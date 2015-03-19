@@ -4,7 +4,6 @@
 
 ## Roadmap 
 ---
-
 * Version 1.0 : Front-end that display sites on a map using google map api.
 * Version 1.1 : Admin back end.
 * Version 1.2 : Functionality to manage sites and users
@@ -13,5 +12,4 @@
 
 ## License
 ---
-
 Everything in this repo is MIT License unless otherwise specified.
