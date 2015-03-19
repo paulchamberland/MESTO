@@ -1,1 +1,0 @@
-This folder contains doc as-is.  Those docuemtns were used when we initiated the project.  These docuemtns are provided to give a better understanding of what the project is and what we want to do with it.
