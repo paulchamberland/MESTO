@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Manage Buildings</title>
+  <script src="libs/angular.min.js"></script>
+
+<style>
+/* In IE vs Chrome, the column of textarea is different */
+form {
+	border:1px solid black;
+	width:650px; 
+	height:300px;
+}
+
+.section, .section2 {
+    display: block;
+    width: 300px;
+	/*border: 1px solid red;*/
+	padding: 4px;
+}
+.section2 {
+    position: relative;
+	top: -301px;
+	left: 309px;
+}
+
+.field, .fieldgrp {
+    display: block;
+    padding: 4px 4px;
+} 
+.field label {
+	padding-right: 5px;
+}
+.field input[type=text]{
+	float: right;
+}
+
+</style>
+</head>
+<body data-ng-app="BuildingApp">
+	<h1>Add a building</h1>
+	<div data-ng-controller="buildingCTL">
+		<div style="color:red" data-ng-show="bldForm.$dirty && bldForm.$invalid">
+			<span data-ng-show="bldForm.ref.$error.required">Reference is required.</span>
+			<span data-ng-show="bldForm.latitude.$error.required">Lalitude is required.</span>
+			<span data-ng-show="bldForm.lontitude.$error.required">Longitude is required.</span>
+			<span data-ng-show="bldForm.name.$error.required">Name is required.</span>
+			<span data-ng-show="bldForm.cPostal.$error.pattern">Invalid code postal format.</span>
+		</div>
+		<form name="bldForm" novalidate >
+			<input type="hidden" id="id" name="id" data-ng-model="bld.id" />
+			<div class="section">
+				<div class="field"><label for="ref"># reference * :</label><input type="text" id="ref" name="ref" data-ng-model="bld.ref" required /></div>
+				<div class="field"><label for="latitude">latitude * :</label><input type="text" id="latitude" name="latitude" data-ng-model="bld.latitude" required /></div>
+				<div class="field"><label for="lontitude">lontitude * :</label><input type="text" id="lontitude" name="lontitude" data-ng-model="bld.longtitude" required /></div>
+				<div class="field"><label for="name">Name * :</label><input type="text" id="name" name="name" data-ng-model="bld.name" required /></div>
+				<div class="field"><label for="desc">Description:</label><textarea cols="34" rows="5" id="desc" name="desc" data-ng-model="bld.desc"></textarea></div>
+				<div class="field"><label for="cPostal">Is temporary?</label><input type="checkbox" name="isTemporary" data-ng-checked="{{bld.temp}}" /></div>
+				<div class="field"><label for="sDate">start date:</label><input type="text" id="sDate" name="sDate" data-ng-model="bld.stardDate" /></div>
+				<div class="field"><label for="eDate">end date:</label><input type="text" id="eDate" name="eDate" data-ng-model="bld.endDate" /></div>
+			</div>
+			<div class="section2">
+				<div class="field"><label for="adr">Adress:</label><input type="text" id="adr" name="adr" data-ng-model="bld.adr" /></div>
+				<div class="field"><label for="city">City:</label><input type="text" id="city" name="city" data-ng-model="bld.city" /></div>
+				<div class="field"><label for="prov">province:</label><input type="text" id="prov" name="prov" data-ng-model="bld.province" /></div>
+				<div class="field"><label for="contry">contry:</label><input type="text" id="contry" name="contry" data-ng-model="bld.contry" /></div>
+				<div class="field"><label for="cPostal">postal code:</label><input type="text" id="cPostal" name="cPostal" data-ng-model="bld.cPostal" data-ng-pattern="/^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] [0-9][A-Z][0-9]$/" /></div>
+			</div>
+			
+		</form>
+		<button type="sumbit" ng-disabled="bldForm.$invalid">Save</button>
+	</div>
+	
+	<script>
+		var app = angular.module('BuildingApp', []);
+	</script>
+	<script>
+		app.controller('buildingCTL', function($scope) {
+			$scope.bld = {id: "1",
+							ref :"test",
+							latitude:"test2",
+							longtitude:"test3",
+							name:"test4",
+							desc:"test5",
+							temp:true,
+							stardDate:"test7",
+							endDate:"test8",
+							adr:"test9",
+							city:"test10",
+							province:"test11",
+							contry:"test12",
+							cPostal:"test13"};
+			/*$scope.bld.validation = function() {
+			
+			}*/
+		});
+	</script>
+	
+	<h1>Building List</h1>
+	<div data-ng-controller="bldListCTL">
+		<table>
+			<tr data-ng-repeat="b in bldList">
+				<td>{{b.ref}}</td><td>{{b.name}}</td><td>{{b.latitude}}</td><td>{{b.longtitude}}</td>
+			</tr>
+		</table>
+	</div>
+	<script>
+		app.controller('bldListCTL', function($scope) {
+			$scope.bldList = [{ref :"test",
+							latitude:"test2",
+							longtitude:"test3",
+							name:"test4"},
+							{ref :"tst",
+							latitude:"tst2",
+							longtitude:"tst3",
+							name:"tst4"}
+							];
+		});
+	</script>
+</body>
+
+</html>
