@@ -35,7 +35,8 @@ form {
 	float: right;
 }
 
-.error span {
+.error {
+    color:red;
 }
 
 </style>
@@ -43,7 +44,7 @@ form {
 <body data-ng-app="BuildingApp">
 	<h1>Add a building</h1>
 	<div data-ng-controller="buildingCTL">
-		<div style="color:red;" data-ng-show="bldForm.$dirty && bldForm.$invalid">
+		<div data-ng-show="bldForm.$dirty && bldForm.$invalid">
 			<span class="error" data-ng-show="bldForm.reference.$error.required">reference is required.</span>
 			<span class="error" data-ng-show="bldForm.latitude.$error.required">Lalitude is required.</span>
 			<span class="error" data-ng-show="bldForm.latitude.$error.pattern">Invalid lalitude format.</span>
@@ -54,24 +55,24 @@ form {
 			<span class="error" data-ng-show="bldForm.startDate.$error.pattern">Invalid start date format.</span>
 			<span class="error" data-ng-show="bldForm.endDate.$error.pattern">Invalid end date format.</span>
 		</div>
-		<form bldName="bldForm" novalidate >
-			<input type="hidden" id="id" bldName="id" data-ng-model="bld.id" />
+		<form name="bldForm" novalidate >
+			<input type="hidden" id="id" name="id" data-ng-model="bld.id" />
 			<div class="section">
-				<div class="field"><label for="reference"># reference * :</label><input type="text" id="reference" bldName="reference" data-ng-model="bld.reference" required /></div>
-				<div class="field"><label for="latitude">latitude * (xx.xxxxxx):</label><input type="text" id="latitude" bldName="latitude" data-ng-model="bld.latitude" required data-ng-pattern="/^[0-9][0-9]\.[0-9]{6}$/" /></div>
-				<div class="field"><label for="longitude">longitude * (xx.xxxxxx):</label><input type="text" id="longitude" bldName="longitude" data-ng-model="bld.longitude" required data-ng-pattern="/^[0-9][0-9]\.[0-9]{6}$/" /></div>
-				<div class="field"><label for="bldName">Name * :</label><input type="text" id="bldName" bldName="bldName" data-ng-model="bld.bldName" required /></div>
-				<div class="field"><label for="desc">description:</label><textarea cols="38" rows="5" id="desc" bldName="desc" data-ng-model="bld.desc"></textarea></div>
-				<div class="field"><label for="cPostal">Is temporary?</label><input type="checkbox" bldName="isTemporary" data-ng-checked="{{bld.temp}}" /></div>
-				<div class="field"><label for="startDate">start date (MM-dd-yyyy):</label><input type="text" id="startDate" bldName="startDate" data-ng-model="bld.stardDate" data-ng-pattern="/^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)(?:0?2|(?:Feb))\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/" /></div>
-				<div class="field"><label for="endDate">end date (MM-dd-yyyy):</label><input type="text" id="endDate" bldName="endDate" data-ng-model="bld.endDate" data-ng-pattern="/^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)(?:0?2|(?:Feb))\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/" /></div>
+				<div class="field"><label for="reference"># reference * :</label><input type="text" id="reference" name="reference" data-ng-model="bld.reference" required /></div>
+				<div class="field"><label for="latitude">latitude * (xx.xxxxxx):</label><input type="text" id="latitude" name="latitude" data-ng-model="bld.latitude" required data-ng-pattern="/^[0-9][0-9]\.[0-9]{6}$/" /></div>
+				<div class="field"><label for="longitude">longitude * (xx.xxxxxx):</label><input type="text" id="longitude" name="longitude" data-ng-model="bld.longitude" required data-ng-pattern="/^[0-9][0-9]\.[0-9]{6}$/" /></div>
+				<div class="field"><label for="bldName">Name * :</label><input type="text" id="bldName" name="bldName" data-ng-model="bld.bldName" required /></div>
+				<div class="field"><label for="desc">description:</label><textarea cols="38" rows="5" id="desc" name="desc" data-ng-model="bld.desc"></textarea></div>
+				<div class="field"><label for="cPostal">Is temporary?</label><input type="checkbox" name="isTemporary" data-ng-checked="{{bld.temp}}" /></div>
+				<div class="field"><label for="startDate">start date (MM-dd-yyyy):</label><input type="text" id="startDate" name="startDate" data-ng-model="bld.stardDate" data-ng-pattern="/^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)(?:0?2|(?:Feb))\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/" /></div>
+				<div class="field"><label for="endDate">end date (MM-dd-yyyy):</label><input type="text" id="endDate" name="endDate" data-ng-model="bld.endDate" data-ng-pattern="/^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)(?:0?2|(?:Feb))\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/" /></div>
 			</div>
 			<div class="section2">
-				<div class="field"><label for="adr">Adress:</label><input type="text" id="adr" bldName="adr" data-ng-model="bld.adr" /></div>
-				<div class="field"><label for="city">City:</label><input type="text" id="city" bldName="city" data-ng-model="bld.city" /></div>
-				<div class="field"><label for="prov">province:</label><input type="text" id="prov" bldName="prov" data-ng-model="bld.province" /></div>
-				<div class="field"><label for="contry">contry:</label><input type="text" id="contry" bldName="contry" data-ng-model="bld.contry" /></div>
-				<div class="field"><label for="cPostal">postal code (X5X 5X5):</label><input type="text" id="cPostal" bldName="cPostal" data-ng-model="bld.cPostal" data-ng-pattern="/^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] [0-9][A-Z][0-9]$/" /></div>
+				<div class="field"><label for="adr">Adress:</label><input type="text" id="adr" name="adr" data-ng-model="bld.adr" /></div>
+				<div class="field"><label for="city">City:</label><input type="text" id="city" name="city" data-ng-model="bld.city" /></div>
+				<div class="field"><label for="prov">province:</label><input type="text" id="prov" name="prov" data-ng-model="bld.province" /></div>
+				<div class="field"><label for="contry">contry:</label><input type="text" id="contry" name="contry" data-ng-model="bld.contry" /></div>
+				<div class="field"><label for="cPostal">postal code (X5X 5X5):</label><input type="text" id="cPostal" name="cPostal" data-ng-model="bld.cPostal" data-ng-pattern="/^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] [0-9][A-Z][0-9]$/" /></div>
 			</div>
 		</form>
 		<button type="sumbit" ng-disabled="bldForm.$invalid">Save</button>
@@ -104,7 +105,7 @@ form {
 	
 	<h1>Building List</h1>
 	<div data-ng-controller="bldListCTL">
-        <span >{{error}}</span>
+        <span class="error">{{error}}</span>
 		<table border="1">
             <th>Reference</th><th>Name</th><th>Latitude</th><th>Longitude</th>
 			<tr data-ng-repeat="b in bldList">
@@ -118,8 +119,8 @@ form {
                 function(data) {
                     $scope.bldList = data;
                 }).error(
-                    function(data, status, headers, config) {
-                        $scope.error = "error: "+status;
+                    function(data, status, headers, config, statusText) {
+                        $scope.error = "error: "+status+":"+statusText;
                         //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
                     })
 			/*$scope.bldList = [{reference :"test",
