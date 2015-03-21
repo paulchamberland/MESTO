@@ -11,10 +11,10 @@ CREATE TABLE IF NOT EXISTS building (
   longitude varchar(8) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   bldName varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   description text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
-  adress varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  address varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   city varchar(55) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   province varchar(55) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  contry varchar(55) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  country varchar(55) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   postalCode varchar(7) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   startDate date DEFAULT NULL,
   endDate date DEFAULT NULL,
@@ -26,5 +26,5 @@ CREATE TABLE IF NOT EXISTS building (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 TRUNCATE TABLE building;
-INSERT INTO building (id, reference, latitude, longitude, bldName, description, adress, city, province, contry, postalCode, startDate, endDate, updateBy, updateDate) VALUES
-(1, 'ti38dk', '40.32.23', '21.21.21', 'a building test', 'long description about this building who give some details that any other field could give, like the goal of the building, special caracteristics', '2020 Du finfin', 'Jackson', 'quebec', 'canada', 'H0H 0H0', '1999-01-01', '2099-01-01', 'sql data', '2015-03-20');
+INSERT INTO building (id, reference, latitude, longitude, bldName, description, address, city, province, country, postalCode, startDate, endDate, updateBy, updateDate) VALUES
+(1, 'ti38dk', '40.322399', '21.212199', 'a building test', 'long description about this building who gives some details that any other field could not give, like the purpose of the building, special caracteristics', '2020 Du finfin', 'Jackson', 'quebec', 'canada', 'H0H 0H0', '1999-01-01', '2099-01-01', 'sql data', '2015-03-20');
