@@ -1,4 +1,4 @@
-![MESTO](github.com/paulchamberland/MESTO/contributing/logo/mesto.png)
+![MESTO](/MESTO/contributing/logo/mesto.png)
 # MESTO 
 **MESTO** is a project about geolocalization of sites and the equipment related. Designed to help IT organisations to keep track of their equipment and clients in a specific area.  One concept driving this project is that updates can be made by any users, in other word the team wants this systems to be some sort of an socially maintain IT management database.
 
