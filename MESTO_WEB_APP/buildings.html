@@ -50,7 +50,7 @@ form {
 			<span class="error" data-ng-show="bldForm.latitude.$error.pattern">Invalid latitude format.</span>
 			<span class="error" data-ng-show="bldForm.longitude.$error.required">Longitude is required.</span>
 			<span class="error" data-ng-show="bldForm.longitude.$error.pattern">Invalid longitude format.</span>
-			<span class="error" data-ng-show="bldForm.bldName.$error.required">bldName is required.</span>
+			<span class="error" data-ng-show="bldForm.bldName.$error.required">Name is required.</span>
 			<span class="error" data-ng-show="bldForm.cPostal.$error.pattern">Invalid postal code format.</span>
 			<span class="error" data-ng-show="bldForm.startDate.$error.pattern">Invalid start date format.</span>
 			<span class="error" data-ng-show="bldForm.endDate.$error.pattern">Invalid end date format.</span>
@@ -92,10 +92,10 @@ form {
 							temp:true,
 							stardDate:"test7",
 							endDate:"test8",
-							adr:"test9",
+							addr:"test9",
 							city:"test10",
 							province:"test11",
-							contry:"test12",
+							country:"test12",
 							cPostal:"test13"};
 			/*$scope.bld.validation = function() {
 			
@@ -107,7 +107,7 @@ form {
 	<div data-ng-controller="bldListCTL">
         <span class="error">{{error}}</span>
 		<table border="1">
-            <th>Reference</th><th>Name</th><th>Latitude</th><th>Longitude</th>
+            <tr><th>Reference</th><th>Name</th><th>Latitude</th><th>Longitude</th></tr>
 			<tr data-ng-repeat="b in bldList">
 				<td>{{b.reference}}</td><td>{{b.bldName}}</td><td>{{b.latitude}}</td><td>{{b.longitude}}</td>
 			</tr>
@@ -115,7 +115,7 @@ form {
 	</div>
 	<script>
 		app.controller('bldListCTL', function($scope, $http) {
-            $http.post("/mesto/php/DAOBuilding.php").success(
+            $http.post("/MESTO/MESTO_WEB_APP/php/DAOBuilding.php").success(
                 function(data) {
                     $scope.bldList = data;
                 }).error(
