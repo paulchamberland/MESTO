@@ -6,10 +6,10 @@ class bld { // structure of a building
 	public $longitude;
 	public $bldName;
 	public $description;
-	public $adress;
+	public $address;
 	public $city;
 	public $province;
-	public $contry;
+	public $country;
 	public $postalCode;
 	public $startDate;
 	public $endDate;
