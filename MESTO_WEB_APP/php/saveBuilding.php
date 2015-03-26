@@ -1,39 +1,39 @@
 <?php
-$bld = json_decode(file_get_contents("php://input"), true);
+$site = json_decode(file_get_contents("php://input"), true);
 // TODO : remove html and script from data.
 
 try {
     $con = new PDO("mysql:host=localhost;dbname=mesto", "root", "");
     $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
-    if (empty($bld['id'])) {
-        $stmt = $con->prepare("SELECT count(*) as nbBuilding FROM building WHERE reference = '".$bld['reference']."'");
+    if (empty($site['id'])) {
+        $stmt = $con->prepare("SELECT count(*) as nbSite FROM site WHERE reference = '".$site['reference']."'");
         $stmt->execute();
         $rs = $stmt->fetchAll();
         
         $arr = array("msg" => "", "error" => "");
-        if ($rs[0]['nbBuilding'] == 0) {
-            $sql = 'INSERT INTO building (reference, latitude, longitude, bldName, description, address, city, province, country, postalCode, startDate, endDate, updateBy, updateDate)'
-                .' values ("'.$bld['reference'].'","'.$bld['latitude'].'","'.$bld['longitude'].'","'.$bld['bldName'].'","'.$bld['description'].'","'.$bld['address']
-                .'","'.$bld['city'].'","'.$bld['province'].'","'.$bld['country'].'","'.$bld['postalCode'].'","'.$bld['startDate'].'","'.$bld['endDate'].'","apps", NOW())';
+        if ($rs[0]['nbSite'] == 0) {
+            $sql = 'INSERT INTO site (reference, latitude, longitude, siteName, description, address, city, province, country, postalCode, startDate, endDate, updateBy, updateDate)'
+                .' values ("'.$site['reference'].'","'.$site['latitude'].'","'.$site['longitude'].'","'.$site['siteName'].'","'.$site['description'].'","'.$site['address']
+                .'","'.$site['city'].'","'.$site['province'].'","'.$site['country'].'","'.$site['postalCode'].'","'.$site['startDate'].'","'.$site['endDate'].'","apps", NOW())';
             $con->exec($sql);
-            $arr = array("msg" => "Building created successfully!!!", "error" => "");
+            $arr = array("msg" => "Site created successfully!!!", "error" => "");
         } else {
-            $arr["error"] = "Buildings already exists with same reference.";
+            $arr["error"] = "Site already exists with same reference.";
         }
     }
-    else if (!empty($bld['id']) && isset($bld['activity']) && $bld['activity'] == "del") {
-        $sql = 'DELETE FROM building WHERE id="'.$bld['id'].'"';
+    else if (!empty($site['id']) && isset($site['activity']) && $site['activity'] == "del") {
+        $sql = 'DELETE FROM site WHERE id="'.$site['id'].'"';
         $con->exec($sql);
-        $arr = array("msg" => "Building deleted successfully!!!", "error" => "");
+        $arr = array("msg" => "Site deleted successfully!!!", "error" => "");
     }
     else {
-        $sql = 'UPDATE building SET reference="'.$bld['reference'].'", latitude="'.$bld['latitude'].'", longitude="'.$bld['longitude'].'", bldName="'.$bld['bldName']
-                    .'", description="'.$bld['description'].'", address="'.$bld['address'].'", city="'.$bld['city'].'", province="'.$bld['province']
-                    .'", country="'.$bld['country'].'", postalCode="'.$bld['postalCode'].'", startDate="'.$bld['startDate']
-                    .'", endDate="'.$bld['endDate'].'", updateBy="apps", updateDate=NOW() WHERE id="'.$bld['id'].'"';
+        $sql = 'UPDATE site SET reference="'.$site['reference'].'", latitude="'.$site['latitude'].'", longitude="'.$site['longitude'].'", siteName="'.$site['siteName']
+                    .'", description="'.$site['description'].'", address="'.$site['address'].'", city="'.$site['city'].'", province="'.$site['province']
+                    .'", country="'.$site['country'].'", postalCode="'.$site['postalCode'].'", startDate="'.$site['startDate']
+                    .'", endDate="'.$site['endDate'].'", updateBy="apps", updateDate=NOW() WHERE id="'.$site['id'].'"';
         $con->exec($sql);
-        $arr = array("msg" => "Building updated successfully!!!", "error" => "");
+        $arr = array("msg" => "Site updated successfully!!!", "error" => "");
     }
 
     $json = json_encode($arr);
