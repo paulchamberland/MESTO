@@ -24,6 +24,8 @@ try {
 	$stmt->execute();
 	
 	$json = json_encode($stmt->fetchAll(PDO::FETCH_CLASS, "bld"));
+    
+    header('Content-Type: application/json');
     if (!$json)
         switch (json_last_error()) {
             case JSON_ERROR_NONE:
@@ -48,10 +50,10 @@ try {
                 echo '[error: JSON  - Unknown error]';
             break;
         }
-    else 
-        header('Content-Type: application/json');
+    else {
         echo ")]}',\n";
         echo $json;
+    }
     
 }
 catch (PDOException $e) {
