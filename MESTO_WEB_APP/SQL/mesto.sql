@@ -7,8 +7,8 @@ DROP TABLE IF EXISTS building;
 CREATE TABLE IF NOT EXISTS building (
   id int(11) NOT NULL AUTO_INCREMENT,
   reference varchar(55) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  latitude varchar(8) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  longitude varchar(8) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  latitude varchar(9) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  longitude varchar(9) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   bldName varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   description text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   address varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
