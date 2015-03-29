@@ -11,6 +11,7 @@ class site { // structure of a site
 	public $province;
 	public $country;
 	public $postalCode;
+    public $isTemporary;
 	public $startDate;
 	public $endDate;
 	public $updateBy;

@@ -15,7 +15,7 @@ try {
         if ($rs[0]['nbSite'] == 0) {
             $sql = 'INSERT INTO site (reference, latitude, longitude, siteName, description, address, city, province, country, postalCode, startDate, endDate, updateBy, updateDate)'
                 .' values ("'.$site['reference'].'","'.$site['latitude'].'","'.$site['longitude'].'","'.$site['siteName'].'","'.$site['description'].'","'.$site['address']
-                .'","'.$site['city'].'","'.$site['province'].'","'.$site['country'].'","'.$site['postalCode'].'","'.$site['startDate'].'","'.$site['endDate'].'","apps", NOW())';
+                .'","'.$site['city'].'","'.$site['province'].'","'.$site['country'].'","'.$site['postalCode'].'","'.$site['isTemporary'].'","'.$site['startDate'].'","'.$site['endDate'].'","apps", NOW())';
             $con->exec($sql);
             $arr = array("msg" => "Site created successfully!!!", "error" => "");
         } else {
@@ -30,7 +30,7 @@ try {
     else {
         $sql = 'UPDATE site SET reference="'.$site['reference'].'", latitude="'.$site['latitude'].'", longitude="'.$site['longitude'].'", siteName="'.$site['siteName']
                     .'", description="'.$site['description'].'", address="'.$site['address'].'", city="'.$site['city'].'", province="'.$site['province']
-                    .'", country="'.$site['country'].'", postalCode="'.$site['postalCode'].'", startDate="'.$site['startDate']
+                    .'", country="'.$site['country'].'", postalCode="'.$site['postalCode'].'", isTemporary="'.$site['isTemporary'].'", startDate="'.$site['startDate']
                     .'", endDate="'.$site['endDate'].'", updateBy="apps", updateDate=NOW() WHERE id="'.$site['id'].'"';
         $con->exec($sql);
         $arr = array("msg" => "Site updated successfully!!!", "error" => "");

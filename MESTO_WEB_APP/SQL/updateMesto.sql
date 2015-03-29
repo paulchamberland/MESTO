@@ -1,0 +1,1 @@
+ALTER TABLE `site` ADD `isTemporary` BOOLEAN NOT NULL DEFAULT FALSE AFTER `postalCode`;
