@@ -13,7 +13,7 @@ try {
         
         $arr = array("msg" => "", "error" => "");
         if ($rs[0]['nbSite'] == 0) {
-            $sql = 'INSERT INTO site (reference, latitude, longitude, siteName, description, address, city, province, country, postalCode, startDate, endDate, updateBy, updateDate)'
+            $sql = 'INSERT INTO site (reference, latitude, longitude, siteName, description, address, city, province, country, postalCode, isTemporary, startDate, endDate, updateBy, updateDate)'
                 .' values ("'.$site['reference'].'","'.$site['latitude'].'","'.$site['longitude'].'","'.$site['siteName'].'","'.$site['description'].'","'.$site['address']
                 .'","'.$site['city'].'","'.$site['province'].'","'.$site['country'].'","'.$site['postalCode'].'","'.$site['isTemporary'].'","'.$site['startDate'].'","'.$site['endDate'].'","apps", NOW())';
             $con->exec($sql);
@@ -71,8 +71,8 @@ try {
     }
 }
 catch (PDOException $e) {
-    /*echo $e->getMessage();*/
-    $arr = array("msg" => "", "error" => "Unknow error from the database, Contact administrator. Try later");
+    /*echo "[error:'".$e->getMessage()."']";*/
+    $arr = array("msg" => "", "error" => "Database error, Contact administrator. Try later");
     header('Content-Type: application/json');
 	echo $json = json_encode($arr);
 }
