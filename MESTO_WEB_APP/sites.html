@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Manage Buildings</title>
+  <title>Manage Sites</title>
   <script src="libs/angular.min.js"></script>
 
 <style>
@@ -190,7 +190,7 @@ form {
                     // TODO: Add validation to compare date... 
                     $http({
                         method: 'POST',
-                        url: "/MESTO/MESTO_WEB_APP/php/saveBuilding.php", // TODO: Make a config with path
+                        url: "/MESTO/MESTO_WEB_APP/php/saveSite.php", // TODO: Make a config with path
                         data: {
                             id : $scope.siteForm.id.$modelValue,
 							reference : $scope.siteForm.reference.$modelValue,
@@ -199,7 +199,7 @@ form {
 							siteName : $scope.siteForm.siteName.$modelValue,
 							description : $scope.siteForm.description.$modelValue,
 							isTemp : $scope.siteForm.isTemp.$modelValue,
-							startDate : new Date($scope.siteForm.startDate.$modelValue).toYMD(),
+							startDate : new Date($scope.siteForm.startDate.$modelValue).toYMD(), // TODO : problem with the constructor, make it custom to put real value.
 							endDate : new Date($scope.siteForm.endDate.$modelValue).toYMD(),
 							address : $scope.siteForm.address.$modelValue,
 							city : $scope.siteForm.city.$modelValue,
@@ -231,7 +231,7 @@ form {
             $scope.delete = function() {
                 $http({
                         method: 'POST',
-                        url: "/MESTO/MESTO_WEB_APP/php/saveBuilding.php", // TODO: Make a config with path
+                        url: "/MESTO/MESTO_WEB_APP/php/saveSite.php", // TODO: Make a config with path
                         data: {
                             id : $scope.siteForm.id.$modelValue,
 							activity : ACTIVITY_DELETE
@@ -261,7 +261,7 @@ form {
             };
             
             function loadList () {
-                $http.post("/MESTO/MESTO_WEB_APP/php/DAOBuilding.php").success( // TODO: Make a config with path
+                $http.post("/MESTO/MESTO_WEB_APP/php/DAOSite.php").success( // TODO: Make a config with path
                     function(data) {
                         $scope.siteList = data;
                     }
