@@ -85,6 +85,7 @@ form {
 				<div class="field"><label for="province">province:</label><input type="text" id="province" name="province" data-ng-model="site.province" /></div>
 				<div class="field"><label for="country">country:</label><input type="text" id="country" name="country" data-ng-model="site.country" /></div>
 				<div class="field"><label for="postalCode">postal code (X5X 5X5):</label><input type="text" id="postalCode" name="postalCode" data-ng-model="site.postalCode" data-ng-pattern="/^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] [0-9][A-Z][0-9]$/" /></div>
+                <div class="field"><label for="role">Role:</label><select id="role" ng-model="site.role" name="role" ng-options="role.value as role.label for role in ROLE"></select></div>
 			</div>
 		</form>
 		<button data-ng-click="save();" ng-disabled="siteForm.$pristine || siteForm.$invalid">Save</button>
@@ -140,6 +141,7 @@ form {
         
 		app.controller('siteCTL', function($scope, $http) {
             var ACTIVITY_DELETE = "del";
+            $scope.ROLE = [{value:'ED',label:'Edifice'},{value:'FLR',label:'Floor'},{value:'FOB',label:'FOB'},{value:'COP',label:'COP'},{value:'CMP',label:'CAMP'}];
             
 			$scope.site = {id: "",
 							reference :"",
@@ -154,10 +156,12 @@ form {
 							city:"",
 							province:"",
 							country:"",
-							postalCode:""};
+							postalCode:"",
+                            role:""};
             var emptySite = {};
             $scope.canDelete = false;
             
+            // TODO: To remove at some point
             $scope.site_init = {id: "1",
 							reference :"test",
 							latitude:"12.123456",
@@ -171,14 +175,16 @@ form {
 							city:"test10",
 							province:"test11",
 							country:"test12",
-							postalCode:"X5X 5X5"};
+							postalCode:"X5X 5X5",
+                            role:"COP"};
             
             function init() {
                 loadList();
                 emptySite = angular.copy($scope.site);
+                //$scope.site = angular.copy($scope.site_init); // TODO: to remove at some point...
             }
             
-            $scope.loadSite = function (p_site) {
+            $scope.loadSite = function(p_site) {
                 $scope.site = angular.copy(p_site);
                 $scope.site.startDate = new Date($scope.site.startDate).toDMY();
                 $scope.site.endDate = new Date($scope.site.endDate).toDMY();
@@ -186,14 +192,14 @@ form {
                 $scope.canDelete = true;
             };
             
-            $scope.resetFrm = function () {
+            $scope.resetFrm = function() {
                 $scope.site = angular.copy(emptySite);
                 $scope.siteForm.$setPristine();
                 $scope.canDelete = false;
                 // TODO: reset old msg update a site, load again, modify and clic on reset...
             };
             
-            $scope.save = function () {
+            $scope.save = function() {
                 if ($scope.siteForm.$dirty && $scope.siteForm.$valid) {
                     $http({
                         method: 'POST',
@@ -212,7 +218,8 @@ form {
 							city : $scope.siteForm.city.$modelValue,
 							province : $scope.siteForm.province.$modelValue,
 							country : $scope.siteForm.country.$modelValue,
-							postalCode : $scope.siteForm.postalCode.$modelValue
+							postalCode : $scope.siteForm.postalCode.$modelValue,
+                            role : $scope.siteForm.role.$modelValue
                         },
                         headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
                     }).success(
@@ -277,7 +284,7 @@ form {
                 }
             };
             
-            function loadList () {
+            function loadList() {
                 $http.post("/MESTO/MESTO_WEB_APP/php/DAOSite.php").success( // TODO: Make a config with path
                     function(data) {
                         $scope.siteList = data;

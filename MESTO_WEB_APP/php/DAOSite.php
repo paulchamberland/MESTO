@@ -14,6 +14,7 @@ class site { // structure of a site
     public $isTemporary;
 	public $startDate;
 	public $endDate;
+    public $role;
 	public $updateBy;
     public $updateDate;
 }
