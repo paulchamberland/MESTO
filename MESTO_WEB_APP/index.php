@@ -6,8 +6,8 @@
     </style>
     
     <style>
-	#header {
-    background-color: #003366;
+	#header, #footer{
+    background-color: #3E75A6;
     color:white;
     text-align:left;
     padding:5px;
@@ -37,14 +37,16 @@
     </script>
   </head>
   <body>
-  
-  <div id="header"><h1>MESTO</h1>
-  <br/>
-  <a href="./buildings.html">manage buildings</a>
-   <br/>
+  <div id="header">
+	<div id="logo">
+		<img src="images/mesto.png" alt="Mesto" style="width:250px;height:70px">
+	</div>
   </div>
-  
-    <div id="menu">sdfsdf</div> 
-  <div id="map-canvas"></div>
+  <div id="menu">
+	<?php include 'menu.php';?>
+	</div> 
+	<div id="map-canvas"></div>
+	<div id="footer">
+	</div>
   </body>
 </html>
