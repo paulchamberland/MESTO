@@ -46,7 +46,7 @@
   margin: 0;
   padding: 0;
   list-style-type: none;
-  background: #D8D8D8;
+  background: #ffffff;
   border: 1px solid #ece6e8;
   border-bottom: 3px solid #d9ced2;
   border-top: 0 none;
@@ -55,13 +55,12 @@
   display: block;
 }
 #cssmenu > ul li.has-sub > a {
-  background-image: url('images/caret.png');
   background-repeat: no-repeat;
   background-position: 90% -95%;
 }
 #cssmenu > ul li.has-sub > a.active,
 #cssmenu > ul li.has-sub > a:hover {
-  background: #3E75A6 url('images/caret.png') no-repeat;
+  background: #3E75A6;
   background-position: 90% 195%;
 }
 #cssmenu > ul li a {
@@ -85,7 +84,6 @@
     display: block;
   }
   #cssmenu > ul li#responsive-tab a {
-    background: url('images/menu.png') no-repeat;
     background-position: 95% -35%;
   }
   #cssmenu > ul li#responsive-tab a:hover {
@@ -105,7 +103,7 @@
     display: block;
     position: static;
     width: 100%;
-    background: #D8D8D8;
+    background: #ffffff;
     border: 0 none;
   }
   #cssmenu > ul li.has-sub ul li {

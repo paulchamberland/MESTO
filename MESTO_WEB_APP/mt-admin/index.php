@@ -2,6 +2,13 @@
 
 <html lang="en">
 <head>
+
+	<style type="text/css">
+      html, body  {  background-color: #3E75A6; height: 100%; margin: 0; padding: 0;}
+   
+   	
+	</style>
+
   <meta charset="utf-8">
 
   <title>Mesto Admin</title>
@@ -26,7 +33,7 @@ admin panel
 <br/>
 <br/>
 <br/>
-<a href="../index.php"><span>main page</span></a>--> back to main page
+<a href="../index.html"><span>main page</span></a>--> back to main page
 
 
 </body>
