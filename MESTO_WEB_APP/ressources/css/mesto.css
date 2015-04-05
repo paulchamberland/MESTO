@@ -1,0 +1,33 @@
+/* In IE vs Chrome, the column of textarea is different */
+form {
+	border:1px solid black;
+	width:695px; 
+	height:300px;
+}
+
+.section, .section2 {
+    display: block;
+    width: 330px;
+	/*border: 1px solid red;*/
+	padding: 4px;
+}
+.section2 {
+    position: relative;
+	top: -301px;
+	left: 339px;
+}
+
+.field, .fieldgrp {
+    display: block;
+    padding: 4px 4px;
+} 
+.field label {
+	padding-right: 5px;
+}
+.field input[type=text], select{
+	float: right;
+}
+
+.error {
+    color:red;
+}

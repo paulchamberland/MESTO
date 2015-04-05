@@ -3,13 +3,13 @@ SET time_zone = "+05:00";
 CREATE DATABASE IF NOT EXISTS mesto DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 USE mesto;
 
-DROP TABLE IF EXISTS building;
-CREATE TABLE IF NOT EXISTS building (
+DROP TABLE IF EXISTS site;
+CREATE TABLE IF NOT EXISTS site (
   id int(11) NOT NULL AUTO_INCREMENT,
   reference varchar(55) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   latitude varchar(9) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   longitude varchar(9) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  bldName varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  siteName varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   description text CHARACTER SET utf8 COLLATE utf8_unicode_ci,
   address varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   city varchar(55) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -25,6 +25,6 @@ CREATE TABLE IF NOT EXISTS building (
   FULLTEXT KEY description (description)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
-TRUNCATE TABLE building;
-INSERT INTO building (id, reference, latitude, longitude, bldName, description, address, city, province, country, postalCode, startDate, endDate, updateBy, updateDate) VALUES
+TRUNCATE TABLE site;
+INSERT INTO site (id, reference, latitude, longitude, siteName, description, address, city, province, country, postalCode, startDate, endDate, updateBy, updateDate) VALUES
 (1, 'ti38dk', '40.322399', '21.212199', 'a building test', 'long description about this building who gives some details that any other field could not give, like the purpose of the building, special caracteristics', '2020 Du finfin', 'Jackson', 'quebec', 'canada', 'H0H 0H0', '1999-01-01', '2099-01-01', 'sql data', '2015-03-20');
