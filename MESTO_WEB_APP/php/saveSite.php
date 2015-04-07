@@ -28,6 +28,8 @@ try {
         $arr = array("msg" => "Site deleted successfully!!!", "error" => "");
     }
     else {
+        // TODO: Update reference? That is unique. Need validation or block updating that in GUI.
+        // TODO: Update name? That is unique. Need validation or block updating that in GUI.
         $sql = 'UPDATE site SET reference="'.$site['reference'].'", latitude="'.$site['latitude'].'", longitude="'.$site['longitude'].'", siteName="'.$site['siteName']
                     .'", description="'.$site['description'].'", address="'.$site['address'].'", city="'.$site['city'].'", province="'.$site['province']
                     .'", country="'.$site['country'].'", postalCode="'.$site['postalCode'].'", isTemporary="'.$site['isTemporary'].'", startDate="'.$site['startDate']

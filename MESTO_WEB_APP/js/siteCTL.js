@@ -150,7 +150,12 @@ app.controller('siteCTL', function($scope, $http) {
     function loadList() {
         $http.post("/MESTO/MESTO_WEB_APP/php/DAOSite.php").success( // TODO: Make a config with path
             function(data) {
-                $scope.siteList = data;
+                if (data.error == null) {
+                    $scope.siteList = data;
+                }
+                else {
+                    $scope.lstError = data.error;
+                }
             }
         ).error(
             function(data, status, headers, config, statusText) {

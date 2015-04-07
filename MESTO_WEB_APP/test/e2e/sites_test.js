@@ -167,6 +167,8 @@ describe('E2E: Site', function() {
         expect(inputED.getAttribute("class")).toMatch("ng-valid-greater-than");
     });
     
+    // TODO: Improve by checking validation pattern after get Data from database
+    
     it('Testing: State of Saving button', function() {
         var btn = element(by.id('btnSave'));
         
@@ -202,5 +204,50 @@ describe('E2E: Site', function() {
         
         element(by.model('site.city')).sendKeys('t');
         expect(btn.isEnabled()).toBeTruthy();
+    });
+
+    it('Testing: Save a site', function() {
+        element(by.model('site.reference')).sendKeys('testE2E');
+        element(by.model('site.latitude')).sendKeys('12.432132');
+        element(by.model('site.longitude')).sendKeys('12.321321');
+        element(by.model('site.siteName')).sendKeys('test scenario data');
+        
+        element(by.id('btnSave')).click();
+        expect(element(by.binding('SQLErrors')).getText()).toEqual('');
+        expect(element(by.binding('SQLMsgs')).getText()).toEqual('Site created successfully!!!');
+    });
+    it('Testing: Save a site, already exist', function() {
+        element(by.model('site.reference')).sendKeys('testE2E'); // unique 
+        element(by.model('site.latitude')).sendKeys('12.432132');
+        element(by.model('site.longitude')).sendKeys('12.321321');
+        element(by.model('site.siteName')).sendKeys('test scenario data');
+        
+        element(by.id('btnSave')).click();
+        expect(element(by.binding('SQLErrors')).getText()).toEqual('Site already exists with same reference.');
+        expect(element(by.binding('SQLMsgs')).getText()).toEqual('');
+    });
+    
+    it('Testing: Update a site', function() {
+        //var sites = element.all(by.repeater('s in siteList'));
+        //var last = element(by.repeater('s in siteList').row(sites.count()-1));
+        
+        element(by.repeater('s in siteList').row(3)).click(); // TODO: need to put something more flexible
+        //last.click();
+        
+        element(by.model('site.siteName')).sendKeys('V2');// changed
+         
+        element(by.id('btnSave')).click();
+        expect(element(by.binding('SQLErrors')).getText()).toEqual('');
+        expect(element(by.binding('SQLMsgs')).getText()).toEqual('Site updated successfully!!!');
+    });
+    it('Testing: Delete a site', function() {
+        element(by.repeater('s in siteList').row(3)).click(); // TODO: need to put something more flexible
+        
+        //expect(last).toEqual('testE2E');
+        //last.click();
+        
+        element(by.id('btnDelete')).click();
+        expect(element(by.binding('SQLErrors')).getText()).toEqual('');
+        expect(element(by.binding('SQLMsgs')).getText()).toEqual('Site deleted successfully!!!');
     });
 });
