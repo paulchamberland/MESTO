@@ -18,8 +18,9 @@ class site { // structure of a site
 	public $updateBy;
     public $updateDate;
 }
-
+$arr = null;
 try {
+    //throw new PDOException('juste un test');
 	$con = new PDO("mysql:host=localhost;dbname=mesto", "root", "");
 	$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$stmt = $con->prepare("SELECT * from site;");
@@ -59,8 +60,16 @@ try {
     
 }
 catch (PDOException $e) {
-	echo "[error:$e->getMessage()]";
+    /*echo "[error:'".$e->getMessage()."']";*/
+    $arr = array("msg" => "", "error" => "Database error, Contact administrator. Try later");
+    header('Content-Type: application/json');
+	echo $json = json_encode($arr);
 }
-$con = null;
+catch (Exception $e) {
+	echo "[error:'".$e->getMessage()."']";
+}
+finally {
+    $con = null;
+}
 
 ?>
