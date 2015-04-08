@@ -50,6 +50,7 @@ app.controller('siteCTL', function($scope, $http) {
         $scope.site.endDate = new Date($scope.site.endDate).toDMY();
         $scope.siteForm.$setPristine();
         $scope.canDelete = true;
+        // TODO: reset old msg
     };
     
     $scope.resetFrm = function() {
