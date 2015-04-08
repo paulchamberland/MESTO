@@ -12,6 +12,7 @@ module.exports = function(config){
       // include js files
       'js/mestoApp.js',
       'js/siteCTL.js',
+      'js/roomCTL.js',
       'js/mestoHelper.js',
  
       // include unit test specs

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Manage Rooms</title>
+  <script src="libs/angular.min.js"></script>
+  <script src="js/mestoHelper.js"></script>
+  <script src="js/mestoApp.js"></script>
+  <script src="js/roomCTL.js"></script>
+  <link rel="stylesheet" type="text/css" href="ressources/css/mesto.css">
+</head>
+<body data-ng-app="MESTO" data-ng-controller="roomCTL">
+	<h1>Add a Room</h1>
+	<div >
+		<div data-ng-show="roomForm.$dirty && roomForm.$invalid">
+			<span class="error" data-ng-show="roomForm.roomID.$error.required">Room ID is required.</span>
+			<span class="error" data-ng-show="roomForm.roomSize.$error.pattern">Room size need to be digit only.</span>
+		</div>
+        <span class="error">{{SQLErrors}}</span>
+        <span class="t">{{SQLMsgs}}</span>
+		<form name="roomForm" novalidate >
+			<input type="hidden" id="id" name="id" data-ng-model="room.id" />
+			<div class="section">
+				<div class="field"><label for="roomID">Room ID * :</label><input type="text" id="roomID" name="roomID" data-ng-model="room.roomID" required /></div>
+				<div class="field"><label for="PoC">Point of Contact :</label><input type="text" id="PoC" name="pointOfContact" data-ng-model="room.pointOfContact" /></div>
+				<div class="field"><label for="TPoC">Technical PoC :</label><input type="text" id="TPoC" name="technicalPointOfContact" data-ng-model="room.technicalPointOfContact" /></div>
+				<div class="field"><label for="roomSize">Room size (in square) :</label><input type="text" id="roomSize" name="roomSize" data-ng-model="room.roomSize" data-ng-pattern="/^[0-9]*$/" /></div>
+				<div class="field"><label for="role">Role:</label><select id="role" ng-model="room.role" name="role" ng-options="role.value as role.label for role in ROLE"></select></div>
+			</div>
+		</form>
+		<button id="btnSave" data-ng-click="save();" ng-disabled="roomForm.$pristine || roomForm.$invalid">Save</button>
+		<button id="btnDelete" data-ng-click="delete();" ng-disabled="!canDelete">Delete</button>
+        <button id="btnReset" data-ng-click="resetFrm();" ng-disabled="roomForm.$pristine">Reset</button>
+	</div>
+    
+	<div>
+        <h1>Room List</h1>
+        <span class="error" data-ng-show="lstError">{{lstError}}</span>
+		<table border="1">
+            <tr><th>Room ID</th><th>Point of Contact</th></tr>
+			<tr data-ng-repeat="r in roomList" data-ng-click="loadRoom(r)">
+				<td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>
