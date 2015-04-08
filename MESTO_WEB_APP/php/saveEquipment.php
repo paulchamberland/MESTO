@@ -1,6 +1,6 @@
 <?php
 $equip = json_decode(file_get_contents("php://input"), true);
-// TODO : remove html and script from data.
+// TODO: htmlspecialchars() and json_decode are not compatible for some reason, find a ways to secure data from XSS
 
 try {
     $con = new PDO("mysql:host=localhost;dbname=mesto", "root", "");
@@ -12,7 +12,7 @@ try {
         $rs = $stmt->fetchAll();
         
         $arr = array("msg" => "", "error" => "");
-        if ($rs[0]['nbEquip'] == 0) {
+        if ($rs[0]['nbEquip'] == 0 !empty($equip['serialNumber'])) {
             $sql = 'INSERT INTO equipment (serialNumber, barCode, manufacturer, model, configHW, configSW, type, updateBy, updateDate)'
                 .' values ("'.$equip['serialNumber'].'","'.$equip['barCode'].'","'.$equip['manufacturer'].'","'.$equip['model'].'","'.$equip['configHW'].'","'.$equip['configSW'].'","'.$equip['type'].'","apps", NOW())';
             $con->exec($sql);

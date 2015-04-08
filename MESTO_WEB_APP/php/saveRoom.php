@@ -1,6 +1,6 @@
 <?php
 $room = json_decode(file_get_contents("php://input"), true);
-// TODO : remove html and script from data.
+// TODO: htmlspecialchars() and json_decode are not compatible for some reason, find a ways to secure data from XSS
 
 try {
     $con = new PDO("mysql:host=localhost;dbname=mesto", "root", "");
@@ -12,7 +12,7 @@ try {
         $rs = $stmt->fetchAll();
         
         $arr = array("msg" => "", "error" => "");
-        if ($rs[0]['nbRoom'] == 0) {
+        if ($rs[0]['nbRoom'] == 0 && !empty($room['roomID'])) {
             $sql = 'INSERT INTO room (roomID, pointOfContact, technicalPointOfContact, role, roomSize, updateBy, updateDate)'
                 .' values ("'.$room['roomID'].'","'.$room['pointOfContact'].'","'.$room['technicalPointOfContact'].'","'.$room['role'].'","'.$room['roomSize'].'","apps", NOW())';
             $con->exec($sql);

@@ -1,6 +1,6 @@
 <?php
 $site = json_decode(file_get_contents("php://input"), true);
-// TODO : remove html and script from data.
+// TODO: htmlspecialchars() and json_decode are not compatible for some reason, find a ways to secure data from XSS
 
 try {
     $con = new PDO("mysql:host=localhost;dbname=mesto", "root", "");
@@ -12,12 +12,12 @@ try {
         $rs = $stmt->fetchAll();
         
         $arr = array("msg" => "", "error" => "");
-        if ($rs[0]['nbSite'] == 0) {
+        if ($rs[0]['nbSite'] == 0 && !empty($site['reference']) && !empty($site['latitude']) && !empty($site['longitude']) && !empty($site['siteName'])) {
             $sql = 'INSERT INTO site (reference, latitude, longitude, siteName, description, address, city, province, country, postalCode, isTemporary, startDate, endDate, role, updateBy, updateDate)'
                 .' values ("'.$site['reference'].'","'.$site['latitude'].'","'.$site['longitude'].'","'.$site['siteName'].'","'.$site['description'].'","'.$site['address']
                 .'","'.$site['city'].'","'.$site['province'].'","'.$site['country'].'","'.$site['postalCode'].'","'.$site['isTemporary'].'","'.$site['startDate'].'","'.$site['endDate'].'","'.$site['role'].'","apps", NOW())';
             $con->exec($sql);
-            $arr = array("msg" => "Site created successfully!!!", "error" => "");
+            $arr["msg"] = "Site created successfully!!!";
         } else {
             $arr["error"] = "Site already exists with same reference.";
         }
