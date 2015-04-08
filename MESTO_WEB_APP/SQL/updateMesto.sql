@@ -14,3 +14,19 @@ CREATE TABLE IF NOT EXISTS room (
   PRIMARY KEY (id),
   UNIQUE KEY roomID (roomID)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+DROP TABLE IF EXISTS equipment;
+CREATE TABLE IF NOT EXISTS equipment (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  serialNumber varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  barCode varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  manufacturer varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  model varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  configHW varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  configSW varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  type varchar(4) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  updateBy varchar(100) NOT NULL,
+  updateDate date NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY serialNumber (serialNumber)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
