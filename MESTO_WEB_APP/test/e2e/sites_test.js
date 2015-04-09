@@ -228,11 +228,7 @@ describe('E2E: Site => ', function() {
 
         // TODO : DateBug : Fail, problem of not feeding date, fill back with wrong date...
         it('Testing: Update a site', function() {
-            //var sites = element.all(by.repeater('s in siteList'));
-            //var last = element(by.repeater('s in siteList').row(sites.count()-1));
-            
-            element(by.repeater('s in siteList').row(3)).click(); // TODO: need to put something more flexible
-            //last.click();
+            element.all(by.repeater('siteList')).last().click();
             
             element(by.model('site.siteName')).sendKeys('V2');// changed
              
@@ -241,7 +237,7 @@ describe('E2E: Site => ', function() {
             expect(element(by.binding('SQLMsgs')).getText()).toEqual('Site updated successfully!!!');
         });
         it('Testing: Delete a site', function() {
-            element(by.repeater('s in siteList').row(3)).click(); // TODO: need to put something more flexible
+            element.all(by.repeater('siteList')).last().click();
             
             element(by.id('btnDelete')).click();
             expect(element(by.binding('SQLErrors')).getText()).toEqual('');
@@ -268,7 +264,7 @@ describe('E2E: Site => ', function() {
             element(by.model('site.endDate')).sendKeys('01-01-2020');
             
             element(by.id('btnSave')).click();
-            element(by.repeater('siteList').row(3)).click();
+            element.all(by.repeater('siteList')).last().click();
             
             expect(element(by.model('site.reference')).getAttribute("value")).toEqual('testE2E');
             expect(element(by.model('site.latitude')).getAttribute("value")).toEqual('12.432132');

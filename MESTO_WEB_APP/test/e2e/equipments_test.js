@@ -69,13 +69,13 @@ describe('E2E: Equipment =>', function() {
         element(by.model('equipment.model')).sendKeys('t');
         expect(btn.isEnabled()).toBeFalsy();
         
-        element(by.repeater('equipmentList').row(0)).click();
+        element.all(by.repeater('equipmentList')).last().click();
         expect(btn.isEnabled()).toBeTruthy();
     });
     /***********************************************************/
     
     it('Testing: Update an equipment', function() {
-        element(by.repeater('equipmentList').row(0)).click(); // TODO: need to put something more flexible
+        element.all(by.repeater('equipmentList')).last().click();
         
         element(by.model('equipment.model')).sendKeys('V2');// changed
          
@@ -84,7 +84,7 @@ describe('E2E: Equipment =>', function() {
         expect(element(by.binding('SQLMsgs')).getText()).toEqual('Equipment updated successfully!!!');
     });
     it('Testing: Delete an equipment', function() {
-        element(by.repeater('equipmentList').row(0)).click(); // TODO: need to put something more flexible
+        element.all(by.repeater('equipmentList')).last().click();
         
         element(by.id('btnDelete')).click();
         expect(element(by.binding('SQLErrors')).getText()).toEqual('');
@@ -101,7 +101,7 @@ describe('E2E: Equipment =>', function() {
         element(by.model('equipment.type')).sendKeys('SRV');
         
         element(by.id('btnSave')).click();
-        element(by.repeater('equipmentList').row(0)).click(); // TODO: need to put something more flexible
+        element.all(by.repeater('equipmentList')).last().click();
         
         expect(element(by.model('equipment.serialNumber')).getAttribute("value")).toEqual('testE2E_V2');
         expect(element(by.model('equipment.barCode')).getAttribute("value")).toEqual('test barcode');

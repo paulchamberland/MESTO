@@ -84,17 +84,13 @@ describe('E2E: Room =>', function() {
         element(by.model('room.pointOfContact')).sendKeys('t');
         expect(btn.isEnabled()).toBeFalsy();
         
-        element(by.repeater('roomList').row(0)).click();
+        element.all(by.repeater('roomList')).last().click();
         expect(btn.isEnabled()).toBeTruthy();
     });
     /***********************************************************/
     
     it('Testing: Update a room', function() {
-        //var sites = element.all(by.repeater('s in siteList'));
-        //var last = element(by.repeater('s in siteList').row(sites.count()-1));
-        
-        element(by.repeater('roomList').row(0)).click(); // TODO: need to put something more flexible
-        //last.click();
+        element.all(by.repeater('roomList')).last().click();
         
         element(by.model('room.pointOfContact')).sendKeys('V2');// changed
          
@@ -103,10 +99,7 @@ describe('E2E: Room =>', function() {
         expect(element(by.binding('SQLMsgs')).getText()).toEqual('Room updated successfully!!!');
     });
     it('Testing: Delete a room', function() {
-        element(by.repeater('roomList').row(0)).click(); // TODO: need to put something more flexible
-        
-        //expect(last).toEqual('testE2E');
-        //last.click();
+        element.all(by.repeater('roomList')).last().click();
         
         element(by.id('btnDelete')).click();
         expect(element(by.binding('SQLErrors')).getText()).toEqual('');
@@ -121,7 +114,7 @@ describe('E2E: Room =>', function() {
         element(by.model('room.role')).sendKeys('T');
         
         element(by.id('btnSave')).click();
-        element(by.repeater('roomList').row(0)).click(); // TODO: need to put something more flexible
+        element.all(by.repeater('roomList')).last().click();
         
         expect(element(by.model('room.roomID')).getAttribute("value")).toEqual('testE2E');
         expect(element(by.model('room.pointOfContact')).getAttribute("value")).toEqual('tester');
@@ -142,7 +135,7 @@ describe('E2E: Room =>', function() {
         element(by.model('room.role')).sendKeys('T'); // is a selectbox.
         
         element(by.id('btnSave')).click();
-        element(by.repeater('roomList').row(0)).click();
+        element.all(by.repeater('roomList')).last().click();
         
         expect(element(by.model('room.roomID')).getAttribute("value")).toEqual('testE2Ev2');
         expect(element(by.model('room.pointOfContact')).getAttribute("value")).toEqual('tester');
