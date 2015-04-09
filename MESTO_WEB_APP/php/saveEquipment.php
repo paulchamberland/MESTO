@@ -12,7 +12,7 @@ try {
         $rs = $stmt->fetchAll();
         
         $arr = array("msg" => "", "error" => "");
-        if ($rs[0]['nbEquip'] == 0 !empty($equip['serialNumber'])) {
+        if ($rs[0]['nbEquip'] == 0 && !empty($equip['serialNumber'])) {
             $sql = 'INSERT INTO equipment (serialNumber, barCode, manufacturer, model, configHW, configSW, type, updateBy, updateDate)'
                 .' values ("'.$equip['serialNumber'].'","'.$equip['barCode'].'","'.$equip['manufacturer'].'","'.$equip['model'].'","'.$equip['configHW'].'","'.$equip['configSW'].'","'.$equip['type'].'","apps", NOW())';
             $con->exec($sql);

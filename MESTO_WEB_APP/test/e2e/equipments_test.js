@@ -1,9 +1,9 @@
-describe('E2E: Equipment', function() {
+describe('E2E: Equipment =>', function() {
     beforeEach(function() {
         browser.get('http://localhost/MESTO/MESTO_WEB_APP/equipments.html');
     });
     
-    it('should have a title', function() {
+    it('Testing : Web label display', function() {
         expect(browser.getTitle()).toEqual('Manage Equipments');
     });
     
@@ -13,8 +13,6 @@ describe('E2E: Equipment', function() {
         //Expected 'ng-pristine ng-untouched ng-invalid ng-invalid-required' to equal 'ng-dirty'.
         expect(element(by.model('equipment.serialNumber')).getAttribute("class")).toMatch("ng-invalid-required");
     });
-    
-    // TODO: Improve by checking validation pattern after get Data from database
     
     it('Testing: State of Saving button', function() {
         var btn = element(by.id('btnSave'));
@@ -61,17 +59,8 @@ describe('E2E: Equipment', function() {
         expect(element(by.binding('SQLErrors')).getText()).toEqual('Equipment already exists with same serial number.');
         expect(element(by.binding('SQLMsgs')).getText()).toEqual('');
     });
-    it('Testing: Validation from getting database', function() {
-        element(by.repeater('equipmentList').row(0)).click(); // TODO: need to put something more flexible
-        
-        expect(element(by.model('equipment.serialNumber')).getAttribute("value")).toEqual('testE2E');
-        expect(element(by.model('equipment.barCode')).getAttribute("value")).toEqual('test');
-        expect(element(by.model('equipment.manufacturer')).getAttribute("value")).toEqual('tester');
-        expect(element(by.model('equipment.model')).getAttribute("value")).toEqual('Xw-133');
-        expect(element(by.model('equipment.configHW')).getAttribute("value")).toEqual('config 1');
-        expect(element(by.model('equipment.configSW')).getAttribute("value")).toEqual('config 2');
-        expect(element(by.model('equipment.type')).$('option:checked').getText()).toEqual('Server');
-    });
+
+    /******************** need data ****************************/
     it('Testing: State of Delete button', function() {
         var btn = element(by.id('btnDelete'));
         
@@ -83,6 +72,7 @@ describe('E2E: Equipment', function() {
         element(by.repeater('equipmentList').row(0)).click();
         expect(btn.isEnabled()).toBeTruthy();
     });
+    /***********************************************************/
     
     it('Testing: Update an equipment', function() {
         element(by.repeater('equipmentList').row(0)).click(); // TODO: need to put something more flexible
@@ -99,5 +89,28 @@ describe('E2E: Equipment', function() {
         element(by.id('btnDelete')).click();
         expect(element(by.binding('SQLErrors')).getText()).toEqual('');
         expect(element(by.binding('SQLMsgs')).getText()).toEqual('Equipment deleted successfully!!!');
+    });
+    
+    it('Testing: Full data validation with database', function() {
+        element(by.model('equipment.serialNumber')).sendKeys('testE2E_V2'); // unique & required
+        element(by.model('equipment.barCode')).sendKeys('test barcode');
+        element(by.model('equipment.manufacturer')).sendKeys('tester');
+        element(by.model('equipment.model')).sendKeys('X5');
+        element(by.model('equipment.configHW')).sendKeys('config 1');
+        element(by.model('equipment.configSW')).sendKeys('config 2');
+        element(by.model('equipment.type')).sendKeys('SRV');
+        
+        element(by.id('btnSave')).click();
+        element(by.repeater('equipmentList').row(0)).click(); // TODO: need to put something more flexible
+        
+        expect(element(by.model('equipment.serialNumber')).getAttribute("value")).toEqual('testE2E_V2');
+        expect(element(by.model('equipment.barCode')).getAttribute("value")).toEqual('test barcode');
+        expect(element(by.model('equipment.manufacturer')).getAttribute("value")).toEqual('tester');
+        expect(element(by.model('equipment.model')).getAttribute("value")).toEqual('X5');
+        expect(element(by.model('equipment.configHW')).getAttribute("value")).toEqual('config 1');
+        expect(element(by.model('equipment.configSW')).getAttribute("value")).toEqual('config 2');
+        expect(element(by.model('equipment.type')).$('option:checked').getText()).toEqual('Server');
+        
+        element(by.id('btnDelete')).click();
     });
 });

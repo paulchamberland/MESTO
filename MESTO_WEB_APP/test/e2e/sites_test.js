@@ -1,9 +1,9 @@
-describe('E2E: Site', function() {
+describe('E2E: Site => ', function() {
     beforeEach(function() {
         browser.get('http://localhost/MESTO/MESTO_WEB_APP/sites.html');
     });
     
-    it('should have a title', function() {
+    it('Testing : Web label display', function() {
         expect(browser.getTitle()).toEqual('Manage Sites');
     });
     
@@ -167,8 +167,6 @@ describe('E2E: Site', function() {
         expect(inputED.getAttribute("class")).toMatch("ng-valid-greater-than");
     });
     
-    // TODO: Improve by checking validation pattern after get Data from database
-    
     it('Testing: State of Saving button', function() {
         var btn = element(by.id('btnSave'));
         
@@ -193,7 +191,7 @@ describe('E2E: Site', function() {
         element(by.model('site.city')).sendKeys('t');
         expect(btn.isEnabled()).toBeFalsy();
         
-        element(by.repeater('s in siteList').row(0)).click();
+        element(by.repeater('s in siteList').row(0)).click(); // need to have data 
         expect(btn.isEnabled()).toBeTruthy();
     });
     
@@ -205,49 +203,89 @@ describe('E2E: Site', function() {
         element(by.model('site.city')).sendKeys('t');
         expect(btn.isEnabled()).toBeTruthy();
     });
+    
+    describe(' - Basic Database Operation => ', function() {
+        it('Testing: Save a site', function() {
+            element(by.model('site.reference')).sendKeys('testE2E');
+            element(by.model('site.latitude')).sendKeys('12.432132');
+            element(by.model('site.longitude')).sendKeys('12.321321');
+            element(by.model('site.siteName')).sendKeys('test scenario data');
+            
+            element(by.id('btnSave')).click();
+            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
+            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Site created successfully!!!');
+        });
+        it('Testing: Save a site, already exist', function() {
+            element(by.model('site.reference')).sendKeys('testE2E'); // unique 
+            element(by.model('site.latitude')).sendKeys('12.432132');
+            element(by.model('site.longitude')).sendKeys('12.321321');
+            element(by.model('site.siteName')).sendKeys('test scenario data');
+            
+            element(by.id('btnSave')).click();
+            expect(element(by.binding('SQLErrors')).getText()).toEqual('Site already exists with same reference.');
+            expect(element(by.binding('SQLMsgs')).getText()).toEqual('');
+        });
 
-    it('Testing: Save a site', function() {
-        element(by.model('site.reference')).sendKeys('testE2E');
-        element(by.model('site.latitude')).sendKeys('12.432132');
-        element(by.model('site.longitude')).sendKeys('12.321321');
-        element(by.model('site.siteName')).sendKeys('test scenario data');
-        
-        element(by.id('btnSave')).click();
-        expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-        expect(element(by.binding('SQLMsgs')).getText()).toEqual('Site created successfully!!!');
-    });
-    it('Testing: Save a site, already exist', function() {
-        element(by.model('site.reference')).sendKeys('testE2E'); // unique 
-        element(by.model('site.latitude')).sendKeys('12.432132');
-        element(by.model('site.longitude')).sendKeys('12.321321');
-        element(by.model('site.siteName')).sendKeys('test scenario data');
-        
-        element(by.id('btnSave')).click();
-        expect(element(by.binding('SQLErrors')).getText()).toEqual('Site already exists with same reference.');
-        expect(element(by.binding('SQLMsgs')).getText()).toEqual('');
+        // TODO : DateBug : Fail, problem of not feeding date, fill back with wrong date...
+        it('Testing: Update a site', function() {
+            //var sites = element.all(by.repeater('s in siteList'));
+            //var last = element(by.repeater('s in siteList').row(sites.count()-1));
+            
+            element(by.repeater('s in siteList').row(3)).click(); // TODO: need to put something more flexible
+            //last.click();
+            
+            element(by.model('site.siteName')).sendKeys('V2');// changed
+             
+            element(by.id('btnSave')).click();
+            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
+            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Site updated successfully!!!');
+        });
+        it('Testing: Delete a site', function() {
+            element(by.repeater('s in siteList').row(3)).click(); // TODO: need to put something more flexible
+            
+            element(by.id('btnDelete')).click();
+            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
+            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Site deleted successfully!!!');
+        });
     });
     
-    it('Testing: Update a site', function() {
-        //var sites = element.all(by.repeater('s in siteList'));
-        //var last = element(by.repeater('s in siteList').row(sites.count()-1));
-        
-        element(by.repeater('s in siteList').row(3)).click(); // TODO: need to put something more flexible
-        //last.click();
-        
-        element(by.model('site.siteName')).sendKeys('V2');// changed
-         
-        element(by.id('btnSave')).click();
-        expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-        expect(element(by.binding('SQLMsgs')).getText()).toEqual('Site updated successfully!!!');
-    });
-    it('Testing: Delete a site', function() {
-        element(by.repeater('s in siteList').row(3)).click(); // TODO: need to put something more flexible
-        
-        //expect(last).toEqual('testE2E');
-        //last.click();
-        
-        element(by.id('btnDelete')).click();
-        expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-        expect(element(by.binding('SQLMsgs')).getText()).toEqual('Site deleted successfully!!!');
+    describe(' - Advance database operation => ', function() {
+        // TODO : DateBug : Fail, problem of converting data, it fill back with wrong date...
+        it('Testing: Full data validation with database', function() {
+            element(by.model('site.reference')).sendKeys('testE2E');
+            element(by.model('site.latitude')).sendKeys('12.432132');
+            element(by.model('site.longitude')).sendKeys('12.321321');
+            element(by.model('site.siteName')).sendKeys('test scenario data');
+            element(by.model('site.description')).sendKeys('test description data');
+            element(by.model('site.address')).sendKeys('2020 du finfin');
+            element(by.model('site.city')).sendKeys('farnahm');
+            element(by.model('site.province')).sendKeys('québec');
+            element(by.model('site.country')).sendKeys('canada');
+            element(by.model('site.postalCode')).sendKeys('R4R 4R4');
+            element(by.model('site.role')).sendKeys('E');
+            element(by.model('site.isTemporary')).click();
+            element(by.model('site.startDate')).sendKeys('01-01-2011');
+            element(by.model('site.endDate')).sendKeys('01-01-2020');
+            
+            element(by.id('btnSave')).click();
+            element(by.repeater('siteList').row(3)).click();
+            
+            expect(element(by.model('site.reference')).getAttribute("value")).toEqual('testE2E');
+            expect(element(by.model('site.latitude')).getAttribute("value")).toEqual('12.432132');
+            expect(element(by.model('site.longitude')).getAttribute("value")).toEqual('12.321321');
+            expect(element(by.model('site.siteName')).getAttribute("value")).toEqual('test scenario data');
+            expect(element(by.model('site.description')).getAttribute("value")).toEqual('test description data');
+            expect(element(by.model('site.address')).getAttribute("value")).toEqual('2020 du finfin');
+            expect(element(by.model('site.city')).getAttribute("value")).toEqual('farnahm');
+            expect(element(by.model('site.province')).getAttribute("value")).toEqual('québec');
+            expect(element(by.model('site.country')).getAttribute("value")).toEqual('canada');
+            expect(element(by.model('site.postalCode')).getAttribute("value")).toEqual('R4R 4R4');
+            expect(element(by.model('site.role')).$('option:checked').getText()).toEqual('Edifice');
+            expect(element(by.model('site.isTemporary')).isSelected()).toBeTruthy();
+            expect(element(by.model('site.startDate')).getAttribute("value")).toEqual('01-01-2011');
+            expect(element(by.model('site.endDate')).getAttribute("value")).toEqual('01-01-2020');
+            
+            element(by.id('btnDelete')).click();
+        });
     });
 });

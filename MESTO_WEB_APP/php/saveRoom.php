@@ -68,8 +68,8 @@ try {
     }
 }
 catch (PDOException $e) {
-    /*echo "[error:'".$e->getMessage()."']";*/
-    $arr = array("msg" => "", "error" => "Database error, Contact administrator. Try later");
+    /*echo "[error:'".$e->getMessage()."']";*/ // TODO: when appends put that in a for better consultation
+    $arr = array("msg" => "", "error" => "Database error, Contact administrator. Try later : ".htmlspecialchars($e->getMessage()));
     header('Content-Type: application/json');
 	echo $json = json_encode($arr);
 }

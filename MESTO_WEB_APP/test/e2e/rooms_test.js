@@ -1,10 +1,9 @@
-describe('E2E: Room', function() {
+describe('E2E: Room =>', function() {
     beforeEach(function() {
         browser.get('http://localhost/MESTO/MESTO_WEB_APP/rooms.html');
-        //browser.waitForAngular();
     });
     
-    it('should have a title', function() {
+    it('Testing : Web label display', function() {
         expect(browser.getTitle()).toEqual('Manage Rooms');
     });
     
@@ -34,8 +33,6 @@ describe('E2E: Room', function() {
         expect(input.getAttribute("value")).toEqual('254');
         expect(input.getAttribute("class")).toMatch("ng-valid-pattern");
     });
-    
-    // TODO: Improve by checking validation pattern after get Data from database
     
     it('Testing: State of Saving button', function() {
         var btn = element(by.id('btnSave'));
@@ -78,15 +75,7 @@ describe('E2E: Room', function() {
         expect(element(by.binding('SQLErrors')).getText()).toEqual('Room already exists with same room ID.');
         expect(element(by.binding('SQLMsgs')).getText()).toEqual('');
     });
-    it('Testing: Validation from getting database', function() {
-        element(by.repeater('roomList').row(0)).click(); // TODO: need to put something more flexible
-        
-        expect(element(by.model('room.roomID')).getAttribute("value")).toEqual('testE2E');
-        expect(element(by.model('room.pointOfContact')).getAttribute("value")).toEqual('tester');
-        expect(element(by.model('room.technicalPointOfContact')).getAttribute("value")).toEqual('');
-        expect(element(by.model('room.roomSize')).getAttribute("value")).toEqual('24');
-        expect(element(by.model('room.role')).$('option:checked').getText()).toEqual('Telecom');
-    });
+    /******************** need data ****************************/
     it('Testing: State of Delete button', function() {
         var btn = element(by.id('btnDelete'));
         
@@ -98,6 +87,7 @@ describe('E2E: Room', function() {
         element(by.repeater('roomList').row(0)).click();
         expect(btn.isEnabled()).toBeTruthy();
     });
+    /***********************************************************/
     
     it('Testing: Update a room', function() {
         //var sites = element.all(by.repeater('s in siteList'));
@@ -122,4 +112,44 @@ describe('E2E: Room', function() {
         expect(element(by.binding('SQLErrors')).getText()).toEqual('');
         expect(element(by.binding('SQLMsgs')).getText()).toEqual('Room deleted successfully!!!');
     });
+    
+    it('Testing: Full data validation with database', function() {
+        element(by.model('room.roomID')).sendKeys('testE2E'); // unique & required
+        element(by.model('room.pointOfContact')).sendKeys('tester');
+        element(by.model('room.technicalPointOfContact')).sendKeys('tester technical');
+        element(by.model('room.roomSize')).sendKeys('24');
+        element(by.model('room.role')).sendKeys('T');
+        
+        element(by.id('btnSave')).click();
+        element(by.repeater('roomList').row(0)).click(); // TODO: need to put something more flexible
+        
+        expect(element(by.model('room.roomID')).getAttribute("value")).toEqual('testE2E');
+        expect(element(by.model('room.pointOfContact')).getAttribute("value")).toEqual('tester');
+        expect(element(by.model('room.technicalPointOfContact')).getAttribute("value")).toEqual('tester technical');
+        expect(element(by.model('room.roomSize')).getAttribute("value")).toEqual('24');
+        expect(element(by.model('room.role')).$('option:checked').getText()).toEqual('Telecom');
+        
+        element(by.id('btnDelete')).click();
+    });
+    
+    /*
+    // TODO: By default, angular don't trust html tag, but define some way to be bulletproof for XSS attack
+    it('Testing: removing html and php tag', function() {
+        element(by.model('room.roomID')).sendKeys('testE2E<h1>v2</h1>'); // unique & required
+        element(by.model('room.pointOfContact')).sendKeys('tester<?php echo "test";?>');
+        element(by.model('room.technicalPointOfContact')).sendKeys('tester t<script>alert("show me");</script>');
+        element(by.model('room.roomSize')).sendKeys('24'); // have a pattern to block anything a number
+        element(by.model('room.role')).sendKeys('T'); // is a selectbox.
+        
+        element(by.id('btnSave')).click();
+        element(by.repeater('roomList').row(0)).click();
+        
+        expect(element(by.model('room.roomID')).getAttribute("value")).toEqual('testE2Ev2');
+        expect(element(by.model('room.pointOfContact')).getAttribute("value")).toEqual('tester');
+        expect(element(by.model('room.technicalPointOfContact')).getAttribute("value")).toEqual('tester t');
+        expect(element(by.model('room.roomSize')).getAttribute("value")).toEqual('24');
+        expect(element(by.model('room.role')).$('option:checked').getText()).toEqual('Telecom');
+        
+        element(by.id('btnDelete')).click();
+    });*/
 });
