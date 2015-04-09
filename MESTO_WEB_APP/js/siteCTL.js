@@ -50,15 +50,19 @@ app.controller('siteCTL', function($scope, $http) {
         $scope.site.endDate = new Date($scope.site.endDate).toDMY();
         $scope.siteForm.$setPristine();
         $scope.canDelete = true;
-        // TODO: reset old msg
+        $scope.resetMsg();
     };
     
     $scope.resetFrm = function() {
         $scope.site = angular.copy(self.emptySite);
         $scope.siteForm.$setPristine();
         $scope.canDelete = false;
-        // TODO: reset old msg update a site, load again, modify and clic on reset...
     };
+    
+    $scope.resetMsg = function() {
+        if ($scope.SQLErrors) delete $scope.SQLErrors;
+        if ($scope.SQLMsgs) delete $scope.SQLMsgs;
+    }
     
     $scope.save = function() {
         if ($scope.siteForm.$dirty && $scope.siteForm.$valid) {

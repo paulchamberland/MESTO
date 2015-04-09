@@ -27,6 +27,8 @@ describe('Testing the controller of equipment object', function() {
 
     it('Testing: Load of an equipment', function() {
         scope.equipmentForm = {$setPristine : function(){}};
+        scope.SQLMsgs = "Good message";
+        scope.SQLErrors = "bad message";
         
         var fakeEquipment = {id: "1",
                             serialNumber :"432-43453454-4ref4",
@@ -41,6 +43,8 @@ describe('Testing the controller of equipment object', function() {
         
         expect(scope.equipment).toEqual(fakeEquipment);
         expect(scope.canDelete).toBe(true);
+        expect(scope.SQLMsgs).not.toBeDefined();
+        expect(scope.SQLErrors).not.toBeDefined();
     });
     
     it('Testing: Reset form', function() {
@@ -65,6 +69,20 @@ describe('Testing the controller of equipment object', function() {
                                         configHW :"",
                                         configSW :"",
                                         type:""});
+    });
+    
+    it('Testing: Reset Messages ', function() {
+        scope.resetMsg(); // Test when already not define
+        
+        expect(scope.SQLMsgs).not.toBeDefined();
+        expect(scope.SQLErrors).not.toBeDefined();
+        
+        scope.SQLMsgs = "Good message";
+        scope.SQLErrors = "bad message";
+        scope.resetMsg(); // test when define
+        
+        expect(scope.SQLMsgs).not.toBeDefined();
+        expect(scope.SQLErrors).not.toBeDefined();
     });
     
     describe('Testing Ajax call from Equipment object', function() {

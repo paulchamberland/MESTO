@@ -34,15 +34,19 @@ app.controller('equipmentCTL', function($scope, $http) {
         $scope.equipment = angular.copy(p_equip);
         $scope.equipmentForm.$setPristine();
         $scope.canDelete = true;
-        // TODO: reset old msg:
+        $scope.resetMsg();
     };
     
     $scope.resetFrm = function() {
         $scope.equipment = angular.copy(self.emptyEquipment);
         $scope.equipmentForm.$setPristine();
         $scope.canDelete = false;
-        // TODO: reset old msg: update an equipment, load again, modify and clic on reset...
     };
+    
+    $scope.resetMsg = function() {
+        if ($scope.SQLErrors) delete $scope.SQLErrors;
+        if ($scope.SQLMsgs) delete $scope.SQLMsgs;
+    }
     
     $scope.save = function() {
         if ($scope.equipmentForm.$dirty && $scope.equipmentForm.$valid) {

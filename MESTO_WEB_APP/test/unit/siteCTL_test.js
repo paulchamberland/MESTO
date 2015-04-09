@@ -33,6 +33,8 @@ describe('Testing the controller of site object', function() {
 
     it('Testing: Load of a site', function() {
         scope.siteForm = {$setPristine : function(){}};
+        scope.SQLMsgs = "Good message";
+        scope.SQLErrors = "bad message";
         
         var fakeSite = {id: "1",
                     reference :"test",
@@ -56,10 +58,9 @@ describe('Testing the controller of site object', function() {
         fakeSite.endDate = new Date(fakeSite.endDate).toDMY();
         
         expect(scope.site).toEqual(fakeSite);
-        //expect($scope.siteForm.$pristine).toBe(true);
-        //expect($scope.siteForm.$dirty).toBe(false);
-        //expect($scope.siteForm.$valid).toBe(true);
         expect(scope.canDelete).toBe(true);
+        expect(scope.SQLMsgs).not.toBeDefined();
+        expect(scope.SQLErrors).not.toBeDefined();
     });
     
     it('Testing: Reset form', function() {
@@ -101,6 +102,20 @@ describe('Testing the controller of site object', function() {
                                     country:"",
                                     postalCode:"",
                                     role:""});
+    });
+    
+    it('Testing: Reset Messages ', function() {
+        scope.resetMsg(); // Test when already not define
+        
+        expect(scope.SQLMsgs).not.toBeDefined();
+        expect(scope.SQLErrors).not.toBeDefined();
+        
+        scope.SQLMsgs = "Good message";
+        scope.SQLErrors = "bad message";
+        scope.resetMsg(); // test when define
+        
+        expect(scope.SQLMsgs).not.toBeDefined();
+        expect(scope.SQLErrors).not.toBeDefined();
     });
     
     describe('Testing Ajax call from site object', function() {

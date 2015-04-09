@@ -25,6 +25,8 @@ describe('Testing the controller of room object', function() {
 
     it('Testing: Load of a room', function() {
         scope.roomForm = {$setPristine : function(){}};
+        scope.SQLMsgs = "Good message";
+        scope.SQLErrors = "bad message";
         
         var fakeRoom = {id: "1",
                     roomID :"erv324r23",
@@ -37,6 +39,8 @@ describe('Testing the controller of room object', function() {
         
         expect(scope.room).toEqual(fakeRoom);
         expect(scope.canDelete).toBe(true);
+        expect(scope.SQLMsgs).not.toBeDefined();
+        expect(scope.SQLErrors).not.toBeDefined();
     });
     
     it('Testing: Reset form', function() {
@@ -57,6 +61,20 @@ describe('Testing the controller of room object', function() {
                                     technicalPointOfContact :"",
                                     roomSize :"",
                                     role:""});
+    });
+    
+    it('Testing: Reset Messages ', function() {
+        scope.resetMsg(); // Test when already not define
+        
+        expect(scope.SQLMsgs).not.toBeDefined();
+        expect(scope.SQLErrors).not.toBeDefined();
+        
+        scope.SQLMsgs = "Good message";
+        scope.SQLErrors = "bad message";
+        scope.resetMsg(); // test when define
+        
+        expect(scope.SQLMsgs).not.toBeDefined();
+        expect(scope.SQLErrors).not.toBeDefined();
     });
     
     describe('Testing Ajax call from Room object', function() {

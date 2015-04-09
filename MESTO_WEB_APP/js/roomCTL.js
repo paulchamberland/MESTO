@@ -30,15 +30,19 @@ app.controller('roomCTL', function($scope, $http) {
         $scope.room = angular.copy(p_room);
         $scope.roomForm.$setPristine();
         $scope.canDelete = true;
-        // TODO: reset old msg:
+        $scope.resetMsg();
     };
     
     $scope.resetFrm = function() {
         $scope.room = angular.copy(self.emptyRoom);
         $scope.roomForm.$setPristine();
         $scope.canDelete = false;
-        // TODO: reset old msg: update a room, load again, modify and clic on reset...
     };
+    
+    $scope.resetMsg = function() {
+        if ($scope.SQLErrors) delete $scope.SQLErrors;
+        if ($scope.SQLMsgs) delete $scope.SQLMsgs;
+    }
     
     $scope.save = function() {
         if ($scope.roomForm.$dirty && $scope.roomForm.$valid) {
