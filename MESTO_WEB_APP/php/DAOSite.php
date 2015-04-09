@@ -1,29 +1,32 @@
 <?php
-class bld { // structure of a building
+class site { // structure of a site
 	public $id;
 	public $reference;
 	public $latitude;
 	public $longitude;
-	public $bldName;
+	public $siteName;
 	public $description;
 	public $address;
 	public $city;
 	public $province;
 	public $country;
 	public $postalCode;
+    public $isTemporary;
 	public $startDate;
 	public $endDate;
+    public $role;
 	public $updateBy;
     public $updateDate;
 }
-
+$arr = null;
 try {
+    //throw new PDOException('juste un test');
 	$con = new PDO("mysql:host=localhost;dbname=mesto", "root", "");
 	$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$stmt = $con->prepare("SELECT * from building;");
+	$stmt = $con->prepare("SELECT * from site;");
 	$stmt->execute();
 	
-	$json = json_encode($stmt->fetchAll(PDO::FETCH_CLASS, "bld"));
+	$json = json_encode($stmt->fetchAll(PDO::FETCH_CLASS, "site"));
     
     header('Content-Type: application/json');
     if (!$json)
@@ -57,8 +60,16 @@ try {
     
 }
 catch (PDOException $e) {
-	echo "[error:$e->getMessage()]";
+    /*echo "[error:'".$e->getMessage()."']";*/
+    $arr = array("msg" => "", "error" => "Database error, Contact administrator. Try later");
+    header('Content-Type: application/json');
+	echo $json = json_encode($arr);
 }
-$con = null;
+catch (Exception $e) {
+	echo "[error:'".$e->getMessage()."']";
+}
+finally {
+    $con = null;
+}
 
 ?>
