@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Manage Equipments</title>
+  <script src="libs/angular.min.js"></script>
+  <script src="js/mestoHelper.js"></script>
+  <script src="js/mestoApp.js"></script>
+  <script src="js/equipmentCTL.js"></script>
+  <link rel="stylesheet" type="text/css" href="ressources/css/mesto.css">
+</head>
+<body data-ng-app="MESTO" data-ng-controller="equipmentCTL">
+	<h1>Add an equipment</h1>
+	<div >
+		<div data-ng-show="equipmentForm.$dirty && equipmentForm.$invalid">
+			<span class="error" data-ng-show="equipmentForm.serialNumber.$error.required">A serial number is required.</span>
+		</div>
+        <span class="error">{{SQLErrors}}</span>
+        <span class="t">{{SQLMsgs}}</span>
+		<form name="equipmentForm" novalidate >
+			<input type="hidden" id="id" name="id" data-ng-model="equipment.id" />
+			<div class="section">
+				<div class="field"><label for="serialNumber">Serial number * :</label><input type="text" id="serialNumber" name="serialNumber" data-ng-model="equipment.serialNumber" required /></div>
+				<div class="field"><label for="barCode">Bar Code :</label><input type="text" id="barCode" name="barCode" data-ng-model="equipment.barCode" /></div>
+				<div class="field"><label for="manufacturer">Manufacturer :</label><input type="text" id="manufacturer" name="manufacturer" data-ng-model="equipment.manufacturer" /></div>
+				<div class="field"><label for="model">Model :</label><input type="text" id="model" name="model" data-ng-model="equipment.model" /></div>
+				<div class="field"><label for="configHW">HW Config :</label><input type="text" id="configHW" name="configHW" data-ng-model="equipment.configHW" /></div>
+				<div class="field"><label for="configSW">SW Config :</label><input type="text" id="configSW" name="configSW" data-ng-model="equipment.configSW" /></div>
+				<div class="field"><label for="type">Type :</label><select id="type" ng-model="equipment.type" name="type" ng-options="type.value as type.label for type in TYPE"></select></div>
+			</div>
+		</form>
+		<button id="btnSave" data-ng-click="save();" ng-disabled="equipmentForm.$pristine || equipmentForm.$invalid">Save</button>
+		<button id="btnDelete" data-ng-click="delete();" ng-disabled="!canDelete">Delete</button>
+        <button id="btnReset" data-ng-click="resetFrm();" ng-disabled="equipmentForm.$pristine">Reset</button>
+	</div>
+    
+	<div>
+        <h1>Equipment List</h1>
+        <span class="error" data-ng-show="lstError">{{lstError}}</span>
+		<table border="1">
+            <tr><th>Serial Number</th><th>Model</th></tr>
+			<tr data-ng-repeat="e in equipmentList" data-ng-click="loadEquipment(e)">
+				<td>{{e.serialNumber}}</td><td>{{e.model}}</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

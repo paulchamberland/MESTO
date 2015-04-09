@@ -41,3 +41,7 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+#CodeCoverage create by UnitTesting
+MESTO_WEB_APP/coverage/*.*
+MESTO_WEB_APP/test-results.xml

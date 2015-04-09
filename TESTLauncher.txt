@@ -1,0 +1,10 @@
+---- unit test laucher ----
+C:\Users\Jo\Documents\GitHub> karma start .\MESTO\MESTO_WEB_APP\test\karma-conf.js --single-run
+
+---- e2e laucher ----
+C:\Users\Jo\Documents\GitHub> webdriver-manager start
+C:\Users\Jo\Documents\GitHub> protractor .\MESTO\MESTO_WEB_APP\test\protractor-conf.js
+
+---- PHP unit test laucher ----
+- install: https://phpunit.de/manual/current/en/installation.html
+C:\Users\Jo\Documents\GitHub> phpunit .\MESTO\MESTO_WEB_APP\test\phpUnit\simple_test.php

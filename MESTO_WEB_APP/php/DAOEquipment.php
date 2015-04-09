@@ -1,32 +1,24 @@
 <?php
-class site { // structure of a site
+class equipment { // structure of an equipment
 	public $id;
-	public $reference;
-	public $latitude;
-	public $longitude;
-	public $siteName;
-	public $description;
-	public $address;
-	public $city;
-	public $province;
-	public $country;
-	public $postalCode;
-    public $isTemporary;
-	public $startDate;
-	public $endDate;
-    public $role;
+	public $serialNumber;
+	public $barCode;
+	public $manufacturer;
+    public $model;
+    public $configHW;
+    public $configSW;
+    public $type;
 	public $updateBy;
     public $updateDate;
 }
-$arr = null;
+
 try {
-    //throw new PDOException('juste un test');
 	$con = new PDO("mysql:host=localhost;dbname=mesto", "root", "");
 	$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$stmt = $con->prepare("SELECT * from site;");
+	$stmt = $con->prepare("SELECT * from equipment;");
 	$stmt->execute();
 	
-	$json = json_encode($stmt->fetchAll(PDO::FETCH_CLASS, "site"));
+	$json = json_encode($stmt->fetchAll(PDO::FETCH_CLASS, "equipment"));
     
     header('Content-Type: application/json');
     if (!$json)

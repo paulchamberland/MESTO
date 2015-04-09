@@ -1,6 +1,6 @@
 <?php
 $site = json_decode(file_get_contents("php://input"), true);
-// TODO : remove html and script from data.
+// TODO: htmlspecialchars() and json_decode are not compatible for some reason, find a ways to secure data from XSS
 
 try {
     $con = new PDO("mysql:host=localhost;dbname=mesto", "root", "");
@@ -12,12 +12,12 @@ try {
         $rs = $stmt->fetchAll();
         
         $arr = array("msg" => "", "error" => "");
-        if ($rs[0]['nbSite'] == 0) {
+        if ($rs[0]['nbSite'] == 0 && !empty($site['reference']) && !empty($site['latitude']) && !empty($site['longitude']) && !empty($site['siteName'])) {
             $sql = 'INSERT INTO site (reference, latitude, longitude, siteName, description, address, city, province, country, postalCode, isTemporary, startDate, endDate, role, updateBy, updateDate)'
                 .' values ("'.$site['reference'].'","'.$site['latitude'].'","'.$site['longitude'].'","'.$site['siteName'].'","'.$site['description'].'","'.$site['address']
                 .'","'.$site['city'].'","'.$site['province'].'","'.$site['country'].'","'.$site['postalCode'].'","'.$site['isTemporary'].'","'.$site['startDate'].'","'.$site['endDate'].'","'.$site['role'].'","apps", NOW())';
             $con->exec($sql);
-            $arr = array("msg" => "Site created successfully!!!", "error" => "");
+            $arr["msg"] = "Site created successfully!!!";
         } else {
             $arr["error"] = "Site already exists with same reference.";
         }
@@ -28,6 +28,8 @@ try {
         $arr = array("msg" => "Site deleted successfully!!!", "error" => "");
     }
     else {
+        // TODO: Update reference? That is unique. Need validation or block updating that in GUI.
+        // TODO: Update name? That is unique. Need validation or block updating that in GUI.
         $sql = 'UPDATE site SET reference="'.$site['reference'].'", latitude="'.$site['latitude'].'", longitude="'.$site['longitude'].'", siteName="'.$site['siteName']
                     .'", description="'.$site['description'].'", address="'.$site['address'].'", city="'.$site['city'].'", province="'.$site['province']
                     .'", country="'.$site['country'].'", postalCode="'.$site['postalCode'].'", isTemporary="'.$site['isTemporary'].'", startDate="'.$site['startDate']
