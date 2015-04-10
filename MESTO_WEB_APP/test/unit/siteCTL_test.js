@@ -1,4 +1,4 @@
-describe('Testing the controller of site object', function() {
+describe('Testing the controller of site object =>', function() {
     beforeEach(module('MESTO'));
     var controller, scope;
 
@@ -43,8 +43,8 @@ describe('Testing the controller of site object', function() {
                     siteName:"test4",
                     description:"test5",
                     isTemporary:true,
-                    startDate:"12-12-1912",
-                    endDate:"11-11-1900",
+                    startDate:"1912-01-01",
+                    endDate:"1900-11-11",
                     address:"test9",
                     city:"test10",
                     province:"test11",
@@ -54,13 +54,67 @@ describe('Testing the controller of site object', function() {
                     
         scope.loadSite(fakeSite);
         
-        fakeSite.startDate = new Date(fakeSite.startDate).toDMY();
-        fakeSite.endDate = new Date(fakeSite.endDate).toDMY();
-        
-        expect(scope.site).toEqual(fakeSite);
+        expect(scope.site).toEqual({id: "1",
+                                    reference :"test",
+                                    latitude:"12.123456",
+                                    longitude:"43.123456",
+                                    siteName:"test4",
+                                    description:"test5",
+                                    isTemporary:true,
+                                    startDate:"01-01-1912",
+                                    endDate:"11-11-1900",
+                                    address:"test9",
+                                    city:"test10",
+                                    province:"test11",
+                                    country:"test12",
+                                    postalCode:"X5X 5X5",
+                                    role:"COP"});
         expect(scope.canDelete).toBe(true);
         expect(scope.SQLMsgs).not.toBeDefined();
         expect(scope.SQLErrors).not.toBeDefined();
+    });
+    it('Testing: Validation of Date at loading', function() {
+        scope.siteForm = {$setPristine : function(){}};
+        
+        var fakeSite = {id: "1",
+                    reference :"test",
+                    latitude:"12.123456",
+                    longitude:"43.123456",
+                    siteName:"test4",
+                    isTemporary:true,
+                    startDate:"01-01-2008",
+                    endDate:"01-01-2010"};
+                    
+        scope.loadSite(fakeSite);
+        
+        expect(scope.site).toEqual({id: "1",
+                    reference :"test",
+                    latitude:"12.123456",
+                    longitude:"43.123456",
+                    siteName:"test4",
+                    isTemporary:true,
+                    startDate:"01-01-2008",
+                    endDate:"01-01-2010"});
+        
+        var fakeSite2 = {id: "2",
+            reference :"tester",
+            latitude:"55.123456",
+            longitude:"44.123456",
+            siteName:"tester2",
+            isTemporary:true,
+            startDate:"2008-01-01",
+            endDate:"2010-01-01"};
+                    
+        scope.loadSite(fakeSite2);
+        
+        expect(scope.site).toEqual({id: "2",
+                    reference :"tester",
+                    latitude:"55.123456",
+                    longitude:"44.123456",
+                    siteName:"tester2",
+                    isTemporary:true,
+                    startDate:"01-01-2008",
+                    endDate:"01-01-2010"});
     });
     
     it('Testing: Reset form', function() {
@@ -72,8 +126,8 @@ describe('Testing the controller of site object', function() {
                     siteName:"test4",
                     description:"test5",
                     isTemporary:true,
-                    startDate:"12-12-1912",
-                    endDate:"11-11-1900",
+                    startDate:"1912-12-12",
+                    endDate:"1900-11-11",
                     address:"test9",
                     city:"test10",
                     province:"test11",
@@ -118,7 +172,7 @@ describe('Testing the controller of site object', function() {
         expect(scope.SQLErrors).not.toBeDefined();
     });
     
-    describe('Testing Ajax call from site object', function() {
+    describe('Testing Ajax call from site object =>', function() {
         beforeEach(inject(function(_$httpBackend_) {
             $httpBackend = _$httpBackend_;
         }));
@@ -131,8 +185,8 @@ describe('Testing the controller of site object', function() {
                                                                                         +'"siteName":"test4",'
                                                                                         +'"description":"test5",'
                                                                                         +'"isTemporary":true,'
-                                                                                        +'"startDate":"12-12-1912",'
-                                                                                        +'"endDate":"11-11-1900",'
+                                                                                        +'"startDate":"1912-12-12",'
+                                                                                        +'"endDate":"1900-11-11",'
                                                                                         +'"address":"test9",'
                                                                                         +'"city":"test10",'
                                                                                         +'"province":"test11",'
@@ -152,8 +206,8 @@ describe('Testing the controller of site object', function() {
                                                 "siteName":"test4",
                                                 "description":"test5",
                                                 "isTemporary":true,
-                                                "startDate":"12-12-1912",
-                                                "endDate":"11-11-1900",
+                                                "startDate":"1912-12-12",
+                                                "endDate":"1900-11-11",
                                                 "address":"test9",
                                                 "city":"test10",
                                                 "province":"test11",
@@ -199,8 +253,8 @@ describe('Testing the controller of site object', function() {
                                                                                         +'"siteName":"test4",'
                                                                                         +'"description":"test5",'
                                                                                         +'"isTemporary":true,'
-                                                                                        +'"startDate":"12-12-1912",'
-                                                                                        +'"endDate":"11-11-1900",'
+                                                                                        +'"startDate":"1912-12-12",'
+                                                                                        +'"endDate":"1900-11-11",'
                                                                                         +'"address":"test9",'
                                                                                         +'"city":"test10",'
                                                                                         +'"province":"test11",'
@@ -232,8 +286,8 @@ describe('Testing the controller of site object', function() {
                                                                                         +'"siteName":"test4",'
                                                                                         +'"description":"test5",'
                                                                                         +'"isTemporary":true,'
-                                                                                        +'"startDate":"12-12-1912",'
-                                                                                        +'"endDate":"11-11-1900",'
+                                                                                        +'"startDate":"1912-12-12",'
+                                                                                        +'"endDate":"1900-11-11",'
                                                                                         +'"address":"test9",'
                                                                                         +'"city":"test10",'
                                                                                         +'"province":"test11",'
@@ -270,8 +324,8 @@ describe('Testing the controller of site object', function() {
                                                 "siteName":"test4",
                                                 "description":"test5",
                                                 "isTemporary":true,
-                                                "startDate":"12-12-1912",
-                                                "endDate":"11-11-1900",
+                                                "startDate":"1912-12-12",
+                                                "endDate":"1900-11-11",
                                                 "address":"test9",
                                                 "city":"test10",
                                                 "province":"test11",

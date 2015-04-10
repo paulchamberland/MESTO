@@ -253,7 +253,7 @@ describe('E2E: Site => ', function() {
             element(by.model('site.longitude')).sendKeys('12.321321');
             element(by.model('site.siteName')).sendKeys('test scenario data');
             element(by.model('site.description')).sendKeys('test description data');
-            element(by.model('site.address')).sendKeys('2020 du finfin');
+            element(by.model('site.address')).sendKeys('90 du vieux');
             element(by.model('site.city')).sendKeys('farnahm');
             element(by.model('site.province')).sendKeys('québec');
             element(by.model('site.country')).sendKeys('canada');
@@ -271,7 +271,7 @@ describe('E2E: Site => ', function() {
             expect(element(by.model('site.longitude')).getAttribute("value")).toEqual('12.321321');
             expect(element(by.model('site.siteName')).getAttribute("value")).toEqual('test scenario data');
             expect(element(by.model('site.description')).getAttribute("value")).toEqual('test description data');
-            expect(element(by.model('site.address')).getAttribute("value")).toEqual('2020 du finfin');
+            expect(element(by.model('site.address')).getAttribute("value")).toEqual('90 du vieux');
             expect(element(by.model('site.city')).getAttribute("value")).toEqual('farnahm');
             expect(element(by.model('site.province')).getAttribute("value")).toEqual('québec');
             expect(element(by.model('site.country')).getAttribute("value")).toEqual('canada');

@@ -46,8 +46,8 @@ app.controller('siteCTL', function($scope, $http) {
     
     $scope.loadSite = function(p_site) {
         $scope.site = angular.copy(p_site);
-        $scope.site.startDate = new Date($scope.site.startDate).toDMY();
-        $scope.site.endDate = new Date($scope.site.endDate).toDMY();
+        $scope.site.startDate = Date.parseToDMY($scope.site.startDate);
+        $scope.site.endDate = Date.parseToDMY($scope.site.endDate);
         $scope.siteForm.$setPristine();
         $scope.canDelete = true;
         $scope.resetMsg();
@@ -77,7 +77,7 @@ app.controller('siteCTL', function($scope, $http) {
                     siteName : $scope.site.siteName,
                     description : $scope.site.description,
                     isTemporary : $scope.site.isTemporary,
-                    startDate : new Date($scope.site.startDate).toYMD(), // TODO : problem with the constructor, make it custom to put real value. Date.Parse?
+                    startDate : new Date($scope.site.startDate).toYMD(), 
                     endDate : new Date($scope.site.endDate).toYMD(),
                     address : $scope.site.address,
                     city : $scope.site.city,
