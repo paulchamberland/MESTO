@@ -1,11 +1,11 @@
 describe('E2E: Site => ', function() {
     beforeEach(function() {
-        browser.get('http://localhost/MESTO/MESTO_WEB_APP/sites.html');
+        browser.get('http://localhost/MESTO/MESTO_WEB_APP/#/site');
     });
     
-    it('Testing : Web label display', function() {
+    /*it('Testing : Web label display', function() {
         expect(browser.getTitle()).toEqual('Manage Sites');
-    });
+    });*/
     
     it('Testing: Required form fields', function() {
         element(by.model('site.city')).sendKeys('t'); // started state
@@ -167,6 +167,29 @@ describe('E2E: Site => ', function() {
         expect(inputED.getAttribute("class")).toMatch("ng-valid-greater-than");
     });
     
+    it('Testing: Validation pattern of phone number of PoC', function() {
+        var input = element(by.model('site.phoneNumberPoC'));
+        input.sendKeys('t');
+        expect(input.getAttribute("class")).toMatch("ng-invalid-pattern");
+        
+        input.clear();
+        input.sendKeys('54343223243');
+        expect(input.getAttribute("class")).toMatch("ng-invalid-pattern");
+        
+        input.clear();
+        input.sendKeys('514 555 2321');
+        expect(input.getAttribute("class")).toMatch("ng-invalid-pattern");
+        
+        input.clear();
+        input.sendKeys('514-541-4324');
+        expect(input.getAttribute("class")).toMatch("ng-valid-pattern");
+        
+        input.clear();
+        input.sendKeys('000-000-0000');
+        expect(input.getAttribute("class")).toMatch("ng-valid-pattern");
+    });
+    
+    
     it('Testing: State of Saving button', function() {
         var btn = element(by.id('btnSave'));
         
@@ -262,6 +285,8 @@ describe('E2E: Site => ', function() {
             element(by.model('site.isTemporary')).click();
             element(by.model('site.startDate')).sendKeys('01-01-2011');
             element(by.model('site.endDate')).sendKeys('01-01-2020');
+            element(by.model('site.pointOfContact')).sendKeys('Lt. Bariton');
+            element(by.model('site.phoneNumberPoC')).sendKeys('514-555-4321');
             
             element(by.id('btnSave')).click();
             element.all(by.repeater('siteList')).last().click();
@@ -280,6 +305,8 @@ describe('E2E: Site => ', function() {
             expect(element(by.model('site.isTemporary')).isSelected()).toBeTruthy();
             expect(element(by.model('site.startDate')).getAttribute("value")).toEqual('01-01-2011');
             expect(element(by.model('site.endDate')).getAttribute("value")).toEqual('01-01-2020');
+            expect(element(by.model('site.pointOfContact')).getAttribute("value")).toEqual('Lt. Bariton');
+            expect(element(by.model('site.phoneNumberPoC')).getAttribute("value")).toEqual('514-555-4321');
             
             element(by.id('btnDelete')).click();
         });

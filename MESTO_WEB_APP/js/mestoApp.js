@@ -1,6 +1,9 @@
 var app = angular.module('MESTO', ['ngRoute']);
 app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/home', {templateUrl:'home.html', controller:'mapCTL'});
+    $routeProvider.when('/site', {templateUrl:'sites.html', controller:'siteCTL'});
+    $routeProvider.when('/room', {templateUrl:'rooms.html', controller:'roomCTL'});
+    $routeProvider.when('/equip', {templateUrl:'equipments.html', controller:'equipmentCTL'});
     $routeProvider.when('/admin', {templateUrl:'mt-admin/index.php'});
     $routeProvider.otherwise({redirectTo:"/home"});
 }]);

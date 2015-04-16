@@ -1,13 +1,13 @@
 /* In IE vs Chrome, the column of textarea is different */
-form {
+.basic {
 	border:1px solid black;
-	width:695px; 
+	width:705px; 
 	height:300px;
 }
 
 .section, .section2 {
     display: block;
-    width: 330px;
+    width: 335px;
 	/*border: 1px solid red;*/
 	padding: 4px;
 }

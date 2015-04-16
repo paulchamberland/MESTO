@@ -8,6 +8,7 @@ module.exports = function(config){
       // include relevant Angular files and libs
       'libs/angular.min.js',
       'libs/angular-mocks.js',
+      'libs/angular-route.min.js',
  
       // include js files
       'js/mestoApp.js',

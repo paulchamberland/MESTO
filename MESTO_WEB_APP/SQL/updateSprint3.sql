@@ -8,3 +8,6 @@ CREATE TABLE IF NOT EXISTS mtuser (
 
 INSERT INTO mtuser (username, password) VALUES
 ('tester', 'tester');
+
+ALTER TABLE `site` ADD `pointOfContact` varchar(45) NULL AFTER `role`;
+ALTER TABLE `site` ADD `phoneNumberPoC` varchar(12) NULL AFTER `pointOfContact`;

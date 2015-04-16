@@ -17,7 +17,9 @@ app.controller('siteCTL', function($scope, $http) {
                     province:"",
                     country:"",
                     postalCode:"",
-                    role:""};
+                    role:"",
+                    pointOfContact:"",
+                    phoneNumberPoC:""};
     this.emptySite = {};
     $scope.canDelete = false;
     
@@ -36,7 +38,9 @@ app.controller('siteCTL', function($scope, $http) {
                     province:"test11",
                     country:"test12",
                     postalCode:"X5X 5X5",
-                    role:"COP"};
+                    role:"COP",
+                    pointOfContact:"Lt. Bariton",
+                    phoneNumberPoC:"514-555-4321"};
     
     function init() {
         loadList();
@@ -84,7 +88,9 @@ app.controller('siteCTL', function($scope, $http) {
                     province : $scope.site.province,
                     country : $scope.site.country,
                     postalCode : $scope.site.postalCode,
-                    role : $scope.site.role
+                    role : $scope.site.role,
+                    pointOfContact : $scope.site.pointOfContact,
+                    phoneNumberPoC : $scope.site.phoneNumberPoC
                 },
                 headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
             }).success(
