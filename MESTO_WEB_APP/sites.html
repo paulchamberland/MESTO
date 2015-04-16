@@ -1,11 +1,14 @@
-<link rel="stylesheet" type="text/css" href="ressources/css/mesto.css">
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#menu').load('menu.html');
-    });
-</script>
-<div id="menu" style="position: relative; z-index: 1" ></div> 
-<div>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Manage Sites</title>
+  <script src="libs/angular.min.js"></script>
+  <script src="js/mestoHelper.js"></script>
+  <script src="js/mestoApp.js"></script>
+  <script src="js/siteCTL.js"></script>
+  <link rel="stylesheet" type="text/css" href="ressources/css/mesto.css">
+</head>
+<body data-ng-app="MESTO" data-ng-controller="siteCTL">
 	<h1>Add a Site</h1>
 	<div >
 		<div data-ng-show="siteForm.$dirty && siteForm.$invalid">
@@ -20,11 +23,10 @@
             <span class="error" data-ng-show="siteForm.endDate.$error.required">End date is required for temporary site.</span>
 			<span class="error" data-ng-show="siteForm.endDate.$error.pattern">Invalid end date format.</span>
             <span class="error" data-ng-show="siteForm.endDate.$error.greaterThan">End date need to be greater than start date.</span>
-			<span class="error" data-ng-show="siteForm.phoneNumberPoC.$error.pattern">Invalid Phone number of PoC format.</span>
 		</div>
         <span class="error">{{SQLErrors}}</span>
         <span class="t">{{SQLMsgs}}</span>
-		<form class="basic" name="siteForm" novalidate >
+		<form name="siteForm" novalidate >
 			<input type="hidden" id="id" name="id" data-ng-model="site.id" />
 			<div class="section">
 				<div class="field"><label for="reference"># reference * :</label><input type="text" id="reference" name="reference" data-ng-model="site.reference" required /></div>
@@ -51,8 +53,6 @@
 				<div class="field"><label for="country">country:</label><input type="text" id="country" name="country" data-ng-model="site.country" /></div>
 				<div class="field"><label for="postalCode">postal code (X5X 5X5):</label><input type="text" id="postalCode" name="postalCode" data-ng-model="site.postalCode" data-ng-pattern="/^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] [0-9][A-Z][0-9]$/" /></div>
                 <div class="field"><label for="role">Role:</label><select id="role" ng-model="site.role" name="role" ng-options="role.value as role.label for role in ROLE"></select></div>
-                <div class="field"><label for="PoC">Point of Contact :</label><input type="text" id="PoC" name="pointOfContact" data-ng-model="site.pointOfContact" /></div>
-				<div class="field"><label for="numTel">Phone number of PoC :</label><input type="text" id="numTel" name="phoneNumberPoC" data-ng-model="site.phoneNumberPoC" data-ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" /></div>
 			</div>
 		</form>
 		<button id="btnSave" data-ng-click="save();" ng-disabled="siteForm.$pristine || siteForm.$invalid">Save</button>
@@ -70,4 +70,5 @@
 			</tr>
 		</table>
 	</div>
-</div>
+</body>
+</html>

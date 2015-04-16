@@ -1,6 +1,10 @@
 describe('E2E: Equipment =>', function() {
     beforeEach(function() {
-        browser.get('http://localhost/MESTO/MESTO_WEB_APP/#/equip');
+        browser.get('http://localhost/MESTO/MESTO_WEB_APP/equipments.html');
+    });
+    
+    it('Testing : Web label display', function() {
+        expect(browser.getTitle()).toEqual('Manage Equipments');
     });
     
     it('Testing: Required form fields', function() {

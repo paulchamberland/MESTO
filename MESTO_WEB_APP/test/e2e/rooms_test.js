@@ -1,6 +1,10 @@
 describe('E2E: Room =>', function() {
     beforeEach(function() {
-        browser.get('http://localhost/MESTO/MESTO_WEB_APP/#/room');
+        browser.get('http://localhost/MESTO/MESTO_WEB_APP/rooms.html');
+    });
+    
+    it('Testing : Web label display', function() {
+        expect(browser.getTitle()).toEqual('Manage Rooms');
     });
     
     it('Testing: Required form fields', function() {
