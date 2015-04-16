@@ -15,7 +15,7 @@ a { text-decoration:none }
 }
 
 /* Login Button */
-#loginButton { 
+#loginButton, #logoutButton { 
     display:inline-block;
     float:right;
     background:#d2e0ea url(../images/buttonbg.png) repeat-x; 
@@ -28,17 +28,22 @@ a { text-decoration:none }
 }
 
 /* Login Button Text */
-#loginButton span {
+#loginButton span, #logoutButton span {
     color:#445058; 
     font-size:14px; 
     font-weight:bold; 
-    text-shadow:1px 1px #fff; 
-    padding:7px 29px 9px 10px;
-    background:url(../images/loginArrow.png) no-repeat 53px 7px;
+    text-shadow:1px 1px #fff;
     display:block
 }
+#loginButton span {
+    padding:7px 29px 9px 10px;
+    background:url(../images/loginArrow.png) no-repeat 53px 7px;
+}
+#logoutButton span {
+    padding:7px 10px 9px 10px;
+}
 
-#loginButton:hover {
+#loginButton:hover, #logoutButton:hover{
     background:url(../images/buttonbgHover.png) repeat-x;
 }
 
@@ -130,6 +135,11 @@ fieldset#body {
     -webkit-box-shadow:inset 0px 1px 3px #bbb;
     -moz-box-shadow:inset 0px 1px 3px #bbb;
     font-size:12px;
+}
+
+#loginForm.ng-invalid-wrong input {
+    border:1px solid #899caa;
+    color:red;
 }
 
 /* Sign In Button */
