@@ -1,14 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Manage Rooms</title>
-  <script src="libs/angular.min.js"></script>
-  <script src="js/mestoHelper.js"></script>
-  <script src="js/mestoApp.js"></script>
-  <script src="js/roomCTL.js"></script>
-  <link rel="stylesheet" type="text/css" href="ressources/css/mesto.css">
-</head>
-<body data-ng-app="MESTO" data-ng-controller="roomCTL">
+<link rel="stylesheet" type="text/css" href="ressources/css/mesto.css">
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#menu').load('menu.html');
+    });
+</script>
+<div id="menu" style="position: relative; z-index: 1" ></div>
+<div>
 	<h1>Add a Room</h1>
 	<div >
 		<div data-ng-show="roomForm.$dirty && roomForm.$invalid">
@@ -42,5 +39,4 @@
 			</tr>
 		</table>
 	</div>
-</body>
-</html>
+</div>

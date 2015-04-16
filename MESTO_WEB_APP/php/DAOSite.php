@@ -15,6 +15,8 @@ class site { // structure of a site
 	public $startDate;
 	public $endDate;
     public $role;
+    public $pointOfContact;
+    public $phoneNumberPoC;
 	public $updateBy;
     public $updateDate;
 }

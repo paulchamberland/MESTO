@@ -15,8 +15,6 @@
   <meta name="description" content="Mesto Admin">
   <meta name="author" content="Mesto Group">
 
-  <link rel="stylesheet" href="css/styles.css?v=1.0">
-
   <!--[if lt IE 9]>
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
