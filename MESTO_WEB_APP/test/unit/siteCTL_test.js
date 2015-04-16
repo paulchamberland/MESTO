@@ -138,9 +138,6 @@ describe('Testing the controller of site object =>', function() {
         scope.resetFrm();
         
         expect(scope.canDelete).toBe(false);
-        //expect(scope.siteForm.$pristine).toBe(true);
-        //expect(scope.siteForm.$dirty).toBe(false);
-        //expect(scope.siteForm.$valid).toBe(true);
         expect(scope.site).toEqual({id: "",
                                     reference :"",
                                     latitude:"",
@@ -170,6 +167,27 @@ describe('Testing the controller of site object =>', function() {
         
         expect(scope.SQLMsgs).not.toBeDefined();
         expect(scope.SQLErrors).not.toBeDefined();
+    });
+    
+    it('Testing: Validate End Date', function() {
+        //scope.siteForm = {$setValidity : function(){}};
+        scope.siteForm = {$setPristine : function(){}};
+        
+        scope.loadSite({
+                    startDate:"1912-12-12",
+                    endDate:"1900-11-11"});
+        scope.$digest();
+        except($scope.siteForm.endDate.$error.greaterThan).toBeTruthy();
+        
+        scope.loadSite({
+            startDate:"",
+            endDate:"1900-11-11"});
+        except($scope.siteForm.endDate.$error.greaterThan).toBeTruthy();
+        
+        scope.loadSite({
+            startDate:"1900-11-11",
+            endDate:"1912-11-11"});
+        except($scope.siteForm.endDate.$error.greaterThan).toBeTruthy();
     });
     
     describe('Testing Ajax call from site object =>', function() {

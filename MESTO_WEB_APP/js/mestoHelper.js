@@ -10,7 +10,8 @@
         if (day.length == 1) {
             day = "0" + day;
         }
-        return year + "-" + month + "-" + day;
+        
+        return (isNaN(year) || isNaN(month) || isNaN(day)) ? "" : year + "-" + month + "-" + day;
     }
 })();
 (function() {
@@ -25,7 +26,8 @@
         if (day.length == 1) {
             day = "0" + day;
         }
-        return day + "-" + month + "-" + year;
+        
+        return (isNaN(year) || isNaN(month) || isNaN(day)) ? "" : day + "-" + month + "-" + year;
     }
 })();
 (function() {
