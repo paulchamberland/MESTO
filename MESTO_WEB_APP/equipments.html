@@ -1,19 +1,22 @@
-<link rel="stylesheet" type="text/css" href="ressources/css/mesto.css">
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#menu').load('menu.html');
-    });
-</script>
-<div id="menu" style="position: relative; z-index: 1" ></div>
-<div>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Manage Equipments</title>
+  <script src="libs/angular.min.js"></script>
+  <script src="js/mestoHelper.js"></script>
+  <script src="js/mestoApp.js"></script>
+  <script src="js/equipmentCTL.js"></script>
+  <link rel="stylesheet" type="text/css" href="ressources/css/mesto.css">
+</head>
+<body data-ng-app="MESTO" data-ng-controller="equipmentCTL">
 	<h1>Add an equipment</h1>
-	<div>
+	<div >
 		<div data-ng-show="equipmentForm.$dirty && equipmentForm.$invalid">
 			<span class="error" data-ng-show="equipmentForm.serialNumber.$error.required">A serial number is required.</span>
 		</div>
         <span class="error">{{SQLErrors}}</span>
         <span class="t">{{SQLMsgs}}</span>
-		<form class="basic" name="equipmentForm" novalidate >
+		<form name="equipmentForm" novalidate >
 			<input type="hidden" id="id" name="id" data-ng-model="equipment.id" />
 			<div class="section">
 				<div class="field"><label for="serialNumber">Serial number * :</label><input type="text" id="serialNumber" name="serialNumber" data-ng-model="equipment.serialNumber" required /></div>
@@ -40,4 +43,5 @@
 			</tr>
 		</table>
 	</div>
-</div>
+</body>
+</html>
