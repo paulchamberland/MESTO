@@ -10,8 +10,12 @@ app.config(['$routeProvider', function($routeProvider) {
 
 app.run(function($rootScope, $location, securitySrv) {
     var routeRestricted = ['/admin'];
+    var forbiddenCall = ['.html', '.php'];
     $rootScope.$on('$routeChangeStart', function() {
         if (routeRestricted.indexOf($location.path()) != -1 && !securitySrv.isLogged()) {
+            $location.path('/home');
+        }
+        else if (forbiddenCall.indexOf($location.path()) != -1) {
             $location.path('/home');
         }
     });
