@@ -5,13 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Mesto - find it!</title>
     <style type="text/css">
-   	#header, #footer{
-	width:100%;
-	height:70px;
-    background-color: #3E75A6;
-    color:white;
-    text-align:left;
-    padding:15px 0;
+   	header {
+        width:100%;
+        height:70px;
+        background-color: #3E75A6;
+        color:white;
+        text-align:left;
+        padding:15px 0;
+	}
+   	footer{
+        width:100%;
+        height:70px;
+        background-color: #3E75A6;
+        color:white;
+        text-align:left;
 	}
     
 	#logo {
@@ -19,13 +26,14 @@
 		float:left;
 	}
 	#search_bar {
-	float:left;
-	width: 350px;
-	height: 50px;
-	z-index:2;
+        float:left;
+        width: 350px;
+        height: 50px;
+        z-index:2;
 	}
+    
 	a {
-    color:white;
+        color:white;
 	}
 
 	</style>
@@ -57,7 +65,7 @@
 	</script>
   </head>
   <body data-ng-app="MESTO">
-  <div id="header">
+  <header>
 	<div id="logo">
 		<img src="./ressources/images/mesto.png" alt="Mesto" style="width:250px;height:70px">
 	</div>
@@ -89,10 +97,10 @@
             </div>
             <!-- Login Ends Here -->
         </div>
-  </div>
+  </header>
   <div style="height:100%">
     <ng-view></nb-view>
   </div>
-  <div id="footer"></div>
+  <footer></footer>
   </body>
 </html>
