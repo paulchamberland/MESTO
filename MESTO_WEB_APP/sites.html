@@ -5,9 +5,9 @@
     });
 </script>
 <div id="menu" style="position: relative; z-index: 1" ></div> 
-<div>
+<div class="main">
 	<h1>Add a Site</h1>
-	<div >
+	<div>
 		<div data-ng-show="siteForm.$dirty && siteForm.$invalid">
 			<span class="error" data-ng-show="siteForm.reference.$error.required">Reference is required.</span>
 			<span class="error" data-ng-show="siteForm.latitude.$error.required">Latitude is required.</span>
@@ -64,7 +64,7 @@
         <h1>Sites List</h1>
         <span class="error" data-ng-show="lstError">{{lstError}}</span>
 		<table border="1">
-            <tr ><th>Reference</th><th>Name</th><th>Latitude</th><th>Longitude</th></tr>
+            <tr><th>Reference</th><th>Name</th><th>Latitude</th><th>Longitude</th></tr>
 			<tr data-ng-repeat="s in siteList" data-ng-click="loadSite(s)">
 				<td>{{s.reference}}</td><td>{{s.siteName}}</td><td>{{s.latitude}}</td><td>{{s.longitude}}</td>
 			</tr>

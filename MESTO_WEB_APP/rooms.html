@@ -5,16 +5,16 @@
     });
 </script>
 <div id="menu" style="position: relative; z-index: 1" ></div>
-<div>
+<div class="main">
 	<h1>Add a Room</h1>
-	<div >
+	<div>
 		<div data-ng-show="roomForm.$dirty && roomForm.$invalid">
 			<span class="error" data-ng-show="roomForm.roomID.$error.required">Room ID is required.</span>
 			<span class="error" data-ng-show="roomForm.roomSize.$error.pattern">Room size need to be digit only.</span>
 		</div>
         <span class="error">{{SQLErrors}}</span>
         <span class="t">{{SQLMsgs}}</span>
-		<form name="roomForm" novalidate >
+		<form class="basic" name="roomForm" novalidate >
 			<input type="hidden" id="id" name="id" data-ng-model="room.id" />
 			<div class="section">
 				<div class="field"><label for="roomID">Room ID * :</label><input type="text" id="roomID" name="roomID" data-ng-model="room.roomID" required /></div>
