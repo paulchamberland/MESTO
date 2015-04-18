@@ -81,18 +81,21 @@ app.factory('googleMap', function() {
     var zones = null;
     
     function getMap() {
-        //if (mainMap == null) {
-            mainMap = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-        //}
-        
-        //if (zones == null) {
-            zones = new geoXML3.parser({
-                map: mainMap, 
-                zoom: false,
-                suppressInfoWindows: true
-            });
-            zones.parse('limits/Zones.kml');
-        //}
+        try {
+            //if (mainMap == null) {
+                mainMap = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+            //}
+            
+            //if (zones == null) {
+                zones = new geoXML3.parser({
+                    map: mainMap, 
+                    zoom: false,
+                    suppressInfoWindows: true
+                });
+                zones.parse('limits/Zones.kml');
+            //}
+        }
+        catch (e) {}
         
         return mainMap;
     }
