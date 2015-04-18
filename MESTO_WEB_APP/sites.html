@@ -59,6 +59,16 @@
 		<button id="btnDelete" data-ng-click="delete();" ng-disabled="!canDelete">Delete</button>
         <button id="btnReset" data-ng-click="resetFrm();" ng-disabled="siteForm.$pristine">Reset</button>
 	</div>
+    <div style="padding-top:15px">
+        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Rooms of this building</span><button id="btnAddSite" data-ng-click="addSite();">Add new</button>
+        <span class="error" data-ng-show="lstRoomErr">{{lstRoomErr}}</span>
+		<table border="1">
+            <tr><th>Room ID</th><th>Point of Contact</th></tr>
+			<tr data-ng-repeat="r in site.lstRooms" data-ng-click="">
+				<td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td>
+			</tr>
+		</table>
+	</div>
     
 	<div>
         <h1>Sites List</h1>

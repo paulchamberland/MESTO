@@ -26,7 +26,8 @@ describe('Testing the controller of site object =>', function() {
                     postalCode:"",
                     role:"",
                     pointOfContact:"",
-                    phoneNumberPoC:""};
+                    phoneNumberPoC:"",
+                    lstRooms:[]};
         
         expect(scope.site).toEqual(site);
         
@@ -54,7 +55,8 @@ describe('Testing the controller of site object =>', function() {
                     postalCode:"X5X 5X5",
                     role:"COP",
                     pointOfContact:"Lt. Bariton",
-                    phoneNumberPoC:"514-555-4321"};
+                    phoneNumberPoC:"514-555-4321",
+                    lstRooms:[{id:"2",name:"test"},{id:"3",name:"testV2"}]};
                     
         scope.loadSite(fakeSite);
         
@@ -74,7 +76,8 @@ describe('Testing the controller of site object =>', function() {
                                     postalCode:"X5X 5X5",
                                     role:"COP",
                                     pointOfContact:"Lt. Bariton",
-                                    phoneNumberPoC:"514-555-4321"});
+                                    phoneNumberPoC:"514-555-4321",
+                                    lstRooms:[{id:"2",name:"test"},{id:"3",name:"testV2"}]});
         expect(scope.canDelete).toBe(true);
         expect(scope.SQLMsgs).not.toBeDefined();
         expect(scope.SQLErrors).not.toBeDefined();
@@ -141,7 +144,8 @@ describe('Testing the controller of site object =>', function() {
                     postalCode:"X5X 5X5",
                     role:"COP",
                     pointOfContact:"Lt. Bariton",
-                    phoneNumberPoC:"514-555-4321"});
+                    phoneNumberPoC:"514-555-4321",
+                    lstRooms:[{id:"2",name:"test"},{id:"3",name:"testV2"}]});
         
         scope.resetFrm();
         
@@ -162,7 +166,8 @@ describe('Testing the controller of site object =>', function() {
                                     postalCode:"",
                                     role:"",
                                     pointOfContact:"",
-                                    phoneNumberPoC:""});
+                                    phoneNumberPoC:"",
+                                    lstRooms:[]});
     });
     
     it('Testing: Reset Messages ', function() {
@@ -331,7 +336,8 @@ describe('Testing the controller of site object =>', function() {
                                     postalCode:"",
                                     role:"",
                                     pointOfContact:"",
-                                    phoneNumberPoC:""});
+                                    phoneNumberPoC:"",
+                                    lstRooms:[]});
             expect(scope.SQLMsgs).toEqual('Site created successfully!!!');
             expect(scope.SQLErrors).not.toBeDefined();
             expect(scope.siteList).toEqual([{"id": "1",
@@ -436,7 +442,8 @@ describe('Testing the controller of site object =>', function() {
                                     postalCode:"",
                                     role:"",
                                     pointOfContact:"",
-                                    phoneNumberPoC:""});
+                                    phoneNumberPoC:"",
+                                    lstRooms:[]});
             expect(scope.SQLMsgs).toEqual('Site deleted successfully!!!');
             expect(scope.SQLErrors).not.toBeDefined();
             expect(scope.siteList).toEqual([{"id": "1",

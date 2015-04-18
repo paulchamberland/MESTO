@@ -11,6 +11,7 @@
 		<div data-ng-show="roomForm.$dirty && roomForm.$invalid">
 			<span class="error" data-ng-show="roomForm.roomID.$error.required">Room ID is required.</span>
 			<span class="error" data-ng-show="roomForm.roomSize.$error.pattern">Room size need to be digit only.</span>
+			<span class="error" data-ng-show="roomForm.parentSiteName.$error.required">A room must be build for a site.</span>
 		</div>
         <span class="error">{{SQLErrors}}</span>
         <span class="t">{{SQLMsgs}}</span>
@@ -22,7 +23,23 @@
 				<div class="field"><label for="TPoC">Technical PoC :</label><input type="text" id="TPoC" name="technicalPointOfContact" data-ng-model="room.technicalPointOfContact" /></div>
 				<div class="field"><label for="roomSize">Room size (in square) :</label><input type="text" id="roomSize" name="roomSize" data-ng-model="room.roomSize" data-ng-pattern="/^[0-9]*$/" /></div>
 				<div class="field"><label for="role">Role:</label><select id="role" ng-model="room.role" name="role" ng-options="role.value as role.label for role in ROLE"></select></div>
-			</div>
+				<div class="field">
+                    <label for="prSite">Assigned Site:</label><input type="text" id="prSite" name="parentSiteName" data-ng-model="room.parentSite.name" disabled required/>
+                    <button id="btnLinkSite" data-ng-click="openSiteList()" >...</button>
+                </div>
+            </div>
+            
+            <div style="position:absolute; top:0px;left:400px;" data-ng-if="isSiteListOpened">
+                <h3>Sites List</h3>
+                <span class="error" data-ng-show="lstStErr">{{lstStErr}}</span>
+                <span class="">Assigned the room to a site, by clicking on the row.</span>
+                <table border="1">
+                    <tr><th>id</th><th>Reference</th><th>Name</th><th>Latitude</th><th>Longitude</th></tr>
+                    <tr data-ng-repeat="s in siteList" data-ng-click="associateSite(s)">
+                        <td>{{s.id}}</td><td>{{s.reference}}</td><td>{{s.siteName}}</td><td>{{s.latitude}}</td><td>{{s.longitude}}</td>
+                    </tr>
+                </table>
+            </div>
 		</form>
 		<button id="btnSave" data-ng-click="save();" ng-disabled="roomForm.$pristine || roomForm.$invalid">Save</button>
 		<button id="btnDelete" data-ng-click="delete();" ng-disabled="!canDelete">Delete</button>

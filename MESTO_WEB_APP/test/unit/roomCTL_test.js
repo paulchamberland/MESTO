@@ -1,4 +1,4 @@
-describe('Testing the controller of room object', function() {
+describe('Testing the controller of room object =>', function() {
     beforeEach(module('MESTO'));
     var controller, scope;
 
@@ -16,7 +16,11 @@ describe('Testing the controller of room object', function() {
                     pointOfContact :"",
                     technicalPointOfContact :"",
                     roomSize :"",
-                    role:""};
+                    role:"",
+                    parentSite:{
+                        id:"",
+                        name:""
+                    }};
         
         expect(scope.room).toEqual(room);
         
@@ -33,7 +37,11 @@ describe('Testing the controller of room object', function() {
                     pointOfContact :"sgt bilbo",
                     technicalPointOfContact :"sgt bilbo",
                     roomSize :"43",
-                    role:"TC"};
+                    role:"TC",
+                    parentSite:{
+                        id:"2",
+                        name:"siteTest"
+                    }};
                     
         scope.loadRoom(fakeRoom);
         
@@ -50,7 +58,11 @@ describe('Testing the controller of room object', function() {
                     pointOfContact :"sgt bilbo",
                     technicalPointOfContact :"sgt bilbo",
                     roomSize :"43",
-                    role:"TC"});
+                    role:"TC",
+                    parentSite:{
+                        id:"2",
+                        name:"siteTest"
+                    }});
         
         scope.resetFrm();
         
@@ -60,7 +72,11 @@ describe('Testing the controller of room object', function() {
                                     pointOfContact :"",
                                     technicalPointOfContact :"",
                                     roomSize :"",
-                                    role:""});
+                                    role:"",
+                                    parentSite:{
+                                        id:"",
+                                        name:""
+                                    }});
     });
     
     it('Testing: Reset Messages ', function() {
@@ -76,8 +92,24 @@ describe('Testing the controller of room object', function() {
         expect(scope.SQLMsgs).not.toBeDefined();
         expect(scope.SQLErrors).not.toBeDefined();
     });
+ 
+    it('Testing: associateSite function', function() {
+        var testDirty = false;
+        scope.roomForm = {parentSiteName:{$setDirty : function(){testDirty=true;}}};
+        scope.isSiteListOpened = true;
+        scope.associateSite({id:'3',siteName:"test"});
+        
+        expect(scope.room.parentSite.id).toBe('3');
+        expect(scope.room.parentSite.name).toEqual("test");
+        expect(scope.isSiteListOpened).toBeFalsy();
+        expect(testDirty).toBeTruthy();
+        
+        testDirty = false;
+        scope.associateSite({id:'3',siteName:"test"});
+        expect(testDirty).toBeFalsy();
+    });    
     
-    describe('Testing Ajax call from Room object', function() {
+    describe('Testing Ajax call from Room object => ', function() {
         beforeEach(inject(function(_$httpBackend_) {
             $httpBackend = _$httpBackend_;
         }));
@@ -88,19 +120,23 @@ describe('Testing the controller of room object', function() {
                                                                                         +'"pointOfContact":"sgt bilbo",'
                                                                                         +'"technicalPointOfContact":"sgt bilbo",'
                                                                                         +'"roomSize":"43",'
-                                                                                        +'"role":"TC"}]');
+                                                                                        +'"role":"TC",'
+                                                                                        +'"parentSite":{"id":"2","name":"siteTest"}'
+                                                                                        +'}]');
 
             scope.refreshList(); // <--- TEST
 
             $httpBackend.flush();
             
             expect(scope.lstError).not.toBeDefined();
-            expect(scope.roomList).toEqual([{"id":"1",
-                                                "roomID":"erv324r23",
-                                                "pointOfContact":"sgt bilbo",
-                                                "technicalPointOfContact":"sgt bilbo",
-                                                "roomSize":"43",
-                                                "role":"TC"}]);
+            expect(scope.roomList).toEqual([{id:"1",
+                                                roomID:"erv324r23",
+                                                pointOfContact:"sgt bilbo",
+                                                technicalPointOfContact:"sgt bilbo",
+                                                roomSize:"43",
+                                                role:"TC",
+                                                parentSite:{id:"2",name:"siteTest"}
+                                                }]);
         });
         it('Testing: Generated error for Refresh', function() {
             scope.canDelete = true;
@@ -138,7 +174,9 @@ describe('Testing the controller of room object', function() {
                                                                                         +'"pointOfContact":"sgt bilbo",'
                                                                                         +'"technicalPointOfContact":"sgt bilbo",'
                                                                                         +'"roomSize":"43",'
-                                                                                        +'"role":"TC"}]');
+                                                                                        +'"role":"TC",'
+                                                                                        +'"parentSite":{"id":"2","name":"siteTest"}'
+                                                                                        +'}]');
 
             scope.save(); // <--- TEST
 
@@ -153,7 +191,7 @@ describe('Testing the controller of room object', function() {
         it('Testing: Succeeding the Saving', function() {
             scope.roomForm = {$setPristine:function(){}, $dirty:true, $valid:true};
             scope.canDelete = true;
-            scope.room = {roomID:"fake"};
+            scope.room = {roomID:"fake",parentSite:{}};
             
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond('{"msg":"Room created successfully!!!", "error":""}');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('');
@@ -162,7 +200,9 @@ describe('Testing the controller of room object', function() {
                                                                                         +'"pointOfContact":"sgt bilbo",'
                                                                                         +'"technicalPointOfContact":"sgt bilbo",'
                                                                                         +'"roomSize":"43",'
-                                                                                        +'"role":"TC"}]');
+                                                                                        +'"role":"TC",'
+                                                                                        +'"parentSite":{"id":"2","name":"siteTest"}'
+                                                                                        +'}]');
 
             scope.save(); // <--- TEST
 
@@ -174,7 +214,11 @@ describe('Testing the controller of room object', function() {
                                     pointOfContact :"",
                                     technicalPointOfContact :"",
                                     roomSize :"",
-                                    role:""});
+                                    role:"",
+                                    parentSite:{
+                                        id:"",
+                                        name:""
+                                    }});
             expect(scope.SQLMsgs).toEqual('Room created successfully!!!');
             expect(scope.SQLErrors).not.toBeDefined();
             expect(scope.roomList).toEqual([{"id":"1",
@@ -182,12 +226,16 @@ describe('Testing the controller of room object', function() {
                                                 "pointOfContact":"sgt bilbo",
                                                 "technicalPointOfContact":"sgt bilbo",
                                                 "roomSize":"43",
-                                                "role":"TC"}]);
+                                                "role":"TC",
+                                                "parentSite":{
+                                                    "id":"2",
+                                                    "name":"siteTest"
+                                                }}]);
         });
         it('Testing: Generated error for Saving', function() {
             scope.roomForm = {$dirty:true, $valid:true};
             scope.canDelete = true;
-            scope.room = {roomID:"fake"};
+            scope.room = {roomID:"fake",parentSite:{id:"3"}};
             
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond({});
@@ -197,7 +245,7 @@ describe('Testing the controller of room object', function() {
             $httpBackend.flush();
             
             expect(scope.canDelete).toBe(true);
-            expect(scope.room).toEqual({roomID:"fake"});
+            expect(scope.room).toEqual({roomID:"fake",parentSite:{id:"3"}});
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).toEqual('Database error, Contact administrator. Try later'); // Principal test
             expect(scope.roomList).toEqual({});
@@ -205,7 +253,7 @@ describe('Testing the controller of room object', function() {
         it('Testing: Failing the Saving', function() {
             scope.roomForm = {$dirty:true, $valid:true};
             scope.canDelete = true;
-            scope.room = {roomID:"fake"};
+            scope.room = {roomID:"fake",parentSite:{id:"3"}};
             
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond(500, 'server error');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond({});
@@ -215,7 +263,7 @@ describe('Testing the controller of room object', function() {
             $httpBackend.flush();
             
             expect(scope.canDelete).toBe(true);
-            expect(scope.room).toEqual({roomID:"fake"});
+            expect(scope.room).toEqual({roomID:"fake",parentSite:{id:"3"}});
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).toEqual('error: 500:undefined'); // Principal test
             expect(scope.roomList).toEqual({});
@@ -225,7 +273,7 @@ describe('Testing the controller of room object', function() {
         it('Testing: Succeeding the Deleting', function() {
             scope.roomForm = {$setPristine:function(){}};
             scope.canDelete = true;
-            scope.room = {roomID:"fake"};
+            scope.room = {roomID:"fake",parentSite:{}};
             
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond('{"msg":"Room deleted successfully!!!", "error":""}');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('');
@@ -234,7 +282,9 @@ describe('Testing the controller of room object', function() {
                                                                                         +'"pointOfContact":"sgt bilbo",'
                                                                                         +'"technicalPointOfContact":"sgt bilbo",'
                                                                                         +'"roomSize":"43",'
-                                                                                        +'"role":"TC"}]');
+                                                                                        +'"role":"TC",'
+                                                                                        +'"parentSite":{"id":"2","name":"siteTest"}'
+                                                                                        +'}]');
 
             scope.delete(); // <--- TEST
 
@@ -246,7 +296,11 @@ describe('Testing the controller of room object', function() {
                                     pointOfContact :"",
                                     technicalPointOfContact :"",
                                     roomSize :"",
-                                    role:""});
+                                    role:"",
+                                    parentSite:{
+                                        id:"",
+                                        name:""
+                                    }});
             expect(scope.SQLMsgs).toEqual('Room deleted successfully!!!');
             expect(scope.SQLErrors).not.toBeDefined();
             expect(scope.roomList).toEqual([{"id":"1",
@@ -254,7 +308,11 @@ describe('Testing the controller of room object', function() {
                                                 "pointOfContact":"sgt bilbo",
                                                 "technicalPointOfContact":"sgt bilbo",
                                                 "roomSize":"43",
-                                                "role":"TC"}]);
+                                                "role":"TC",
+                                                "parentSite":{
+                                                    "id":"2",
+                                                    "name":"siteTest"
+                                                }}]);
         });
         it('Testing: Generating error for Deleting', function() {
             scope.canDelete = true;
@@ -289,6 +347,18 @@ describe('Testing the controller of room object', function() {
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).toEqual('error: 500:undefined'); // Principal test
             expect(scope.roomList).toEqual({});
+        });
+        
+        it('Testing : openSiteList function', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond({}); // basic call from constructor
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond({});
+            expect(scope.siteList).not.toBeDefined();
+            
+            scope.openSiteList();
+            $httpBackend.flush();
+            
+            expect(scope.isSiteListOpened).toBe(true);
+            expect(scope.siteList).toEqual({});
         });
     });
 });

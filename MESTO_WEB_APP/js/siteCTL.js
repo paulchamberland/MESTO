@@ -1,4 +1,4 @@
-app.controller('siteCTL', function($scope, $http) {
+app.controller('siteCTL', function($scope, $http, $location) {
     var self = this;
     var ACTIVITY_DELETE = "del";
     $scope.ROLE = [{value:'ED',label:'Edifice'},{value:'FLR',label:'Floor'},{value:'FOB',label:'FOB'},{value:'COP',label:'COP'},{value:'CMP',label:'CAMP'}];
@@ -19,7 +19,8 @@ app.controller('siteCTL', function($scope, $http) {
                     postalCode:"",
                     role:"",
                     pointOfContact:"",
-                    phoneNumberPoC:""};
+                    phoneNumberPoC:"",
+                    lstRooms:[]};
     this.emptySite = {};
     $scope.canDelete = false;
     
@@ -40,7 +41,8 @@ app.controller('siteCTL', function($scope, $http) {
                     postalCode:"X5X 5X5",
                     role:"COP",
                     pointOfContact:"Lt. Bariton",
-                    phoneNumberPoC:"514-555-4321"};
+                    phoneNumberPoC:"514-555-4321",
+                    lstRooms:[]};
     
     function init() {
         loadList();
@@ -55,6 +57,8 @@ app.controller('siteCTL', function($scope, $http) {
         $scope.siteForm.$setPristine();
         $scope.canDelete = true;
         $scope.resetMsg();
+        
+        loadRoomsList();
     };
     
     $scope.resetFrm = function() {
@@ -175,6 +179,37 @@ app.controller('siteCTL', function($scope, $http) {
                 //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
             }
         );
+    };
+    
+    function loadRoomsList() {
+        //$http.post("/MESTO/MESTO_WEB_APP/php/DAORoom.php").success( // TODO: Make a config with path
+        $http({
+                method: 'POST',
+                url: "/MESTO/MESTO_WEB_APP/php/DAORoom.php", // TODO: Make a config with path
+                data: {
+                    id : $scope.site.id
+                },
+                headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+            }).success( // TODO: Make a config with path
+            function(data) {
+                if (data.error == null) {
+                    $scope.site.lstRooms = data;
+                }
+                else {
+                    $scope.lstRoomErr = data.error;
+                }
+            }
+            ).error(
+                function(data, status, headers, config, statusText) {
+                    // TODO: error server handling
+                    $scope.lstRoomErr = "error: "+status+":"+statusText;
+                    //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
+                }
+            );
+    };
+    
+    $scope.addSite = function() {
+        $location.path("/room"); // TODO: complete by sending the ID and do the comportement on the Room page
     };
     
     init();
