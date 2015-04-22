@@ -46,7 +46,7 @@
                         <td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td>
                     </tr>
                 </table>
-
+                <button id="btnCloseRoom" data-ng-click="closeRoomList()" >Close</button>
             </div>
             
             <div style="position:absolute; top:0px;left:400px;" data-ng-if="isSiteListOpened">
@@ -59,6 +59,7 @@
                         <td>{{s.id}}</td><td>{{s.reference}}</td><td>{{s.siteName}}</td><td>{{s.latitude}}</td><td>{{s.longitude}}</td>
                     </tr>
                 </table>
+                <button id="btnCloseSite" data-ng-click="closeSiteList()" >Close</button>
             </div>
 		</form>
 		<button id="btnSave" data-ng-click="save();" ng-disabled="equipmentForm.$pristine || equipmentForm.$invalid">Save</button>

@@ -168,6 +168,13 @@ app.controller('equipmentCTL', function($scope, $http) {
         );
     };
     
+    $scope.closeRoomList = function() {
+        $scope.isRoomListOpened = false;
+    };
+    $scope.closeSiteList = function() {
+        $scope.isSiteListOpened = false;
+    };
+    
     $scope.openRoomList = function() {
         $scope.isRoomListOpened = true;
         $scope.isSiteListOpened = false;

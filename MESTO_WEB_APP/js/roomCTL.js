@@ -146,6 +146,10 @@ app.controller('roomCTL', function($scope, $http, $location) {
         );
     };
     
+    $scope.closeSiteList = function() {
+        $scope.isSiteListOpened = false;
+    };
+
     $scope.openSiteList = function() {
         $scope.isSiteListOpened = true;
         loadSiteList();

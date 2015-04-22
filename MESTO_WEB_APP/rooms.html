@@ -39,6 +39,7 @@
                         <td>{{s.id}}</td><td>{{s.reference}}</td><td>{{s.siteName}}</td><td>{{s.latitude}}</td><td>{{s.longitude}}</td>
                     </tr>
                 </table>
+                <button id="btnCloseSite" data-ng-click="closeSiteList()" >Close</button>
             </div>
 		</form>
 		<button id="btnSave" data-ng-click="save();" ng-disabled="roomForm.$pristine || roomForm.$invalid">Save</button>

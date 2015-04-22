@@ -110,7 +110,16 @@ describe('Testing the controller of room object =>', function() {
         testDirty = false;
         scope.associateSite({id:'3',siteName:"test"});
         expect(testDirty).toBeFalsy();
-    });    
+    });
+    
+    it('Testing: closeSiteList function', function() {
+        expect(scope.isSiteListOpened).toBeFalsy();
+        
+        scope.isSiteListOpened = true;
+        scope.closeSiteList();
+        
+        expect(scope.isSiteListOpened).toBeFalsy();
+    });
     
     describe('Testing Ajax call from Room object => ', function() {
         beforeEach(inject(function(_$httpBackend_) {

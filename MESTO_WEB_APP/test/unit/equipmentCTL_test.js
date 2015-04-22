@@ -117,6 +117,23 @@ describe('Testing the controller of equipment object', function() {
         expect(testDirty).toBeFalsy();
     });
     
+    it('Testing: closeRoomList function', function() {
+        expect(scope.isRoomListOpened).toBeFalsy();
+        
+        scope.isRoomListOpened = true;
+        scope.closeRoomList();
+        
+        expect(scope.isRoomListOpened).toBeFalsy();
+    });
+    it('Testing: closeSiteList function', function() {
+        expect(scope.isSiteListOpened).toBeFalsy();
+        
+        scope.isSiteListOpened = true;
+        scope.closeSiteList();
+        
+        expect(scope.isSiteListOpened).toBeFalsy();
+    });
+    
     it('Testing: associateSite function', function() {
         var testDirty = false;
         scope.equipmentForm = {parentSiteName:{$setDirty : function(){testDirty=true;}}};
