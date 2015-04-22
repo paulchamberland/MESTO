@@ -60,12 +60,22 @@
         <button id="btnReset" data-ng-click="resetFrm();" ng-disabled="siteForm.$pristine">Reset</button>
 	</div>
     <div style="padding-top:15px">
-        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Rooms of this building</span><button id="btnAddSite" data-ng-click="addSite();">Add new</button>
+        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Rooms of this building</span><button id="btnAddRoom" data-ng-click="addRoom();">Add new</button>
         <span class="error" data-ng-show="lstRoomErr">{{lstRoomErr}}</span>
 		<table border="1">
             <tr><th>Room ID</th><th>Point of Contact</th></tr>
 			<tr data-ng-repeat="r in site.lstRooms" data-ng-click="">
 				<td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td>
+			</tr>
+		</table>
+	</div>
+    <div style="padding-top:15px">
+        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Equipments of this building</span><button id="btnAddEquip" data-ng-click="addEquip();">Add new</button>
+        <span class="error" data-ng-show="lstEquipErr">{{lstEquipErr}}</span>
+		<table border="1">
+            <tr><th>Serial Number</th><th>Model</th></tr>
+			<tr data-ng-repeat="e in site.lstEquips" data-ng-click="">
+				<td>{{e.serialNumber}}</td><td>{{e.model}}</td>
 			</tr>
 		</table>
 	</div>

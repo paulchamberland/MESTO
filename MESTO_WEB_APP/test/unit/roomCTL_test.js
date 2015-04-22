@@ -20,7 +20,8 @@ describe('Testing the controller of room object =>', function() {
                     parentSite:{
                         id:"",
                         name:""
-                    }};
+                    },
+                    lstEquips:[]};
         
         expect(scope.room).toEqual(room);
         
@@ -62,7 +63,8 @@ describe('Testing the controller of room object =>', function() {
                     parentSite:{
                         id:"2",
                         name:"siteTest"
-                    }});
+                    },
+                    lstEquips:[]});
         
         scope.resetFrm();
         
@@ -76,7 +78,8 @@ describe('Testing the controller of room object =>', function() {
                                     parentSite:{
                                         id:"",
                                         name:""
-                                    }});
+                                    },
+                                    lstEquips:[]});
     });
     
     it('Testing: Reset Messages ', function() {
@@ -191,7 +194,7 @@ describe('Testing the controller of room object =>', function() {
         it('Testing: Succeeding the Saving', function() {
             scope.roomForm = {$setPristine:function(){}, $dirty:true, $valid:true};
             scope.canDelete = true;
-            scope.room = {roomID:"fake",parentSite:{}};
+            scope.room = {roomID:"fake",parentSite:{},lstEquips:[]};
             
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond('{"msg":"Room created successfully!!!", "error":""}');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('');
@@ -218,7 +221,8 @@ describe('Testing the controller of room object =>', function() {
                                     parentSite:{
                                         id:"",
                                         name:""
-                                    }});
+                                    },
+                                    lstEquips:[]});
             expect(scope.SQLMsgs).toEqual('Room created successfully!!!');
             expect(scope.SQLErrors).not.toBeDefined();
             expect(scope.roomList).toEqual([{"id":"1",
@@ -269,11 +273,34 @@ describe('Testing the controller of room object =>', function() {
             expect(scope.roomList).toEqual({});
         });
 
+        it('Testing: Load sub list of Equipements', function() {
+            scope.roomForm = {$setPristine : function(){}};
+            
+            var pRoom = {id: "1",
+                        roomID :"erv324r23",
+                        pointOfContact :"sgt bilbo",
+                        technicalPointOfContact :"sgt bilbo",
+                        roomSize :"43",
+                        role:"TC",
+                        parentSite:{
+                            id:"2",
+                            name:"siteTest"
+                        },
+                        lstEquips:[]};
+                        
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('');
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('[{"test":"test"}]');
+                        
+            scope.loadRoom(pRoom);
+            $httpBackend.flush();
+            
+            expect(scope.room.lstEquips).toEqual([{test:"test"}]);
+        });
         
         it('Testing: Succeeding the Deleting', function() {
             scope.roomForm = {$setPristine:function(){}};
             scope.canDelete = true;
-            scope.room = {roomID:"fake",parentSite:{}};
+            scope.room = {roomID:"fake",parentSite:{},lstEquips:[]};
             
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond('{"msg":"Room deleted successfully!!!", "error":""}');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('');
@@ -300,7 +327,8 @@ describe('Testing the controller of room object =>', function() {
                                     parentSite:{
                                         id:"",
                                         name:""
-                                    }});
+                                    },
+                                    lstEquips:[]});
             expect(scope.SQLMsgs).toEqual('Room deleted successfully!!!');
             expect(scope.SQLErrors).not.toBeDefined();
             expect(scope.roomList).toEqual([{"id":"1",

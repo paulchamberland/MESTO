@@ -46,6 +46,17 @@
         <button id="btnReset" data-ng-click="resetFrm();" ng-disabled="roomForm.$pristine">Reset</button>
 	</div>
     
+    <div style="padding-top:15px">
+        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Equipments of this building</span><button id="btnAddEquip" data-ng-click="addEquip();">Add new</button>
+        <span class="error" data-ng-show="lstEquipErr">{{lstEquipErr}}</span>
+		<table border="1">
+            <tr><th>Serial Number</th><th>Model</th></tr>
+			<tr data-ng-repeat="e in room.lstEquips" data-ng-click="">
+				<td>{{e.serialNumber}}</td><td>{{e.model}}</td>
+			</tr>
+		</table>
+	</div>
+    
 	<div>
         <h1>Room List</h1>
         <span class="error" data-ng-show="lstError">{{lstError}}</span>

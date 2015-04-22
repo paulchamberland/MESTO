@@ -13,3 +13,6 @@ ALTER TABLE `site` ADD `pointOfContact` varchar(45) NULL AFTER `role`;
 ALTER TABLE `site` ADD `phoneNumberPoC` varchar(12) NULL AFTER `pointOfContact`;
 
 ALTER TABLE `room` ADD `fk_siteId` INT NOT NULL AFTER `roomSize`;
+
+ALTER TABLE `equipment` ADD `fk_roomId` INT NOT NULL AFTER `type`;
+ALTER TABLE `equipment` ADD `fk_siteId` INT NOT NULL AFTER `fk_roomId`;

@@ -18,7 +18,15 @@ describe('Testing the controller of equipment object', function() {
                         model :"",
                         configHW :"",
                         configSW :"",
-                        type:""};
+                        type:"",
+                        parentRoom:{
+                            id:"",
+                            roomID:""
+                        },
+                        parentSite:{
+                            id:"",
+                            name:""
+                        }};
         
         expect(scope.equipment).toEqual(equipment);
         
@@ -68,7 +76,15 @@ describe('Testing the controller of equipment object', function() {
                                         model :"",
                                         configHW :"",
                                         configSW :"",
-                                        type:""});
+                                        type:"",
+                                        parentRoom:{
+                                            id:"",
+                                            roomID:""
+                                        },
+                                        parentSite:{
+                                            id:"",
+                                            name:""
+                                        }});
     });
     
     it('Testing: Reset Messages ', function() {
@@ -83,6 +99,52 @@ describe('Testing the controller of equipment object', function() {
         
         expect(scope.SQLMsgs).not.toBeDefined();
         expect(scope.SQLErrors).not.toBeDefined();
+    });
+    
+    it('Testing: associateRoom function', function() {
+        var testDirty = false;
+        scope.equipmentForm = {parentRoomName:{$setDirty : function(){testDirty=true;}}};
+        scope.isRoomListOpened = true;
+        scope.associateRoom({id:'3',roomID:"test"});
+        
+        expect(scope.equipment.parentRoom.id).toBe('3');
+        expect(scope.equipment.parentRoom.roomID).toEqual("test");
+        expect(scope.isRoomListOpened).toBeFalsy();
+        expect(testDirty).toBeTruthy();
+        
+        testDirty = false;
+        scope.associateRoom({id:'3',roomID:"test"});
+        expect(testDirty).toBeFalsy();
+    });
+    
+    it('Testing: associateSite function', function() {
+        var testDirty = false;
+        scope.equipmentForm = {parentSiteName:{$setDirty : function(){testDirty=true;}}};
+        scope.isSiteListOpened = true;
+        scope.associateSite({id:'3',siteName:"test"});
+        
+        expect(scope.equipment.parentSite.id).toBe('3');
+        expect(scope.equipment.parentSite.name).toEqual("test");
+        expect(scope.isSiteListOpened).toBeFalsy();
+        expect(testDirty).toBeTruthy();
+        
+        testDirty = false;
+        scope.associateSite({id:'3',siteName:"test"});
+        expect(testDirty).toBeFalsy();
+    });
+    
+    it('Testing: cleanAssociateRoom function', function() {
+        scope.validDoubleAssociation = function() {};
+        scope.equipment.parentRoom = {id:"21", roomID:"test"};
+        scope.cleanAssociateRoom();
+        expect(scope.equipment.parentRoom).toEqual({id:"", roomID:""});
+    });
+    
+    it('Testing: cleanAssociateSite function', function() {
+        scope.validDoubleAssociation = function() {};
+        scope.equipment.parentSite = {id:"21", name:"test"};
+        scope.cleanAssociateSite();
+        expect(scope.equipment.parentSite).toEqual({id:"", name:""});
     });
     
     describe('Testing Ajax call from Equipment object', function() {
@@ -167,7 +229,15 @@ describe('Testing the controller of equipment object', function() {
         it('Testing: Succeeding the Saving', function() {
             scope.equipmentForm = {$setPristine:function(){}, $dirty:true, $valid:true};
             scope.canDelete = true;
-            scope.equipment = {roomID:"fake"};
+            scope.equipment = {roomID:"fake",
+                                parentRoom:{
+                                    id:"",
+                                    roomID:""
+                                },
+                                parentSite:{
+                                    id:"",
+                                    name:""
+                                }};
             
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"Equipment created successfully!!!", "error":""}');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('');
@@ -192,7 +262,15 @@ describe('Testing the controller of equipment object', function() {
                                         model :"",
                                         configHW :"",
                                         configSW :"",
-                                        type:""});
+                                        type:"",
+                                        parentRoom:{
+                                            id:"",
+                                            roomID:""
+                                        },
+                                        parentSite:{
+                                            id:"",
+                                            name:""
+                                        }});
             expect(scope.SQLMsgs).toEqual('Equipment created successfully!!!');
             expect(scope.SQLErrors).not.toBeDefined();
             expect(scope.equipmentList).toEqual([{"id":"1",
@@ -207,7 +285,15 @@ describe('Testing the controller of equipment object', function() {
         it('Testing: Generated error for Saving', function() {
             scope.equipmentForm = {$dirty:true, $valid:true};
             scope.canDelete = true;
-            scope.equipment = {serialNumber:"fake"};
+            scope.equipment = {serialNumber:"fake",
+                                parentRoom:{
+                                    id:"12",
+                                    roomID:"test"
+                                },
+                                parentSite:{
+                                    id:"",
+                                    name:""
+                                }};
             
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond({});
@@ -217,7 +303,15 @@ describe('Testing the controller of equipment object', function() {
             $httpBackend.flush();
             
             expect(scope.canDelete).toBe(true);
-            expect(scope.equipment).toEqual({serialNumber:"fake"});
+            expect(scope.equipment).toEqual({serialNumber:"fake",
+                                                parentRoom:{
+                                                    id:"12",
+                                                    roomID:"test"
+                                                },
+                                                parentSite:{
+                                                    id:"",
+                                                    name:""
+                                                }});
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).toEqual('Database error, Contact administrator. Try later'); // Principal test
             expect(scope.equipmentList).toEqual({});
@@ -225,7 +319,15 @@ describe('Testing the controller of equipment object', function() {
         it('Testing: Failing the Saving', function() {
             scope.equipmentForm = {$dirty:true, $valid:true};
             scope.canDelete = true;
-            scope.equipment = {serialNumber:"fake"};
+            scope.equipment = {serialNumber:"fake",
+                                parentRoom:{
+                                    id:"12",
+                                    roomID:"test"
+                                },
+                                parentSite:{
+                                    id:"",
+                                    name:""
+                                }};
             
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(500, 'server error');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond({});
@@ -235,7 +337,15 @@ describe('Testing the controller of equipment object', function() {
             $httpBackend.flush();
             
             expect(scope.canDelete).toBe(true);
-            expect(scope.equipment).toEqual({serialNumber:"fake"});
+            expect(scope.equipment).toEqual({serialNumber:"fake",
+                                                parentRoom:{
+                                                    id:"12",
+                                                    roomID:"test"
+                                                },
+                                                parentSite:{
+                                                    id:"",
+                                                    name:""
+                                                }});
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).toEqual('error: 500:undefined'); // Principal test
             expect(scope.equipmentList).toEqual({});
@@ -270,7 +380,15 @@ describe('Testing the controller of equipment object', function() {
                                         model :"",
                                         configHW :"",
                                         configSW :"",
-                                        type:""});
+                                        type:"",
+                                        parentRoom:{
+                                            id:"",
+                                            roomID:""
+                                        },
+                                        parentSite:{
+                                            id:"",
+                                            name:""
+                                        }});
             expect(scope.SQLMsgs).toEqual('Equipment deleted successfully!!!');
             expect(scope.SQLErrors).not.toBeDefined();
             expect(scope.equipmentList).toEqual([{"id":"1",
@@ -315,6 +433,29 @@ describe('Testing the controller of equipment object', function() {
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).toEqual('error: 500:undefined'); // Principal test
             expect(scope.equipmentList).toEqual({});
+        });
+        
+        it('Testing : openSiteList function', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond({}); // basic call from constructor
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond({});
+            expect(scope.siteList).not.toBeDefined();
+            
+            scope.openSiteList();
+            $httpBackend.flush();
+            
+            expect(scope.isSiteListOpened).toBe(true);
+            expect(scope.siteList).toEqual({});
+        });
+        it('Testing : openRoomList function', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond({}); // basic call from constructor
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond({});
+            expect(scope.roomList).not.toBeDefined();
+            
+            scope.openRoomList();
+            $httpBackend.flush();
+            
+            expect(scope.isRoomListOpened).toBe(true);
+            expect(scope.roomList).toEqual({});
         });
     });
 });

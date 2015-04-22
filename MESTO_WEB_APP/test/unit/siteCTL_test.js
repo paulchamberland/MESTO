@@ -27,7 +27,8 @@ describe('Testing the controller of site object =>', function() {
                     role:"",
                     pointOfContact:"",
                     phoneNumberPoC:"",
-                    lstRooms:[]};
+                    lstRooms:[],
+                    lstEquips:[]};
         
         expect(scope.site).toEqual(site);
         
@@ -56,7 +57,8 @@ describe('Testing the controller of site object =>', function() {
                     role:"COP",
                     pointOfContact:"Lt. Bariton",
                     phoneNumberPoC:"514-555-4321",
-                    lstRooms:[{id:"2",name:"test"},{id:"3",name:"testV2"}]};
+                    lstRooms:[{id:"2",name:"test"},{id:"3",name:"testV2"}],
+                    lstEquips:[{id:"2",roomID:"test"},{id:"3",roomID:"testV2"}]};
                     
         scope.loadSite(fakeSite);
         
@@ -77,7 +79,8 @@ describe('Testing the controller of site object =>', function() {
                                     role:"COP",
                                     pointOfContact:"Lt. Bariton",
                                     phoneNumberPoC:"514-555-4321",
-                                    lstRooms:[{id:"2",name:"test"},{id:"3",name:"testV2"}]});
+                                    lstRooms:[{id:"2",name:"test"},{id:"3",name:"testV2"}],
+                                    lstEquips:[{id:"2",roomID:"test"},{id:"3",roomID:"testV2"}]});
         expect(scope.canDelete).toBe(true);
         expect(scope.SQLMsgs).not.toBeDefined();
         expect(scope.SQLErrors).not.toBeDefined();
@@ -145,7 +148,8 @@ describe('Testing the controller of site object =>', function() {
                     role:"COP",
                     pointOfContact:"Lt. Bariton",
                     phoneNumberPoC:"514-555-4321",
-                    lstRooms:[{id:"2",name:"test"},{id:"3",name:"testV2"}]});
+                    lstRooms:[{id:"2",name:"test"},{id:"3",name:"testV2"}],
+                    lstEquips:[{id:"2",roomID:"test"},{id:"3",roomID:"testV2"}]});
         
         scope.resetFrm();
         
@@ -167,7 +171,8 @@ describe('Testing the controller of site object =>', function() {
                                     role:"",
                                     pointOfContact:"",
                                     phoneNumberPoC:"",
-                                    lstRooms:[]});
+                                    lstRooms:[],
+                                    lstEquips:[]});
     });
     
     it('Testing: Reset Messages ', function() {
@@ -337,7 +342,8 @@ describe('Testing the controller of site object =>', function() {
                                     role:"",
                                     pointOfContact:"",
                                     phoneNumberPoC:"",
-                                    lstRooms:[]});
+                                    lstRooms:[],
+                                    lstEquips:[]});
             expect(scope.SQLMsgs).toEqual('Site created successfully!!!');
             expect(scope.SQLErrors).not.toBeDefined();
             expect(scope.siteList).toEqual([{"id": "1",
@@ -443,7 +449,8 @@ describe('Testing the controller of site object =>', function() {
                                     role:"",
                                     pointOfContact:"",
                                     phoneNumberPoC:"",
-                                    lstRooms:[]});
+                                    lstRooms:[],
+                                    lstEquips:[]});
             expect(scope.SQLMsgs).toEqual('Site deleted successfully!!!');
             expect(scope.SQLErrors).not.toBeDefined();
             expect(scope.siteList).toEqual([{"id": "1",
@@ -497,6 +504,27 @@ describe('Testing the controller of site object =>', function() {
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).toEqual('error: 500:undefined'); // Principal test
             expect(scope.siteList).toEqual({});
+        });
+        
+        it('Testing: Load sub list of Equipements', function() {
+            scope.siteForm = {$setPristine : function(){}};
+            
+            var pSite = {id: "1",
+                    reference :"test",
+                    latitude:"12.123456",
+                    longitude:"43.123456",
+                    siteName:"test4",
+                    lstRooms:[{id:"2",name:"test"},{id:"3",name:"testV2"}],
+                    lstEquips:[{id:"2",roomID:"test"},{id:"3",roomID:"testV2"}]};
+                        
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond('');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('');
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('[{"test":"test"}]');
+                        
+            scope.loadSite(pSite);
+            $httpBackend.flush();
+            
+            expect(scope.site.lstEquips).toEqual([{test:"test"}]);
         });
     });
 });

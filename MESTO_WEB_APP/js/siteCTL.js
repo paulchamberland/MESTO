@@ -20,7 +20,8 @@ app.controller('siteCTL', function($scope, $http, $location) {
                     role:"",
                     pointOfContact:"",
                     phoneNumberPoC:"",
-                    lstRooms:[]};
+                    lstRooms:[],
+                    lstEquips:[]};
     this.emptySite = {};
     $scope.canDelete = false;
     
@@ -42,7 +43,8 @@ app.controller('siteCTL', function($scope, $http, $location) {
                     role:"COP",
                     pointOfContact:"Lt. Bariton",
                     phoneNumberPoC:"514-555-4321",
-                    lstRooms:[]};
+                    lstRooms:[],
+                    lstEquips:[]};
     
     function init() {
         loadList();
@@ -59,6 +61,7 @@ app.controller('siteCTL', function($scope, $http, $location) {
         $scope.resetMsg();
         
         loadRoomsList();
+        loadEquipsList();
     };
     
     $scope.resetFrm = function() {
@@ -208,8 +211,39 @@ app.controller('siteCTL', function($scope, $http, $location) {
             );
     };
     
-    $scope.addSite = function() {
+    $scope.addRoom = function() {
         $location.path("/room"); // TODO: complete by sending the ID and do the comportement on the Room page
+    };
+    
+    function loadEquipsList() {
+        $http({
+                method: 'POST',
+                url: "/MESTO/MESTO_WEB_APP/php/DAOEquipment.php", // TODO: Make a config with path
+                data: {
+                    id : $scope.site.id,
+                    type : "SITE_INC"
+                },
+                headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+            }).success( // TODO: Make a config with path
+            function(data) {
+                if (data.error == null) {
+                    $scope.site.lstEquips = data;
+                }
+                else {
+                    $scope.lstEquipErr = data.error;
+                }
+            }
+            ).error(
+                function(data, status, headers, config, statusText) {
+                    // TODO: error server handling
+                    $scope.lstEquipErr = "error: "+status+":"+statusText;
+                    //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
+                }
+            );
+    };
+    
+    $scope.addEquip = function() {
+        $location.path("/equip"); // TODO: complete by sending the ID and do the comportement on the Room page
     };
     
     init();
