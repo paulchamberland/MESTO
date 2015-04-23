@@ -37,4 +37,26 @@ div.section2 {
 
 div.main {
     padding-left:10px;
+    /*float:left;
+    display: block;*/
+    display:table-cell;
+}
+
+#menu.v {
+    background: #E7E7E7; 
+    width:200px;
+    display:table-cell;
+    vertical-align:top;
+    /*display: block;
+    float: left;*/
+}
+
+.titre {
+    font-size:2em;
+    font-weight:bold;
+    padding:10px;
+}
+.wrap {
+    height:30px;
+    /*margin-bottom:30px;*/
 }

@@ -15,10 +15,12 @@
 	}
    	footer{
         width:100%;
-        height:70px;
+        height:30px;
         background-color: #3E75A6;
         color:white;
         text-align:left;
+        position: fixed;
+        bottom: 0;
 	}
     
 	#logo {
@@ -32,12 +34,13 @@
         z-index:2;
 	}
     
-	a {
+	/*a {
         color:white;
-	}
+	}*/
 
 	</style>
-    <link rel="stylesheet" href="./ressources/css/login_dd_style.css" />
+    <link rel="stylesheet" type="text/css" href="./ressources/css/login_dd_style.css" />
+    <link rel="stylesheet" type="text/css" href="ressources/css/mesto.css">
     
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCtGKY6V-0PBUobXIG63JvdgGrldlC109Q">
@@ -98,8 +101,9 @@
             <!-- Login Ends Here -->
         </div>
   </header>
-  <div style="height:100%">
-    <ng-view></nb-view>
+  <div style="height:100%;display: block;">
+    <ng-view></ng-view>
+    <div class="wrap"></div>
   </div>
   <footer></footer>
   </body>

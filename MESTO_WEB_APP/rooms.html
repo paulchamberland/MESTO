@@ -6,58 +6,6 @@
 </script>
 <div id="menu" style="position: relative; z-index: 1" ></div>
 <div class="main">
-	<h1>Add a Room</h1>
-	<div>
-		<div data-ng-show="roomForm.$dirty && roomForm.$invalid">
-			<span class="error" data-ng-show="roomForm.roomID.$error.required">Room ID is required.</span>
-			<span class="error" data-ng-show="roomForm.roomSize.$error.pattern">Room size need to be digit only.</span>
-			<span class="error" data-ng-show="roomForm.parentSiteName.$error.required">A room must be build for a site.</span>
-		</div>
-        <span class="error">{{SQLErrors}}</span>
-        <span class="t">{{SQLMsgs}}</span>
-		<form class="basic" name="roomForm" novalidate >
-			<input type="hidden" id="id" name="id" data-ng-model="room.id" />
-			<div class="section">
-				<div class="field"><label for="roomID">Room ID * :</label><input type="text" id="roomID" name="roomID" data-ng-model="room.roomID" required /></div>
-				<div class="field"><label for="PoC">Point of Contact :</label><input type="text" id="PoC" name="pointOfContact" data-ng-model="room.pointOfContact" /></div>
-				<div class="field"><label for="TPoC">Technical PoC :</label><input type="text" id="TPoC" name="technicalPointOfContact" data-ng-model="room.technicalPointOfContact" /></div>
-				<div class="field"><label for="roomSize">Room size (in square) :</label><input type="text" id="roomSize" name="roomSize" data-ng-model="room.roomSize" data-ng-pattern="/^[0-9]*$/" /></div>
-				<div class="field"><label for="role">Role:</label><select id="role" ng-model="room.role" name="role" ng-options="role.value as role.label for role in ROLE"></select></div>
-				<div class="field">
-                    <label for="prSite">Assigned Site:</label><input type="text" id="prSite" name="parentSiteName" data-ng-model="room.parentSite.name" disabled required/>
-                    <button id="btnLinkSite" data-ng-click="openSiteList()" >...</button>
-                </div>
-            </div>
-            
-            <div style="position:absolute; top:0px;left:400px;" data-ng-if="isSiteListOpened">
-                <h3>Sites List</h3>
-                <span class="error" data-ng-show="lstStErr">{{lstStErr}}</span>
-                <span class="">Assigned the room to a site, by clicking on the row.</span>
-                <table border="1">
-                    <tr><th>id</th><th>Reference</th><th>Name</th><th>Latitude</th><th>Longitude</th></tr>
-                    <tr data-ng-repeat="s in siteList" data-ng-click="associateSite(s)">
-                        <td>{{s.id}}</td><td>{{s.reference}}</td><td>{{s.siteName}}</td><td>{{s.latitude}}</td><td>{{s.longitude}}</td>
-                    </tr>
-                </table>
-                <button id="btnCloseSite" data-ng-click="closeSiteList()" >Close</button>
-            </div>
-		</form>
-		<button id="btnSave" data-ng-click="save();" ng-disabled="roomForm.$pristine || roomForm.$invalid">Save</button>
-		<button id="btnDelete" data-ng-click="delete();" ng-disabled="!canDelete">Delete</button>
-        <button id="btnReset" data-ng-click="resetFrm();" ng-disabled="roomForm.$pristine">Reset</button>
-	</div>
-    
-    <div style="padding-top:15px">
-        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Equipments of this building</span><button id="btnAddEquip" data-ng-click="addEquip();">Add new</button>
-        <span class="error" data-ng-show="lstEquipErr">{{lstEquipErr}}</span>
-		<table border="1">
-            <tr><th>Serial Number</th><th>Model</th></tr>
-			<tr data-ng-repeat="e in room.lstEquips" data-ng-click="">
-				<td>{{e.serialNumber}}</td><td>{{e.model}}</td>
-			</tr>
-		</table>
-	</div>
-    
 	<div>
         <h1>Room List</h1>
         <span class="error" data-ng-show="lstError">{{lstError}}</span>

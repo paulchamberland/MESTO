@@ -1,6 +1,6 @@
 describe('E2E: Site => ', function() {
     beforeEach(function() {
-        browser.get('http://localhost/MESTO/MESTO_WEB_APP/#/site');
+        browser.get('http://localhost/MESTO/MESTO_WEB_APP/#/admin/site');
     });
     
     /*it('Testing : Web label display', function() {

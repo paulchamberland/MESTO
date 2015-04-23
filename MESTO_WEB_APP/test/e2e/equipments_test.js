@@ -1,6 +1,6 @@
 describe('E2E: Equipment =>', function() {
     beforeEach(function() {
-        browser.get('http://localhost/MESTO/MESTO_WEB_APP/#/equip');
+        browser.get('http://localhost/MESTO/MESTO_WEB_APP/#/admin/equip');
     });
     
     it('Testing: Required form fields', function() {
