@@ -4,7 +4,6 @@ app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/site', {templateUrl:'sites.html', controller:'siteCTL'});
     $routeProvider.when('/room', {templateUrl:'rooms.html', controller:'roomCTL'});
     $routeProvider.when('/equip', {templateUrl:'equipments.html', controller:'equipmentCTL'});
-    $routeProvider.when('/test', {templateUrl:'test.html'});
     $routeProvider.when('/fakeadmin', {templateUrl:'mt-admin/mt-home.html'});
     $routeProvider.when('/admin', {templateUrl:'mt-admin/mt-home.html'});
     $routeProvider.when('/admin/site', {templateUrl:'mt-admin/mt-sites.html', controller:'siteCTL'});
