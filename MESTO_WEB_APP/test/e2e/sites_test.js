@@ -23,9 +23,47 @@ describe('E2E: Site => ', function() {
         expect(input.getAttribute("class")).toMatch("ng-invalid-pattern");
         
         input.clear();
-        input.sendKeys('12.321321');
+        input.sendKeys('2.32132');
+        expect(input.getAttribute("class")).toMatch("ng-invalid-pattern");
         
-        expect(input.getAttribute("value")).toEqual('12.321321');
+        input.clear();
+        input.sendKeys('2,332132');
+        expect(input.getAttribute("class")).toMatch("ng-invalid-pattern");
+        
+        input.clear();
+        input.sendKeys('-.332132');
+        expect(input.getAttribute("class")).toMatch("ng-invalid-pattern");
+        
+        input.clear();
+        input.sendKeys('-332132');
+        expect(input.getAttribute("class")).toMatch("ng-invalid-pattern");
+        
+        input.clear();
+        input.sendKeys('2.332132');
+        expect(input.getAttribute("class")).toMatch("ng-valid-pattern");
+        
+        input.clear();
+        input.sendKeys('12.321321');
+        expect(input.getAttribute("class")).toMatch("ng-valid-pattern");
+        
+        input.clear();
+        input.sendKeys('212.321321');
+        expect(input.getAttribute("class")).toMatch("ng-valid-pattern");
+        
+        input.clear();
+        input.sendKeys('-212.321321');
+        expect(input.getAttribute("class")).toMatch("ng-valid-pattern");
+        
+        input.clear();
+        input.sendKeys('12.321321');
+        expect(input.getAttribute("class")).toMatch("ng-valid-pattern");
+        
+        input.clear();
+        input.sendKeys('-12.321321');
+        expect(input.getAttribute("class")).toMatch("ng-valid-pattern");
+        
+        input.clear();
+        input.sendKeys('-2.321321');
         expect(input.getAttribute("class")).toMatch("ng-valid-pattern");
     });
     
@@ -35,9 +73,47 @@ describe('E2E: Site => ', function() {
         expect(input.getAttribute("class")).toMatch("ng-invalid-pattern");
         
         input.clear();
-        input.sendKeys('12.321321');
+        input.sendKeys('2.32132');
+        expect(input.getAttribute("class")).toMatch("ng-invalid-pattern");
         
-        expect(input.getAttribute("value")).toEqual('12.321321');
+        input.clear();
+        input.sendKeys('2,332132');
+        expect(input.getAttribute("class")).toMatch("ng-invalid-pattern");
+        
+        input.clear();
+        input.sendKeys('-.332132');
+        expect(input.getAttribute("class")).toMatch("ng-invalid-pattern");
+        
+        input.clear();
+        input.sendKeys('-332132');
+        expect(input.getAttribute("class")).toMatch("ng-invalid-pattern");
+        
+        input.clear();
+        input.sendKeys('2.332132');
+        expect(input.getAttribute("class")).toMatch("ng-valid-pattern");
+        
+        input.clear();
+        input.sendKeys('12.321321');
+        expect(input.getAttribute("class")).toMatch("ng-valid-pattern");
+        
+        input.clear();
+        input.sendKeys('212.321321');
+        expect(input.getAttribute("class")).toMatch("ng-valid-pattern");
+        
+        input.clear();
+        input.sendKeys('-212.321321');
+        expect(input.getAttribute("class")).toMatch("ng-valid-pattern");
+        
+        input.clear();
+        input.sendKeys('12.321321');
+        expect(input.getAttribute("class")).toMatch("ng-valid-pattern");
+        
+        input.clear();
+        input.sendKeys('-12.321321');
+        expect(input.getAttribute("class")).toMatch("ng-valid-pattern");
+        
+        input.clear();
+        input.sendKeys('-2.321321');
         expect(input.getAttribute("class")).toMatch("ng-valid-pattern");
     });
     

@@ -27,8 +27,8 @@
 			<input type="hidden" id="id" name="id" data-ng-model="site.id" />
 			<div class="section">
 				<div class="field"><label for="reference"># reference * :</label><input type="text" id="reference" name="reference" data-ng-model="site.reference" required /></div>
-				<div class="field"><label for="latitude">latitude * (xx.xxxxxx):</label><input type="text" id="latitude" name="latitude" data-ng-model="site.latitude" required data-ng-pattern="/^[0-9][0-9]\.[0-9]{6}$/" /></div>
-				<div class="field"><label for="longitude">longitude * (xx.xxxxxx):</label><input type="text" id="longitude" name="longitude" data-ng-model="site.longitude" required data-ng-pattern="/^[0-9][0-9]\.[0-9]{6}$/" /></div>
+				<div class="field"><label for="latitude">latitude * (xxx.xxxxxx):</label><input type="text" id="latitude" name="latitude" data-ng-model="site.latitude" required data-ng-pattern="/^-?[0-9]?[0-9]?[0-9]\.[0-9]{6}$/" /></div>
+				<div class="field"><label for="longitude">longitude * (xxx.xxxxxx):</label><input type="text" id="longitude" name="longitude" data-ng-model="site.longitude" required data-ng-pattern="/^-?[0-9]?[0-9]?[0-9]\.[0-9]{6}$/" /></div>
 				<div class="field"><label for="siteName">Name * :</label><input type="text" id="siteName" name="siteName" data-ng-model="site.siteName" required /></div>
 				<div class="field"><label for="description">description:</label><textarea cols="38" rows="5" id="description" name="description" data-ng-model="site.description"></textarea></div>
 				<div class="field"><label for="isTemporary">Is temporary?</label>
@@ -59,7 +59,7 @@
         <button id="btnReset" data-ng-click="resetFrm();" ng-disabled="siteForm.$pristine">Reset</button>
 	</div>
     <div style="padding-top:15px;">
-        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Rooms of this building</span><button id="btnAddRoom" data-ng-click="addRoom();">Add new</button>
+        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Rooms of this site</span><button id="btnAddRoom" data-ng-click="addRoom();">Add new</button>
         <span class="error" data-ng-show="lstRoomErr">{{lstRoomErr}}</span>
 		<table border="1">
             <tr><th>Room ID</th><th>Point of Contact</th></tr>
@@ -69,7 +69,7 @@
 		</table>
 	</div>
     <div style="padding-top:15px">
-        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Equipments of this building</span><button id="btnAddEquip" data-ng-click="addEquip();">Add new</button>
+        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Equipments of this site</span><button id="btnAddEquip" data-ng-click="addEquip();">Add new</button>
         <span class="error" data-ng-show="lstEquipErr">{{lstEquipErr}}</span>
 		<table border="1">
             <tr><th>Serial Number</th><th>Model</th></tr>
