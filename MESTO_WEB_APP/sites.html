@@ -3,17 +3,65 @@
     $(document).ready(function() {
         $('#menu').load('menu.html');
     });
+    
+    $(".test").mouseover(function() {
+        $('#details').fadeIn('slow');
+    });
 </script>
 <div id="menu" style="position: relative; z-index: 1" ></div> 
 <div class="main">
 	<div>
-        <h1>Sites List</h1>
+        <h1 class="test">Sites List</h1>
         <span class="error" data-ng-show="lstError">{{lstError}}</span>
 		<table border="1">
             <tr><th>Reference</th><th>Name</th><th>Latitude</th><th>Longitude</th></tr>
-			<tr data-ng-repeat="s in siteList" data-ng-click="loadSite(s)">
+			<tr data-ng-repeat="s in siteList" data-ng-mouseover="openSite(s)">
 				<td>{{s.reference}}</td><td>{{s.siteName}}</td><td>{{s.latitude}}</td><td>{{s.longitude}}</td>
 			</tr>
 		</table>
 	</div>
+    
+    <div id="details">
+        <div class="top">{{site.siteName}}</div>
+        <div class="core">
+            <div class="inner first"># Reference : {{site.reference}}</div>
+            <div class="inner">Latitude : {{site.latitude}}</div>
+            <div class="inner">Longitude : {{site.longitude}}</div>
+            <div class="inner">Description : {{site.description}}</div>
+            <div class="inner">Is temporary? <input type="checkbox" data-ng-checked="site.isTemporary == true" data-ng-model="site.isTemporary" disabled /></div>
+            <div class="inner">Start date : {{site.startDate}}</div>
+            <div class="inner">End date : {{site.endDate}}</div>
+            <div class="inner">Address : {{site.address}}</div>
+			<div class="inner">City : {{site.city}}</div>
+			<div class="inner">Province : {{site.province}}</div>
+			<div class="inner">Country : {{site.country}}</div>
+			<div class="inner">Postal code : {{site.postalCode}}</div>
+            <div class="inner">Role : {{getLabelROLE(site.role)}}</div>
+            <div class="inner">Point of Contact : {{site.pointOfContact}}</div>
+			<div class="inner">Phone number of PoC : {{site.phoneNumberPoC}}</div>
+            <div class="inner">
+                <span style="font-weight: bold; font-size: 12px;">Rooms of this building</span>
+                <span class="error" data-ng-show="lstRoomErr">{{lstRoomErr}}</span>
+                <table border="1">
+                    <tr><th>Room ID</th><th>Point of Contact</th></tr>
+                    <tr data-ng-repeat="r in site.lstRooms" data-ng-click="">
+                        <td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="inner last">
+                <span style="font-weight: bold; font-size: 12px;">Equipments of this building</span>
+                <span class="error" data-ng-show="lstEquipErr">{{lstEquipErr}}</span>
+                <table border="1">
+                    <tr><th>Serial Number</th><th>Model</th></tr>
+                    <tr data-ng-repeat="e in site.lstEquips" data-ng-click="">
+                        <td>{{e.serialNumber}}</td><td>{{e.model}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="bot"><button onclick="$('#details').fadeOut('slow');">Close</button></div>
+    </div>
+    
+    <div class="wrap"></div>
 </div>

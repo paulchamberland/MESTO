@@ -3,17 +3,55 @@
     $(document).ready(function() {
         $('#menu').load('menu.html');
     });
+    /*
+    var mouseX;
+    var mouseY;
+    $(document).mousemove( function(e) {
+         mouseX = e.pageX; 
+         mouseY = e.pageY;
+    });
+    
+    //data-ng-mouseover="equipment = e;console.log('over');"
+    $(".t.ng-scope").mouseover(function(){
+        console.log("test");
+        $('#details').css({'top':mouseY,'left':mouseX}).fadeIn('slow');
+    });
+    $(".t.ng-scope").mouseout(function(){
+        $('#details').fadeOut('slow');
+    });*/
+    
+    $(".test").mouseover(function() {
+        $('#details').fadeIn('slow');
+    });
+
 </script>
 <div id="menu" style="position: relative; z-index: 1" ></div>
 <div class="main">
 	<div>
-        <h1>Equipment List</h1>
+        <h1 class="test">Equipment List</h1>
         <span class="error" data-ng-show="lstError">{{lstError}}</span>
 		<table border="1">
             <tr><th>Serial Number</th><th>Model</th></tr>
-			<tr data-ng-repeat="e in equipmentList" data-ng-click="loadEquipment(e)">
+			<tr data-ng-repeat="e in equipmentList" data-ng-mouseover="setEquipment(e)" class="t">
 				<td>{{e.serialNumber}}</td><td>{{e.model}}</td>
 			</tr>
 		</table>
 	</div>
+    
+    <div id="details">
+        <div class="top">{{equipment.serialNumber}}</div>
+        <div class="core" >
+            <div class="inner first">Bar Code : {{equipment.barCode}}</div>
+            <div class="inner">Manufacturer : {{equipment.manufacturer}}</div>
+            <div class="inner">Model : {{equipment.model}}</div>
+            <div class="inner">HW Config : {{equipment.configHW}}</div>
+            <div class="inner">SW Config : {{equipment.configSW}}</div>
+            <div class="inner">Type : {{getLabelTYPE(equipment.type)}}</div>
+            <div class="inner">Assigned Room : {{equipment.parentRoom.roomID}}</div>
+            <div class="inner last">Assigned Site : {{equipment.parentSite.name}}</div>
+        </div>
+        <div class="bot"><button onclick="$('#details').fadeOut('slow');">Close</button></div>
+    </div>  
+    
+    <div class="wrap"></div>
 </div>

@@ -60,3 +60,36 @@ div.main {
     height:30px;
     /*margin-bottom:30px;*/
 }
+
+#details {
+    border-radius: 25px;
+    background: #CCCCCC;
+    border: 2px solid #000000;
+    box-shadow: 5px 5px 2px #888888;
+    position: absolute;
+    top: 170px;
+    left: 40px;
+    min-width: 400px;
+    display:none;
+}
+#details > .core {
+    background: white;
+    border: 1px solid #000000;
+}
+
+#details > .core >.inner {
+    padding-left: 10px;
+}
+#details > .core >.inner.first {
+    padding-top: 10px;
+}
+#details > .core >.inner.last {
+    padding-bottom: 10px;
+}
+#details > .top {
+    padding: 5px 5px 5px 15px;
+    font-size:1.5em;
+}
+#details > .bot {
+    padding: 5px 5px 5px 15px;
+}

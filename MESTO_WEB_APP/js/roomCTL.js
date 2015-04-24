@@ -18,6 +18,12 @@ app.controller('roomCTL', function($scope, $http, $location) {
     $scope.canDelete = false; // Flag disable button delete
     $scope.isSiteListOpened = false; // Flag to manage GUI display of the list
     
+    $scope.getLabelROLE = function(pRole) {
+        for (t in $scope.ROLE) {
+            if ($scope.ROLE[t].value == pRole) return $scope.ROLE[t].label;
+        }
+    };
+    
     // TODO: To remove at some point
     $scope.room_init = {id: "1",
                     roomID :"erv324r23",
@@ -37,8 +43,17 @@ app.controller('roomCTL', function($scope, $http, $location) {
         //$scope.room = angular.copy($scope.room_init); // TODO: to remove at some point...
     }
     
+    $scope.openRoom = function(pRoom) {
+        $scope.setRoom(pRoom);
+        loadEquipsList();
+    }
+    
+    $scope.setRoom = function(pRoom) {
+        $scope.room = angular.copy(pRoom);
+    }
+    
     $scope.loadRoom = function(p_room) {
-        $scope.room = angular.copy(p_room);
+        $scope.setRoom(p_room);
         $scope.roomForm.$setPristine();
         $scope.canDelete = true;
         $scope.resetMsg();
@@ -47,7 +62,7 @@ app.controller('roomCTL', function($scope, $http, $location) {
     };
     
     $scope.resetFrm = function() {
-        $scope.room = angular.copy(self.emptyRoom);
+        $scope.setRoom(self.emptyRoom);
         $scope.roomForm.$setPristine();
         $scope.canDelete = false;
     };

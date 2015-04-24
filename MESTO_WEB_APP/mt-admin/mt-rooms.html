@@ -21,7 +21,7 @@
 				<div class="field"><label for="PoC">Point of Contact :</label><input type="text" id="PoC" name="pointOfContact" data-ng-model="room.pointOfContact" /></div>
 				<div class="field"><label for="TPoC">Technical PoC :</label><input type="text" id="TPoC" name="technicalPointOfContact" data-ng-model="room.technicalPointOfContact" /></div>
 				<div class="field"><label for="roomSize">Room size (in square) :</label><input type="text" id="roomSize" name="roomSize" data-ng-model="room.roomSize" data-ng-pattern="/^[0-9]*$/" /></div>
-				<div class="field"><label for="role">Role:</label><select id="role" ng-model="room.role" name="role" ng-options="role.value as role.label for role in ROLE"></select></div>
+				<div class="field"><label for="role">Role:</label><select id="role" data-ng-model="room.role" name="role" data-ng-options="role.value as role.label for role in ROLE"></select></div>
 				<div class="field">
                     <label for="prSite">Assigned Site:</label><input type="text" id="prSite" name="parentSiteName" data-ng-model="room.parentSite.name" disabled required/>
                     <button id="btnLinkSite" data-ng-click="openSiteList()" >...</button>

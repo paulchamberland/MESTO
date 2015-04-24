@@ -24,6 +24,12 @@ app.controller('equipmentCTL', function($scope, $http) {
     $scope.isRoomListOpened = false; // Flag to manage GUI display of the list
     $scope.isSiteListOpened = false; // Flag to manage GUI display of the list
     
+    $scope.getLabelTYPE = function(pType) {
+        for (t in $scope.TYPE) {
+            if ($scope.TYPE[t].value == pType) return $scope.TYPE[t].label;
+        }
+    };
+    
     // TODO: To remove at some point
     $scope.equipment_init = {id: "",
                     serialNumber :"432-43453454-4ref4",
@@ -48,15 +54,19 @@ app.controller('equipmentCTL', function($scope, $http) {
         //$scope.equipment = angular.copy($scope.equipment_init); // TODO: to remove at some point...
     }
     
-    $scope.loadEquipment = function(p_equip) {
+    $scope.setEquipment = function (p_equip) {
         $scope.equipment = angular.copy(p_equip);
+    };
+    
+    $scope.loadEquipment = function(p_equip) {
+        $scope.setEquipment(p_equip);
         $scope.equipmentForm.$setPristine();
         $scope.canDelete = true;
         $scope.resetMsg();
     };
     
     $scope.resetFrm = function() {
-        $scope.equipment = angular.copy(self.emptyEquipment);
+        $scope.setEquipment(self.emptyEquipment);
         $scope.equipmentForm.$setPristine();
         $scope.canDelete = false;
     };

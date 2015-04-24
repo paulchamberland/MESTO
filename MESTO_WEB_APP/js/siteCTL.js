@@ -25,6 +25,12 @@ app.controller('siteCTL', function($scope, $http, $location) {
     this.emptySite = {};
     $scope.canDelete = false;
     
+    $scope.getLabelROLE = function(pRole) {
+        for (t in $scope.ROLE) {
+            if ($scope.ROLE[t].value == pRole) return $scope.ROLE[t].label;
+        }
+    };
+    
     // TODO: To remove at some point
     $scope.site_init = {id: "1",
                     reference :"test",
@@ -52,8 +58,19 @@ app.controller('siteCTL', function($scope, $http, $location) {
         //$scope.site = angular.copy($scope.site_init); // TODO: to remove at some point...
     }
     
+    $scope.openSite = function(pSite) {
+        $scope.setSite(pSite);
+        
+        loadRoomsList();
+        loadEquipsList();
+    }
+    
+    $scope.setSite = function(pSite) {
+        $scope.site = angular.copy(pSite);
+    }
+    
     $scope.loadSite = function(p_site) {
-        $scope.site = angular.copy(p_site);
+        $scope.setSite(p_site);
         $scope.site.startDate = Date.parseToDMY($scope.site.startDate);
         $scope.site.endDate = Date.parseToDMY($scope.site.endDate);
         $scope.siteForm.$setPristine();
@@ -65,7 +82,7 @@ app.controller('siteCTL', function($scope, $http, $location) {
     };
     
     $scope.resetFrm = function() {
-        $scope.site = angular.copy(self.emptySite);
+        $scope.setSite(self.emptySite);
         $scope.siteForm.$setPristine();
         $scope.canDelete = false;
     };
