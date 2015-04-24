@@ -226,7 +226,7 @@ app.controller('roomCTL', function($scope, $http, $location) {
     };
     
     $scope.addEquip = function() {
-        $location.path("/equip"); // TODO: complete by sending the ID and do the comportement on the Room page
+        $location.path("/admin/equip"); // TODO: complete by sending the ID and do the comportement on the Room page
     };
     
     init();
