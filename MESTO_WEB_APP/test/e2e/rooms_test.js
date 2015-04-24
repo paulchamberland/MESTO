@@ -1,10 +1,6 @@
 describe('E2E: Room =>', function() {
     beforeEach(function() {
-        browser.get('http://localhost/MESTO/MESTO_WEB_APP/rooms.html');
-    });
-    
-    it('Testing : Web label display', function() {
-        expect(browser.getTitle()).toEqual('Manage Rooms');
+        browser.get('http://localhost/MESTO/MESTO_WEB_APP/#/admin/room');
     });
     
     it('Testing: Required form fields', function() {
@@ -12,6 +8,7 @@ describe('E2E: Room =>', function() {
         
         //Expected 'ng-pristine ng-untouched ng-invalid ng-invalid-required' to equal 'ng-dirty'.
         expect(element(by.model('room.roomID')).getAttribute("class")).toMatch("ng-invalid-required");
+        expect(element(by.model('room.parentSite.name')).getAttribute("class")).toMatch("ng-invalid-required");
     });
     
     it('Testing: Validation pattern of roomSize', function() {
@@ -34,6 +31,14 @@ describe('E2E: Room =>', function() {
         expect(input.getAttribute("class")).toMatch("ng-valid-pattern");
     });
     
+    it('Testing: Associate a site and required', function() {
+        element(by.id('btnLinkSite')).click();
+        element.all(by.repeater('siteList')).first().click();
+        
+        expect(element(by.model('room.parentSite.name')).getAttribute("value")).not.toEqual('');
+        expect(element(by.model('room.parentSite.name')).getAttribute("class")).toMatch("ng-valid-required");
+    });
+    
     it('Testing: State of Saving button', function() {
         var btn = element(by.id('btnSave'));
         
@@ -43,6 +48,8 @@ describe('E2E: Room =>', function() {
         expect(btn.isEnabled()).toBeFalsy();
         
         element(by.model('room.roomID')).sendKeys('test');
+        element(by.id('btnLinkSite')).click();
+        element.all(by.repeater('siteList')).first().click();
         
         expect(btn.isEnabled()).toBeTruthy();
     });
@@ -61,6 +68,8 @@ describe('E2E: Room =>', function() {
         element(by.model('room.pointOfContact')).sendKeys('tester');
         element(by.model('room.roomSize')).sendKeys('24');
         element(by.model('room.role')).sendKeys('T');
+        element(by.id('btnLinkSite')).click();
+        element.all(by.repeater('siteList')).first().click();
         
         element(by.id('btnSave')).click();
         expect(element(by.binding('SQLErrors')).getText()).toEqual('');
@@ -70,6 +79,8 @@ describe('E2E: Room =>', function() {
         element(by.model('room.roomID')).sendKeys('testE2E'); // unique & required
         element(by.model('room.pointOfContact')).sendKeys('tester');
         element(by.model('room.roomSize')).sendKeys('24');
+        element(by.id('btnLinkSite')).click();
+        element.all(by.repeater('siteList')).first().click();
         
         element(by.id('btnSave')).click();
         expect(element(by.binding('SQLErrors')).getText()).toEqual('Room already exists with same room ID.');
@@ -112,6 +123,9 @@ describe('E2E: Room =>', function() {
         element(by.model('room.technicalPointOfContact')).sendKeys('tester technical');
         element(by.model('room.roomSize')).sendKeys('24');
         element(by.model('room.role')).sendKeys('T');
+        element(by.id('btnLinkSite')).click();
+        element.all(by.repeater('siteList')).first().click();// Just to be sure the info is there
+        
         
         element(by.id('btnSave')).click();
         element.all(by.repeater('roomList')).last().click();
@@ -121,6 +135,7 @@ describe('E2E: Room =>', function() {
         expect(element(by.model('room.technicalPointOfContact')).getAttribute("value")).toEqual('tester technical');
         expect(element(by.model('room.roomSize')).getAttribute("value")).toEqual('24');
         expect(element(by.model('room.role')).$('option:checked').getText()).toEqual('Telecom');
+        expect(element(by.model('room.parentSite.name')).getAttribute("value")).not.toEqual('');
         
         element(by.id('btnDelete')).click();
     });

@@ -1,4 +1,4 @@
-app.controller('siteCTL', function($scope, $http) {
+app.controller('siteCTL', function($scope, $http, $location) {
     var self = this;
     var ACTIVITY_DELETE = "del";
     $scope.ROLE = [{value:'ED',label:'Edifice'},{value:'FLR',label:'Floor'},{value:'FOB',label:'FOB'},{value:'COP',label:'COP'},{value:'CMP',label:'CAMP'}];
@@ -17,9 +17,19 @@ app.controller('siteCTL', function($scope, $http) {
                     province:"",
                     country:"",
                     postalCode:"",
-                    role:""};
+                    role:"",
+                    pointOfContact:"",
+                    phoneNumberPoC:"",
+                    lstRooms:[],
+                    lstEquips:[]};
     this.emptySite = {};
     $scope.canDelete = false;
+    
+    $scope.getLabelROLE = function(pRole) {
+        for (t in $scope.ROLE) {
+            if ($scope.ROLE[t].value == pRole) return $scope.ROLE[t].label;
+        }
+    };
     
     // TODO: To remove at some point
     $scope.site_init = {id: "1",
@@ -36,7 +46,11 @@ app.controller('siteCTL', function($scope, $http) {
                     province:"test11",
                     country:"test12",
                     postalCode:"X5X 5X5",
-                    role:"COP"};
+                    role:"COP",
+                    pointOfContact:"Lt. Bariton",
+                    phoneNumberPoC:"514-555-4321",
+                    lstRooms:[],
+                    lstEquips:[]};
     
     function init() {
         loadList();
@@ -44,17 +58,31 @@ app.controller('siteCTL', function($scope, $http) {
         //$scope.site = angular.copy($scope.site_init); // TODO: to remove at some point...
     }
     
+    $scope.openSite = function(pSite) {
+        $scope.setSite(pSite);
+        
+        loadRoomsList();
+        loadEquipsList();
+    }
+    
+    $scope.setSite = function(pSite) {
+        $scope.site = angular.copy(pSite);
+    }
+    
     $scope.loadSite = function(p_site) {
-        $scope.site = angular.copy(p_site);
-        $scope.site.startDate = new Date($scope.site.startDate).toDMY();
-        $scope.site.endDate = new Date($scope.site.endDate).toDMY();
+        $scope.setSite(p_site);
+        $scope.site.startDate = Date.parseToDMY($scope.site.startDate);
+        $scope.site.endDate = Date.parseToDMY($scope.site.endDate);
         $scope.siteForm.$setPristine();
         $scope.canDelete = true;
         $scope.resetMsg();
+        
+        loadRoomsList();
+        loadEquipsList();
     };
     
     $scope.resetFrm = function() {
-        $scope.site = angular.copy(self.emptySite);
+        $scope.setSite(self.emptySite);
         $scope.siteForm.$setPristine();
         $scope.canDelete = false;
     };
@@ -77,14 +105,16 @@ app.controller('siteCTL', function($scope, $http) {
                     siteName : $scope.site.siteName,
                     description : $scope.site.description,
                     isTemporary : $scope.site.isTemporary,
-                    startDate : new Date($scope.site.startDate).toYMD(), // TODO : problem with the constructor, make it custom to put real value. Date.Parse?
+                    startDate : new Date($scope.site.startDate).toYMD(), 
                     endDate : new Date($scope.site.endDate).toYMD(),
                     address : $scope.site.address,
                     city : $scope.site.city,
                     province : $scope.site.province,
                     country : $scope.site.country,
                     postalCode : $scope.site.postalCode,
-                    role : $scope.site.role
+                    role : $scope.site.role,
+                    pointOfContact : $scope.site.pointOfContact,
+                    phoneNumberPoC : $scope.site.phoneNumberPoC
                 },
                 headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
             }).success(
@@ -169,6 +199,68 @@ app.controller('siteCTL', function($scope, $http) {
                 //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
             }
         );
+    };
+    
+    function loadRoomsList() {
+        //$http.post("/MESTO/MESTO_WEB_APP/php/DAORoom.php").success( // TODO: Make a config with path
+        $http({
+                method: 'POST',
+                url: "/MESTO/MESTO_WEB_APP/php/DAORoom.php", // TODO: Make a config with path
+                data: {
+                    id : $scope.site.id
+                },
+                headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+            }).success( // TODO: Make a config with path
+            function(data) {
+                if (data.error == null) {
+                    $scope.site.lstRooms = data;
+                }
+                else {
+                    $scope.lstRoomErr = data.error;
+                }
+            }
+            ).error(
+                function(data, status, headers, config, statusText) {
+                    // TODO: error server handling
+                    $scope.lstRoomErr = "error: "+status+":"+statusText;
+                    //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
+                }
+            );
+    };
+    
+    $scope.addRoom = function() {
+        $location.path("/admin/room"); // TODO: complete by sending the ID and do the comportement on the Room page
+    };
+    
+    function loadEquipsList() {
+        $http({
+                method: 'POST',
+                url: "/MESTO/MESTO_WEB_APP/php/DAOEquipment.php", // TODO: Make a config with path
+                data: {
+                    id : $scope.site.id,
+                    type : "SITE_INC"
+                },
+                headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+            }).success( // TODO: Make a config with path
+            function(data) {
+                if (data.error == null) {
+                    $scope.site.lstEquips = data;
+                }
+                else {
+                    $scope.lstEquipErr = data.error;
+                }
+            }
+            ).error(
+                function(data, status, headers, config, statusText) {
+                    // TODO: error server handling
+                    $scope.lstEquipErr = "error: "+status+":"+statusText;
+                    //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
+                }
+            );
+    };
+    
+    $scope.addEquip = function() {
+        $location.path("/admin/equip"); // TODO: complete by sending the ID and do the comportement on the Room page
     };
     
     init();

@@ -13,8 +13,8 @@ try {
         
         $arr = array("msg" => "", "error" => "");
         if ($rs[0]['nbEquip'] == 0 && !empty($equip['serialNumber'])) {
-            $sql = 'INSERT INTO equipment (serialNumber, barCode, manufacturer, model, configHW, configSW, type, updateBy, updateDate)'
-                .' values ("'.$equip['serialNumber'].'","'.$equip['barCode'].'","'.$equip['manufacturer'].'","'.$equip['model'].'","'.$equip['configHW'].'","'.$equip['configSW'].'","'.$equip['type'].'","apps", NOW())';
+            $sql = 'INSERT INTO equipment (serialNumber, barCode, manufacturer, model, configHW, configSW, type, fk_roomId, fk_siteId, updateBy, updateDate)'
+                .' values ("'.$equip['serialNumber'].'","'.$equip['barCode'].'","'.$equip['manufacturer'].'","'.$equip['model'].'","'.$equip['configHW'].'","'.$equip['configSW'].'","'.$equip['type'].'","'.$equip['parentRoomKey'].'","'.$equip['parentSiteKey'].'","apps", NOW())';
             $con->exec($sql);
             $arr = array("msg" => "Equipment created successfully!!!", "error" => "");
         } else {
@@ -28,7 +28,7 @@ try {
     }
     else {
         // TODO: Updating a serialNumber? that is unique, need validation, or block that...
-        $sql = 'UPDATE equipment SET serialNumber="'.$equip['serialNumber'].'", barCode="'.$equip['barCode'].'", manufacturer="'.$equip['manufacturer'].'", model="'.$equip['model'].'", configHW="'.$equip['configHW'].'", configSW="'.$equip['configSW'].'", type="'.$equip['type'].'", updateBy="apps", updateDate=NOW() WHERE id="'.$equip['id'].'"';
+        $sql = 'UPDATE equipment SET serialNumber="'.$equip['serialNumber'].'", barCode="'.$equip['barCode'].'", manufacturer="'.$equip['manufacturer'].'", model="'.$equip['model'].'", configHW="'.$equip['configHW'].'", configSW="'.$equip['configSW'].'", type="'.$equip['type'].'", fk_roomId="'.$equip['parentRoomKey'].'", fk_siteId="'.$equip['parentSiteKey'].'", updateBy="apps", updateDate=NOW() WHERE id="'.$equip['id'].'"';
         $con->exec($sql);
         $arr = array("msg" => "Equipment updated successfully!!!", "error" => "");
     }

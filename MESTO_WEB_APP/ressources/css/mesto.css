@@ -1,20 +1,23 @@
 /* In IE vs Chrome, the column of textarea is different */
-form {
-	border:1px solid black;
-	width:695px; 
-	height:300px;
+form.basic {
+    position:relative;
 }
 
-.section, .section2 {
+div.section, div.section2 {
     display: block;
-    width: 330px;
+    width: 350px;
 	/*border: 1px solid red;*/
 	padding: 4px;
 }
-.section2 {
+div.section2 {
     position: relative;
 	top: -301px;
 	left: 339px;
+}
+div.section2 {
+    position: absolute;
+	top: 0px;
+	left: 345px;
 }
 
 .field, .fieldgrp {
@@ -30,4 +33,63 @@ form {
 
 .error {
     color:red;
+}
+
+div.main {
+    padding-left:10px;
+    /*float:left;
+    display: block;*/
+    display:table-cell;
+}
+
+#menu.v {
+    background: #E7E7E7; 
+    width:200px;
+    display:table-cell;
+    vertical-align:top;
+    /*display: block;
+    float: left;*/
+}
+
+.titre {
+    font-size:2em;
+    font-weight:bold;
+    padding:10px;
+}
+.wrap {
+    height:30px;
+    /*margin-bottom:30px;*/
+}
+
+#details {
+    border-radius: 25px;
+    background: #CCCCCC;
+    border: 2px solid #000000;
+    box-shadow: 5px 5px 2px #888888;
+    position: absolute;
+    top: 170px;
+    left: 40px;
+    min-width: 400px;
+    display:none;
+}
+#details > .core {
+    background: white;
+    border: 1px solid #000000;
+}
+
+#details > .core >.inner {
+    padding-left: 10px;
+}
+#details > .core >.inner.first {
+    padding-top: 10px;
+}
+#details > .core >.inner.last {
+    padding-bottom: 10px;
+}
+#details > .top {
+    padding: 5px 5px 5px 15px;
+    font-size:1.5em;
+}
+#details > .bot {
+    padding: 5px 5px 5px 15px;
 }

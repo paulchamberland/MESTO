@@ -1,10 +1,6 @@
 describe('E2E: Equipment =>', function() {
     beforeEach(function() {
-        browser.get('http://localhost/MESTO/MESTO_WEB_APP/equipments.html');
-    });
-    
-    it('Testing : Web label display', function() {
-        expect(browser.getTitle()).toEqual('Manage Equipments');
+        browser.get('http://localhost/MESTO/MESTO_WEB_APP/#/admin/equip');
     });
     
     it('Testing: Required form fields', function() {
@@ -12,6 +8,35 @@ describe('E2E: Equipment =>', function() {
         
         //Expected 'ng-pristine ng-untouched ng-invalid ng-invalid-required' to equal 'ng-dirty'.
         expect(element(by.model('equipment.serialNumber')).getAttribute("class")).toMatch("ng-invalid-required");
+    });
+    
+    it('Testing: Associate a room', function() {
+        element(by.id('btnLinkRoom')).click();
+        element.all(by.repeater('roomList')).first().click();
+        
+        expect(element(by.model('equipment.parentRoom.roomID')).getAttribute("value")).not.toEqual('');
+        expect(element(by.model('equipment.parentSite.name')).getAttribute("value")).toEqual('');
+    });
+    it('Testing: Associate a site', function() {
+        element(by.id('btnLinkSite')).click();
+        element.all(by.repeater('siteList')).first().click();
+        
+        expect(element(by.model('equipment.parentSite.name')).getAttribute("value")).not.toEqual('');
+        expect(element(by.model('equipment.parentRoom.roomID')).getAttribute("value")).toEqual('');
+    });
+    it('Testing: Exclusive association for a site and for a room', function() {
+        element(by.id('btnLinkSite')).click();
+        element.all(by.repeater('siteList')).first().click();
+        
+        expect(element(by.model('equipment.parentSite.name')).getAttribute("class")).toMatch("ng-valid-double-association");
+        
+        element(by.id('btnLinkRoom')).click();
+        element.all(by.repeater('roomList')).first().click();
+        
+        expect(element(by.model('equipment.parentSite.name')).getAttribute("class")).toMatch("ng-invalid-double-association");
+        
+        element(by.id('btnCleanSite')).click();
+        expect(element(by.model('equipment.parentSite.name')).getAttribute("class")).toMatch("ng-valid-double-association");
     });
     
     it('Testing: State of Saving button', function() {
@@ -99,6 +124,8 @@ describe('E2E: Equipment =>', function() {
         element(by.model('equipment.configHW')).sendKeys('config 1');
         element(by.model('equipment.configSW')).sendKeys('config 2');
         element(by.model('equipment.type')).sendKeys('SRV');
+        element(by.id('btnLinkRoom')).click();
+        element.all(by.repeater('roomList')).first().click();
         
         element(by.id('btnSave')).click();
         element.all(by.repeater('equipmentList')).last().click();
@@ -110,7 +137,8 @@ describe('E2E: Equipment =>', function() {
         expect(element(by.model('equipment.configHW')).getAttribute("value")).toEqual('config 1');
         expect(element(by.model('equipment.configSW')).getAttribute("value")).toEqual('config 2');
         expect(element(by.model('equipment.type')).$('option:checked').getText()).toEqual('Server');
-        
+        expect(element(by.model('equipment.parentRoom.roomID')).getAttribute("value")).not.toEqual('');
+                
         element(by.id('btnDelete')).click();
     });
 });

@@ -10,9 +10,25 @@ app.controller('equipmentCTL', function($scope, $http) {
                     model :"",
                     configHW :"",
                     configSW :"",
-                    type:""};
+                    type:"",
+                    parentRoom:{
+                        id:"",
+                        roomID:""
+                    },
+                    parentSite:{
+                        id:"",
+                        name:""
+                    }};
     this.emptyEquipment = {};
     $scope.canDelete = false;
+    $scope.isRoomListOpened = false; // Flag to manage GUI display of the list
+    $scope.isSiteListOpened = false; // Flag to manage GUI display of the list
+    
+    $scope.getLabelTYPE = function(pType) {
+        for (t in $scope.TYPE) {
+            if ($scope.TYPE[t].value == pType) return $scope.TYPE[t].label;
+        }
+    };
     
     // TODO: To remove at some point
     $scope.equipment_init = {id: "",
@@ -22,7 +38,15 @@ app.controller('equipmentCTL', function($scope, $http) {
                     model :"XW-5",
                     configHW :"some config",
                     configSW :"some config 2",
-                    type:"HUB"};
+                    type:"HUB",
+                    parentRoom:{
+                        id:"32",
+                        roomID:"Test pRoom"
+                    },
+                    parentSite:{
+                        id:"21",
+                        name:"test pSite"
+                    }};
     
     function init() {
         loadList();
@@ -30,15 +54,19 @@ app.controller('equipmentCTL', function($scope, $http) {
         //$scope.equipment = angular.copy($scope.equipment_init); // TODO: to remove at some point...
     }
     
-    $scope.loadEquipment = function(p_equip) {
+    $scope.setEquipment = function (p_equip) {
         $scope.equipment = angular.copy(p_equip);
+    };
+    
+    $scope.loadEquipment = function(p_equip) {
+        $scope.setEquipment(p_equip);
         $scope.equipmentForm.$setPristine();
         $scope.canDelete = true;
         $scope.resetMsg();
     };
     
     $scope.resetFrm = function() {
-        $scope.equipment = angular.copy(self.emptyEquipment);
+        $scope.setEquipment(self.emptyEquipment);
         $scope.equipmentForm.$setPristine();
         $scope.canDelete = false;
     };
@@ -61,7 +89,9 @@ app.controller('equipmentCTL', function($scope, $http) {
                     model : $scope.equipment.model,
                     configHW : $scope.equipment.configHW,
                     configSW : $scope.equipment.configSW,
-                    type : $scope.equipment.type
+                    type : $scope.equipment.type,
+                    parentRoomKey : $scope.equipment.parentRoom.id,
+                    parentSiteKey : $scope.equipment.parentSite.id
                 },
                 headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
             }).success(
@@ -119,6 +149,16 @@ app.controller('equipmentCTL', function($scope, $http) {
         loadList();
     };
     
+    $scope.validDoubleAssociation = function() {
+        if (($scope.equipment.parentSite.name != null && $scope.equipment.parentSite.name != "")
+                && ($scope.equipment.parentRoom.roomID != null && $scope.equipment.parentRoom.roomID != "") ) {
+            $scope.equipmentForm.parentSiteName.$setValidity('doubleAssociation', false);
+        }
+        else {
+            $scope.equipmentForm.parentSiteName.$setValidity('doubleAssociation', true);
+        }
+    };
+    
     function loadList() {
         $http.post("/MESTO/MESTO_WEB_APP/php/DAOEquipment.php").success( // TODO: Make a config with path
             function(data) {
@@ -134,6 +174,89 @@ app.controller('equipmentCTL', function($scope, $http) {
                 // TODO: error server handling
                 $scope.lstError = "error: "+status+":"+statusText;
                 //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
+            }
+        );
+    };
+    
+    $scope.closeRoomList = function() {
+        $scope.isRoomListOpened = false;
+    };
+    $scope.closeSiteList = function() {
+        $scope.isSiteListOpened = false;
+    };
+    
+    $scope.openRoomList = function() {
+        $scope.isRoomListOpened = true;
+        $scope.isSiteListOpened = false;
+        loadRoomList();
+    };
+    $scope.openSiteList = function() {
+        $scope.isRoomListOpened = false;
+        $scope.isSiteListOpened = true;
+        loadSiteList();
+    };
+    
+    $scope.associateRoom = function(selectRoom) {
+        if ($scope.equipment.parentRoom.roomID != selectRoom.roomID) {
+            $scope.equipmentForm.parentRoomName.$setDirty();
+        }
+        
+        $scope.equipment.parentRoom.id = selectRoom.id;
+        $scope.equipment.parentRoom.roomID = selectRoom.roomID;
+        $scope.isRoomListOpened = false;
+    };
+    $scope.associateSite = function(selectSite) {
+        if ($scope.equipment.parentSite.name != selectSite.siteName) {
+            $scope.equipmentForm.parentSiteName.$setDirty();
+        }
+        
+        $scope.equipment.parentSite.id = selectSite.id;
+        $scope.equipment.parentSite.name = selectSite.siteName;
+        $scope.isSiteListOpened = false;
+    };
+    
+    $scope.cleanAssociateRoom = function() {
+        $scope.equipment.parentRoom.id = "";
+        $scope.equipment.parentRoom.roomID = "";
+        $scope.validDoubleAssociation();
+    };
+    $scope.cleanAssociateSite = function() {
+        $scope.equipment.parentSite.id = "";
+        $scope.equipment.parentSite.name = "";
+        $scope.validDoubleAssociation();
+    };
+    
+    function loadRoomList() {
+        $http.post("/MESTO/MESTO_WEB_APP/php/DAORoom.php").success( // TODO: Make a config with path
+            function(data) {
+                if (data.error == null) {
+                    $scope.roomList = data;
+                }
+                else {
+                    $scope.lstRmErr = data.error;
+                }
+            }
+        ).error(
+            function(data, status, headers, config, statusText) {
+                // TODO: error server handling
+                $scope.lstRmErr = "error: "+status+":"+statusText;
+            }
+        );
+    };
+    function loadSiteList() {
+        $http.post("/MESTO/MESTO_WEB_APP/php/DAOSite.php").success( // TODO: Make a config with path
+            function(data) {
+                if (data.error == null) {
+                    $scope.siteList = data;
+                }
+                else {
+                    $scope.lstStErr = data.error;
+                }
+            }
+        ).error(
+            function(data, status, headers, config, statusText) {
+                // TODO: error server handling
+                $scope.lstStErr = "error: "+status+":"+statusText;
             }
         );
     };

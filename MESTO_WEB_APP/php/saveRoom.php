@@ -13,8 +13,8 @@ try {
         
         $arr = array("msg" => "", "error" => "");
         if ($rs[0]['nbRoom'] == 0 && !empty($room['roomID'])) {
-            $sql = 'INSERT INTO room (roomID, pointOfContact, technicalPointOfContact, role, roomSize, updateBy, updateDate)'
-                .' values ("'.$room['roomID'].'","'.$room['pointOfContact'].'","'.$room['technicalPointOfContact'].'","'.$room['role'].'","'.$room['roomSize'].'","apps", NOW())';
+            $sql = 'INSERT INTO room (roomID, pointOfContact, technicalPointOfContact, role, roomSize, fk_siteId, updateBy, updateDate)'
+                .' values ("'.$room['roomID'].'","'.$room['pointOfContact'].'","'.$room['technicalPointOfContact'].'","'.$room['role'].'","'.$room['roomSize'].'","'.$room['parentSiteKey'].'","apps", NOW())';
             $con->exec($sql);
             $arr = array("msg" => "Room created successfully!!!", "error" => "");
         } else {
@@ -28,7 +28,7 @@ try {
     }
     else {
         // TODO: Updating a roomID? that is unique, need validation, or block that...
-        $sql = 'UPDATE room SET roomID="'.$room['roomID'].'", pointOfContact="'.$room['pointOfContact'].'", technicalPointOfContact="'.$room['technicalPointOfContact'].'", role="'.$room['role'].'", roomSize="'.$room['roomSize'].'", updateBy="apps", updateDate=NOW() WHERE id="'.$room['id'].'"';
+        $sql = 'UPDATE room SET roomID="'.$room['roomID'].'", pointOfContact="'.$room['pointOfContact'].'", technicalPointOfContact="'.$room['technicalPointOfContact'].'", role="'.$room['role'].'", roomSize="'.$room['roomSize'].'", fk_siteId="'.$room['parentSiteKey'].'", updateBy="apps", updateDate=NOW() WHERE id="'.$room['id'].'"';
         $con->exec($sql);
         $arr = array("msg" => "Room updated successfully!!!", "error" => "");
     }

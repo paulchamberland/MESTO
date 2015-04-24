@@ -1,4 +1,4 @@
-describe('Testing the controller of site object', function() {
+describe('Testing the controller of site object =>', function() {
     beforeEach(module('MESTO'));
     var controller, scope;
 
@@ -24,7 +24,11 @@ describe('Testing the controller of site object', function() {
                     province:"",
                     country:"",
                     postalCode:"",
-                    role:""};
+                    role:"",
+                    pointOfContact:"",
+                    phoneNumberPoC:"",
+                    lstRooms:[],
+                    lstEquips:[]};
         
         expect(scope.site).toEqual(site);
         
@@ -43,24 +47,86 @@ describe('Testing the controller of site object', function() {
                     siteName:"test4",
                     description:"test5",
                     isTemporary:true,
-                    startDate:"12-12-1912",
-                    endDate:"11-11-1900",
+                    startDate:"1912-01-01",
+                    endDate:"1900-11-11",
                     address:"test9",
                     city:"test10",
                     province:"test11",
                     country:"test12",
                     postalCode:"X5X 5X5",
-                    role:"COP"};
+                    role:"COP",
+                    pointOfContact:"Lt. Bariton",
+                    phoneNumberPoC:"514-555-4321",
+                    lstRooms:[{id:"2",name:"test"},{id:"3",name:"testV2"}],
+                    lstEquips:[{id:"2",roomID:"test"},{id:"3",roomID:"testV2"}]};
                     
         scope.loadSite(fakeSite);
         
-        fakeSite.startDate = new Date(fakeSite.startDate).toDMY();
-        fakeSite.endDate = new Date(fakeSite.endDate).toDMY();
-        
-        expect(scope.site).toEqual(fakeSite);
+        expect(scope.site).toEqual({id: "1",
+                                    reference :"test",
+                                    latitude:"12.123456",
+                                    longitude:"43.123456",
+                                    siteName:"test4",
+                                    description:"test5",
+                                    isTemporary:true,
+                                    startDate:"01-01-1912",
+                                    endDate:"11-11-1900",
+                                    address:"test9",
+                                    city:"test10",
+                                    province:"test11",
+                                    country:"test12",
+                                    postalCode:"X5X 5X5",
+                                    role:"COP",
+                                    pointOfContact:"Lt. Bariton",
+                                    phoneNumberPoC:"514-555-4321",
+                                    lstRooms:[{id:"2",name:"test"},{id:"3",name:"testV2"}],
+                                    lstEquips:[{id:"2",roomID:"test"},{id:"3",roomID:"testV2"}]});
         expect(scope.canDelete).toBe(true);
         expect(scope.SQLMsgs).not.toBeDefined();
         expect(scope.SQLErrors).not.toBeDefined();
+    });
+    it('Testing: Validation of Date at loading', function() {
+        scope.siteForm = {$setPristine : function(){}};
+        
+        var fakeSite = {id: "1",
+                    reference :"test",
+                    latitude:"12.123456",
+                    longitude:"43.123456",
+                    siteName:"test4",
+                    isTemporary:true,
+                    startDate:"01-01-2008",
+                    endDate:"01-01-2010"};
+                    
+        scope.loadSite(fakeSite);
+        
+        expect(scope.site).toEqual({id: "1",
+                    reference :"test",
+                    latitude:"12.123456",
+                    longitude:"43.123456",
+                    siteName:"test4",
+                    isTemporary:true,
+                    startDate:"01-01-2008",
+                    endDate:"01-01-2010"});
+        
+        var fakeSite2 = {id: "2",
+            reference :"tester",
+            latitude:"55.123456",
+            longitude:"44.123456",
+            siteName:"tester2",
+            isTemporary:true,
+            startDate:"2008-01-01",
+            endDate:"2010-01-01"};
+                    
+        scope.loadSite(fakeSite2);
+        
+        expect(scope.site).toEqual({id: "2",
+                    reference :"tester",
+                    latitude:"55.123456",
+                    longitude:"44.123456",
+                    siteName:"tester2",
+                    isTemporary:true,
+                    startDate:"01-01-2008",
+                    endDate:"01-01-2010"});
     });
     
     it('Testing: Reset form', function() {
@@ -72,21 +138,22 @@ describe('Testing the controller of site object', function() {
                     siteName:"test4",
                     description:"test5",
                     isTemporary:true,
-                    startDate:"12-12-1912",
-                    endDate:"11-11-1900",
+                    startDate:"1912-12-12",
+                    endDate:"1900-11-11",
                     address:"test9",
                     city:"test10",
                     province:"test11",
                     country:"test12",
                     postalCode:"X5X 5X5",
-                    role:"COP"});
+                    role:"COP",
+                    pointOfContact:"Lt. Bariton",
+                    phoneNumberPoC:"514-555-4321",
+                    lstRooms:[{id:"2",name:"test"},{id:"3",name:"testV2"}],
+                    lstEquips:[{id:"2",roomID:"test"},{id:"3",roomID:"testV2"}]});
         
         scope.resetFrm();
         
         expect(scope.canDelete).toBe(false);
-        //expect(scope.siteForm.$pristine).toBe(true);
-        //expect(scope.siteForm.$dirty).toBe(false);
-        //expect(scope.siteForm.$valid).toBe(true);
         expect(scope.site).toEqual({id: "",
                                     reference :"",
                                     latitude:"",
@@ -101,7 +168,11 @@ describe('Testing the controller of site object', function() {
                                     province:"",
                                     country:"",
                                     postalCode:"",
-                                    role:""});
+                                    role:"",
+                                    pointOfContact:"",
+                                    phoneNumberPoC:"",
+                                    lstRooms:[],
+                                    lstEquips:[]});
     });
     
     it('Testing: Reset Messages ', function() {
@@ -118,7 +189,7 @@ describe('Testing the controller of site object', function() {
         expect(scope.SQLErrors).not.toBeDefined();
     });
     
-    describe('Testing Ajax call from site object', function() {
+    describe('Testing Ajax call from site object =>', function() {
         beforeEach(inject(function(_$httpBackend_) {
             $httpBackend = _$httpBackend_;
         }));
@@ -131,14 +202,16 @@ describe('Testing the controller of site object', function() {
                                                                                         +'"siteName":"test4",'
                                                                                         +'"description":"test5",'
                                                                                         +'"isTemporary":true,'
-                                                                                        +'"startDate":"12-12-1912",'
-                                                                                        +'"endDate":"11-11-1900",'
+                                                                                        +'"startDate":"1912-12-12",'
+                                                                                        +'"endDate":"1900-11-11",'
                                                                                         +'"address":"test9",'
                                                                                         +'"city":"test10",'
                                                                                         +'"province":"test11",'
                                                                                         +'"country":"test12",'
                                                                                         +'"postalCode":"X5X 5X5",'
-                                                                                        +'"role":"COP"}]');
+                                                                                        +'"role":"COP",'
+                                                                                        +'"pointOfContact":"Lt. Bariton",'
+                                                                                        +'"phoneNumberPoC":"514-555-4321"}]');
 
             scope.refreshList(); // <--- TEST
 
@@ -152,14 +225,16 @@ describe('Testing the controller of site object', function() {
                                                 "siteName":"test4",
                                                 "description":"test5",
                                                 "isTemporary":true,
-                                                "startDate":"12-12-1912",
-                                                "endDate":"11-11-1900",
+                                                "startDate":"1912-12-12",
+                                                "endDate":"1900-11-11",
                                                 "address":"test9",
                                                 "city":"test10",
                                                 "province":"test11",
                                                 "country":"test12",
                                                 "postalCode":"X5X 5X5",
-                                                "role":"COP"}]);
+                                                "role":"COP",
+                                                "pointOfContact":"Lt. Bariton",
+                                                "phoneNumberPoC":"514-555-4321"}]);
         });
         it('Testing: Generated error for Refresh', function() {
             scope.canDelete = true;
@@ -199,14 +274,16 @@ describe('Testing the controller of site object', function() {
                                                                                         +'"siteName":"test4",'
                                                                                         +'"description":"test5",'
                                                                                         +'"isTemporary":true,'
-                                                                                        +'"startDate":"12-12-1912",'
-                                                                                        +'"endDate":"11-11-1900",'
+                                                                                        +'"startDate":"1912-12-12",'
+                                                                                        +'"endDate":"1900-11-11",'
                                                                                         +'"address":"test9",'
                                                                                         +'"city":"test10",'
                                                                                         +'"province":"test11",'
                                                                                         +'"country":"test12",'
                                                                                         +'"postalCode":"X5X 5X5",'
-                                                                                        +'"role":"COP"}]');
+                                                                                        +'"role":"COP",'
+                                                                                        +'"pointOfContact":"Lt. Bariton",'
+                                                                                        +'"phoneNumberPoC":"514-555-4321"}]');
 
             scope.save(); // <--- TEST
 
@@ -232,14 +309,16 @@ describe('Testing the controller of site object', function() {
                                                                                         +'"siteName":"test4",'
                                                                                         +'"description":"test5",'
                                                                                         +'"isTemporary":true,'
-                                                                                        +'"startDate":"12-12-1912",'
-                                                                                        +'"endDate":"11-11-1900",'
+                                                                                        +'"startDate":"1912-12-12",'
+                                                                                        +'"endDate":"1900-11-11",'
                                                                                         +'"address":"test9",'
                                                                                         +'"city":"test10",'
                                                                                         +'"province":"test11",'
                                                                                         +'"country":"test12",'
                                                                                         +'"postalCode":"X5X 5X5",'
-                                                                                        +'"role":"COP"}]');
+                                                                                        +'"role":"COP",'
+                                                                                        +'"pointOfContact":"Lt. Bariton",'
+                                                                                        +'"phoneNumberPoC":"514-555-4321"}]');
 
             scope.save(); // <--- TEST
 
@@ -260,7 +339,11 @@ describe('Testing the controller of site object', function() {
                                     province:"",
                                     country:"",
                                     postalCode:"",
-                                    role:""});
+                                    role:"",
+                                    pointOfContact:"",
+                                    phoneNumberPoC:"",
+                                    lstRooms:[],
+                                    lstEquips:[]});
             expect(scope.SQLMsgs).toEqual('Site created successfully!!!');
             expect(scope.SQLErrors).not.toBeDefined();
             expect(scope.siteList).toEqual([{"id": "1",
@@ -270,14 +353,16 @@ describe('Testing the controller of site object', function() {
                                                 "siteName":"test4",
                                                 "description":"test5",
                                                 "isTemporary":true,
-                                                "startDate":"12-12-1912",
-                                                "endDate":"11-11-1900",
+                                                "startDate":"1912-12-12",
+                                                "endDate":"1900-11-11",
                                                 "address":"test9",
                                                 "city":"test10",
                                                 "province":"test11",
                                                 "country":"test12",
                                                 "postalCode":"X5X 5X5",
-                                                "role":"COP"}]);
+                                                "role":"COP",
+                                                "pointOfContact":"Lt. Bariton",
+                                                "phoneNumberPoC":"514-555-4321"}]);
         });
         it('Testing: Generated error for Saving', function() {
             scope.siteForm = {$dirty:true, $valid:true};
@@ -338,7 +423,9 @@ describe('Testing the controller of site object', function() {
                                                                                         +'"province":"test11",'
                                                                                         +'"country":"test12",'
                                                                                         +'"postalCode":"X5X 5X5",'
-                                                                                        +'"role":"COP"}]');
+                                                                                        +'"role":"COP",'
+                                                                                        +'"pointOfContact":"Lt. Bariton",'
+                                                                                        +'"phoneNumberPoC":"514-555-4321"}]');
 
             scope.delete(); // <--- TEST
 
@@ -359,7 +446,11 @@ describe('Testing the controller of site object', function() {
                                     province:"",
                                     country:"",
                                     postalCode:"",
-                                    role:""});
+                                    role:"",
+                                    pointOfContact:"",
+                                    phoneNumberPoC:"",
+                                    lstRooms:[],
+                                    lstEquips:[]});
             expect(scope.SQLMsgs).toEqual('Site deleted successfully!!!');
             expect(scope.SQLErrors).not.toBeDefined();
             expect(scope.siteList).toEqual([{"id": "1",
@@ -376,7 +467,9 @@ describe('Testing the controller of site object', function() {
                                                 "province":"test11",
                                                 "country":"test12",
                                                 "postalCode":"X5X 5X5",
-                                                "role":"COP"}]);
+                                                "role":"COP",
+                                                "pointOfContact":"Lt. Bariton",
+                                                "phoneNumberPoC":"514-555-4321"}]);
         });
         it('Testing: Generating error for Deleting', function() {
             scope.canDelete = true;
@@ -411,6 +504,27 @@ describe('Testing the controller of site object', function() {
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).toEqual('error: 500:undefined'); // Principal test
             expect(scope.siteList).toEqual({});
+        });
+        
+        it('Testing: Load sub list of Equipements', function() {
+            scope.siteForm = {$setPristine : function(){}};
+            
+            var pSite = {id: "1",
+                    reference :"test",
+                    latitude:"12.123456",
+                    longitude:"43.123456",
+                    siteName:"test4",
+                    lstRooms:[{id:"2",name:"test"},{id:"3",name:"testV2"}],
+                    lstEquips:[{id:"2",roomID:"test"},{id:"3",roomID:"testV2"}]};
+                        
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond('');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('');
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('[{"test":"test"}]');
+                        
+            scope.loadSite(pSite);
+            $httpBackend.flush();
+            
+            expect(scope.site.lstEquips).toEqual([{test:"test"}]);
         });
     });
 });
