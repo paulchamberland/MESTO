@@ -54,6 +54,11 @@ app.controller('equipmentCTL', function($scope, $http) {
         //$scope.equipment = angular.copy($scope.equipment_init); // TODO: to remove at some point...
     }
     
+    $scope.openEquipment = function(pEquip) {
+        $scope.setEquipment(pEquip);
+        $('#details').fadeIn('slow');
+    }
+    
     $scope.setEquipment = function (p_equip) {
         $scope.equipment = angular.copy(p_equip);
     };
@@ -216,11 +221,15 @@ app.controller('equipmentCTL', function($scope, $http) {
     };
     
     $scope.cleanAssociateRoom = function() {
+        $scope.equipmentForm.parentRoomName.$setDirty();
+        
         $scope.equipment.parentRoom.id = "";
         $scope.equipment.parentRoom.roomID = "";
         $scope.validDoubleAssociation();
     };
     $scope.cleanAssociateSite = function() {
+        $scope.equipmentForm.parentSiteName.$setDirty();
+        
         $scope.equipment.parentSite.id = "";
         $scope.equipment.parentSite.name = "";
         $scope.validDoubleAssociation();

@@ -46,6 +46,7 @@ app.controller('roomCTL', function($scope, $http, $location) {
     $scope.openRoom = function(pRoom) {
         $scope.setRoom(pRoom);
         loadEquipsList();
+        $('#details').fadeIn('slow');
     }
     
     $scope.setRoom = function(pRoom) {
@@ -178,6 +179,13 @@ app.controller('roomCTL', function($scope, $http, $location) {
         $scope.room.parentSite.id = selectSite.id;
         $scope.room.parentSite.name = selectSite.siteName;
         $scope.isSiteListOpened = false;
+    };
+    
+    $scope.cleanAssociateSite = function() {
+        $scope.roomForm.parentSiteName.$setDirty();
+        
+        $scope.room.parentSite.id = "";
+        $scope.room.parentSite.name = "";
     };
     
     function loadSiteList() {

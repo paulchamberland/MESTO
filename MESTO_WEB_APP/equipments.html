@@ -19,11 +19,6 @@
     $(".t.ng-scope").mouseout(function(){
         $('#details').fadeOut('slow');
     });*/
-    
-    $(".test").mouseover(function() {
-        $('#details').fadeIn('slow');
-    });
-
 </script>
 <div id="menu" style="position: relative; z-index: 1" ></div>
 <div class="main">
@@ -32,7 +27,7 @@
         <span class="error" data-ng-show="lstError">{{lstError}}</span>
 		<table border="1">
             <tr><th>Serial Number</th><th>Model</th></tr>
-			<tr data-ng-repeat="e in equipmentList" data-ng-mouseover="setEquipment(e)" class="t">
+			<tr data-ng-repeat="e in equipmentList" data-ng-click="openEquipment(e)">
 				<td>{{e.serialNumber}}</td><td>{{e.model}}</td>
 			</tr>
 		</table>

@@ -63,6 +63,8 @@ app.controller('siteCTL', function($scope, $http, $location) {
         
         loadRoomsList();
         loadEquipsList();
+        
+        $('#details').fadeIn('slow');
     }
     
     $scope.setSite = function(pSite) {
