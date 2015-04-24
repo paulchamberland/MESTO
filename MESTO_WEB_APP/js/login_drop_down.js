@@ -1,6 +1,6 @@
 // Login Form
 
-$(function() {
+/*$(function() {
     var button = $('#loginButton');
     var box = $('#loginBox');
     var form = $('#loginForm');
@@ -12,10 +12,10 @@ $(function() {
     form.mouseup(function() { 
         return false;
     });
-    $(this).mouseup(function(login) {
+    /*$(this).mouseup(function(login) {
         if(!($(login.target).parent('#loginButton').length > 0)) {
             button.removeClass('active');
             box.hide();
         }
-    });
-});
+    });*
+});*/

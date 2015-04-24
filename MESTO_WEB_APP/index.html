@@ -77,8 +77,8 @@
             <!-- Login Starts Here -->
             <div id="loginContainer" data-ng-controller="loginCTL">
                 <span style="padding-right:5px" data-ng-if="isLogged()">Welcome {{username}}</span>
-                <a href="#" id="logoutButton" data-ng-if="isLogged()" data-ng-click="logout()"><span>Logout</span></a>
-                <a href="#" id="loginButton" data-ng-if="!isLogged()"><span>Login</span><em></em></a>
+                <a id="logoutButton" data-ng-if="isLogged()" data-ng-click="logout()"><span>Logout</span></a>
+                <a id="loginButton" data-ng-if="!isLogged()" onclick="$('#loginBox').toggle();$('#loginForm').toggleClass('active');"><span>Login</span><em></em></a>
                 <div style="clear:both"></div>
                 <div id="loginBox">              
                     <form id="loginForm" name="loginForm" data-ng-submit="login(logInfo)" novalidate>
