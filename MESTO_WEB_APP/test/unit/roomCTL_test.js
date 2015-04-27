@@ -99,26 +99,16 @@ describe('Testing the controller of room object =>', function() {
     it('Testing: associateSite function', function() {
         var testDirty = false;
         scope.roomForm = {parentSiteName:{$setDirty : function(){testDirty=true;}}};
-        scope.isSiteListOpened = true;
-        scope.associateSite({id:'3',siteName:"test"});
+        
+        scope.associateSite({id:'3',siteName:"test"}); // test
         
         expect(scope.room.parentSite.id).toBe('3');
         expect(scope.room.parentSite.name).toEqual("test");
-        expect(scope.isSiteListOpened).toBeFalsy();
         expect(testDirty).toBeTruthy();
         
         testDirty = false;
         scope.associateSite({id:'3',siteName:"test"});
         expect(testDirty).toBeFalsy();
-    });
-    
-    it('Testing: closeSiteList function', function() {
-        expect(scope.isSiteListOpened).toBeFalsy();
-        
-        scope.isSiteListOpened = true;
-        scope.closeSiteList();
-        
-        expect(scope.isSiteListOpened).toBeFalsy();
     });
     
     describe('Testing Ajax call from Room object => ', function() {
@@ -394,7 +384,6 @@ describe('Testing the controller of room object =>', function() {
             scope.openSiteList();
             $httpBackend.flush();
             
-            expect(scope.isSiteListOpened).toBe(true);
             expect(scope.siteList).toEqual({});
         });
     });

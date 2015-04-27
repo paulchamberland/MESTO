@@ -61,7 +61,7 @@ div.main {
     /*margin-bottom:30px;*/
 }
 
-#details {
+.details {
     border-radius: 25px;
     background: #CCCCCC;
     border: 2px solid #000000;
@@ -72,24 +72,24 @@ div.main {
     min-width: 400px;
     display:none;
 }
-#details > .core {
+.details > .core {
     background: white;
     border: 1px solid #000000;
 }
 
-#details > .core >.inner {
-    padding-left: 10px;
+.details > .core >.inner {
+    padding: 0px 10px 0px 10px;
 }
-#details > .core >.inner.first {
+.details > .core >.inner.first {
     padding-top: 10px;
 }
-#details > .core >.inner.last {
+.details > .core >.inner.last {
     padding-bottom: 10px;
 }
-#details > .top {
+.details > .top {
     padding: 5px 5px 5px 15px;
     font-size:1.5em;
 }
-#details > .bot {
+.details > .bot {
     padding: 5px 5px 5px 15px;
 }

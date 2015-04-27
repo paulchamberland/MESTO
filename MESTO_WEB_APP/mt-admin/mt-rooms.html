@@ -28,19 +28,6 @@
                     <button id="btnCleanSite" data-ng-click="cleanAssociateSite()" >X</button>
                 </div>
             </div>
-            
-            <div style="position:absolute; top:0px;left:400px;width: 450px;" data-ng-if="isSiteListOpened">
-                <h3>Sites List</h3>
-                <span class="error" data-ng-show="lstStErr">{{lstStErr}}</span>
-                <span class="">Assigned the room to a site, by clicking on the row.</span>
-                <table border="1">
-                    <tr><th>id</th><th>Reference</th><th>Name</th><th>Latitude</th><th>Longitude</th></tr>
-                    <tr data-ng-repeat="s in siteList" data-ng-click="associateSite(s)">
-                        <td>{{s.id}}</td><td>{{s.reference}}</td><td>{{s.siteName}}</td><td>{{s.latitude}}</td><td>{{s.longitude}}</td>
-                    </tr>
-                </table>
-                <button id="btnCloseSite" data-ng-click="closeSiteList()" >Close</button>
-            </div>
 		</form>
 		<button id="btnSave" data-ng-click="save();" ng-disabled="roomForm.$pristine || roomForm.$invalid">Save</button>
 		<button id="btnDelete" data-ng-click="delete();" ng-disabled="!canDelete">Delete</button>
@@ -68,5 +55,22 @@
 			</tr>
 		</table>
 	</div>
+    
+    <div id="lstSite" class="details" style="top:200px;left:400px;">
+        <div class="top">Sites List</div>
+        <div class="core">
+            <div class="inner first"><span class="error" data-ng-show="lstStErr">{{lstStErr}}</span></div>
+            <div class="inner">Assigned the room to a site, by clicking on the row.</div>
+            <div class="inner last">
+                <table border="1">
+                    <tr><th>id</th><th>Reference</th><th>Name</th><th>Latitude</th><th>Longitude</th></tr>
+                    <tr data-ng-repeat="s in siteList" data-ng-click="associateSite(s)">
+                        <td>{{s.id}}</td><td>{{s.reference}}</td><td>{{s.siteName}}</td><td>{{s.latitude}}</td><td>{{s.longitude}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="bot"><button id="btnCloseLstSite" data-ng-click="closeSiteList()" >Close</button></div>
+    </div>
     <div class="wrap"></div>
 </div>

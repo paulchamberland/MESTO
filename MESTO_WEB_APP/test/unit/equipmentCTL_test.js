@@ -6,6 +6,9 @@ describe('Testing the controller of equipment object', function() {
         // The injector unwraps the underscores (_) from around the parameter names when matching
         scope = $rootScope;//.$new();
         controller = _$controller_('equipmentCTL', { $scope: scope });
+        $ = function() {return {fadeOut : function() {},
+                                fadeIn : function() {}
+                                }}; // mock JQuery 
     }));
     
     it('Testing: creation object', function() {
@@ -138,7 +141,8 @@ describe('Testing the controller of equipment object', function() {
         var testDirty = false;
         scope.equipmentForm = {parentSiteName:{$setDirty : function(){testDirty=true;}}};
         scope.isSiteListOpened = true;
-        scope.associateSite({id:'3',siteName:"test"});
+        
+        scope.associateSite({id:'3',siteName:"test"}); // test
         
         expect(scope.equipment.parentSite.id).toBe('3');
         expect(scope.equipment.parentSite.name).toEqual("test");
@@ -153,6 +157,8 @@ describe('Testing the controller of equipment object', function() {
     it('Testing: cleanAssociateRoom function', function() {
         scope.validDoubleAssociation = function() {};
         scope.equipment.parentRoom = {id:"21", roomID:"test"};
+        scope.equipmentForm = {parentRoomName:{$setDirty : function(){testDirty=true;}}};
+        
         scope.cleanAssociateRoom();
         expect(scope.equipment.parentRoom).toEqual({id:"", roomID:""});
     });
@@ -160,6 +166,8 @@ describe('Testing the controller of equipment object', function() {
     it('Testing: cleanAssociateSite function', function() {
         scope.validDoubleAssociation = function() {};
         scope.equipment.parentSite = {id:"21", name:"test"};
+        scope.equipmentForm = {parentSiteName:{$setDirty : function(){testDirty=true;}}};
+        
         scope.cleanAssociateSite();
         expect(scope.equipment.parentSite).toEqual({id:"", name:""});
     });

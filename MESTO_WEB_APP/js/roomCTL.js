@@ -16,7 +16,6 @@ app.controller('roomCTL', function($scope, $http, $location) {
                     lstEquips:[]};
     this.emptyRoom = {};
     $scope.canDelete = false; // Flag disable button delete
-    $scope.isSiteListOpened = false; // Flag to manage GUI display of the list
     
     $scope.getLabelROLE = function(pRole) {
         for (t in $scope.ROLE) {
@@ -163,12 +162,12 @@ app.controller('roomCTL', function($scope, $http, $location) {
     };
     
     $scope.closeSiteList = function() {
-        $scope.isSiteListOpened = false;
+        $('#lstSite').fadeOut('slow');
     };
 
     $scope.openSiteList = function() {
-        $scope.isSiteListOpened = true;
         loadSiteList();
+        $('#lstSite').fadeIn('slow');
     };
     
     $scope.associateSite = function(selectSite) {
@@ -178,7 +177,7 @@ app.controller('roomCTL', function($scope, $http, $location) {
         
         $scope.room.parentSite.id = selectSite.id;
         $scope.room.parentSite.name = selectSite.siteName;
-        $scope.isSiteListOpened = false;
+        $scope.closeSiteList();
     };
     
     $scope.cleanAssociateSite = function() {

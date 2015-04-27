@@ -34,32 +34,6 @@
                     <button id="btnCleanSite" data-ng-click="cleanAssociateSite()" >X</button>
                 </div>
 			</div>
-            
-            <div style="position:absolute; top:0px;left:400px;width: 450px;" data-ng-if="isRoomListOpened">
-                <h3>Rooms List</h3>
-                <span class="error" data-ng-show="lstRmErr">{{lstRmErr}}</span>
-                <span class="">Assigned the equipment to a room by clicking on the row.</span>
-                <table border="1">
-                    <tr><th>Room ID</th><th>Point of Contact</th></tr>
-                    <tr data-ng-repeat="r in roomList" data-ng-click="associateRoom(r);validDoubleAssociation();">
-                        <td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td>
-                    </tr>
-                </table>
-                <button id="btnCloseRoom" data-ng-click="closeRoomList()" >Close</button>
-            </div>
-            
-            <div style="position:absolute; top:0px;left:400px;width: 450px;" data-ng-if="isSiteListOpened">
-                <h3>Sites List</h3>
-                <span class="error" data-ng-show="lstStErr">{{lstStErr}}</span>
-                <span class="">Assigned the equipment to a site by clicking on the row.</span>
-                <table border="1">
-                    <tr><th>id</th><th>Reference</th><th>Name</th><th>Latitude</th><th>Longitude</th></tr>
-                    <tr data-ng-repeat="s in siteList" data-ng-click="associateSite(s);validDoubleAssociation();">
-                        <td>{{s.id}}</td><td>{{s.reference}}</td><td>{{s.siteName}}</td><td>{{s.latitude}}</td><td>{{s.longitude}}</td>
-                    </tr>
-                </table>
-                <button id="btnCloseSite" data-ng-click="closeSiteList()" >Close</button>
-            </div>
 		</form>
 		<button id="btnSave" data-ng-click="save();" ng-disabled="equipmentForm.$pristine || equipmentForm.$invalid">Save</button>
 		<button id="btnDelete" data-ng-click="delete();" ng-disabled="!canDelete">Delete</button>
@@ -76,5 +50,40 @@
 			</tr>
 		</table>
 	</div>
+    
+    <div id="lstRoom" class="details" style="top:200px;left:400px;">
+        <div class="top">Rooms List</div>
+        <div class="core">
+            <div class="inner first"><span class="error" data-ng-show="lstRmErr">{{lstRmErr}}</span></div>
+            <div class="inner">Assigned the equipment to a room by clicking on the row.</div>
+            <div class="inner last">
+                <table border="1">
+                    <tr><th>Room ID</th><th>Point of Contact</th></tr>
+                    <tr data-ng-repeat="r in roomList" data-ng-click="associateRoom(r);validDoubleAssociation();">
+                        <td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="bot"><button id="btnCloseLstRoom" data-ng-click="closeRoomList()">Close</button></div>
+    </div>
+    
+    <div id="lstSite" class="details" style="top:200px;left:400px;">
+        <div class="top">Sites List</div>
+        <div class="core">
+            <div class="inner first"><span class="error" data-ng-show="lstStErr">{{lstStErr}}</span></div>
+            <div class="inner">Assigned the equipment to a site by clicking on the row.</div>
+            <div class="inner last">
+                <table border="1">
+                    <tr><th>id</th><th>Reference</th><th>Name</th><th>Latitude</th><th>Longitude</th></tr>
+                    <tr data-ng-repeat="s in siteList" data-ng-click="associateSite(s);validDoubleAssociation();">
+                        <td>{{s.id}}</td><td>{{s.reference}}</td><td>{{s.siteName}}</td><td>{{s.latitude}}</td><td>{{s.longitude}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="bot"><button id="btnCloseLstSite" data-ng-click="closeSiteList()" >Close</button></div>
+    </div>
+    
     <div class="wrap"></div>
 </div>

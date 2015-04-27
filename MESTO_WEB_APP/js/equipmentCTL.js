@@ -185,20 +185,29 @@ app.controller('equipmentCTL', function($scope, $http) {
     
     $scope.closeRoomList = function() {
         $scope.isRoomListOpened = false;
+        $('#lstRoom').fadeOut('slow');
     };
     $scope.closeSiteList = function() {
         $scope.isSiteListOpened = false;
+        $('#lstSite').fadeOut('slow');
     };
     
     $scope.openRoomList = function() {
-        $scope.isRoomListOpened = true;
-        $scope.isSiteListOpened = false;
-        loadRoomList();
+        if (! $scope.isSiteListOpened) {
+            $scope.isRoomListOpened = true;
+            $scope.isSiteListOpened = false;
+            
+            loadRoomList();
+            $('#lstRoom').fadeIn('slow');
+        }
     };
     $scope.openSiteList = function() {
-        $scope.isRoomListOpened = false;
-        $scope.isSiteListOpened = true;
-        loadSiteList();
+        if (! $scope.isRoomListOpened) {
+            $scope.isRoomListOpened = false;
+            $scope.isSiteListOpened = true;
+            loadSiteList();
+            $('#lstSite').fadeIn('slow');
+        }
     };
     
     $scope.associateRoom = function(selectRoom) {
@@ -208,7 +217,8 @@ app.controller('equipmentCTL', function($scope, $http) {
         
         $scope.equipment.parentRoom.id = selectRoom.id;
         $scope.equipment.parentRoom.roomID = selectRoom.roomID;
-        $scope.isRoomListOpened = false;
+        
+        $scope.closeRoomList();
     };
     $scope.associateSite = function(selectSite) {
         if ($scope.equipment.parentSite.name != selectSite.siteName) {
@@ -217,7 +227,8 @@ app.controller('equipmentCTL', function($scope, $http) {
         
         $scope.equipment.parentSite.id = selectSite.id;
         $scope.equipment.parentSite.name = selectSite.siteName;
-        $scope.isSiteListOpened = false;
+        
+        $scope.closeSiteList();
     };
     
     $scope.cleanAssociateRoom = function() {
