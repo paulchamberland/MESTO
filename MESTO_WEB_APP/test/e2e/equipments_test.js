@@ -128,12 +128,50 @@ describe('E2E: Equipment => ', function() {
         expect(element(by.binding('SQLErrors')).getText()).toEqual('');
         expect(element(by.binding('SQLMsgs')).getText()).toEqual('Equipment updated successfully!!!');
     });
+    
+    
     it('Testing: Delete an equipment', function() {
         element.all(by.repeater('equipmentList')).last().click();
         
         element(by.id('btnDelete')).click();
         expect(element(by.binding('SQLErrors')).getText()).toEqual('');
         expect(element(by.binding('SQLMsgs')).getText()).toEqual('Equipment deleted successfully!!!');
+    });
+    
+    it('Testing: Updating a equipement with a other existing unique serialNumber value', function() {
+        element(by.model('equipment.serialNumber')).sendKeys('testE2E_V3'); // unique 
+        element(by.model('equipment.manufacturer')).sendKeys('tester');
+        element(by.model('equipment.model')).sendKeys('Xw-133');
+        element(by.model('equipment.type')).sendKeys('SRV');
+        
+        element(by.id('btnSave')).click();
+        expect(element(by.binding('SQLErrors')).getText()).toEqual('');
+        expect(element(by.binding('SQLMsgs')).getText()).toEqual('Equipment created successfully!!!');
+        
+        element(by.model('equipment.serialNumber')).sendKeys('testE2E_V4'); // unique
+        element(by.model('equipment.manufacturer')).sendKeys('tester-4');
+        element(by.model('equipment.model')).sendKeys('Xw-133_4');
+        element(by.model('equipment.type')).sendKeys('SRV');
+        
+        element(by.id('btnSave')).click();
+        expect(element(by.binding('SQLErrors')).getText()).toEqual('');
+        expect(element(by.binding('SQLMsgs')).getText()).toEqual('Equipment created successfully!!!');
+        
+
+        element.all(by.repeater('equipmentList')).last().click();
+        
+        element(by.model('equipment.serialNumber')).clear();// changed
+        element(by.model('equipment.serialNumber')).sendKeys('testE2E_V3');// changed
+         
+        element(by.id('btnSave')).click();
+        expect(element(by.binding('SQLErrors')).getText()).toEqual('Update failed: Equipment already exists with same serial number.');
+        expect(element(by.binding('SQLMsgs')).getText()).toEqual('');
+        
+        element.all(by.repeater('equipmentList')).last().click();
+        element(by.id('btnDelete')).click();
+        
+        element.all(by.repeater('equipmentList')).last().click();
+        element(by.id('btnDelete')).click();
     });
     
     it('Testing: Full data validation with database', function() {

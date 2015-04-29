@@ -5,37 +5,48 @@ $room = json_decode(file_get_contents("php://input"), true);
 try {
     $con = new PDO("mysql:host=localhost;dbname=mesto", "root", "");
     $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $arr = array("msg" => "", "error" => "");
     
-    if (empty($room['id'])) {
-        $stmt = $con->prepare("SELECT count(*) as nbRoom FROM room WHERE roomID = '".$room['roomID']."'");
-        $stmt->execute();
-        $rs = $stmt->fetchAll();
-        
-        $arr = array("msg" => "", "error" => "");
-        if ($rs[0]['nbRoom'] == 0 && !empty($room['roomID'])) {
-            $sql = 'INSERT INTO room (roomID, pointOfContact, technicalPointOfContact, role, roomSize, fk_siteId, updateBy, updateDate)'
-                .' values ("'.$room['roomID'].'","'.$room['pointOfContact'].'","'.$room['technicalPointOfContact'].'","'.$room['role'].'","'.$room['roomSize'].'","'.$room['parentSiteKey'].'","apps", NOW())';
-            $con->exec($sql);
-            $arr = array("msg" => "Room created successfully!!!", "error" => "");
-        } else {
-            $arr["error"] = "Room already exists with same room ID.";
-        }
-    }
-    else if (!empty($room['id']) && isset($room['activity']) && $room['activity'] == "del") {
+    if (!empty($room['id']) && isset($room['activity']) && $room['activity'] == "del") {
         $sql = 'DELETE FROM room WHERE id="'.$room['id'].'"';
         $con->exec($sql);
-        $arr = array("msg" => "Room deleted successfully!!!", "error" => "");
+        $arr["msg"] = "Room deleted successfully!!!";
     }
-    else {
-        // TODO: Updating a roomID? that is unique, need validation, or block that...
-        $sql = 'UPDATE room SET roomID="'.$room['roomID'].'", pointOfContact="'.$room['pointOfContact'].'", technicalPointOfContact="'.$room['technicalPointOfContact'].'", role="'.$room['role'].'", roomSize="'.$room['roomSize'].'", fk_siteId="'.$room['parentSiteKey'].'", updateBy="apps", updateDate=NOW() WHERE id="'.$room['id'].'"';
-        $con->exec($sql);
-        $arr = array("msg" => "Room updated successfully!!!", "error" => "");
+    else if (!empty($room['roomID'])) {
+        $sql = "SELECT count(*) as nbRoom FROM room WHERE roomID = '".$room['roomID']."'";
+        
+        if (!empty($room['id'])) {
+            $sql .= " AND NOT id = '".$room['id']."'";
+        }
+        
+        $stmt = $con->prepare($sql);
+        $stmt->execute();
+        $rs = $stmt->fetchAll();
+            
+        if (empty($room['id'])) {
+            if ($rs[0]['nbRoom'] == 0) {
+                $sql = 'INSERT INTO room (roomID, pointOfContact, technicalPointOfContact, role, roomSize, fk_siteId, updateBy, updateDate)'
+                    .' values ("'.$room['roomID'].'","'.$room['pointOfContact'].'","'.$room['technicalPointOfContact'].'","'.$room['role'].'","'.$room['roomSize'].'","'.$room['parentSiteKey'].'","apps", NOW())';
+                $con->exec($sql);
+                $arr["msg"] = "Room created successfully!!!";
+            } else {
+                $arr["error"] = "Room already exists with same room ID.";
+            }
+        }
+        else {
+            if ($rs[0]['nbRoom'] == 0) {
+                $sql = 'UPDATE room SET roomID="'.$room['roomID'].'", pointOfContact="'.$room['pointOfContact'].'", technicalPointOfContact="'.$room['technicalPointOfContact'].'", role="'.$room['role'].'", roomSize="'.$room['roomSize'].'", fk_siteId="'.$room['parentSiteKey'].'", updateBy="apps", updateDate=NOW() WHERE id="'.$room['id'].'"';
+                $con->exec($sql);
+                $arr["msg"] = "Room updated successfully!!!";
+            } else {
+                $arr["error"] = "Update failed: Room already exists with same room ID.";
+            }
+        }
     }
-
+    
     $json = json_encode($arr);
 
-    // TODO: Modulirize that
+    // TODO: Modularize that
     header('Content-Type: application/json');
     if (!$json) {
         switch (json_last_error()) {

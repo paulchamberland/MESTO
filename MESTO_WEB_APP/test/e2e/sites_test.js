@@ -341,7 +341,6 @@ describe('E2E: Site => ', function() {
             expect(element(by.binding('SQLMsgs')).getText()).toEqual('');
         });
 
-        // TODO : DateBug : Fail, problem of not feeding date, fill back with wrong date...
         it('Testing: Update a site', function() {
             element.all(by.repeater('siteList')).last().click();
             
@@ -361,7 +360,40 @@ describe('E2E: Site => ', function() {
     });
     
     describe(' - Advance database operation => ', function() {
-        // TODO : DateBug : Fail, problem of converting data, it fill back with wrong date...
+        it('Testing: Update a site', function() {
+            element(by.model('site.reference')).sendKeys('testE2E_V3');
+            element(by.model('site.latitude')).sendKeys('12.432132');
+            element(by.model('site.longitude')).sendKeys('12.321321');
+            element(by.model('site.siteName')).sendKeys('test scenario data 3');
+            
+            element(by.id('btnSave')).click();
+            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
+            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Site created successfully!!!');
+            
+            element(by.model('site.reference')).sendKeys('testE2E_V4');
+            element(by.model('site.latitude')).sendKeys('12.432132');
+            element(by.model('site.longitude')).sendKeys('12.321321');
+            element(by.model('site.siteName')).sendKeys('test scenario data 4');
+            
+            element(by.id('btnSave')).click();
+            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
+            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Site created successfully!!!');
+            
+            element.all(by.repeater('siteList')).last().click();
+            
+            element(by.model('site.reference')).clear();
+            element(by.model('site.reference')).sendKeys('testE2E_V3');
+            element(by.id('btnSave')).click();
+            
+            expect(element(by.binding('SQLErrors')).getText()).toEqual('Update Failed: Site already exists with same reference.');
+            expect(element(by.binding('SQLMsgs')).getText()).toEqual('');
+            
+            element.all(by.repeater('siteList')).last().click();
+            element(by.id('btnDelete')).click();
+            element.all(by.repeater('siteList')).last().click();
+            element(by.id('btnDelete')).click();
+        });
+        
         it('Testing: Full data validation with database', function() {
             element(by.model('site.reference')).sendKeys('testE2E');
             element(by.model('site.latitude')).sendKeys('12.432132');

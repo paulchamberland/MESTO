@@ -1,4 +1,4 @@
-describe('E2E: Room =>', function() {
+describe('E2E: Room => ', function() {
     beforeAll(function() {
         browser.get('http://localhost/MESTO/MESTO_WEB_APP/#/home');
         
@@ -12,6 +12,7 @@ describe('E2E: Room =>', function() {
         element(by.id('login')).click();
         
         browser.actions().mouseMove(element(by.id('mnManage'))).perform();
+        browser.sleep(1000);
         element(by.id('mnRooms')).click();
     });
     
@@ -133,6 +134,44 @@ describe('E2E: Room =>', function() {
         element(by.id('btnDelete')).click();
         expect(element(by.binding('SQLErrors')).getText()).toEqual('');
         expect(element(by.binding('SQLMsgs')).getText()).toEqual('Room deleted successfully!!!');
+    });
+    
+    it('Testing: Update a room with a other existing unique roomID value', function() {
+        element(by.model('room.roomID')).sendKeys('testE2E_V3'); // unique & required
+        element(by.model('room.pointOfContact')).sendKeys('tester_3');
+        element(by.model('room.roomSize')).sendKeys('24');
+        element(by.id('btnLinkSite')).click();
+        browser.sleep(1000);
+        element.all(by.repeater('siteList')).first().click();
+        
+        element(by.id('btnSave')).click();
+        expect(element(by.binding('SQLErrors')).getText()).toEqual('');
+        expect(element(by.binding('SQLMsgs')).getText()).toEqual('Room created successfully!!!');
+        
+        element(by.model('room.roomID')).sendKeys('testE2E_V4'); // unique & required
+        element(by.model('room.pointOfContact')).sendKeys('tester_4');
+        element(by.model('room.roomSize')).sendKeys('24');
+        element(by.id('btnLinkSite')).click();
+        browser.sleep(1000);
+        element.all(by.repeater('siteList')).first().click();
+        
+        element(by.id('btnSave')).click();
+        expect(element(by.binding('SQLErrors')).getText()).toEqual('');
+        expect(element(by.binding('SQLMsgs')).getText()).toEqual('Room created successfully!!!');
+        
+        
+        element.all(by.repeater('roomList')).last().click();
+        element(by.model('room.roomID')).clear();
+        element(by.model('room.roomID')).sendKeys('testE2E_V3');
+        element(by.id('btnSave')).click();
+        
+        expect(element(by.binding('SQLErrors')).getText()).toEqual('Update failed: Room already exists with same room ID.');
+        expect(element(by.binding('SQLMsgs')).getText()).toEqual('');
+        
+        element.all(by.repeater('roomList')).last().click();
+        element(by.id('btnDelete')).click();
+        element.all(by.repeater('roomList')).last().click();
+        element(by.id('btnDelete')).click();
     });
     
     it('Testing: Full data validation with database', function() {
