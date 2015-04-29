@@ -1,8 +1,24 @@
-describe('E2E: Equipment =>', function() {
-    beforeEach(function() {
-        browser.get('http://localhost/MESTO/MESTO_WEB_APP/#/admin/equip');
+describe('E2E: Equipment => ', function() {
+    beforeAll(function() {
+        browser.get('http://localhost/MESTO/MESTO_WEB_APP/#/home');
+        
+        element(by.id('loginButton')).click();
+        
+        element(by.model('logInfo.username')).clear();
+        element(by.model('logInfo.username')).sendKeys('tester');
+        element(by.model('logInfo.pwd')).clear();
+        element(by.model('logInfo.pwd')).sendKeys('tester');
+        
+        element(by.id('login')).click();
+        
+        browser.actions().mouseMove(element(by.id('mnManage'))).perform();
+        element(by.id('mnEquipements')).click();
     });
     
+    beforeEach(function() {
+        element(by.id('btnReset')).click();
+    });
+ 
     it('Testing: Required form fields', function() {
         element(by.model('equipment.model')).sendKeys('t'); // started state
         
@@ -19,6 +35,7 @@ describe('E2E: Equipment =>', function() {
     });
     it('Testing: Associate a site', function() {
         element(by.id('btnLinkSite')).click();
+        browser.sleep(1000);
         element.all(by.repeater('siteList')).first().click();
         
         expect(element(by.model('equipment.parentSite.name')).getAttribute("value")).not.toEqual('');
@@ -26,11 +43,14 @@ describe('E2E: Equipment =>', function() {
     });
     it('Testing: Exclusive association for a site and for a room', function() {
         element(by.id('btnLinkSite')).click();
+        browser.sleep(1000);
+        
         element.all(by.repeater('siteList')).first().click();
         
         expect(element(by.model('equipment.parentSite.name')).getAttribute("class")).toMatch("ng-valid-double-association");
         
         element(by.id('btnLinkRoom')).click();
+        browser.sleep(1000);
         element.all(by.repeater('roomList')).first().click();
         
         expect(element(by.model('equipment.parentSite.name')).getAttribute("class")).toMatch("ng-invalid-double-association");
@@ -125,6 +145,7 @@ describe('E2E: Equipment =>', function() {
         element(by.model('equipment.configSW')).sendKeys('config 2');
         element(by.model('equipment.type')).sendKeys('SRV');
         element(by.id('btnLinkRoom')).click();
+        browser.sleep(1000);
         element.all(by.repeater('roomList')).first().click();
         
         element(by.id('btnSave')).click();

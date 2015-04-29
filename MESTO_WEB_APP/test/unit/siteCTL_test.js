@@ -295,8 +295,10 @@ describe('Testing the controller of site object =>', function() {
             expect(scope.SQLErrors).not.toBeDefined();
             expect(scope.siteList).toEqual([{}]);
         });
-        it('Testing: Succeeding the Saving', function() {
+        it('Testing: Succeeding the Saving (with old msg)', function() {
             scope.siteForm = {$setPristine:function(){}, $dirty:true, $valid:true};
+            scope.SQLErrors = " error msg";
+            scope.MsgErrors = "success msg";
             scope.canDelete = true;
             scope.site = {reference:"fake"};
             
@@ -402,8 +404,10 @@ describe('Testing the controller of site object =>', function() {
         });
 
         
-        it('Testing: Succeeding the Deleting', function() {
+        it('Testing: Succeeding the Deleting (with old msg)', function() {
             scope.siteForm = {$setPristine:function(){}};
+            scope.SQLErrors = " error msg";
+            scope.MsgErrors = "success msg";
             scope.canDelete = true;
             scope.site = {reference:"fake"};
             

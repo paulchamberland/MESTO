@@ -1,6 +1,22 @@
 describe('E2E: Site => ', function() {
+    beforeAll(function() {
+        browser.get('http://localhost/MESTO/MESTO_WEB_APP/#/home');
+        
+        element(by.id('loginButton')).click();
+        
+        element(by.model('logInfo.username')).clear();
+        element(by.model('logInfo.username')).sendKeys('tester');
+        element(by.model('logInfo.pwd')).clear();
+        element(by.model('logInfo.pwd')).sendKeys('tester');
+        
+        element(by.id('login')).click();
+        
+        browser.actions().mouseMove(element(by.id('mnManage'))).perform();
+        element(by.id('mnSites')).click();
+    });
+    
     beforeEach(function() {
-        browser.get('http://localhost/MESTO/MESTO_WEB_APP/#/admin/site');
+        element(by.id('btnReset')).click();
     });
     
     /*it('Testing : Web label display', function() {

@@ -190,8 +190,10 @@ describe('Testing the controller of room object =>', function() {
             expect(scope.SQLErrors).not.toBeDefined();
             expect(scope.roomList).toEqual([{}]);
         });
-        it('Testing: Succeeding the Saving', function() {
+        it('Testing: Succeeding the Saving (with old Msg)', function() {
             scope.roomForm = {$setPristine:function(){}, $dirty:true, $valid:true};
+            scope.SQLErrors = " error msg";
+            scope.MsgErrors = "success msg";
             scope.canDelete = true;
             scope.room = {roomID:"fake",parentSite:{},lstEquips:[]};
             
@@ -296,8 +298,10 @@ describe('Testing the controller of room object =>', function() {
             expect(scope.room.lstEquips).toEqual([{test:"test"}]);
         });
         
-        it('Testing: Succeeding the Deleting', function() {
+        it('Testing: Succeeding the Deleting (with old msg)', function() {
             scope.roomForm = {$setPristine:function(){}};
+            scope.SQLErrors = " error msg";
+            scope.MsgErrors = "success msg";
             scope.canDelete = true;
             scope.room = {roomID:"fake",parentSite:{},lstEquips:[]};
             

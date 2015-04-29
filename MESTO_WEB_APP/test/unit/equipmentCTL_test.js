@@ -251,8 +251,10 @@ describe('Testing the controller of equipment object', function() {
             expect(scope.SQLErrors).not.toBeDefined();
             expect(scope.equipmentList).toEqual([{}]);
         });
-        it('Testing: Succeeding the Saving', function() {
+        it('Testing: Succeeding the Saving (with old msg)', function() {
             scope.equipmentForm = {$setPristine:function(){}, $dirty:true, $valid:true};
+            scope.SQLErrors = " error msg";
+            scope.MsgErrors = "success msg";
             scope.canDelete = true;
             scope.equipment = {roomID:"fake",
                                 parentRoom:{
@@ -377,8 +379,10 @@ describe('Testing the controller of equipment object', function() {
         });
 
         
-        it('Testing: Succeeding the Deleting', function() {
+        it('Testing: Succeeding the Deleting (with old Msg)', function() {
             scope.equipmentForm = {$setPristine:function(){}};
+            scope.SQLErrors = " error msg";
+            scope.MsgErrors = "success msg";
             scope.canDelete = true;
             scope.equipment = {serialNumber:"fake"};
             

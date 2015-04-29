@@ -31,7 +31,7 @@
 		</form>
 		<button id="btnSave" data-ng-click="save();" ng-disabled="roomForm.$pristine || roomForm.$invalid">Save</button>
 		<button id="btnDelete" data-ng-click="delete();" ng-disabled="!canDelete">Delete</button>
-        <button id="btnReset" data-ng-click="resetFrm();" ng-disabled="roomForm.$pristine">Reset</button>
+        <button id="btnReset" data-ng-click="resetFrm();resetMsg();" ng-disabled="roomForm.$pristine">Reset</button>
 	</div>
     
     <div style="padding-top:15px">

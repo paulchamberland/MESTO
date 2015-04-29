@@ -101,6 +101,7 @@ app.controller('equipmentCTL', function($scope, $http) {
                 headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
             }).success(
                 function(data, status) {
+                    $scope.resetMsg();
                     if (data.msg != '') {
                         $scope.SQLMsgs = data.msg;
                         loadList();
@@ -130,6 +131,7 @@ app.controller('equipmentCTL', function($scope, $http) {
                 headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
             }).success(
                 function(data, status) {
+                    $scope.resetMsg();
                     if (data.msg != '') {
                         $scope.SQLMsgs = data.msg;
                         loadList();
