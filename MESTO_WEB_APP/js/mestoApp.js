@@ -115,7 +115,7 @@ app.factory('securitySrv', function($http, $location) {
     };
     
     function getUsername() {
-        return currentUser.userId;
+        return (currentUser) ? currentUser.userId : null;
     }
     
     return {

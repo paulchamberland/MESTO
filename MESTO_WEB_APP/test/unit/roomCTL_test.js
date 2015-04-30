@@ -27,9 +27,61 @@ describe('Testing the controller of room object =>', function() {
         
         expect(controller.emptyRoom).toEqual(room);
     });
+    
+    it('Testing: Get the label from ROLE value', function() {
+        expect(scope.getLabelROLE('MTC')).toEqual("Main Telecom");
+        expect(scope.getLabelROLE('TC')).toEqual("Telecom");
+        expect(scope.getLabelROLE('SPR')).toEqual("Spare");
+        expect(scope.getLabelROLE('STR')).toEqual("Storage");
+    });
+    
+    it('Testing: Open room', function() {
+        var room = {id: "1",
+                    roomID :"erv324r23",
+                    pointOfContact :"sgt bilbo",
+                    roomSize :"43",
+                    role:"TC"};
+                    
+        // TODO: Spy on the sub list private function
+        scope.openRoom(room);
+        
+        expect(scope.room).toEqual(room);
+        // TODO: make a spy on jquery without or sub object function
+    });
+    
+    describe('Dependancy to navigateSrv/location', function() {
+        var location, navigateSrv;
+        
+        beforeEach(inject(function(_navigateSrv_, _$location_) {
+            navigateSrv = _navigateSrv_;
+            location = _$location_;
+        }));
+        it('Testing: NavigateToRoom function', function() {
+            var room = {id: "1",
+                    roomID :"erv324r23",
+                    pointOfContact :"sgt bilbo",
+                    roomSize :"43",
+                    role:"TC"};
+            
+            spyOn(location, 'path');
+            
+            scope.navigateToRoom(room);
+            
+            expect(location.path).toHaveBeenCalledWith('/admin/room');
+            expect(navigateSrv.getRoom()).toEqual(room);
+        });
+        
+        it('Testing: Add a new sub-object Equipment', function() {
+            spyOn(location, 'path');
+            
+            scope.addEquip();
+            
+            expect(location.path).toHaveBeenCalledWith('/admin/equip');
+        });
+    });
 
     it('Testing: Load of a room', function() {
-        scope.roomForm = {$setPristine : function(){}};
+        //scope.roomForm = {$setPristine : function(){}};
         scope.SQLMsgs = "Good message";
         scope.SQLErrors = "bad message";
         
@@ -109,6 +161,16 @@ describe('Testing the controller of room object =>', function() {
         testDirty = false;
         scope.associateSite({id:'3',siteName:"test"});
         expect(testDirty).toBeFalsy();
+    });
+    
+    it('Testing: cleanAssociateSite', function() {
+        var testDirty = true;
+        scope.roomForm = {parentSiteName:{$setDirty : function(){testDirty=false;}}};
+        
+        scope.cleanAssociateSite();
+        
+        expect(scope.room.parentSite.id).toEqual("");
+        expect(scope.room.parentSite.name).toEqual("")
     });
     
     describe('Testing Ajax call from Room object => ', function() {

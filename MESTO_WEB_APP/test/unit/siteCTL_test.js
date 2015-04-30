@@ -34,9 +34,71 @@ describe('Testing the controller of site object =>', function() {
         
         expect(controller.emptySite).toEqual(site);
     });
+    
+    it('Testing: Get the label from ROLE value', function() {
+        expect(scope.getLabelROLE('ED')).toEqual("Edifice");
+        expect(scope.getLabelROLE('FLR')).toEqual("Floor");
+        expect(scope.getLabelROLE('FOB')).toEqual("FOB");
+        expect(scope.getLabelROLE('COP')).toEqual("COP");
+        expect(scope.getLabelROLE('CMP')).toEqual("CAMP");
+    });
 
+    it('Testing: Open site', function() {
+        var site = {id: "1",
+                    reference :"test",
+                    latitude:"12.123456",
+                    longitude:"43.123456",
+                    siteName:"test4"};
+                    
+        // TODO: Spy on both sub list private function
+        scope.openSite(site);
+        
+        expect(scope.site).toEqual(site);
+        
+        // TODO: make a spy of jquery without or sub object function
+    });
+    
+    describe('Dependancy to navigateSrv/location', function() {
+        var location, navigateSrv;
+        
+        beforeEach(inject(function(_navigateSrv_, _$location_) {
+            navigateSrv = _navigateSrv_;
+            location = _$location_;
+        }));
+        it('Testing: NavigateToSite function', function() {
+            var site = {id: "1",
+                    reference :"test",
+                    latitude:"12.123456",
+                    longitude:"43.123456",
+                    siteName:"test4"};
+            
+            spyOn(location, 'path');
+            
+            scope.navigateToSite(site);
+            
+            expect(location.path).toHaveBeenCalledWith('/admin/site');
+            expect(navigateSrv.getSite()).toEqual(site);
+        });
+        
+        it('Testing: Add a new sub-object Room', function() {
+            spyOn(location, 'path');
+            
+            scope.addRoom();
+            
+            expect(location.path).toHaveBeenCalledWith('/admin/room');
+        });
+        
+        it('Testing: Add a new sub-object Equipment', function() {
+            spyOn(location, 'path');
+            
+            scope.addEquip();
+            
+            expect(location.path).toHaveBeenCalledWith('/admin/equip');
+        });
+    });
+    
     it('Testing: Load of a site', function() {
-        scope.siteForm = {$setPristine : function(){}};
+        //scope.siteForm = {$setPristine : function(){}};
         scope.SQLMsgs = "Good message";
         scope.SQLErrors = "bad message";
         

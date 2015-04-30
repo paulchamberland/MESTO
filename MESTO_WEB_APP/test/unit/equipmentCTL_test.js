@@ -6,13 +6,24 @@ describe('Testing the controller of equipment object', function() {
         // The injector unwraps the underscores (_) from around the parameter names when matching
         scope = $rootScope;//.$new();
         controller = _$controller_('equipmentCTL', { $scope: scope });
-        $ = function() {return {fadeOut : function() {},
-                                fadeIn : function() {}
-                                }}; // mock JQuery 
+        $ = function() {return {
+                    fadeOut : function() {},
+                    fadeIn : function() {}
+                };
+            };
+        /*$ = function() {this.e; return this.e = {
+                    fadeOut : function() {},
+                    fadeIn : function() {}
+                };
+            };*/ // mock JQuery 
+            
+        //jasmine.createSpyObj('$'
     }));
     
     it('Testing: creation object', function() {
-        expect(scope.canDelete).toBe(false);
+        expect(scope.canDelete).toBeFalsy();
+        expect(scope.isRoomListOpened).toBeFalsy();
+        expect(scope.isSiteListOpened).toBeFalsy();
         
         var equipment = {id: "",
                         serialNumber :"",
@@ -35,9 +46,55 @@ describe('Testing the controller of equipment object', function() {
         
         expect(controller.emptyEquipment).toEqual(equipment);
     });
+    
+    it('Testing: Get the label from TYPE value', function() {
+        expect(scope.getLabelTYPE('RT')).toEqual("Router");
+        expect(scope.getLabelTYPE('HUB')).toEqual("Hub");
+        expect(scope.getLabelTYPE('SRV')).toEqual("Server");
+        expect(scope.getLabelTYPE('SWT')).toEqual("Switch");
+    });
+    
+    it('Testing: Open Equipement', function() {
+        var equip = {id: "1",
+                    serialNumber :"432-43453454-4ref4",
+                    barCode :"code",
+                    manufacturer :"avenger",
+                    model :"XW-5",
+                    type:"HUB"};
+        
+        //spyOn($, '().fadeIn'); // TODO: make a spy of a function without or sub object function
+        scope.openEquipment(equip);
+        
+        expect(scope.equipment).toEqual(equip);
+        //expect($().fadeIn).toHaveBeenCalled();// TODO: make a spy on jquery without or sub object function
+    });
+    
+    describe('Dependancy to navigateSrv', function() {
+        var location, navigateSrv;
+        
+        beforeEach(inject(function(_navigateSrv_, _$location_) {
+            navigateSrv = _navigateSrv_;
+            location = _$location_;
+        }));
+        it('Testing: NavigateToEquipement function', function() {
+            var equip = {id: "1",
+                            serialNumber :"432-43453454-4ref4",
+                            barCode :"code",
+                            manufacturer :"avenger",
+                            model :"XW-5",
+                            type:"HUB"};
+            
+            spyOn(location, 'path');
+            
+            scope.navigateToEquipment(equip);
+            
+            expect(location.path).toHaveBeenCalledWith('/admin/equip');
+            expect(navigateSrv.getEquip()).toEqual(equip);
+        });
+    });
 
     it('Testing: Load of an equipment', function() {
-        scope.equipmentForm = {$setPristine : function(){}};
+        //scope.equipmentForm = {$setPristine : function(){}};
         scope.SQLMsgs = "Good message";
         scope.SQLErrors = "bad message";
         

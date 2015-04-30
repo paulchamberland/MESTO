@@ -51,7 +51,9 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv) {
     
     $scope.openRoom = function(pRoom) {
         $scope.setRoom(pRoom);
+        
         loadEquipsList();
+        
         $('#details').fadeIn('slow');
     }
     
