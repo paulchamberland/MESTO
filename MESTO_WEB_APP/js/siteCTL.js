@@ -1,4 +1,4 @@
-app.controller('siteCTL', function($scope, $http, $location) {
+app.controller('siteCTL', function($scope, $http, $location, navigateSrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
     $scope.ROLE = [{value:'ED',label:'Edifice'},{value:'FLR',label:'Floor'},{value:'FOB',label:'FOB'},{value:'COP',label:'COP'},{value:'CMP',label:'CAMP'}];
@@ -53,9 +53,16 @@ app.controller('siteCTL', function($scope, $http, $location) {
                     lstEquips:[]};
     
     function init() {
-        loadList();
         self.emptySite = angular.copy($scope.site);
-        //$scope.site = angular.copy($scope.site_init); // TODO: to remove at some point...
+        
+        if (navigateSrv.getSite() != null) {
+            $scope.loadSite(navigateSrv.getSite());
+            navigateSrv.cleanMemory();
+            //$scope.site = angular.copy($scope.site_init); // TODO: to remove at some point...
+        }
+        else {
+            loadList();
+        }
     }
     
     $scope.openSite = function(pSite) {
@@ -75,12 +82,17 @@ app.controller('siteCTL', function($scope, $http, $location) {
         $scope.setSite(p_site);
         $scope.site.startDate = Date.parseToDMY($scope.site.startDate);
         $scope.site.endDate = Date.parseToDMY($scope.site.endDate);
-        $scope.siteForm.$setPristine();
+        //$scope.siteForm.$setPristine();
         $scope.canDelete = true;
         $scope.resetMsg();
         
         loadRoomsList();
         loadEquipsList();
+    };
+    
+    $scope.navigateToSite = function(p_site) {
+        navigateSrv.setSite(p_site);
+        $location.path("/admin/site");
     };
     
     $scope.resetFrm = function() {

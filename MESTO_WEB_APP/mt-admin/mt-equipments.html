@@ -40,17 +40,6 @@
         <button id="btnReset" data-ng-click="resetFrm();resetMsg();" ng-disabled="equipmentForm.$pristine">Reset</button>
 	</div>
     
-	<div>
-        <h1>Equipment List</h1>
-        <span class="error" data-ng-show="lstError">{{lstError}}</span>
-		<table border="1">
-            <tr><th>Serial Number</th><th>Model</th></tr>
-			<tr data-ng-repeat="e in equipmentList" data-ng-click="loadEquipment(e)">
-				<td>{{e.serialNumber}}</td><td>{{e.model}}</td>
-			</tr>
-		</table>
-	</div>
-    
     <div id="lstRoom" class="details" style="top:200px;left:400px;">
         <div class="top">Rooms List</div>
         <div class="core">

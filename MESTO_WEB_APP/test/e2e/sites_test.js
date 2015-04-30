@@ -1,4 +1,11 @@
 describe('E2E: Site => ', function() {
+    function getLastSite() {
+        browser.actions().mouseMove(element(by.id('mnView'))).perform();
+        element(by.id('mnVwSites')).click();
+        
+        element.all(by.repeater('siteList')).last().click();
+    };
+    
     beforeAll(function() {
         browser.get('http://localhost/MESTO/MESTO_WEB_APP/#/home');
         
@@ -306,7 +313,8 @@ describe('E2E: Site => ', function() {
         element(by.model('site.city')).sendKeys('t');
         expect(btn.isEnabled()).toBeFalsy();
         
-        element(by.repeater('s in siteList').row(0)).click(); // need to have data 
+        //element(by.repeater('s in siteList').row(0)).click(); // need to have data 
+        getLastSite();
         expect(btn.isEnabled()).toBeTruthy();
     });
     
@@ -342,7 +350,7 @@ describe('E2E: Site => ', function() {
         });
 
         it('Testing: Update a site', function() {
-            element.all(by.repeater('siteList')).last().click();
+            getLastSite();
             
             element(by.model('site.siteName')).sendKeys('V2');// changed
              
@@ -351,7 +359,7 @@ describe('E2E: Site => ', function() {
             expect(element(by.binding('SQLMsgs')).getText()).toEqual('Site updated successfully!!!');
         });
         it('Testing: Delete a site', function() {
-            element.all(by.repeater('siteList')).last().click();
+            getLastSite();
             
             element(by.id('btnDelete')).click();
             expect(element(by.binding('SQLErrors')).getText()).toEqual('');
@@ -360,7 +368,7 @@ describe('E2E: Site => ', function() {
     });
     
     describe(' - Advance database operation => ', function() {
-        it('Testing: Update a site', function() {
+        it('Testing: Update a site with a other existing unique reference value', function() {
             element(by.model('site.reference')).sendKeys('testE2E_V3');
             element(by.model('site.latitude')).sendKeys('12.432132');
             element(by.model('site.longitude')).sendKeys('12.321321');
@@ -379,7 +387,7 @@ describe('E2E: Site => ', function() {
             expect(element(by.binding('SQLErrors')).getText()).toEqual('');
             expect(element(by.binding('SQLMsgs')).getText()).toEqual('Site created successfully!!!');
             
-            element.all(by.repeater('siteList')).last().click();
+            getLastSite();
             
             element(by.model('site.reference')).clear();
             element(by.model('site.reference')).sendKeys('testE2E_V3');
@@ -388,9 +396,9 @@ describe('E2E: Site => ', function() {
             expect(element(by.binding('SQLErrors')).getText()).toEqual('Update Failed: Site already exists with same reference.');
             expect(element(by.binding('SQLMsgs')).getText()).toEqual('');
             
-            element.all(by.repeater('siteList')).last().click();
+            getLastSite();
             element(by.id('btnDelete')).click();
-            element.all(by.repeater('siteList')).last().click();
+            getLastSite();
             element(by.id('btnDelete')).click();
         });
         
@@ -413,7 +421,7 @@ describe('E2E: Site => ', function() {
             element(by.model('site.phoneNumberPoC')).sendKeys('514-555-4321');
             
             element(by.id('btnSave')).click();
-            element.all(by.repeater('siteList')).last().click();
+            getLastSite();
             
             expect(element(by.model('site.reference')).getAttribute("value")).toEqual('testE2E');
             expect(element(by.model('site.latitude')).getAttribute("value")).toEqual('12.432132');

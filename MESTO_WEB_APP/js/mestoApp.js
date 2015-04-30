@@ -7,13 +7,16 @@ app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/fakeadmin', {templateUrl:'mt-admin/mt-home.html'});
     $routeProvider.when('/admin', {templateUrl:'mt-admin/mt-home.html'});
     $routeProvider.when('/admin/site', {templateUrl:'mt-admin/mt-sites.html', controller:'siteCTL'});
+    $routeProvider.when('/admin/sites', {templateUrl:'mt-admin/mt-lstSites.html', controller:'siteCTL'});
     $routeProvider.when('/admin/room', {templateUrl:'mt-admin/mt-rooms.html', controller:'roomCTL'});
+    $routeProvider.when('/admin/rooms', {templateUrl:'mt-admin/mt-lstRooms.html', controller:'roomCTL'});
     $routeProvider.when('/admin/equip', {templateUrl:'mt-admin/mt-equipments.html', controller:'equipmentCTL'});
+    $routeProvider.when('/admin/equipments', {templateUrl:'mt-admin/mt-lstEquipments.html', controller:'equipmentCTL'});
     $routeProvider.otherwise({redirectTo:"/home"});
 }]);
 
 app.run(function($rootScope, $location, securitySrv) {
-    var routeRestricted = ['/admin', '/admin/site', '/admin/room', '/admin/equip'];
+    var routeRestricted = ['/admin', '/admin/site', '/admin/sites', '/admin/room', '/admin/rooms', '/admin/equip', '/admin/equipments'];
     var forbiddenCall = ['.html', '.php'];
     $rootScope.$on('$routeChangeStart', function() {
         if (routeRestricted.indexOf($location.path()) != -1 && !securitySrv.isLogged()) {
@@ -23,6 +26,54 @@ app.run(function($rootScope, $location, securitySrv) {
             $location.path('/home');
         }
     });
+});
+
+app.factory('navigateSrv', function() {
+    var equip = null;
+    var room = null;
+    var site = null;
+    
+    function setEquip(p_equip) {
+        equip = angular.copy(p_equip); 
+        room = null;
+        site = null;
+    };
+    function setRoom(p_room) {
+        equip = null; 
+        room = angular.copy(p_room);
+        site = null;
+    };
+    function setSite(p_site) {
+        equip = null; 
+        room = null;
+        site = angular.copy(p_site);
+    };
+    
+    function getEquip() {
+        return equip;
+    };
+    function getRoom() {
+        return room;
+    };
+    function getSite() {
+        return site;
+    };
+    
+    function cleanMemory() {
+        equip = null; 
+        room = null;
+        site = null;
+    }
+    
+    return {
+        cleanMemory : cleanMemory,
+        setEquip : setEquip,
+        getEquip : getEquip,
+        setRoom : setRoom,
+        getRoom : getRoom,
+        setSite : setSite,
+        getSite : getSite
+    };
 });
 
 app.factory('securitySrv', function($http, $location) {

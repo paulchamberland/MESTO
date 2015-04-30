@@ -1,4 +1,11 @@
 describe('E2E: Room => ', function() {
+    function getLastRoom() {
+        browser.actions().mouseMove(element(by.id('mnView'))).perform();
+        element(by.id('mnVwRooms')).click();
+        
+        element.all(by.repeater('roomList')).last().click();
+    };
+    
     beforeAll(function() {
         browser.get('http://localhost/MESTO/MESTO_WEB_APP/#/home');
         
@@ -114,13 +121,13 @@ describe('E2E: Room => ', function() {
         element(by.model('room.pointOfContact')).sendKeys('t');
         expect(btn.isEnabled()).toBeFalsy();
         
-        element.all(by.repeater('roomList')).last().click();
+        getLastRoom();
         expect(btn.isEnabled()).toBeTruthy();
     });
     /***********************************************************/
     
     it('Testing: Update a room', function() {
-        element.all(by.repeater('roomList')).last().click();
+        getLastRoom();
         
         element(by.model('room.pointOfContact')).sendKeys('V2');// changed
          
@@ -129,7 +136,7 @@ describe('E2E: Room => ', function() {
         expect(element(by.binding('SQLMsgs')).getText()).toEqual('Room updated successfully!!!');
     });
     it('Testing: Delete a room', function() {
-        element.all(by.repeater('roomList')).last().click();
+        getLastRoom();
         
         element(by.id('btnDelete')).click();
         expect(element(by.binding('SQLErrors')).getText()).toEqual('');
@@ -159,8 +166,7 @@ describe('E2E: Room => ', function() {
         expect(element(by.binding('SQLErrors')).getText()).toEqual('');
         expect(element(by.binding('SQLMsgs')).getText()).toEqual('Room created successfully!!!');
         
-        
-        element.all(by.repeater('roomList')).last().click();
+        getLastRoom();
         element(by.model('room.roomID')).clear();
         element(by.model('room.roomID')).sendKeys('testE2E_V3');
         element(by.id('btnSave')).click();
@@ -168,9 +174,9 @@ describe('E2E: Room => ', function() {
         expect(element(by.binding('SQLErrors')).getText()).toEqual('Update failed: Room already exists with same room ID.');
         expect(element(by.binding('SQLMsgs')).getText()).toEqual('');
         
-        element.all(by.repeater('roomList')).last().click();
+        getLastRoom();
         element(by.id('btnDelete')).click();
-        element.all(by.repeater('roomList')).last().click();
+        getLastRoom();
         element(by.id('btnDelete')).click();
     });
     
@@ -186,7 +192,7 @@ describe('E2E: Room => ', function() {
         
         
         element(by.id('btnSave')).click();
-        element.all(by.repeater('roomList')).last().click();
+        getLastRoom();
         
         expect(element(by.model('room.roomID')).getAttribute("value")).toEqual('testE2E');
         expect(element(by.model('room.pointOfContact')).getAttribute("value")).toEqual('tester');

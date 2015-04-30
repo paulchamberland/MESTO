@@ -1,0 +1,20 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#menu').load('mt-admin/mt-menu.html');
+    });
+</script>
+<div id="menu" class="v" ></div>
+<div class="main">
+	<div>
+        <h1>Room List</h1>
+        <span class="error" data-ng-show="lstError">{{lstError}}</span>
+		<table border="1">
+            <tr><th>Room ID</th><th>Point of Contact</th></tr>
+			<tr data-ng-repeat="r in roomList" data-ng-click="navigateToRoom(r)">
+				<td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td>
+			</tr>
+		</table>
+	</div>
+    
+    <div class="wrap"></div>
+</div>

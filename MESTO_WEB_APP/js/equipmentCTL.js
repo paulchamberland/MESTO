@@ -1,4 +1,4 @@
-app.controller('equipmentCTL', function($scope, $http) {
+app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
     $scope.TYPE = [{value:'RT',label:'Router'},{value:'HUB',label:'Hub'},{value:'SRV',label:'Server'},{value:'SWT',label:'Switch'}];
@@ -49,9 +49,16 @@ app.controller('equipmentCTL', function($scope, $http) {
                     }};
     
     function init() {
-        loadList();
         self.emptyEquipment = angular.copy($scope.equipment);
-        //$scope.equipment = angular.copy($scope.equipment_init); // TODO: to remove at some point...
+        
+        if (navigateSrv.getEquip() != null) {
+            $scope.loadEquipment(navigateSrv.getEquip());
+            navigateSrv.cleanMemory();
+            //$scope.equipment = angular.copy($scope.equipment_init); // TODO: to remove at some point...
+        }
+        else {
+            loadList();
+        }
     }
     
     $scope.openEquipment = function(pEquip) {
@@ -65,9 +72,14 @@ app.controller('equipmentCTL', function($scope, $http) {
     
     $scope.loadEquipment = function(p_equip) {
         $scope.setEquipment(p_equip);
-        $scope.equipmentForm.$setPristine();
+        //$scope.equipmentForm.$setPristine();
         $scope.canDelete = true;
         $scope.resetMsg();
+    };
+    
+    $scope.navigateToEquipment = function(p_equip) {
+        navigateSrv.setEquip(p_equip);
+        $location.path("/admin/equip");
     };
     
     $scope.resetFrm = function() {

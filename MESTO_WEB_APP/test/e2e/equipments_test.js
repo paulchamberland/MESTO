@@ -1,4 +1,11 @@
 describe('E2E: Equipment => ', function() {
+    function getLastEquipement() {
+        browser.actions().mouseMove(element(by.id('mnView'))).perform();
+        element(by.id('mnVwEquipements')).click();
+        
+        element.all(by.repeater('equipmentList')).last().click();
+    };
+    
     beforeAll(function() {
         browser.get('http://localhost/MESTO/MESTO_WEB_APP/#/home');
         
@@ -12,6 +19,7 @@ describe('E2E: Equipment => ', function() {
         element(by.id('login')).click();
         
         browser.actions().mouseMove(element(by.id('mnManage'))).perform();
+        browser.sleep(1000);
         element(by.id('mnEquipements')).click();
     });
     
@@ -114,13 +122,13 @@ describe('E2E: Equipment => ', function() {
         element(by.model('equipment.model')).sendKeys('t');
         expect(btn.isEnabled()).toBeFalsy();
         
-        element.all(by.repeater('equipmentList')).last().click();
+        getLastEquipement();
         expect(btn.isEnabled()).toBeTruthy();
     });
     /***********************************************************/
     
     it('Testing: Update an equipment', function() {
-        element.all(by.repeater('equipmentList')).last().click();
+        getLastEquipement();
         
         element(by.model('equipment.model')).sendKeys('V2');// changed
          
@@ -131,7 +139,7 @@ describe('E2E: Equipment => ', function() {
     
     
     it('Testing: Delete an equipment', function() {
-        element.all(by.repeater('equipmentList')).last().click();
+        getLastEquipement();
         
         element(by.id('btnDelete')).click();
         expect(element(by.binding('SQLErrors')).getText()).toEqual('');
@@ -139,7 +147,7 @@ describe('E2E: Equipment => ', function() {
     });
     
     it('Testing: Updating a equipement with a other existing unique serialNumber value', function() {
-        element(by.model('equipment.serialNumber')).sendKeys('testE2E_V3'); // unique 
+        element(by.model('equipment.serialNumber')).sendKeys('ztestE2E_V3'); // unique 
         element(by.model('equipment.manufacturer')).sendKeys('tester');
         element(by.model('equipment.model')).sendKeys('Xw-133');
         element(by.model('equipment.type')).sendKeys('SRV');
@@ -148,7 +156,7 @@ describe('E2E: Equipment => ', function() {
         expect(element(by.binding('SQLErrors')).getText()).toEqual('');
         expect(element(by.binding('SQLMsgs')).getText()).toEqual('Equipment created successfully!!!');
         
-        element(by.model('equipment.serialNumber')).sendKeys('testE2E_V4'); // unique
+        element(by.model('equipment.serialNumber')).sendKeys('ztestE2E_V4'); // unique
         element(by.model('equipment.manufacturer')).sendKeys('tester-4');
         element(by.model('equipment.model')).sendKeys('Xw-133_4');
         element(by.model('equipment.type')).sendKeys('SRV');
@@ -157,20 +165,19 @@ describe('E2E: Equipment => ', function() {
         expect(element(by.binding('SQLErrors')).getText()).toEqual('');
         expect(element(by.binding('SQLMsgs')).getText()).toEqual('Equipment created successfully!!!');
         
-
-        element.all(by.repeater('equipmentList')).last().click();
+        getLastEquipement();
         
         element(by.model('equipment.serialNumber')).clear();// changed
-        element(by.model('equipment.serialNumber')).sendKeys('testE2E_V3');// changed
+        element(by.model('equipment.serialNumber')).sendKeys('ztestE2E_V3');// changed
          
         element(by.id('btnSave')).click();
         expect(element(by.binding('SQLErrors')).getText()).toEqual('Update failed: Equipment already exists with same serial number.');
         expect(element(by.binding('SQLMsgs')).getText()).toEqual('');
         
-        element.all(by.repeater('equipmentList')).last().click();
+        getLastEquipement();
         element(by.id('btnDelete')).click();
         
-        element.all(by.repeater('equipmentList')).last().click();
+        getLastEquipement();
         element(by.id('btnDelete')).click();
     });
     
@@ -187,7 +194,7 @@ describe('E2E: Equipment => ', function() {
         element.all(by.repeater('roomList')).first().click();
         
         element(by.id('btnSave')).click();
-        element.all(by.repeater('equipmentList')).last().click();
+        getLastEquipement();
         
         expect(element(by.model('equipment.serialNumber')).getAttribute("value")).toEqual('testE2E_V2');
         expect(element(by.model('equipment.barCode')).getAttribute("value")).toEqual('test barcode');

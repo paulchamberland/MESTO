@@ -1,4 +1,4 @@
-app.controller('roomCTL', function($scope, $http, $location) {
+app.controller('roomCTL', function($scope, $http, $location, navigateSrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
     $scope.ROLE = [{value:'MTC',label:'Main Telecom'},{value:'TC',label:'Telecom'},{value:'SPR',label:'Spare'},{value:'STR',label:'Storage'}];
@@ -37,9 +37,16 @@ app.controller('roomCTL', function($scope, $http, $location) {
                     lstEquips:[]};
     
     function init() {
-        loadList();
         self.emptyRoom = angular.copy($scope.room);
-        //$scope.room = angular.copy($scope.room_init); // TODO: to remove at some point...
+        
+        if (navigateSrv.getRoom() != null) {
+            $scope.loadRoom(navigateSrv.getRoom());
+            navigateSrv.cleanMemory();
+            //$scope.room = angular.copy($scope.room_init); // TODO: to remove at some point...
+        }
+        else {
+            loadList();
+        }
     }
     
     $scope.openRoom = function(pRoom) {
@@ -54,11 +61,16 @@ app.controller('roomCTL', function($scope, $http, $location) {
     
     $scope.loadRoom = function(p_room) {
         $scope.setRoom(p_room);
-        $scope.roomForm.$setPristine();
+        //$scope.roomForm.$setPristine();
         $scope.canDelete = true;
         $scope.resetMsg();
         
         loadEquipsList();
+    };
+    
+    $scope.navigateToRoom = function(p_room) {
+        navigateSrv.setRoom(p_room);
+        $location.path("/admin/room");
     };
     
     $scope.resetFrm = function() {
