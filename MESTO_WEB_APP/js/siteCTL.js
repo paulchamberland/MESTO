@@ -2,6 +2,7 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
     var ACTIVITY_REMOVE_ASSO_EQUIP = "rem-ass-st|eq";
+    var ACTIVITY_REMOVE_ASSO_ROOM = "rem-ass-st|rm";
     $scope.ROLE = [{value:'ED',label:'Edifice'},{value:'FLR',label:'Floor'},{value:'FOB',label:'FOB'},{value:'COP',label:'COP'},{value:'CMP',label:'CAMP'}];
     
     $scope.site = {id: "",
@@ -245,7 +246,31 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv) {
             );
     };
     
-    $scope.addRoom = function() {
+    $scope.removeAssRoom = function(p_roomID) {
+        $http({
+                method: 'POST',
+                url: "/MESTO/MESTO_WEB_APP/php/saveRoom.php",
+                data: {id: p_roomID,
+                        activity: ACTIVITY_REMOVE_ASSO_ROOM},
+                headers: {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+            }).success(
+                function(data) {
+                    if (data.msg != '') {
+                        loadRoomsList(); // refresh
+                    }
+                    else {
+                        $scope.lstRoomErr = data.error;
+                    }
+                }
+            ).error(
+                function(data, status, headers, config, statusText) {
+                    // TODO: error server handling
+                    $scope.lstRoomErr = "error: "+status+":"+statusText;
+                    //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
+                });
+    };
+    
+    $scope.newRoom = function() {
         $location.path("/admin/room"); // TODO: complete by sending the ID and do the comportement on the Room page
     };
     

@@ -59,12 +59,12 @@
         <button id="btnReset" data-ng-click="resetFrm();resetMsg();" ng-disabled="siteForm.$pristine">Reset</button>
 	</div>
     <div style="padding-top:15px;">
-        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Rooms of this site</span><button id="btnAddRoom" data-ng-click="addRoom();">Add new</button>
+        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Rooms of this site</span><button id="btnGetRoom" data-ng-click="getRoom();">Get</button>
         <span class="error" data-ng-show="lstRoomErr">{{lstRoomErr}}</span>
 		<table border="1">
-            <tr><th>Room ID</th><th>Point of Contact</th></tr>
+            <tr><th>Room ID</th><th>Point of Contact</th><th></th></tr>
 			<tr data-ng-repeat="r in site.lstRooms" data-ng-click="">
-				<td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td>
+				<td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td><td><button id="btnRemoveRoom" data-ng-click="removeAssRoom(r.id)">Remove</button></td>
 			</tr>
 		</table>
 	</div>

@@ -12,6 +12,11 @@ try {
         $con->exec($sql);
         $arr["msg"] = "Room deleted successfully!!!";
     }
+    else if (!empty($room['id']) && isset($room['activity']) && $room['activity'] == "rem-ass-st|rm") {
+        $sql = 'UPDATE room SET fk_siteId="" WHERE id="'.$room['id'].'"';
+        $con->exec($sql);
+        $arr["msg"] = "Association with room ended successfully!!!";
+    }
     else if (!empty($room['roomID'])) {
         $sql = "SELECT count(*) as nbRoom FROM room WHERE roomID = '".$room['roomID']."'";
         

@@ -83,7 +83,7 @@ describe('Testing the controller of site object =>', function() {
         it('Testing: Add a new sub-object Room', function() {
             spyOn(location, 'path');
             
-            scope.addRoom();
+            scope.newRoom();
             
             expect(location.path).toHaveBeenCalledWith('/admin/room');
         });
@@ -621,6 +621,36 @@ describe('Testing the controller of site object =>', function() {
             
             expect(scope.lstEquipErr).not.toBeDefined();
             expect(scope.site.lstEquips).toEqual([{test:"test"}]);
+        });
+        
+        it('Testing: Failed to remove a associated room', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond(200, '{"msg":"", "error":"Database error"}');
+            
+            scope.removeAssRoom(12);
+            $httpBackend.flush();
+            
+            expect(scope.lstRoomErr).toEqual("Database error");
+        });
+        it('Testing: Error to remove a associated room', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond(500, '{"msg":"", "error":"error"}');
+            
+            scope.removeAssRoom(12);
+            $httpBackend.flush();
+            
+            expect(scope.lstRoomErr).toEqual("error: 500:undefined");
+        });
+        it('Testing: Success to remove a associated room', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond(200, '{"msg":"success", "error":""}');
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('[{"test":"test"}]');
+            
+            scope.removeAssRoom(12);
+            $httpBackend.flush();
+            
+            expect(scope.lstRoomErr).not.toBeDefined();
+            expect(scope.site.lstRooms).toEqual([{test:"test"}]);
         });
     });
 });
