@@ -592,5 +592,35 @@ describe('Testing the controller of site object =>', function() {
             
             expect(scope.site.lstEquips).toEqual([{test:"test"}]);
         });
+        
+        it('Testing: Failed to remove a associated equipment', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '{"msg":"", "error":"Database error"}');
+            
+            scope.removeAssEquip(12);
+            $httpBackend.flush();
+            
+            expect(scope.lstEquipErr).toEqual("Database error");
+        });
+        it('Testing: Error to remove a associated equipment', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(500, '{"msg":"", "error":"error"}');
+            
+            scope.removeAssEquip(12);
+            $httpBackend.flush();
+            
+            expect(scope.lstEquipErr).toEqual("error: 500:undefined");
+        });
+        it('Testing: Success to remove a associated equipment', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '{"msg":"success", "error":""}');
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('[{"test":"test"}]');
+            
+            scope.removeAssEquip(12);
+            $httpBackend.flush();
+            
+            expect(scope.lstEquipErr).not.toBeDefined();
+            expect(scope.site.lstEquips).toEqual([{test:"test"}]);
+        });
     });
 });

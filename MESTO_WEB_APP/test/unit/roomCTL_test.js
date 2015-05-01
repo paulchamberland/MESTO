@@ -74,7 +74,7 @@ describe('Testing the controller of room object =>', function() {
         it('Testing: Add a new sub-object Equipment', function() {
             spyOn(location, 'path');
             
-            scope.addEquip();
+            scope.newEquip();
             
             expect(location.path).toHaveBeenCalledWith('/admin/equip');
         });
@@ -451,6 +451,36 @@ describe('Testing the controller of room object =>', function() {
             $httpBackend.flush();
             
             expect(scope.siteList).toEqual({});
+        });
+        
+        it('Testing: Failed to remove a associated equipment', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(''); // CTR init
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '{"msg":"", "error":"Database error"}');
+            
+            scope.removeAssEquip(12);
+            $httpBackend.flush();
+            
+            expect(scope.lstEquipErr).toEqual("Database error");
+        });
+        it('Testing: Error to remove a associated equipment', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(''); // CTR init
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(500, '{"msg":"", "error":"error"}');
+            
+            scope.removeAssEquip(12);
+            $httpBackend.flush();
+            
+            expect(scope.lstEquipErr).toEqual("error: 500:undefined");
+        });
+        it('Testing: Success to remove a associated equipment', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(''); // CTR init
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '{"msg":"success", "error":""}');
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('[{"test":"test"}]');
+            
+            scope.removeAssEquip(12);
+            $httpBackend.flush();
+            
+            expect(scope.lstEquipErr).not.toBeDefined();
+            expect(scope.room.lstEquips).toEqual([{test:"test"}]);
         });
     });
 });

@@ -1,7 +1,7 @@
 app.controller('siteCTL', function($scope, $http, $location, navigateSrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
-    var ACTIVITY_REMOVE_ASSO_EQUIP = "rem-ass-eq";
+    var ACTIVITY_REMOVE_ASSO_EQUIP = "rem-ass-st|eq";
     $scope.ROLE = [{value:'ED',label:'Edifice'},{value:'FLR',label:'Floor'},{value:'FOB',label:'FOB'},{value:'COP',label:'COP'},{value:'CMP',label:'CAMP'}];
     
     $scope.site = {id: "",

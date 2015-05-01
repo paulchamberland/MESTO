@@ -12,8 +12,13 @@ try {
         $con->exec($sql);
         $arr["msg"] = "Equipment deleted successfully!!!";
     }
-    else if (!empty($equip['id']) && isset($equip['activity']) && $equip['activity'] == "rem-ass-eq") {
+    else if (!empty($equip['id']) && isset($equip['activity']) && $equip['activity'] == "rem-ass-st|eq") {
         $sql = 'UPDATE equipment SET fk_siteId="" WHERE id="'.$equip['id'].'"';
+        $con->exec($sql);
+        $arr["msg"] = "Association with equipment ended successfully!!!";
+    }
+    else if (!empty($equip['id']) && isset($equip['activity']) && $equip['activity'] == "rem-ass-rm|eq") {
+        $sql = 'UPDATE equipment SET fk_roomId="" WHERE id="'.$equip['id'].'"';
         $con->exec($sql);
         $arr["msg"] = "Association with equipment ended successfully!!!";
     }

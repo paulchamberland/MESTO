@@ -1,6 +1,7 @@
 app.controller('roomCTL', function($scope, $http, $location, navigateSrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
+    var ACTIVITY_REMOVE_ASSO_EQUIP = "rem-ass-rm|eq";
     $scope.ROLE = [{value:'MTC',label:'Main Telecom'},{value:'TC',label:'Telecom'},{value:'SPR',label:'Spare'},{value:'STR',label:'Storage'}];
     
     $scope.room = {id: "",
@@ -248,7 +249,35 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv) {
             );
     };
     
-    $scope.addEquip = function() {
+    $scope.removeAssEquip = function(p_equipID) {
+        $http({
+                method: 'POST',
+                url: "/MESTO/MESTO_WEB_APP/php/saveEquipment.php",
+                data: {id: p_equipID,
+                        activity: ACTIVITY_REMOVE_ASSO_EQUIP},
+                headers: {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+            }).success(
+                function(data) {
+                    if (data.msg != '') {
+                        loadEquipsList(); // refresh
+                    }
+                    else {
+                        $scope.lstEquipErr = data.error;
+                    }
+                }
+            ).error(
+                function(data, status, headers, config, statusText) {
+                    // TODO: error server handling
+                    $scope.lstEquipErr = "error: "+status+":"+statusText;
+                    //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
+                });
+    };
+    
+    $scope.getEquip = function() {
+    
+    };
+    
+    $scope.newEquip = function() {
         $location.path("/admin/equip"); // TODO: complete by sending the ID and do the comportement on the Room page
     };
     
