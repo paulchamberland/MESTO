@@ -91,7 +91,7 @@ describe('Testing the controller of site object =>', function() {
         it('Testing: Add a new sub-object Equipment', function() {
             spyOn(location, 'path');
             
-            scope.addEquip();
+            scope.newEquip();
             
             expect(location.path).toHaveBeenCalledWith('/admin/equip');
         });

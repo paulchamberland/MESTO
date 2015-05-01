@@ -57,14 +57,14 @@ try {
 	$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     if (empty($data['id'])) {
-        $stmt = $con->prepare("SELECT e.*, r.roomID, s.siteName FROM equipment e LEFT JOIN room r ON e.fk_roomId = r.id LEFT JOIN site s ON e.fk_siteId = s.id");
+        $stmt = $con->prepare("SELECT e.*, r.roomID, s.siteName FROM equipment e LEFT JOIN room r ON e.fk_roomId = r.id LEFT JOIN site s ON e.fk_siteId = s.id ORDER BY e.id");
 	}
     else {
         if (isset($data['type']) && $data['type'] == "SITE_INC") {
-            $stmt = $con->prepare("SELECT e.*, r.roomID, s.siteName FROM equipment e LEFT JOIN room r ON e.fk_roomId = r.id LEFT JOIN site s ON e.fk_siteId = s.id WHERE e.fk_siteId = '".$data['id']."'");
+            $stmt = $con->prepare("SELECT e.*, r.roomID, s.siteName FROM equipment e LEFT JOIN room r ON e.fk_roomId = r.id LEFT JOIN site s ON e.fk_siteId = s.id WHERE e.fk_siteId = '".$data['id']."' ORDER BY e.id");
         }
         else if (isset($data['type']) && $data['type'] == "ROOM_INC") {
-            $stmt = $con->prepare("SELECT e.*, r.roomID, s.siteName FROM equipment e LEFT JOIN room r ON e.fk_roomId = r.id LEFT JOIN site s ON e.fk_siteId = s.id WHERE e.fk_roomId = '".$data['id']."'");
+            $stmt = $con->prepare("SELECT e.*, r.roomID, s.siteName FROM equipment e LEFT JOIN room r ON e.fk_roomId = r.id LEFT JOIN site s ON e.fk_siteId = s.id WHERE e.fk_roomId = '".$data['id']."' ORDER BY e.id");
         }
     }
     

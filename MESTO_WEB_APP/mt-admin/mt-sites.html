@@ -69,12 +69,12 @@
 		</table>
 	</div>
     <div style="padding-top:15px">
-        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Equipments of this site</span><button id="btnAddEquip" data-ng-click="addEquip();">Add new</button>
+        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Equipments of this site</span><button id="btnGetEquip" data-ng-click="getEquip();">Get</button>
         <span class="error" data-ng-show="lstEquipErr">{{lstEquipErr}}</span>
 		<table border="1">
-            <tr><th>Serial Number</th><th>Model</th></tr>
+            <tr><th>Serial Number</th><th>Model</th><th></th></tr>
 			<tr data-ng-repeat="e in site.lstEquips" data-ng-click="">
-				<td>{{e.serialNumber}}</td><td>{{e.model}}</td>
+				<td>{{e.serialNumber}}</td><td>{{e.model}}</td><td><button id="btnRemoveEquip" data-ng-click="removeAssEquip(e.id)">Remove</button></td>
 			</tr>
 		</table>
 	</div>
