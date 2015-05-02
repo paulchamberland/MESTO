@@ -251,6 +251,21 @@ describe('Testing the controller of site object =>', function() {
         expect(scope.SQLErrors).not.toBeDefined();
     });
     
+    it('Testing: openFreeEquipsList', function() {
+        spyOn(controller, "loadFreeEquipsList");
+        
+        scope.openFreeEquipsList();
+        expect(controller.loadFreeEquipsList).toHaveBeenCalled();
+        // TODO : add test and spy for JQuery
+    });
+    
+    it('Testing: closeFreeEquipsList', function() {
+        scope.lstFreeEquips = "test";
+        scope.closeFreeEquipsList();
+        
+        expect(scope.lstFreeEquips).not.toBeDefined();
+        // TODO : add test and spy for JQuery
+    });
     describe('Testing Ajax call from site object =>', function() {
         beforeEach(inject(function(_$httpBackend_) {
             $httpBackend = _$httpBackend_;
@@ -572,24 +587,34 @@ describe('Testing the controller of site object =>', function() {
             expect(scope.siteList).toEqual({});
         });
         
-        it('Testing: Load sub list of Equipements', function() {
-            scope.siteForm = {$setPristine : function(){}};
+        it('Testing: Failed to Load sub list of Equipements', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(200, '{"msg":"", "error":"Database error"}');
             
-            var pSite = {id: "1",
-                    reference :"test",
-                    latitude:"12.123456",
-                    longitude:"43.123456",
-                    siteName:"test4",
-                    lstRooms:[{id:"2",name:"test"},{id:"3",name:"testV2"}],
-                    lstEquips:[{id:"2",roomID:"test"},{id:"3",roomID:"testV2"}]};
-                        
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond('');
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('');
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('[{"test":"test"}]');
-                        
-            scope.loadSite(pSite);
+            controller.loadEquipsList();
             $httpBackend.flush();
             
+            expect(scope.lstEquipErr).toEqual("Database error");
+            expect(scope.site.lstEquips).toEqual([]);
+        });
+        it('Testing: Error to Load sub list of Equipements', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(500, '{"msg":"", "error":"error"}');
+            
+            controller.loadEquipsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstEquipErr).toEqual("error: 500:undefined");
+            expect(scope.site.lstEquips).toEqual([]);
+        });
+        it('Testing: Success to Load sub list of Equipements', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(200, '[{"test":"test"}]');
+            
+            controller.loadEquipsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstEquipErr).not.toBeDefined();
             expect(scope.site.lstEquips).toEqual([{test:"test"}]);
         });
         
@@ -616,11 +641,14 @@ describe('Testing the controller of site object =>', function() {
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '{"msg":"success", "error":""}');
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('[{"test":"test"}]');
             
+            spyOn(controller, "loadEquipsList").and.callThrough();
+            
             scope.removeAssEquip(12);
             $httpBackend.flush();
             
             expect(scope.lstEquipErr).not.toBeDefined();
             expect(scope.site.lstEquips).toEqual([{test:"test"}]);
+            expect(controller.loadEquipsList).toHaveBeenCalled();
         });
         
         it('Testing: Failed to remove a associated room', function() {
@@ -651,6 +679,75 @@ describe('Testing the controller of site object =>', function() {
             
             expect(scope.lstRoomErr).not.toBeDefined();
             expect(scope.site.lstRooms).toEqual([{test:"test"}]);
+        });
+        
+        it('Testing: Failed to load Free Equips List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(200, '{"msg":"", "error":"Database error"}');
+            
+            controller.loadFreeEquipsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstFreeEquipErr).toEqual("Database error");
+            expect(scope.lstFreeEquips).not.toBeDefined();
+        });
+        it('Testing: Error to load Free Equips List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(500, '{"msg":"", "error":"error"}');
+            
+            controller.loadFreeEquipsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstFreeEquipErr).toEqual("error: 500:undefined");
+            expect(scope.lstFreeEquips).not.toBeDefined();
+        });
+        it('Testing: Success to load Free Equips List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(200, '[{"test":"test"}]');
+            
+            controller.loadFreeEquipsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstFreeEquipErr).not.toBeDefined();
+            expect(scope.lstFreeEquips).toEqual([{test:"test"}]);
+        });
+        
+        it('Testing: Failed to add Free Equips List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '{"msg":"", "error":"Database error"}');
+            scope.lstFreeEquips = [43,41,3];
+            
+            scope.addFreeEquipsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstFreeEquipErr).toEqual("Database error");
+        });
+        it('Testing: Error to add Free Equips List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(500, '{"msg":"", "error":"error"}');
+            scope.lstFreeEquips = [43,41,3];
+            
+            scope.addFreeEquipsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstFreeEquipErr).toEqual("error: 500:undefined");
+        });
+        it('Testing: Success to add Free Equips List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '[{"test":"test"}]');
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('');
+            scope.lstFreeEquips = [43,41,3];
+            
+            scope.closeFreeEquipsList = jasmine.createSpy("closeFreeEquipsList");
+            controller.loadEquipsList = jasmine.createSpy("loadEquipsList");
+            
+            scope.addFreeEquipsList();
+            $httpBackend.flush();
+            
+            expect(scope.closeFreeEquipsList).toHaveBeenCalled();
+            expect(controller.loadEquipsList).toHaveBeenCalled();
+            
+            expect(scope.lstFreeEquipErr).not.toBeDefined();
         });
     });
 });

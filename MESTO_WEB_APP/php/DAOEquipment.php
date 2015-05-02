@@ -66,6 +66,9 @@ try {
         else if (isset($data['type']) && $data['type'] == "ROOM_INC") {
             $stmt = $con->prepare("SELECT e.*, r.roomID, s.siteName FROM equipment e LEFT JOIN room r ON e.fk_roomId = r.id LEFT JOIN site s ON e.fk_siteId = s.id WHERE e.fk_roomId = '".$data['id']."' ORDER BY e.id");
         }
+        else if (isset($data['type']) && $data['type'] == "SITE_FREE") {
+            $stmt = $con->prepare("SELECT e.*, '' as roomID, '' as siteName FROM equipment e WHERE e.fk_roomId = '' AND e.fk_siteId = '' ORDER BY e.id");
+        }
     }
     
 	$stmt->execute();
