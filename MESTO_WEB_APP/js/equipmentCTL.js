@@ -24,7 +24,7 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv) {
     $scope.isRoomListOpened = false; // Flag to manage GUI display of the list
     $scope.isSiteListOpened = false; // Flag to manage GUI display of the list
     
-    $scope.getLabelTYPE = function(pType) {
+    this.getLabelTYPE = function(pType) {
         for (t in $scope.TYPE) {
             if ($scope.TYPE[t].value == pType) return $scope.TYPE[t].label;
         }
@@ -52,48 +52,48 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv) {
         self.emptyEquipment = angular.copy($scope.equipment);
         
         if (navigateSrv.getEquip() != null) {
-            $scope.loadEquipment(navigateSrv.getEquip());
+            self.loadEquipment(navigateSrv.getEquip());
             navigateSrv.cleanMemory();
             //$scope.equipment = angular.copy($scope.equipment_init); // TODO: to remove at some point...
         }
         else {
-            loadList();
+            self.loadList();
         }
     }
     
-    $scope.openEquipment = function(pEquip) {
-        $scope.setEquipment(pEquip);
+    this.openEquipment = function(pEquip) {
+        self.setEquipment(pEquip);
         $('#details').fadeIn('slow');
     }
     
-    $scope.setEquipment = function (p_equip) {
+    this.setEquipment = function (p_equip) {
         $scope.equipment = angular.copy(p_equip);
     };
     
-    $scope.loadEquipment = function(p_equip) {
-        $scope.setEquipment(p_equip);
+    this.loadEquipment = function(p_equip) {
+        self.setEquipment(p_equip);
         //$scope.equipmentForm.$setPristine();
         $scope.canDelete = true;
-        $scope.resetMsg();
+        self.resetMsg();
     };
     
-    $scope.navigateToEquipment = function(p_equip) {
+    this.navigateToEquipment = function(p_equip) {
         navigateSrv.setEquip(p_equip);
         $location.path("/admin/equip");
     };
     
-    $scope.resetFrm = function() {
-        $scope.setEquipment(self.emptyEquipment);
+    this.resetFrm = function() {
+        self.setEquipment(self.emptyEquipment);
         $scope.equipmentForm.$setPristine();
         $scope.canDelete = false;
     };
     
-    $scope.resetMsg = function() {
+    this.resetMsg = function() {
         if ($scope.SQLErrors) delete $scope.SQLErrors;
         if ($scope.SQLMsgs) delete $scope.SQLMsgs;
     }
     
-    $scope.save = function() {
+    this.save = function() {
         if ($scope.equipmentForm.$dirty && $scope.equipmentForm.$valid) {
             $http({
                 method: 'POST',
@@ -113,11 +113,11 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv) {
                 headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
             }).success(
                 function(data, status) {
-                    $scope.resetMsg();
+                    self.resetMsg();
                     if (data.msg != '') {
                         $scope.SQLMsgs = data.msg;
-                        loadList();
-                        $scope.resetFrm();
+                        self.loadList();
+                        self.resetFrm();
                     }
                     else {
                         $scope.SQLErrors = data.error;
@@ -132,7 +132,7 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv) {
         }
     };
     
-    $scope.delete = function() {
+    this.delete = function() {
         $http({
                 method: 'POST',
                 url: "/MESTO/MESTO_WEB_APP/php/saveEquipment.php", // TODO: Make a config with path
@@ -143,11 +143,11 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv) {
                 headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
             }).success(
                 function(data, status) {
-                    $scope.resetMsg();
+                    self.resetMsg();
                     if (data.msg != '') {
                         $scope.SQLMsgs = data.msg;
-                        loadList();
-                        $scope.resetFrm();
+                        self.loadList();
+                        self.resetFrm();
                     }
                     else {
                         $scope.SQLErrors = data.error;
@@ -164,11 +164,11 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv) {
     /*
      *  Unused: Delete or use it?
      */
-    $scope.refreshList = function() {
-        loadList();
+    this.refreshList = function() {
+        self.loadList();
     };
     
-    $scope.validDoubleAssociation = function() {
+    this.validDoubleAssociation = function() {
         if (($scope.equipment.parentSite.name != null && $scope.equipment.parentSite.name != "")
                 && ($scope.equipment.parentRoom.roomID != null && $scope.equipment.parentRoom.roomID != "") ) {
             $scope.equipmentForm.parentSiteName.$setValidity('doubleAssociation', false);
@@ -178,7 +178,7 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv) {
         }
     };
     
-    function loadList() {
+    this.loadList = function() {
         $http.post("/MESTO/MESTO_WEB_APP/php/DAOEquipment.php").success( // TODO: Make a config with path
             function(data) {
                 if (data.error == null) {
@@ -197,34 +197,34 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv) {
         );
     };
     
-    $scope.closeRoomList = function() {
+    this.closeRoomList = function() {
         $scope.isRoomListOpened = false;
         $('#lstRoom').fadeOut('slow');
     };
-    $scope.closeSiteList = function() {
+    this.closeSiteList = function() {
         $scope.isSiteListOpened = false;
         $('#lstSite').fadeOut('slow');
     };
     
-    $scope.openRoomList = function() {
+    this.openRoomList = function() {
         if (! $scope.isSiteListOpened) {
             $scope.isRoomListOpened = true;
             $scope.isSiteListOpened = false;
             
-            loadRoomList();
+            self.loadRoomList();
             $('#lstRoom').fadeIn('slow');
         }
     };
-    $scope.openSiteList = function() {
+    this.openSiteList = function() {
         if (! $scope.isRoomListOpened) {
             $scope.isRoomListOpened = false;
             $scope.isSiteListOpened = true;
-            loadSiteList();
+            self.loadSiteList();
             $('#lstSite').fadeIn('slow');
         }
     };
     
-    $scope.associateRoom = function(selectRoom) {
+    this.associateRoom = function(selectRoom) {
         if ($scope.equipment.parentRoom.roomID != selectRoom.roomID) {
             $scope.equipmentForm.parentRoomName.$setDirty();
         }
@@ -232,9 +232,9 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv) {
         $scope.equipment.parentRoom.id = selectRoom.id;
         $scope.equipment.parentRoom.roomID = selectRoom.roomID;
         
-        $scope.closeRoomList();
+        self.closeRoomList();
     };
-    $scope.associateSite = function(selectSite) {
+    this.associateSite = function(selectSite) {
         if ($scope.equipment.parentSite.name != selectSite.siteName) {
             $scope.equipmentForm.parentSiteName.$setDirty();
         }
@@ -242,25 +242,25 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv) {
         $scope.equipment.parentSite.id = selectSite.id;
         $scope.equipment.parentSite.name = selectSite.siteName;
         
-        $scope.closeSiteList();
+        self.closeSiteList();
     };
     
-    $scope.cleanAssociateRoom = function() {
+    this.cleanAssociateRoom = function() {
         $scope.equipmentForm.parentRoomName.$setDirty();
         
         $scope.equipment.parentRoom.id = "";
         $scope.equipment.parentRoom.roomID = "";
-        $scope.validDoubleAssociation();
+        self.validDoubleAssociation();
     };
-    $scope.cleanAssociateSite = function() {
+    this.cleanAssociateSite = function() {
         $scope.equipmentForm.parentSiteName.$setDirty();
         
         $scope.equipment.parentSite.id = "";
         $scope.equipment.parentSite.name = "";
-        $scope.validDoubleAssociation();
+        self.validDoubleAssociation();
     };
     
-    function loadRoomList() {
+    this.loadRoomList = function() {
         $http.post("/MESTO/MESTO_WEB_APP/php/DAORoom.php").success( // TODO: Make a config with path
             function(data) {
                 if (data.error == null) {
@@ -277,7 +277,7 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv) {
             }
         );
     };
-    function loadSiteList() {
+    this.loadSiteList = function() {
         $http.post("/MESTO/MESTO_WEB_APP/php/DAOSite.php").success( // TODO: Make a config with path
             function(data) {
                 if (data.error == null) {

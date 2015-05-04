@@ -48,10 +48,10 @@ describe('Testing the controller of equipment object', function() {
     });
     
     it('Testing: Get the label from TYPE value', function() {
-        expect(scope.getLabelTYPE('RT')).toEqual("Router");
-        expect(scope.getLabelTYPE('HUB')).toEqual("Hub");
-        expect(scope.getLabelTYPE('SRV')).toEqual("Server");
-        expect(scope.getLabelTYPE('SWT')).toEqual("Switch");
+        expect(controller.getLabelTYPE('RT')).toEqual("Router");
+        expect(controller.getLabelTYPE('HUB')).toEqual("Hub");
+        expect(controller.getLabelTYPE('SRV')).toEqual("Server");
+        expect(controller.getLabelTYPE('SWT')).toEqual("Switch");
     });
     
     it('Testing: Open Equipement', function() {
@@ -63,7 +63,7 @@ describe('Testing the controller of equipment object', function() {
                     type:"HUB"};
         
         //spyOn($, '().fadeIn'); // TODO: make a spy of a function without or sub object function
-        scope.openEquipment(equip);
+        controller.openEquipment(equip);
         
         expect(scope.equipment).toEqual(equip);
         //expect($().fadeIn).toHaveBeenCalled();// TODO: make a spy on jquery without or sub object function
@@ -86,7 +86,7 @@ describe('Testing the controller of equipment object', function() {
             
             spyOn(location, 'path');
             
-            scope.navigateToEquipment(equip);
+            controller.navigateToEquipment(equip);
             
             expect(location.path).toHaveBeenCalledWith('/admin/equip');
             expect(navigateSrv.getEquip()).toEqual(equip);
@@ -107,7 +107,7 @@ describe('Testing the controller of equipment object', function() {
                             configSW :"some config",
                             type:"HUB"};
                     
-        scope.loadEquipment(fakeEquipment);
+        controller.loadEquipment(fakeEquipment);
         
         expect(scope.equipment).toEqual(fakeEquipment);
         expect(scope.canDelete).toBe(true);
@@ -117,7 +117,7 @@ describe('Testing the controller of equipment object', function() {
     
     it('Testing: Reset form', function() {
         scope.equipmentForm = {$setPristine : function(){}};
-        scope.loadEquipment({id: "1",
+        controller.loadEquipment({id: "1",
                             serialNumber :"432-43453454-4ref4",
                             barCode :"code",
                             manufacturer :"avenger",
@@ -126,7 +126,7 @@ describe('Testing the controller of equipment object', function() {
                             configSW :"some config",
                             type:"HUB"});
         
-        scope.resetFrm();
+        controller.resetFrm();
         
         expect(scope.canDelete).toBe(false);
         expect(scope.equipment).toEqual({id: "",
@@ -148,14 +148,14 @@ describe('Testing the controller of equipment object', function() {
     });
     
     it('Testing: Reset Messages ', function() {
-        scope.resetMsg(); // Test when already not define
+        controller.resetMsg(); // Test when already not define
         
         expect(scope.SQLMsgs).not.toBeDefined();
         expect(scope.SQLErrors).not.toBeDefined();
         
         scope.SQLMsgs = "Good message";
         scope.SQLErrors = "bad message";
-        scope.resetMsg(); // test when define
+        controller.resetMsg(); // test when define
         
         expect(scope.SQLMsgs).not.toBeDefined();
         expect(scope.SQLErrors).not.toBeDefined();
@@ -165,7 +165,7 @@ describe('Testing the controller of equipment object', function() {
         var testDirty = false;
         scope.equipmentForm = {parentRoomName:{$setDirty : function(){testDirty=true;}}};
         scope.isRoomListOpened = true;
-        scope.associateRoom({id:'3',roomID:"test"});
+        controller.associateRoom({id:'3',roomID:"test"});
         
         expect(scope.equipment.parentRoom.id).toBe('3');
         expect(scope.equipment.parentRoom.roomID).toEqual("test");
@@ -173,7 +173,7 @@ describe('Testing the controller of equipment object', function() {
         expect(testDirty).toBeTruthy();
         
         testDirty = false;
-        scope.associateRoom({id:'3',roomID:"test"});
+        controller.associateRoom({id:'3',roomID:"test"});
         expect(testDirty).toBeFalsy();
     });
     
@@ -181,7 +181,7 @@ describe('Testing the controller of equipment object', function() {
         expect(scope.isRoomListOpened).toBeFalsy();
         
         scope.isRoomListOpened = true;
-        scope.closeRoomList();
+        controller.closeRoomList();
         
         expect(scope.isRoomListOpened).toBeFalsy();
     });
@@ -189,7 +189,7 @@ describe('Testing the controller of equipment object', function() {
         expect(scope.isSiteListOpened).toBeFalsy();
         
         scope.isSiteListOpened = true;
-        scope.closeSiteList();
+        controller.closeSiteList();
         
         expect(scope.isSiteListOpened).toBeFalsy();
     });
@@ -199,7 +199,7 @@ describe('Testing the controller of equipment object', function() {
         scope.equipmentForm = {parentSiteName:{$setDirty : function(){testDirty=true;}}};
         scope.isSiteListOpened = true;
         
-        scope.associateSite({id:'3',siteName:"test"}); // test
+        controller.associateSite({id:'3',siteName:"test"}); // test
         
         expect(scope.equipment.parentSite.id).toBe('3');
         expect(scope.equipment.parentSite.name).toEqual("test");
@@ -207,26 +207,28 @@ describe('Testing the controller of equipment object', function() {
         expect(testDirty).toBeTruthy();
         
         testDirty = false;
-        scope.associateSite({id:'3',siteName:"test"});
+        controller.associateSite({id:'3',siteName:"test"});
         expect(testDirty).toBeFalsy();
     });
     
     it('Testing: cleanAssociateRoom function', function() {
-        scope.validDoubleAssociation = function() {};
+        spyOn(controller, "validDoubleAssociation");
         scope.equipment.parentRoom = {id:"21", roomID:"test"};
         scope.equipmentForm = {parentRoomName:{$setDirty : function(){testDirty=true;}}};
         
-        scope.cleanAssociateRoom();
+        controller.cleanAssociateRoom();
         expect(scope.equipment.parentRoom).toEqual({id:"", roomID:""});
+        expect(controller.validDoubleAssociation).toHaveBeenCalled();
     });
     
     it('Testing: cleanAssociateSite function', function() {
-        scope.validDoubleAssociation = function() {};
+        spyOn(controller, "validDoubleAssociation");
         scope.equipment.parentSite = {id:"21", name:"test"};
         scope.equipmentForm = {parentSiteName:{$setDirty : function(){testDirty=true;}}};
         
-        scope.cleanAssociateSite();
+        controller.cleanAssociateSite();
         expect(scope.equipment.parentSite).toEqual({id:"", name:""});
+        expect(controller.validDoubleAssociation).toHaveBeenCalled();
     });
     
     describe('Testing Ajax call from Equipment object', function() {
@@ -244,7 +246,7 @@ describe('Testing the controller of equipment object', function() {
                                                                                             +'"configSW":"some config",'
                                                                                             +'"type":"HUB"}]');
 
-            scope.refreshList(); // <--- TEST
+            controller.refreshList(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -264,7 +266,7 @@ describe('Testing the controller of equipment object', function() {
             
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             
-            scope.refreshList(); // <--- TEST
+            controller.refreshList(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -274,7 +276,7 @@ describe('Testing the controller of equipment object', function() {
         it('Testing: Refresh equipements list and failed...', function() {
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(500, 'server error');
 
-            scope.refreshList(); // <--- TEST
+            controller.refreshList(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -298,7 +300,7 @@ describe('Testing the controller of equipment object', function() {
                                                                                         +'"configSW":"some config",'
                                                                                         +'"type":"HUB"}]');
 
-            scope.save(); // <--- TEST
+            controller.save(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -334,7 +336,7 @@ describe('Testing the controller of equipment object', function() {
                                                                                         +'"configSW":"some config",'
                                                                                         +'"type":"HUB"}]');
 
-            scope.save(); // <--- TEST
+            controller.save(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -382,7 +384,7 @@ describe('Testing the controller of equipment object', function() {
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond({});
             
-            scope.save(); // <--- TEST
+            controller.save(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -416,7 +418,7 @@ describe('Testing the controller of equipment object', function() {
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(500, 'server error');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond({});
             
-            scope.save(); // <--- TEST
+            controller.save(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -454,7 +456,7 @@ describe('Testing the controller of equipment object', function() {
                                                                                         +'"configSW":"some config",'
                                                                                         +'"type":"HUB"}]');
 
-            scope.delete(); // <--- TEST
+            controller.delete(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -493,7 +495,7 @@ describe('Testing the controller of equipment object', function() {
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('fake');
             
-            scope.delete(); // <--- TEST
+            controller.delete(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -510,7 +512,7 @@ describe('Testing the controller of equipment object', function() {
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(500, 'server error');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond({});
             
-            scope.delete(); // <--- TEST
+            controller.delete(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -526,7 +528,7 @@ describe('Testing the controller of equipment object', function() {
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond({});
             expect(scope.siteList).not.toBeDefined();
             
-            scope.openSiteList();
+            controller.openSiteList();
             $httpBackend.flush();
             
             expect(scope.isSiteListOpened).toBe(true);
@@ -537,7 +539,7 @@ describe('Testing the controller of equipment object', function() {
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond({});
             expect(scope.roomList).not.toBeDefined();
             
-            scope.openRoomList();
+            controller.openRoomList();
             $httpBackend.flush();
             
             expect(scope.isRoomListOpened).toBe(true);

@@ -1,6 +1,7 @@
 describe('E2E: Equipment => ', function() {
     function getLastEquipement() {
         browser.actions().mouseMove(element(by.id('mnView'))).perform();
+        browser.sleep(500);
         element(by.id('mnVwEquipements')).click();
         
         element.all(by.repeater('equipmentList')).last().click();

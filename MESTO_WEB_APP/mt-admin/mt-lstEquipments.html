@@ -10,7 +10,7 @@
         <span class="error" data-ng-show="lstError">{{lstError}}</span>
 		<table border="1">
             <tr><th>Serial Number</th><th>Model</th></tr>
-			<tr data-ng-repeat="e in equipmentList" data-ng-click="navigateToEquipment(e)">
+			<tr data-ng-repeat="e in equipmentList" data-ng-click="equipCTL.navigateToEquipment(e)">
 				<td>{{e.serialNumber}}</td><td>{{e.model}}</td>
 			</tr>
 		</table>

@@ -27,7 +27,7 @@
         <span class="error" data-ng-show="lstError">{{lstError}}</span>
 		<table border="1">
             <tr><th>Serial Number</th><th>Model</th></tr>
-			<tr data-ng-repeat="e in equipmentList" data-ng-click="openEquipment(e)">
+			<tr data-ng-repeat="e in equipmentList" data-ng-click="equipCTL.openEquipment(e)">
 				<td>{{e.serialNumber}}</td><td>{{e.model}}</td>
 			</tr>
 		</table>

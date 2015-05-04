@@ -25,19 +25,19 @@
 				<div class="field"><label for="type">Type :</label><select id="type" data-ng-model="equipment.type" name="type" data-ng-options="type.value as type.label for type in TYPE"></select></div>
 				<div class="field">
                     <label for="prRoom">Assigned Room:</label><input type="text" id="prRoom" name="parentRoomName" data-ng-model="equipment.parentRoom.roomID" disabled />
-                    <button id="btnLinkRoom" data-ng-click="openRoomList()" >...</button>
-                    <button id="btnCleanRoom" data-ng-click="cleanAssociateRoom()" >X</button>
+                    <button id="btnLinkRoom" data-ng-click="equipCTL.openRoomList()" >...</button>
+                    <button id="btnCleanRoom" data-ng-click="equipCTL.cleanAssociateRoom()" >X</button>
                 </div>
                 <div class="field">
                     <label for="prSite">Assigned Site:</label><input type="text" id="prSite" name="parentSiteName" data-ng-model="equipment.parentSite.name" disabled />
-                    <button id="btnLinkSite" data-ng-click="openSiteList()" >...</button>
-                    <button id="btnCleanSite" data-ng-click="cleanAssociateSite()" >X</button>
+                    <button id="btnLinkSite" data-ng-click="equipCTL.openSiteList()" >...</button>
+                    <button id="btnCleanSite" data-ng-click="equipCTL.cleanAssociateSite()" >X</button>
                 </div>
 			</div>
 		</form>
-		<button id="btnSave" data-ng-click="save();" ng-disabled="equipmentForm.$pristine || equipmentForm.$invalid">Save</button>
-		<button id="btnDelete" data-ng-click="delete();" ng-disabled="!canDelete">Delete</button>
-        <button id="btnReset" data-ng-click="resetFrm();resetMsg();" ng-disabled="equipmentForm.$pristine">Reset</button>
+		<button id="btnSave" data-ng-click="equipCTL.save();" ng-disabled="equipmentForm.$pristine || equipmentForm.$invalid">Save</button>
+		<button id="btnDelete" data-ng-click="equipCTL.delete();" ng-disabled="!canDelete">Delete</button>
+        <button id="btnReset" data-ng-click="equipCTL.resetFrm();equipCTL.resetMsg();" ng-disabled="equipmentForm.$pristine">Reset</button>
 	</div>
     
     <div id="lstRoom" class="details" style="top:200px;left:400px;">
@@ -48,13 +48,13 @@
             <div class="inner last">
                 <table border="1">
                     <tr><th>Room ID</th><th>Point of Contact</th></tr>
-                    <tr data-ng-repeat="r in roomList" data-ng-click="associateRoom(r);validDoubleAssociation();">
+                    <tr data-ng-repeat="r in roomList" data-ng-click="equipCTL.associateRoom(r);equipCTL.validDoubleAssociation();">
                         <td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td>
                     </tr>
                 </table>
             </div>
         </div>
-        <div class="bot"><button id="btnCloseLstRoom" data-ng-click="closeRoomList()">Close</button></div>
+        <div class="bot"><button id="btnCloseLstRoom" data-ng-click="equipCTL.closeRoomList()">Close</button></div>
     </div>
     
     <div id="lstSite" class="details" style="top:200px;left:400px;">
@@ -65,13 +65,13 @@
             <div class="inner last">
                 <table border="1">
                     <tr><th>id</th><th>Reference</th><th>Name</th><th>Latitude</th><th>Longitude</th></tr>
-                    <tr data-ng-repeat="s in siteList" data-ng-click="associateSite(s);validDoubleAssociation();">
+                    <tr data-ng-repeat="s in siteList" data-ng-click="equipCTL.associateSite(s);equipCTL.validDoubleAssociation();">
                         <td>{{s.id}}</td><td>{{s.reference}}</td><td>{{s.siteName}}</td><td>{{s.latitude}}</td><td>{{s.longitude}}</td>
                     </tr>
                 </table>
             </div>
         </div>
-        <div class="bot"><button id="btnCloseLstSite" data-ng-click="closeSiteList()" >Close</button></div>
+        <div class="bot"><button id="btnCloseLstSite" data-ng-click="equipCTL.closeSiteList()" >Close</button></div>
     </div>
     
     <div class="wrap"></div>
