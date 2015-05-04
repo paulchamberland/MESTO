@@ -7,7 +7,7 @@ app.controller('loginCTL', function($scope, $rootScope, $http, $location, securi
     
     $scope.username = "";
     
-    $scope.login = function(pLogInfo) {
+    this.login = function(pLogInfo) {
         securitySrv.login({
                 username : pLogInfo.username,
                 pwd : pLogInfo.pwd
@@ -29,10 +29,10 @@ app.controller('loginCTL', function($scope, $rootScope, $http, $location, securi
                 $scope.loginForm.pwd.$setValidity('wrong', false);
             });
     };
-    $scope.logout = function() {
+    this.logout = function() {
         securitySrv.logout();
     };    
-    $scope.isLogged = function() {
+    this.isLogged = function() {
         return securitySrv.isLogged();
     };
 });
