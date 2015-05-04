@@ -18,7 +18,7 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv) {
     this.emptyRoom = {};
     $scope.canDelete = false; // Flag disable button delete
     
-    $scope.getLabelROLE = function(pRole) {
+    this.getLabelROLE = function(pRole) {
         for (t in $scope.ROLE) {
             if ($scope.ROLE[t].value == pRole) return $scope.ROLE[t].label;
         }
@@ -41,53 +41,53 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv) {
         self.emptyRoom = angular.copy($scope.room);
         
         if (navigateSrv.getRoom() != null) {
-            $scope.loadRoom(navigateSrv.getRoom());
+            self.loadRoom(navigateSrv.getRoom());
             navigateSrv.cleanMemory();
             //$scope.room = angular.copy($scope.room_init); // TODO: to remove at some point...
         }
         else {
-            loadList();
+            self.loadList();
         }
     }
     
-    $scope.openRoom = function(pRoom) {
-        $scope.setRoom(pRoom);
+    this.openRoom = function(pRoom) {
+        self.setRoom(pRoom);
         
-        loadEquipsList();
+        self.loadEquipsList();
         
         $('#details').fadeIn('slow');
     }
     
-    $scope.setRoom = function(pRoom) {
+    this.setRoom = function(pRoom) {
         $scope.room = angular.copy(pRoom);
     }
     
-    $scope.loadRoom = function(p_room) {
-        $scope.setRoom(p_room);
+    this.loadRoom = function(p_room) {
+        self.setRoom(p_room);
         //$scope.roomForm.$setPristine();
         $scope.canDelete = true;
-        $scope.resetMsg();
+        self.resetMsg();
         
-        loadEquipsList();
+        self.loadEquipsList();
     };
     
-    $scope.navigateToRoom = function(p_room) {
+    this.navigateToRoom = function(p_room) {
         navigateSrv.setRoom(p_room);
         $location.path("/admin/room");
     };
     
-    $scope.resetFrm = function() {
-        $scope.setRoom(self.emptyRoom);
+    this.resetFrm = function() {
+        self.setRoom(self.emptyRoom);
         $scope.roomForm.$setPristine();
         $scope.canDelete = false;
     };
     
-    $scope.resetMsg = function() {
+    this.resetMsg = function() {
         if ($scope.SQLErrors) delete $scope.SQLErrors;
         if ($scope.SQLMsgs) delete $scope.SQLMsgs;
     }
     
-    $scope.save = function() {
+    this.save = function() {
         if ($scope.roomForm.$dirty && $scope.roomForm.$valid) {
             $http({
                 method: 'POST',
@@ -104,11 +104,11 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv) {
                 headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
             }).success(
                 function(data, status) {
-                    $scope.resetMsg();
+                    self.resetMsg();
                     if (data.msg != '') {
                         $scope.SQLMsgs = data.msg;
-                        loadList();
-                        $scope.resetFrm();
+                        self.loadList();
+                        self.resetFrm();
                     }
                     else {
                         $scope.SQLErrors = data.error;
@@ -123,7 +123,7 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv) {
         }
     };
     
-    $scope.delete = function() {
+    this.delete = function() {
         $http({
                 method: 'POST',
                 url: "/MESTO/MESTO_WEB_APP/php/saveRoom.php", // TODO: Make a config with path
@@ -134,11 +134,11 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv) {
                 headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
             }).success(
                 function(data, status) {
-                    $scope.resetMsg();
+                    self.resetMsg();
                     if (data.msg != '') {
                         $scope.SQLMsgs = data.msg;
-                        loadList();
-                        $scope.resetFrm();
+                        self.loadList();
+                        self.resetFrm();
                     }
                     else {
                         $scope.SQLErrors = data.error;
@@ -155,11 +155,11 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv) {
     /*
      *  Unused: Delete or use it?
      */
-    $scope.refreshList = function() {
-        loadList();
+    this.refreshList = function() {
+        self.loadList();
     };
     
-    function loadList() {
+    this.loadList = function() {
         $http.post("/MESTO/MESTO_WEB_APP/php/DAORoom.php").success( // TODO: Make a config with path
             function(data) {
                 if (data.error == null) {
@@ -178,33 +178,33 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv) {
         );
     };
     
-    $scope.closeSiteList = function() {
+    this.closeSiteList = function() {
         $('#lstSite').fadeOut('slow');
     };
 
-    $scope.openSiteList = function() {
-        loadSiteList();
+    this.openSiteList = function() {
+        self.loadSiteList();
         $('#lstSite').fadeIn('slow');
     };
     
-    $scope.associateSite = function(selectSite) {
+    this.associateSite = function(selectSite) {
         if ($scope.room.parentSite.name != selectSite.siteName) {
             $scope.roomForm.parentSiteName.$setDirty();
         }
         
         $scope.room.parentSite.id = selectSite.id;
         $scope.room.parentSite.name = selectSite.siteName;
-        $scope.closeSiteList();
+        self.closeSiteList();
     };
     
-    $scope.cleanAssociateSite = function() {
+    this.cleanAssociateSite = function() {
         $scope.roomForm.parentSiteName.$setDirty();
         
         $scope.room.parentSite.id = "";
         $scope.room.parentSite.name = "";
     };
     
-    function loadSiteList() {
+    this.loadSiteList = function() {
         $http.post("/MESTO/MESTO_WEB_APP/php/DAOSite.php").success( // TODO: Make a config with path
             function(data) {
                 if (data.error == null) {
@@ -222,7 +222,7 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv) {
         );
     };
     
-    function loadEquipsList() {
+    this.loadEquipsList = function() {
         $http({
                 method: 'POST',
                 url: "/MESTO/MESTO_WEB_APP/php/DAOEquipment.php", // TODO: Make a config with path
@@ -249,7 +249,7 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv) {
             );
     };
     
-    $scope.removeAssEquip = function(p_equipID) {
+    this.removeAssEquip = function(p_equipID) {
         $http({
                 method: 'POST',
                 url: "/MESTO/MESTO_WEB_APP/php/saveEquipment.php",
@@ -259,7 +259,7 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv) {
             }).success(
                 function(data) {
                     if (data.msg != '') {
-                        loadEquipsList(); // refresh
+                        self.loadEquipsList(); // refresh
                     }
                     else {
                         $scope.lstEquipErr = data.error;
@@ -273,11 +273,11 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv) {
                 });
     };
     
-    $scope.getEquip = function() {
+    this.getEquip = function() {
     
     };
     
-    $scope.newEquip = function() {
+    this.newEquip = function() {
         $location.path("/admin/equip"); // TODO: complete by sending the ID and do the comportement on the Room page
     };
     

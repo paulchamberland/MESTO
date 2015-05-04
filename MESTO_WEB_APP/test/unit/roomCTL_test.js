@@ -29,10 +29,10 @@ describe('Testing the controller of room object =>', function() {
     });
     
     it('Testing: Get the label from ROLE value', function() {
-        expect(scope.getLabelROLE('MTC')).toEqual("Main Telecom");
-        expect(scope.getLabelROLE('TC')).toEqual("Telecom");
-        expect(scope.getLabelROLE('SPR')).toEqual("Spare");
-        expect(scope.getLabelROLE('STR')).toEqual("Storage");
+        expect(controller.getLabelROLE('MTC')).toEqual("Main Telecom");
+        expect(controller.getLabelROLE('TC')).toEqual("Telecom");
+        expect(controller.getLabelROLE('SPR')).toEqual("Spare");
+        expect(controller.getLabelROLE('STR')).toEqual("Storage");
     });
     
     it('Testing: Open room', function() {
@@ -43,7 +43,7 @@ describe('Testing the controller of room object =>', function() {
                     role:"TC"};
                     
         // TODO: Spy on the sub list private function
-        scope.openRoom(room);
+        controller.openRoom(room);
         
         expect(scope.room).toEqual(room);
         // TODO: make a spy on jquery without or sub object function
@@ -65,7 +65,7 @@ describe('Testing the controller of room object =>', function() {
             
             spyOn(location, 'path');
             
-            scope.navigateToRoom(room);
+            controller.navigateToRoom(room);
             
             expect(location.path).toHaveBeenCalledWith('/admin/room');
             expect(navigateSrv.getRoom()).toEqual(room);
@@ -74,7 +74,7 @@ describe('Testing the controller of room object =>', function() {
         it('Testing: Add a new sub-object Equipment', function() {
             spyOn(location, 'path');
             
-            scope.newEquip();
+            controller.newEquip();
             
             expect(location.path).toHaveBeenCalledWith('/admin/equip');
         });
@@ -96,7 +96,7 @@ describe('Testing the controller of room object =>', function() {
                         name:"siteTest"
                     }};
                     
-        scope.loadRoom(fakeRoom);
+        controller.loadRoom(fakeRoom);
         
         expect(scope.room).toEqual(fakeRoom);
         expect(scope.canDelete).toBe(true);
@@ -106,7 +106,7 @@ describe('Testing the controller of room object =>', function() {
     
     it('Testing: Reset form', function() {
         scope.roomForm = {$setPristine : function(){}};
-        scope.loadRoom({id: "1",
+        controller.loadRoom({id: "1",
                     roomID :"erv324r23",
                     pointOfContact :"sgt bilbo",
                     technicalPointOfContact :"sgt bilbo",
@@ -118,7 +118,7 @@ describe('Testing the controller of room object =>', function() {
                     },
                     lstEquips:[]});
         
-        scope.resetFrm();
+        controller.resetFrm();
         
         expect(scope.canDelete).toBe(false);
         expect(scope.room).toEqual({id: "",
@@ -135,14 +135,14 @@ describe('Testing the controller of room object =>', function() {
     });
     
     it('Testing: Reset Messages ', function() {
-        scope.resetMsg(); // Test when already not define
+        controller.resetMsg(); // Test when already not define
         
         expect(scope.SQLMsgs).not.toBeDefined();
         expect(scope.SQLErrors).not.toBeDefined();
         
         scope.SQLMsgs = "Good message";
         scope.SQLErrors = "bad message";
-        scope.resetMsg(); // test when define
+        controller.resetMsg(); // test when define
         
         expect(scope.SQLMsgs).not.toBeDefined();
         expect(scope.SQLErrors).not.toBeDefined();
@@ -152,14 +152,14 @@ describe('Testing the controller of room object =>', function() {
         var testDirty = false;
         scope.roomForm = {parentSiteName:{$setDirty : function(){testDirty=true;}}};
         
-        scope.associateSite({id:'3',siteName:"test"}); // test
+        controller.associateSite({id:'3',siteName:"test"}); // test
         
         expect(scope.room.parentSite.id).toBe('3');
         expect(scope.room.parentSite.name).toEqual("test");
         expect(testDirty).toBeTruthy();
         
         testDirty = false;
-        scope.associateSite({id:'3',siteName:"test"});
+        controller.associateSite({id:'3',siteName:"test"});
         expect(testDirty).toBeFalsy();
     });
     
@@ -167,7 +167,7 @@ describe('Testing the controller of room object =>', function() {
         var testDirty = true;
         scope.roomForm = {parentSiteName:{$setDirty : function(){testDirty=false;}}};
         
-        scope.cleanAssociateSite();
+        controller.cleanAssociateSite();
         
         expect(scope.room.parentSite.id).toEqual("");
         expect(scope.room.parentSite.name).toEqual("")
@@ -188,7 +188,7 @@ describe('Testing the controller of room object =>', function() {
                                                                                         +'"parentSite":{"id":"2","name":"siteTest"}'
                                                                                         +'}]');
 
-            scope.refreshList(); // <--- TEST
+            controller.refreshList(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -208,7 +208,7 @@ describe('Testing the controller of room object =>', function() {
             
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             
-            scope.refreshList(); // <--- TEST
+            controller.refreshList(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -218,7 +218,7 @@ describe('Testing the controller of room object =>', function() {
         it('Testing: Refresh rooms list and failed...', function() {
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(500, 'server error');
 
-            scope.refreshList(); // <--- TEST
+            controller.refreshList(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -242,7 +242,7 @@ describe('Testing the controller of room object =>', function() {
                                                                                         +'"parentSite":{"id":"2","name":"siteTest"}'
                                                                                         +'}]');
 
-            scope.save(); // <--- TEST
+            controller.save(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -270,7 +270,7 @@ describe('Testing the controller of room object =>', function() {
                                                                                         +'"parentSite":{"id":"2","name":"siteTest"}'
                                                                                         +'}]');
 
-            scope.save(); // <--- TEST
+            controller.save(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -307,7 +307,7 @@ describe('Testing the controller of room object =>', function() {
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond({});
             
-            scope.save(); // <--- TEST
+            controller.save(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -325,7 +325,7 @@ describe('Testing the controller of room object =>', function() {
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond(500, 'server error');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond({});
             
-            scope.save(); // <--- TEST
+            controller.save(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -354,7 +354,7 @@ describe('Testing the controller of room object =>', function() {
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('');
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('[{"test":"test"}]');
                         
-            scope.loadRoom(pRoom);
+            controller.loadRoom(pRoom);
             $httpBackend.flush();
             
             expect(scope.room.lstEquips).toEqual([{test:"test"}]);
@@ -378,7 +378,7 @@ describe('Testing the controller of room object =>', function() {
                                                                                         +'"parentSite":{"id":"2","name":"siteTest"}'
                                                                                         +'}]');
 
-            scope.delete(); // <--- TEST
+            controller.delete(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -414,7 +414,7 @@ describe('Testing the controller of room object =>', function() {
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('fake');
             
-            scope.delete(); // <--- TEST
+            controller.delete(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -431,7 +431,7 @@ describe('Testing the controller of room object =>', function() {
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond(500, 'server error');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond({});
             
-            scope.delete(); // <--- TEST
+            controller.delete(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -447,7 +447,7 @@ describe('Testing the controller of room object =>', function() {
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond({});
             expect(scope.siteList).not.toBeDefined();
             
-            scope.openSiteList();
+            controller.openSiteList();
             $httpBackend.flush();
             
             expect(scope.siteList).toEqual({});
@@ -457,7 +457,7 @@ describe('Testing the controller of room object =>', function() {
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(''); // CTR init
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '{"msg":"", "error":"Database error"}');
             
-            scope.removeAssEquip(12);
+            controller.removeAssEquip(12);
             $httpBackend.flush();
             
             expect(scope.lstEquipErr).toEqual("Database error");
@@ -466,7 +466,7 @@ describe('Testing the controller of room object =>', function() {
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(''); // CTR init
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(500, '{"msg":"", "error":"error"}');
             
-            scope.removeAssEquip(12);
+            controller.removeAssEquip(12);
             $httpBackend.flush();
             
             expect(scope.lstEquipErr).toEqual("error: 500:undefined");
@@ -476,7 +476,7 @@ describe('Testing the controller of room object =>', function() {
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '{"msg":"success", "error":""}');
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('[{"test":"test"}]');
             
-            scope.removeAssEquip(12);
+            controller.removeAssEquip(12);
             $httpBackend.flush();
             
             expect(scope.lstEquipErr).not.toBeDefined();

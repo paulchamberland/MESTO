@@ -10,7 +10,7 @@
         <span class="error" data-ng-show="lstError">{{lstError}}</span>
 		<table border="1">
             <tr><th>Room ID</th><th>Point of Contact</th></tr>
-			<tr data-ng-repeat="r in roomList" data-ng-click="navigateToRoom(r)">
+			<tr data-ng-repeat="r in roomList" data-ng-click="roomCTL.navigateToRoom(r)">
 				<td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td>
 			</tr>
 		</table>

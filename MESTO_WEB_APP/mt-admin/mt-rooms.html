@@ -24,23 +24,23 @@
 				<div class="field"><label for="role">Role:</label><select id="role" data-ng-model="room.role" name="role" data-ng-options="role.value as role.label for role in ROLE"></select></div>
 				<div class="field">
                     <label for="prSite">Assigned Site:</label><input type="text" id="prSite" name="parentSiteName" data-ng-model="room.parentSite.name" disabled required/>
-                    <button id="btnLinkSite" data-ng-click="openSiteList()" >...</button>
-                    <button id="btnCleanSite" data-ng-click="cleanAssociateSite()" >X</button>
+                    <button id="btnLinkSite" data-ng-click="roomCTL.openSiteList()" >...</button>
+                    <button id="btnCleanSite" data-ng-click="roomCTL.cleanAssociateSite()" >X</button>
                 </div>
             </div>
 		</form>
-		<button id="btnSave" data-ng-click="save();" ng-disabled="roomForm.$pristine || roomForm.$invalid">Save</button>
-		<button id="btnDelete" data-ng-click="delete();" ng-disabled="!canDelete">Delete</button>
-        <button id="btnReset" data-ng-click="resetFrm();resetMsg();" ng-disabled="roomForm.$pristine">Reset</button>
+		<button id="btnSave" data-ng-click="roomCTL.save();" ng-disabled="roomForm.$pristine || roomForm.$invalid">Save</button>
+		<button id="btnDelete" data-ng-click="roomCTL.delete();" ng-disabled="!canDelete">Delete</button>
+        <button id="btnReset" data-ng-click="roomCTL.resetFrm();roomCTL.resetMsg();" ng-disabled="roomForm.$pristine">Reset</button>
 	</div>
     
     <div style="padding-top:15px">
-        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Equipments of this room</span><button id="btnGetEquip" data-ng-click="getEquip();">Get</button>
+        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Equipments of this room</span><button id="btnGetEquip" data-ng-click="roomCTL.getEquip();">Get</button>
         <span class="error" data-ng-show="lstEquipErr">{{lstEquipErr}}</span>
 		<table border="1">
             <tr><th>Serial Number</th><th>Model</th><th></th></tr>
 			<tr data-ng-repeat="e in room.lstEquips" data-ng-click="">
-				<td>{{e.serialNumber}}</td><td>{{e.model}}</td><td><button id="btnRemoveEquip" data-ng-click="removeAssEquip(e.id)">Remove</button></td>
+				<td>{{e.serialNumber}}</td><td>{{e.model}}</td><td><button id="btnRemoveEquip" data-ng-click="roomCTL.removeAssEquip(e.id)">Remove</button></td>
 			</tr>
 		</table>
 	</div>
@@ -53,13 +53,13 @@
             <div class="inner last">
                 <table border="1">
                     <tr><th>id</th><th>Reference</th><th>Name</th><th>Latitude</th><th>Longitude</th></tr>
-                    <tr data-ng-repeat="s in siteList" data-ng-click="associateSite(s)">
+                    <tr data-ng-repeat="s in siteList" data-ng-click="roomCTL.associateSite(s)">
                         <td>{{s.id}}</td><td>{{s.reference}}</td><td>{{s.siteName}}</td><td>{{s.latitude}}</td><td>{{s.longitude}}</td>
                     </tr>
                 </table>
             </div>
         </div>
-        <div class="bot"><button id="btnCloseLstSite" data-ng-click="closeSiteList()" >Close</button></div>
+        <div class="bot"><button id="btnCloseLstSite" data-ng-click="roomCTL.closeSiteList()" >Close</button></div>
     </div>
     <div class="wrap"></div>
 </div>
