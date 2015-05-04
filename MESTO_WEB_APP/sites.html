@@ -11,7 +11,7 @@
         <span class="error" data-ng-show="lstError">{{lstError}}</span>
 		<table border="1">
             <tr><th>Reference</th><th>Name</th><th>Latitude</th><th>Longitude</th></tr>
-			<tr data-ng-repeat="s in siteList" data-ng-click="openSite(s);">
+			<tr data-ng-repeat="s in siteList" data-ng-click="siteCTL.openSite(s);">
 				<td>{{s.reference}}</td><td>{{s.siteName}}</td><td>{{s.latitude}}</td><td>{{s.longitude}}</td>
 			</tr>
 		</table>

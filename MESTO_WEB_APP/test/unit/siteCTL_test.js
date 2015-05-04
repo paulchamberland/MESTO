@@ -36,11 +36,11 @@ describe('Testing the controller of site object =>', function() {
     });
     
     it('Testing: Get the label from ROLE value', function() {
-        expect(scope.getLabelROLE('ED')).toEqual("Edifice");
-        expect(scope.getLabelROLE('FLR')).toEqual("Floor");
-        expect(scope.getLabelROLE('FOB')).toEqual("FOB");
-        expect(scope.getLabelROLE('COP')).toEqual("COP");
-        expect(scope.getLabelROLE('CMP')).toEqual("CAMP");
+        expect(controller.getLabelROLE('ED')).toEqual("Edifice");
+        expect(controller.getLabelROLE('FLR')).toEqual("Floor");
+        expect(controller.getLabelROLE('FOB')).toEqual("FOB");
+        expect(controller.getLabelROLE('COP')).toEqual("COP");
+        expect(controller.getLabelROLE('CMP')).toEqual("CAMP");
     });
 
     it('Testing: Open site', function() {
@@ -51,7 +51,7 @@ describe('Testing the controller of site object =>', function() {
                     siteName:"test4"};
                     
         // TODO: Spy on both sub list private function
-        scope.openSite(site);
+        controller.openSite(site);
         
         expect(scope.site).toEqual(site);
         
@@ -74,7 +74,7 @@ describe('Testing the controller of site object =>', function() {
             
             spyOn(location, 'path');
             
-            scope.navigateToSite(site);
+            controller.navigateToSite(site);
             
             expect(location.path).toHaveBeenCalledWith('/admin/site');
             expect(navigateSrv.getSite()).toEqual(site);
@@ -83,7 +83,7 @@ describe('Testing the controller of site object =>', function() {
         it('Testing: Add a new sub-object Room', function() {
             spyOn(location, 'path');
             
-            scope.newRoom();
+            controller.newRoom();
             
             expect(location.path).toHaveBeenCalledWith('/admin/room');
         });
@@ -91,7 +91,7 @@ describe('Testing the controller of site object =>', function() {
         it('Testing: Add a new sub-object Equipment', function() {
             spyOn(location, 'path');
             
-            scope.newEquip();
+            controller.newEquip();
             
             expect(location.path).toHaveBeenCalledWith('/admin/equip');
         });
@@ -122,7 +122,7 @@ describe('Testing the controller of site object =>', function() {
                     lstRooms:[{id:"2",name:"test"},{id:"3",name:"testV2"}],
                     lstEquips:[{id:"2",roomID:"test"},{id:"3",roomID:"testV2"}]};
                     
-        scope.loadSite(fakeSite);
+        controller.loadSite(fakeSite);
         
         expect(scope.site).toEqual({id: "1",
                                     reference :"test",
@@ -159,7 +159,7 @@ describe('Testing the controller of site object =>', function() {
                     startDate:"01-01-2008",
                     endDate:"01-01-2010"};
                     
-        scope.loadSite(fakeSite);
+        controller.loadSite(fakeSite);
         
         expect(scope.site).toEqual({id: "1",
                     reference :"test",
@@ -179,7 +179,7 @@ describe('Testing the controller of site object =>', function() {
             startDate:"2008-01-01",
             endDate:"2010-01-01"};
                     
-        scope.loadSite(fakeSite2);
+        controller.loadSite(fakeSite2);
         
         expect(scope.site).toEqual({id: "2",
                     reference :"tester",
@@ -193,7 +193,7 @@ describe('Testing the controller of site object =>', function() {
     
     it('Testing: Reset form', function() {
         scope.siteForm = {$setPristine : function(){}};
-        scope.loadSite({id: "1",
+        controller.loadSite({id: "1",
                     reference :"test",
                     latitude:"12.123456",
                     longitude:"43.123456",
@@ -213,7 +213,7 @@ describe('Testing the controller of site object =>', function() {
                     lstRooms:[{id:"2",name:"test"},{id:"3",name:"testV2"}],
                     lstEquips:[{id:"2",roomID:"test"},{id:"3",roomID:"testV2"}]});
         
-        scope.resetFrm();
+        controller.resetFrm();
         
         expect(scope.canDelete).toBe(false);
         expect(scope.site).toEqual({id: "",
@@ -238,14 +238,14 @@ describe('Testing the controller of site object =>', function() {
     });
     
     it('Testing: Reset Messages ', function() {
-        scope.resetMsg(); // Test when already not define
+        controller.resetMsg(); // Test when already not define
         
         expect(scope.SQLMsgs).not.toBeDefined();
         expect(scope.SQLErrors).not.toBeDefined();
         
         scope.SQLMsgs = "Good message";
         scope.SQLErrors = "bad message";
-        scope.resetMsg(); // test when define
+        controller.resetMsg(); // test when define
         
         expect(scope.SQLMsgs).not.toBeDefined();
         expect(scope.SQLErrors).not.toBeDefined();
@@ -254,14 +254,14 @@ describe('Testing the controller of site object =>', function() {
     it('Testing: openFreeEquipsList', function() {
         spyOn(controller, "loadFreeEquipsList");
         
-        scope.openFreeEquipsList();
+        controller.openFreeEquipsList();
         expect(controller.loadFreeEquipsList).toHaveBeenCalled();
         // TODO : add test and spy for JQuery
     });
     
     it('Testing: closeFreeEquipsList', function() {
         scope.lstFreeEquips = "test";
-        scope.closeFreeEquipsList();
+        controller.closeFreeEquipsList();
         
         expect(scope.lstFreeEquips).not.toBeDefined();
         // TODO : add test and spy for JQuery
@@ -290,7 +290,7 @@ describe('Testing the controller of site object =>', function() {
                                                                                         +'"pointOfContact":"Lt. Bariton",'
                                                                                         +'"phoneNumberPoC":"514-555-4321"}]');
 
-            scope.refreshList(); // <--- TEST
+            controller.refreshList(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -319,7 +319,7 @@ describe('Testing the controller of site object =>', function() {
             
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             
-            scope.refreshList(); // <--- TEST
+            controller.refreshList(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -329,7 +329,7 @@ describe('Testing the controller of site object =>', function() {
         it('Testing: Refresh sites list and failed...', function() {
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(500, 'server error');
 
-            scope.refreshList(); // <--- TEST
+            controller.refreshList(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -362,7 +362,7 @@ describe('Testing the controller of site object =>', function() {
                                                                                         +'"pointOfContact":"Lt. Bariton",'
                                                                                         +'"phoneNumberPoC":"514-555-4321"}]');
 
-            scope.save(); // <--- TEST
+            controller.save(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -399,7 +399,7 @@ describe('Testing the controller of site object =>', function() {
                                                                                         +'"pointOfContact":"Lt. Bariton",'
                                                                                         +'"phoneNumberPoC":"514-555-4321"}]');
 
-            scope.save(); // <--- TEST
+            controller.save(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -451,7 +451,7 @@ describe('Testing the controller of site object =>', function() {
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveSite.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond({});
             
-            scope.save(); // <--- TEST
+            controller.save(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -469,7 +469,7 @@ describe('Testing the controller of site object =>', function() {
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveSite.php').respond(500, 'server error');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond({});
             
-            scope.save(); // <--- TEST
+            controller.save(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -508,7 +508,7 @@ describe('Testing the controller of site object =>', function() {
                                                                                         +'"pointOfContact":"Lt. Bariton",'
                                                                                         +'"phoneNumberPoC":"514-555-4321"}]');
 
-            scope.delete(); // <--- TEST
+            controller.delete(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -559,7 +559,7 @@ describe('Testing the controller of site object =>', function() {
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveSite.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond('fake');
             
-            scope.delete(); // <--- TEST
+            controller.delete(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -576,7 +576,7 @@ describe('Testing the controller of site object =>', function() {
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveSite.php').respond(500, 'server error');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond({});
             
-            scope.delete(); // <--- TEST
+            controller.delete(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -622,7 +622,7 @@ describe('Testing the controller of site object =>', function() {
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '{"msg":"", "error":"Database error"}');
             
-            scope.removeAssEquip(12);
+            controller.removeAssEquip(12);
             $httpBackend.flush();
             
             expect(scope.lstEquipErr).toEqual("Database error");
@@ -631,7 +631,7 @@ describe('Testing the controller of site object =>', function() {
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(500, '{"msg":"", "error":"error"}');
             
-            scope.removeAssEquip(12);
+            controller.removeAssEquip(12);
             $httpBackend.flush();
             
             expect(scope.lstEquipErr).toEqual("error: 500:undefined");
@@ -643,7 +643,7 @@ describe('Testing the controller of site object =>', function() {
             
             spyOn(controller, "loadEquipsList").and.callThrough();
             
-            scope.removeAssEquip(12);
+            controller.removeAssEquip(12);
             $httpBackend.flush();
             
             expect(scope.lstEquipErr).not.toBeDefined();
@@ -655,7 +655,7 @@ describe('Testing the controller of site object =>', function() {
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond(200, '{"msg":"", "error":"Database error"}');
             
-            scope.removeAssRoom(12);
+            controller.removeAssRoom(12);
             $httpBackend.flush();
             
             expect(scope.lstRoomErr).toEqual("Database error");
@@ -664,7 +664,7 @@ describe('Testing the controller of site object =>', function() {
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond(500, '{"msg":"", "error":"error"}');
             
-            scope.removeAssRoom(12);
+            controller.removeAssRoom(12);
             $httpBackend.flush();
             
             expect(scope.lstRoomErr).toEqual("error: 500:undefined");
@@ -674,7 +674,7 @@ describe('Testing the controller of site object =>', function() {
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond(200, '{"msg":"success", "error":""}');
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('[{"test":"test"}]');
             
-            scope.removeAssRoom(12);
+            controller.removeAssRoom(12);
             $httpBackend.flush();
             
             expect(scope.lstRoomErr).not.toBeDefined();
@@ -717,7 +717,7 @@ describe('Testing the controller of site object =>', function() {
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '{"msg":"", "error":"Database error"}');
             scope.lstFreeEquips = [43,41,3];
             
-            scope.addFreeEquipsList();
+            controller.addFreeEquipsList();
             $httpBackend.flush();
             
             expect(scope.lstFreeEquipErr).toEqual("Database error");
@@ -727,7 +727,7 @@ describe('Testing the controller of site object =>', function() {
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(500, '{"msg":"", "error":"error"}');
             scope.lstFreeEquips = [43,41,3];
             
-            scope.addFreeEquipsList();
+            controller.addFreeEquipsList();
             $httpBackend.flush();
             
             expect(scope.lstFreeEquipErr).toEqual("error: 500:undefined");
@@ -738,13 +738,13 @@ describe('Testing the controller of site object =>', function() {
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('');
             scope.lstFreeEquips = [43,41,3];
             
-            scope.closeFreeEquipsList = jasmine.createSpy("closeFreeEquipsList");
+            controller.closeFreeEquipsList = jasmine.createSpy("closeFreeEquipsList");
             controller.loadEquipsList = jasmine.createSpy("loadEquipsList");
             
-            scope.addFreeEquipsList();
+            controller.addFreeEquipsList();
             $httpBackend.flush();
             
-            expect(scope.closeFreeEquipsList).toHaveBeenCalled();
+            expect(controller.closeFreeEquipsList).toHaveBeenCalled();
             expect(controller.loadEquipsList).toHaveBeenCalled();
             
             expect(scope.lstFreeEquipErr).not.toBeDefined();

@@ -10,7 +10,7 @@
         <span class="error" data-ng-show="lstError">{{lstError}}</span>
 		<table border="1">
             <tr><th>Reference</th><th>Name</th><th>Latitude</th><th>Longitude</th></tr>
-			<tr data-ng-repeat="s in siteList" data-ng-click="navigateToSite(s)">
+			<tr data-ng-repeat="s in siteList" data-ng-click="siteCTL.navigateToSite(s)">
 				<td>{{s.reference}}</td><td>{{s.siteName}}</td><td>{{s.latitude}}</td><td>{{s.longitude}}</td>
 			</tr>
 		</table>

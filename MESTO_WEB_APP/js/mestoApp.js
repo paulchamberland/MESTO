@@ -1,13 +1,13 @@
 var app = angular.module('MESTO', ['ngRoute']);
 app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/home', {templateUrl:'home.html', controller:'mapCTL'});
-    $routeProvider.when('/site', {templateUrl:'sites.html', controller:'siteCTL'});
+    $routeProvider.when('/site', {templateUrl:'sites.html', controller:'siteCTL', controllerAs:'siteCTL'});
     $routeProvider.when('/room', {templateUrl:'rooms.html', controller:'roomCTL'});
     $routeProvider.when('/equip', {templateUrl:'equipments.html', controller:'equipmentCTL'});
     $routeProvider.when('/fakeadmin', {templateUrl:'mt-admin/mt-home.html'});
     $routeProvider.when('/admin', {templateUrl:'mt-admin/mt-home.html'});
-    $routeProvider.when('/admin/site', {templateUrl:'mt-admin/mt-sites.html', controller:'siteCTL'});
-    $routeProvider.when('/admin/sites', {templateUrl:'mt-admin/mt-lstSites.html', controller:'siteCTL'});
+    $routeProvider.when('/admin/site', {templateUrl:'mt-admin/mt-sites.html', controller:'siteCTL', controllerAs:'siteCTL'});
+    $routeProvider.when('/admin/sites', {templateUrl:'mt-admin/mt-lstSites.html', controller:'siteCTL', controllerAs:'siteCTL'});
     $routeProvider.when('/admin/room', {templateUrl:'mt-admin/mt-rooms.html', controller:'roomCTL'});
     $routeProvider.when('/admin/rooms', {templateUrl:'mt-admin/mt-lstRooms.html', controller:'roomCTL'});
     $routeProvider.when('/admin/equip', {templateUrl:'mt-admin/mt-equipments.html', controller:'equipmentCTL'});
