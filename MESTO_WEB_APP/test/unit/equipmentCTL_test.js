@@ -35,7 +35,8 @@ describe('Testing the controller of equipment object', function() {
                         type:"",
                         parentRoom:{
                             id:"",
-                            roomID:""
+                            roomID:"",
+                            siteName:""
                         },
                         parentSite:{
                             id:"",
@@ -139,7 +140,8 @@ describe('Testing the controller of equipment object', function() {
                                         type:"",
                                         parentRoom:{
                                             id:"",
-                                            roomID:""
+                                            roomID:"",
+                                            siteName:""
                                         },
                                         parentSite:{
                                             id:"",
@@ -213,11 +215,11 @@ describe('Testing the controller of equipment object', function() {
     
     it('Testing: cleanAssociateRoom function', function() {
         spyOn(controller, "validDoubleAssociation");
-        scope.equipment.parentRoom = {id:"21", roomID:"test"};
+        scope.equipment.parentRoom = {id:"21", roomID:"test", siteName:""};
         scope.equipmentForm = {parentRoomName:{$setDirty : function(){testDirty=true;}}};
         
         controller.cleanAssociateRoom();
-        expect(scope.equipment.parentRoom).toEqual({id:"", roomID:""});
+        expect(scope.equipment.parentRoom).toEqual({id:"", roomID:"", siteName:""});
         expect(controller.validDoubleAssociation).toHaveBeenCalled();
     });
     
@@ -318,7 +320,8 @@ describe('Testing the controller of equipment object', function() {
             scope.equipment = {roomID:"fake",
                                 parentRoom:{
                                     id:"",
-                                    roomID:""
+                                    roomID:"",
+                                    siteName:""
                                 },
                                 parentSite:{
                                     id:"",
@@ -351,7 +354,8 @@ describe('Testing the controller of equipment object', function() {
                                         type:"",
                                         parentRoom:{
                                             id:"",
-                                            roomID:""
+                                            roomID:"", 
+                                            siteName:""
                                         },
                                         parentSite:{
                                             id:"",
@@ -374,7 +378,8 @@ describe('Testing the controller of equipment object', function() {
             scope.equipment = {serialNumber:"fake",
                                 parentRoom:{
                                     id:"12",
-                                    roomID:"test"
+                                    roomID:"test", 
+                                    siteName:"toto"
                                 },
                                 parentSite:{
                                     id:"",
@@ -392,7 +397,8 @@ describe('Testing the controller of equipment object', function() {
             expect(scope.equipment).toEqual({serialNumber:"fake",
                                                 parentRoom:{
                                                     id:"12",
-                                                    roomID:"test"
+                                                    roomID:"test", 
+                                                    siteName:"toto"
                                                 },
                                                 parentSite:{
                                                     id:"",
@@ -471,7 +477,8 @@ describe('Testing the controller of equipment object', function() {
                                         type:"",
                                         parentRoom:{
                                             id:"",
-                                            roomID:""
+                                            roomID:"",
+                                            siteName:""
                                         },
                                         parentSite:{
                                             id:"",

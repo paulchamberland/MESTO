@@ -25,7 +25,7 @@ class Equipment { // structure of an equipment
         $this->updateBy = $objSQL->updateBy;
         $this->updateDate = $objSQL->updateDate;
         
-        $this->parentRoom = new ParentRoom($objSQL->fk_roomId, $objSQL->roomID);
+        $this->parentRoom = new ParentRoom($objSQL->fk_roomId, $objSQL->roomID, $objSQL->siteName);
         $this->parentSite = new ParentSite($objSQL->fk_siteId, $objSQL->siteName);
     }
 }
@@ -33,10 +33,15 @@ class Equipment { // structure of an equipment
 class ParentRoom {
     public $id;
     public $roomID;
+    public $siteName;
     
-    public function __construct($pId, $pRoomId) {
+    public function __construct($pId, $pRoomId, $pSiteName) {
         $this->id = $pId;
         $this->roomID = $pRoomId;
+        if ($pId > 0)
+            $this->siteName = $pSiteName;
+        else
+            $this->siteName = "";
     }
 }
 
@@ -46,7 +51,10 @@ class ParentSite {
     
     public function __construct($pId, $pName) {
         $this->id = $pId;
-        $this->name = $pName;
+        if ($pId > 0)
+            $this->name = $pName;
+        else
+            $this->name = "";
     }
 }
 
@@ -57,7 +65,7 @@ try {
 	$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     if (empty($data['id'])) {
-        $stmt = $con->prepare("SELECT e.*, r.roomID, s.siteName FROM equipment e LEFT JOIN room r ON e.fk_roomId = r.id LEFT JOIN site s ON e.fk_siteId = s.id ORDER BY e.id");
+        $stmt = $con->prepare("SELECT e.*, r.roomID, s.siteName FROM equipment e LEFT JOIN room r ON e.fk_roomId = r.id LEFT JOIN site s ON r.fk_siteId = s.id OR e.fk_siteId = s.id ORDER BY e.id");
 	}
     else {
         if (isset($data['type']) && $data['type'] == "SITE_INC") {

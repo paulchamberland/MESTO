@@ -43,7 +43,8 @@
             <div class="inner">SW Config : {{equipment.configSW}}</div>
             <div class="inner">Type : {{getLabelTYPE(equipment.type)}}</div>
             <div class="inner">Assigned Room : {{equipment.parentRoom.roomID}}</div>
-            <div class="inner last">Assigned Site : {{equipment.parentSite.name}}</div>
+            <div class="inner last" data-ng-if="equipment.parentRoom.id <= 0">Assigned Site : {{equipment.parentSite.name}}</div>
+            <div class="inner last" data-ng-if="equipment.parentRoom.id > 0">Associate Site : {{equipment.parentRoom.siteName}}</div>
         </div>
         <div class="bot"><button onclick="$('#details').fadeOut('slow');">Close</button></div>
     </div>  

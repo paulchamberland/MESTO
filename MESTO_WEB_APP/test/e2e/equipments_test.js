@@ -44,6 +44,7 @@ describe('E2E: Equipment => ', function() {
             
             expect(element(by.model('equipment.parentRoom.roomID')).getAttribute("value")).not.toEqual('');
             expect(element(by.model('equipment.parentSite.name')).getAttribute("value")).toEqual('');
+            expect(element(by.binding('equipment.parentRoom.siteName')).getText()).not.toEqual('');
         });
         it('Testing: Associate a site', function() {
             element(by.id('btnLinkSite')).click();

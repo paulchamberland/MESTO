@@ -13,7 +13,8 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv) {
                     type:"",
                     parentRoom:{
                         id:"",
-                        roomID:""
+                        roomID:"",
+                        siteName:""
                     },
                     parentSite:{
                         id:"",
@@ -41,7 +42,8 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv) {
                     type:"HUB",
                     parentRoom:{
                         id:"32",
-                        roomID:"Test pRoom"
+                        roomID:"Test pRoom",
+                        siteName:"Site Parent room test"
                     },
                     parentSite:{
                         id:"21",
@@ -231,6 +233,7 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv) {
         
         $scope.equipment.parentRoom.id = selectRoom.id;
         $scope.equipment.parentRoom.roomID = selectRoom.roomID;
+        $scope.equipment.parentRoom.siteName = selectRoom.siteName;
         
         self.closeRoomList();
     };
@@ -250,6 +253,7 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv) {
         
         $scope.equipment.parentRoom.id = "";
         $scope.equipment.parentRoom.roomID = "";
+        $scope.equipment.parentRoom.siteName = "";
         self.validDoubleAssociation();
     };
     this.cleanAssociateSite = function() {
