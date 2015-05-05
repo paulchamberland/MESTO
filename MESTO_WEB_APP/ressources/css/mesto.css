@@ -12,12 +12,12 @@ div.section, div.section2 {
 div.section2 {
     position: relative;
 	top: -301px;
-	left: 339px;
+	left: 344px;
 }
 div.section2 {
     position: absolute;
 	top: 0px;
-	left: 345px;
+	left: 350px;
 }
 
 .field, .fieldgrp {
