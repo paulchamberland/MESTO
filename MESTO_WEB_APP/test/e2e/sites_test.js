@@ -338,6 +338,14 @@ describe('E2E: Site => ', function() {
             
             expect(element(by.id('btnOpenFreeLstEquip')).isPresent()).toBeTruthy();
         });
+        
+        it('Testing: State of Get room button', function() {
+            expect(element(by.id('btnOpenFreeLstRoom')).isPresent()).toBeFalsy();
+            
+            getLastSite();
+            
+            expect(element(by.id('btnOpenFreeLstRoom')).isPresent()).toBeTruthy();
+        });
     });
     
     describe(' - Basic Database Operation => ', function() {
@@ -372,7 +380,25 @@ describe('E2E: Site => ', function() {
             expect(element(by.binding('SQLMsgs')).getText()).toEqual('Site updated successfully!!!');
         });
         
-        it('Testing: Associate a equipement to a Site', function() {
+        it('Testing: Associate a room to a Site', function() {
+            getLastSite();
+            element(by.id('btnOpenFreeLstRoom')).click();
+            
+            element.all(by.repeater('lstFreeRooms')).get(0).element(by.model('r.adding')).click();
+            element(by.id('btnAddLstRooms')).click();
+            
+            expect(element.all(by.repeater('lstRooms')).count()).toEqual(1);
+        });
+        
+        it('Testing: Remove a associate room to a Site', function() {
+            getLastSite();
+            
+            element.all(by.repeater('lstRooms')).get(0).element(by.id('btnRemoveRoom')).click();
+            
+            expect(element.all(by.repeater('lstRooms')).count()).toEqual(0);
+        });
+        
+        it('Testing: Associate an equipement to a Site', function() {
             getLastSite();
             element(by.id('btnOpenFreeLstEquip')).click();
             
@@ -382,7 +408,7 @@ describe('E2E: Site => ', function() {
             expect(element.all(by.repeater('lstEquips')).count()).toEqual(1);
         });
         
-        it('Testing: Remove a associate equipement to a Site', function() {
+        it('Testing: Remove an associate equipement to a Site', function() {
             getLastSite();
             
             element.all(by.repeater('lstEquips')).get(0).element(by.id('btnRemoveEquip')).click();

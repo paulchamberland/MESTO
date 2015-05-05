@@ -44,7 +44,12 @@ try {
         $stmt = $con->prepare("SELECT r.*, s.siteName FROM room r LEFT JOIN site s ON r.fk_siteId = s.id");
 	}
     else {
-        $stmt = $con->prepare("SELECT r.*, s.siteName FROM room r LEFT JOIN site s ON r.fk_siteId = s.id WHERE r.fk_siteId = '".$data['id']."'");
+        if (isset($data['type']) && $data['type'] == "SITE_INC") {
+            $stmt = $con->prepare("SELECT r.*, s.siteName FROM room r LEFT JOIN site s ON r.fk_siteId = s.id WHERE r.fk_siteId = '".$data['id']."'");
+        }
+        else if (isset($data['type']) && ($data['type'] == "SITE_FREE")) {
+            $stmt = $con->prepare("SELECT r.*, '' as siteName FROM room r WHERE r.fk_siteId = ''");
+        }
     }
     
     $stmt->execute();

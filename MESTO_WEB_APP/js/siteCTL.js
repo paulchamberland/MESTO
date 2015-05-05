@@ -3,9 +3,12 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv) {
     var ACTIVITY_DELETE = "del";
     var ACTIVITY_ADDING_ASSO_EQUIP = "add-ass-st|eq";
     var ACTIVITY_REMOVE_ASSO_EQUIP = "rem-ass-st|eq";
+    var ACTIVITY_ADDING_ASSO_ROOM = "add-ass-st|rm";
     var ACTIVITY_REMOVE_ASSO_ROOM = "rem-ass-st|rm";
     var LOAD_INCLUDE_EQUIP = "SITE_INC";
+    var LOAD_INCLUDE_ROOM = "SITE_INC";
     var LOAD_FREE_EQUIP = "SITE_FREE";
+    var LOAD_FREE_ROOM = "SITE_FREE";
     $scope.ROLE = [{value:'ED',label:'Edifice'},{value:'FLR',label:'Floor'},{value:'FOB',label:'FOB'},{value:'COP',label:'COP'},{value:'CMP',label:'CAMP'}];
     
     $scope.site = {id: "",
@@ -221,13 +224,15 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv) {
             }
         );
     };
+    /**********************************************************************************************/
     
     this.loadRoomsList = function() {
         $http({
                 method: 'POST',
                 url: "/MESTO/MESTO_WEB_APP/php/DAORoom.php", // TODO: Make a config with path
                 data: {
-                    id : $scope.site.id
+                    id : $scope.site.id,
+                    type : LOAD_INCLUDE_ROOM
                 },
                 headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
             }).success( // TODO: Make a config with path
@@ -243,6 +248,33 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv) {
                 function(data, status, headers, config, statusText) {
                     // TODO: error server handling
                     $scope.lstRoomErr = "error: "+status+":"+statusText;
+                    //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
+                }
+            );
+    };
+    
+    this.loadFreeRoomsList = function() {
+        $http({
+                method: 'POST',
+                url: "/MESTO/MESTO_WEB_APP/php/DAORoom.php", // TODO: Make a config with path
+                data: {
+                    id : $scope.site.id,
+                    type : LOAD_FREE_ROOM
+                },
+                headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+            }).success( // TODO: Make a config with path
+            function(data) {
+                if (data.error == null) {
+                    $scope.lstFreeRooms = data;
+                }
+                else {
+                    $scope.lstFreeRoomErr = data.error;
+                }
+            }
+            ).error(
+                function(data, status, headers, config, statusText) {
+                    // TODO: error server handling
+                    $scope.lstFreeRoomErr = "error: "+status+":"+statusText;
                     //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
                 }
             );
@@ -272,9 +304,56 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv) {
                 });
     };
     
+    this.openFreeRoomsList = function() {
+        self.loadFreeRoomsList();
+        
+        $('#lstFreeRooms').fadeIn('slow');
+    };
+    
+    this.closeFreeRoomsList = function() {
+        $('#lstFreeRooms').fadeOut('slow');
+        
+        delete $scope.lstFreeRooms;
+    };
+    
+    this.addFreeRoomsList = function() {
+        var lstAdding = [];
+        for (var i = 0; i != $scope.lstFreeRooms.length; i++) {
+            if ($scope.lstFreeRooms[i].adding) {
+                lstAdding.push($scope.lstFreeRooms[i].id);
+            }
+        }
+    
+        $http({
+            method: 'POST',
+            url: "/MESTO/MESTO_WEB_APP/php/saveRoom.php",
+            data: {ids: lstAdding.toString(),
+                    siteID: $scope.site.id,
+                    activity: ACTIVITY_ADDING_ASSO_ROOM},
+            headers: {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+        }).success(
+            function(data) {
+                if (data.msg != '') {
+                    self.loadRoomsList();// refresh
+                    self.closeFreeRoomsList(); 
+                }
+                else {
+                    $scope.lstFreeRoomErr = data.error;
+                }
+            }
+        ).error(
+            function(data, status, headers, config, statusText) {
+                // TODO: error server handling
+                $scope.lstFreeRoomErr = "error: "+status+":"+statusText;
+                //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
+            });
+    };
+    
     this.newRoom = function() {
         $location.path("/admin/room"); // TODO: complete by sending the ID and do the comportement on the Room page
     };
+    
+    /**********************************************************************************************/
     
     this.loadEquipsList = function() {
         $http({

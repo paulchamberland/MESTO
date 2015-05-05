@@ -59,7 +59,7 @@
         <button id="btnReset" data-ng-click="siteCTL.resetFrm();siteCTL.resetMsg();" ng-disabled="siteForm.$pristine">Reset</button>
 	</div>
     <div style="padding-top:15px;">
-        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Rooms of this site</span><button id="btnGetRoom" data-ng-click="siteCTL.newRoom();">Get</button>
+        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Rooms of this site</span><button id="btnOpenFreeLstRoom" data-ng-if="site.id" data-ng-click="siteCTL.openFreeRoomsList();">Get</button>
         <span class="error" data-ng-show="lstRoomErr">{{lstRoomErr}}</span>
 		<table border="1">
             <tr><th>Room ID</th><th>Point of Contact</th><th></th></tr>
@@ -78,6 +78,27 @@
 			</tr>
 		</table>
 	</div>
+    
+    <div id="lstFreeRooms" class="details" style="top:200px;left:400px;">
+        <div class="top">Assigning Rooms</div>
+        <div class="core">
+            <div class="inner first"><span class="error" data-ng-show="lstFreeRoomErr">{{lstFreeRoomErr}}</span></div>
+            <div class="inner">Choose rooms to associate to this site.</div>
+            <div class="inner ">
+                <table border="1">
+                    <tr><th></th><th>Room ID</th><th>Point of Contact</th><th>Size</th></tr>
+                    <tr data-ng-repeat="r in lstFreeRooms">
+                        <td><input type="checkbox" data-ng-model="r.adding"/></td><td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td><td>{{r.roomSize}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="inner last">
+                <button id="btnAddLstRooms" data-ng-click="siteCTL.addFreeRoomsList()" >Add</button>
+                <button id="btnNewRoom" style="float:right;" data-ng-click="siteCTL.newRoom()" >New</button>
+            </div>
+        </div>
+        <div class="bot"><button id="btnCloseFreeLstRooms" data-ng-click="siteCTL.closeFreeRoomsList()" >Close</button></div>
+    </div>
     
     <div id="lstFreeEquips" class="details" style="top:200px;left:400px;">
         <div class="top">Assigning Equipments</div>

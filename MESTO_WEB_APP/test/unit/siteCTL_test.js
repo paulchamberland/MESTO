@@ -251,6 +251,22 @@ describe('Testing the controller of site object =>', function() {
         expect(scope.SQLErrors).not.toBeDefined();
     });
     
+    it('Testing: openFreeRoomsList', function() {
+        spyOn(controller, "loadFreeRoomsList");
+        
+        controller.openFreeRoomsList();
+        expect(controller.loadFreeRoomsList).toHaveBeenCalled();
+        // TODO : add test and spy for JQuery
+    });
+    
+    it('Testing: closeFreeRoomsList', function() {
+        scope.lstFreeRooms = "test";
+        controller.closeFreeRoomsList();
+        
+        expect(scope.lstFreeRooms).not.toBeDefined();
+        // TODO : add test and spy for JQuery
+    });
+    
     it('Testing: openFreeEquipsList', function() {
         spyOn(controller, "loadFreeEquipsList");
         
@@ -748,6 +764,75 @@ describe('Testing the controller of site object =>', function() {
             expect(controller.loadEquipsList).toHaveBeenCalled();
             
             expect(scope.lstFreeEquipErr).not.toBeDefined();
+        });
+        
+        it('Testing: Failed to load Free Rooms List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(200, '{"msg":"", "error":"Database error"}');
+            
+            controller.loadFreeRoomsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstFreeRoomErr).toEqual("Database error");
+            expect(scope.lstFreeRooms).not.toBeDefined();
+        });
+        it('Testing: Error to load Free Rooms List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(500, '{"msg":"", "error":"error"}');
+            
+            controller.loadFreeRoomsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstFreeRoomErr).toEqual("error: 500:undefined");
+            expect(scope.lstFreeRooms).not.toBeDefined();
+        });
+        it('Testing: Success to load Free Rooms List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(200, '[{"test":"test"}]');
+            
+            controller.loadFreeRoomsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstFreeRoomErr).not.toBeDefined();
+            expect(scope.lstFreeRooms).toEqual([{test:"test"}]);
+        });
+        
+        it('Testing: Failed to add Free Rooms List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond(200, '{"msg":"", "error":"Database error"}');
+            scope.lstFreeRooms = [43,41,3];
+            
+            controller.addFreeRoomsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstFreeRoomErr).toEqual("Database error");
+        });
+        it('Testing: Error to add Free Rooms List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond(500, '{"msg":"", "error":"error"}');
+            scope.lstFreeRooms = [43,41,3];
+            
+            controller.addFreeRoomsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstFreeRoomErr).toEqual("error: 500:undefined");
+        });
+        it('Testing: Success to add Free Rooms List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond(200, '[{"test":"test"}]');
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('');
+            scope.lstFreeRooms = [43,41,3];
+            
+            controller.closeFreeRoomsList = jasmine.createSpy("closeFreeRoomsList");
+            controller.loadRoomsList = jasmine.createSpy("loadRoomsList");
+            
+            controller.addFreeRoomsList();
+            $httpBackend.flush();
+            
+            expect(controller.closeFreeRoomsList).toHaveBeenCalled();
+            expect(controller.loadRoomsList).toHaveBeenCalled();
+            
+            expect(scope.lstFreeRoomErr).not.toBeDefined();
         });
     });
 });
