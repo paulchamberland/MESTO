@@ -24,6 +24,7 @@ describe('E2E: Room => ', function() {
     });
     
     beforeEach(function() {
+        element(by.model('room.pointOfContact')).sendKeys('t'); // be sure RESET is active
         element(by.id('btnReset')).click();
     });
     
@@ -89,6 +90,14 @@ describe('E2E: Room => ', function() {
             element(by.model('room.pointOfContact')).sendKeys('t');
             expect(btn.isEnabled()).toBeTruthy();
         });
+        
+        it('Testing: State of Get equipement button', function() {
+            expect(element(by.id('btnOpenFreeLstEquip')).isPresent()).toBeFalsy();
+            
+            getLastRoom();
+            
+            expect(element(by.id('btnOpenFreeLstEquip')).isPresent()).toBeTruthy();
+        });
     });
 
     describe(' - Basic Database Operation => ', function() {
@@ -100,6 +109,7 @@ describe('E2E: Room => ', function() {
             element(by.id('btnLinkSite')).click();
             browser.sleep(1000);
             element.all(by.repeater('siteList')).first().click();
+            
             
             element(by.id('btnSave')).click();
             expect(element(by.binding('SQLErrors')).getText()).toEqual('');
@@ -140,6 +150,25 @@ describe('E2E: Room => ', function() {
             expect(element(by.binding('SQLErrors')).getText()).toEqual('');
             expect(element(by.binding('SQLMsgs')).getText()).toEqual('Room updated successfully!!!');
         });
+        
+        it('Testing: Associate a equipement to a Room', function() {
+            getLastRoom();
+            element(by.id('btnOpenFreeLstEquip')).click();
+            
+            element.all(by.repeater('lstFreeEquips')).get(0).element(by.model('e.adding')).click();
+            element(by.id('btnAddLstEquips')).click();
+            
+            expect(element.all(by.repeater('lstEquips')).count()).toEqual(1);
+        });
+        
+        it('Testing: Remove a associate equipement to a Room', function() {
+            getLastRoom();
+            
+            element.all(by.repeater('lstEquips')).get(0).element(by.id('btnRemoveEquip')).click();
+            
+            expect(element.all(by.repeater('lstEquips')).count()).toEqual(0);
+        });
+        
         it('Testing: Delete a room', function() {
             getLastRoom();
             

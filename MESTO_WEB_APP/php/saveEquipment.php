@@ -27,6 +27,11 @@ try {
         $con->exec($sql);
         $arr["msg"] = "Associations with multiple equipments done successfully!!!";
     }
+    else if (!empty($equip['ids']) && isset($equip['activity']) && $equip['activity'] == "add-ass-rm|eq") {
+        $sql = 'UPDATE equipment SET fk_roomId="'.$equip['roomID'].'" WHERE id IN ('.$equip['ids'].')';
+        $con->exec($sql);
+        $arr["msg"] = "Associations with multiple equipments done successfully!!!";
+    }
     else if (!empty($equip['serialNumber'])) {
         $sql = "SELECT count(*) as nbEquip FROM equipment WHERE serialNumber = '".$equip['serialNumber']."'";
         

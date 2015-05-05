@@ -35,7 +35,7 @@
 	</div>
     
     <div style="padding-top:15px">
-        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Equipments of this room</span><button id="btnGetEquip" data-ng-click="roomCTL.getEquip();">Get</button>
+        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Equipments of this room</span><button id="btnOpenFreeLstEquip" data-ng-if="room.id" data-ng-click="roomCTL.openFreeEquipsList();">Get</button>
         <span class="error" data-ng-show="lstEquipErr">{{lstEquipErr}}</span>
 		<table border="1">
             <tr><th>Serial Number</th><th>Model</th><th></th></tr>
@@ -60,6 +60,27 @@
             </div>
         </div>
         <div class="bot"><button id="btnCloseLstSite" data-ng-click="roomCTL.closeSiteList()" >Close</button></div>
+    </div>
+    
+    <div id="lstFreeEquips" class="details" style="top:200px;left:400px;">
+        <div class="top">Assigning Equipments</div>
+        <div class="core">
+            <div class="inner first"><span class="error" data-ng-show="lstFreeEquipErr">{{lstFreeEquipErr}}</span></div>
+            <div class="inner">Choose equipments to associate to this site.</div>
+            <div class="inner ">
+                <table border="1">
+                    <tr><th></th><th>Serial Number</th><th>Manufacturer</th><th>Model</th><th>Type</th></tr>
+                    <tr data-ng-repeat="e in lstFreeEquips">
+                        <td><input type="checkbox" data-ng-model="e.adding"/></td><td>{{e.serialNumber}}</td><td>{{e.manufacturer}}</td><td>{{e.model}}</td><td>{{e.type}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="inner last">
+                <button id="btnAddLstEquips" data-ng-click="roomCTL.addFreeEquipsList()" >Add</button>
+                <button id="btnNewEquip" style="float:right;" data-ng-click="roomCTL.newEquip()" >New</button>
+            </div>
+        </div>
+        <div class="bot"><button id="btnCloseFreeLstEquip" data-ng-click="roomCTL.closeFreeEquipsList()" >Close</button></div>
     </div>
     <div class="wrap"></div>
 </div>

@@ -24,6 +24,7 @@ describe('E2E: Site => ', function() {
     });
     
     beforeEach(function() {
+        element(by.model('site.city')).sendKeys('t'); // be sure that Reset is active
         element(by.id('btnReset')).click();
     });
     

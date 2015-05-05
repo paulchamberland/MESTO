@@ -1,7 +1,9 @@
 app.controller('roomCTL', function($scope, $http, $location, navigateSrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
+    var ACTIVITY_ADDING_ASSO_EQUIP = "add-ass-rm|eq";
     var ACTIVITY_REMOVE_ASSO_EQUIP = "rem-ass-rm|eq";
+    var LOAD_FREE_EQUIP = "ROOM_FREE";
     $scope.ROLE = [{value:'MTC',label:'Main Telecom'},{value:'TC',label:'Telecom'},{value:'SPR',label:'Spare'},{value:'STR',label:'Storage'}];
     
     $scope.room = {id: "",
@@ -249,6 +251,33 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv) {
             );
     };
     
+    this.loadFreeEquipsList = function() {
+        $http({
+                method: 'POST',
+                url: "/MESTO/MESTO_WEB_APP/php/DAOEquipment.php", // TODO: Make a config with path
+                data: {
+                    id : $scope.room.id,
+                    type : LOAD_FREE_EQUIP
+                },
+                headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+            }).success( // TODO: Make a config with path
+            function(data) {
+                if (data.error == null) {
+                    $scope.lstFreeEquips = data;
+                }
+                else {
+                    $scope.lstFreeEquipErr = data.error;
+                }
+            }
+            ).error(
+                function(data, status, headers, config, statusText) {
+                    // TODO: error server handling
+                    $scope.lstFreeEquipErr = "error: "+status+":"+statusText;
+                    //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
+                }
+            );
+    };
+    
     this.removeAssEquip = function(p_equipID) {
         $http({
                 method: 'POST',
@@ -273,9 +302,50 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv) {
                 });
     };
     
-    this.getEquip = function() {
-    
+    this.openFreeEquipsList = function() {
+        self.loadFreeEquipsList();
+        
+        $('#lstFreeEquips').fadeIn('slow');
     };
+    
+    this.closeFreeEquipsList = function() {
+        $('#lstFreeEquips').fadeOut('slow');
+        
+        delete $scope.lstFreeEquips;
+    };
+    
+    this.addFreeEquipsList = function() {
+        var lstAdding = [];
+        for (var i = 0; i != $scope.lstFreeEquips.length; i++) {
+            if ($scope.lstFreeEquips[i].adding) {
+                lstAdding.push($scope.lstFreeEquips[i].id);
+            }
+        }
+    
+        $http({
+            method: 'POST',
+            url: "/MESTO/MESTO_WEB_APP/php/saveEquipment.php",
+            data: {ids: lstAdding.toString(),
+                    roomID: $scope.room.id,
+                    activity: ACTIVITY_ADDING_ASSO_EQUIP},
+            headers: {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+        }).success(
+            function(data) {
+                if (data.msg != '') {
+                    self.loadEquipsList();// refresh
+                    self.closeFreeEquipsList(); 
+                }
+                else {
+                    $scope.lstFreeEquipErr = data.error;
+                }
+            }
+        ).error(
+            function(data, status, headers, config, statusText) {
+                // TODO: error server handling
+                $scope.lstFreeEquipErr = "error: "+status+":"+statusText;
+                //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
+            });
+    }
     
     this.newEquip = function() {
         $location.path("/admin/equip"); // TODO: complete by sending the ID and do the comportement on the Room page
