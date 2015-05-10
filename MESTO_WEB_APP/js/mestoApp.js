@@ -4,8 +4,8 @@ app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/site', {templateUrl:'sites.html', controller:'siteCTL', controllerAs:'siteCTL'});
     $routeProvider.when('/room', {templateUrl:'rooms.html', controller:'roomCTL', controllerAs:'roomCTL'});
     $routeProvider.when('/equip', {templateUrl:'equipments.html', controller:'equipmentCTL', controllerAs:'equipCTL'});
-    $routeProvider.when('/fakeadmin', {templateUrl:'mt-admin/mt-home.html'});
-    $routeProvider.when('/admin', {templateUrl:'mt-admin/mt-home.html'});
+    $routeProvider.when('/admin', {templateUrl:'mt-admin/mt-login.html'});
+    $routeProvider.when('/admin/home', {templateUrl:'mt-admin/mt-home.html'});
     $routeProvider.when('/admin/site', {templateUrl:'mt-admin/mt-sites.html', controller:'siteCTL', controllerAs:'siteCTL'});
     $routeProvider.when('/admin/sites', {templateUrl:'mt-admin/mt-lstSites.html', controller:'siteCTL', controllerAs:'siteCTL'});
     $routeProvider.when('/admin/room', {templateUrl:'mt-admin/mt-rooms.html', controller:'roomCTL', controllerAs:'roomCTL'});
@@ -16,10 +16,13 @@ app.config(['$routeProvider', function($routeProvider) {
 }]);
 
 app.run(function($rootScope, $location, securitySrv) {
-    var routeRestricted = ['/admin', '/admin/site', '/admin/sites', '/admin/room', '/admin/rooms', '/admin/equip', '/admin/equipments'];
+    var routeRestricted = ['/admin/home', '/admin/site', '/admin/sites', '/admin/room', '/admin/rooms', '/admin/equip', '/admin/equipments'];
     var forbiddenCall = ['.html', '.php'];
     $rootScope.$on('$routeChangeStart', function() {
-        if (routeRestricted.indexOf($location.path()) != -1 && !securitySrv.isLogged()) {
+        if ("/admin/".indexOf($location.path()) != -1 && securitySrv.isLogged()) {
+            $location.path('/admin/home');
+        }
+        else if (routeRestricted.indexOf($location.path()) != -1 && !securitySrv.isLogged()) {
             $location.path('/home');
         }
         else if (forbiddenCall.indexOf($location.path()) != -1) {
@@ -89,7 +92,6 @@ app.factory('securitySrv', function($http, $location) {
             function(data, status) {
                 if (data.msg != '') {
                     createUser({id: "id", userId: "Jooj"});
-                    $location.path('/admin');
                 }
                 else {
                 }

@@ -37,7 +37,7 @@ describe('Testing the service Security => ', function() {
         expect(securitySrv.isLogged()).toBeFalsy();
         expect(securitySrv.getUsername()).toBeNull();
     });
-    it('Testing: worked login function', function() {
+    it('Testing: worked login & createUser functions', function() {
         $httpBackend.whenPOST("/MESTO/MESTO_WEB_APP/php/login.php").respond(200, {msg:"Login success", error:""});
         spyOn(location, 'path');
         
@@ -45,7 +45,7 @@ describe('Testing the service Security => ', function() {
         
         $httpBackend.flush();
         
-        expect(location.path).toHaveBeenCalledWith('/admin');
+        expect(location.path).not.toHaveBeenCalled();
         expect(securitySrv.isLogged()).toBeTruthy();
         expect(securitySrv.getUsername()).toEqual('Jooj');
     });

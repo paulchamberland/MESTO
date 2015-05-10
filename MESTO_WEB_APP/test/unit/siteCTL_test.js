@@ -5,6 +5,12 @@ describe('Testing the controller of site object =>', function() {
     beforeEach(inject(function(_$controller_, $rootScope) {
         scope = $rootScope;
         controller = _$controller_('siteCTL', { $scope: scope });
+        
+        $ = function() {return {
+                fadeOut : function() {},
+                fadeIn : function() {}
+            };
+        };
     }));
     
     it('Testing: creation object', function() {

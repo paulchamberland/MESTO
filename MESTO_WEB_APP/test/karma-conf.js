@@ -15,6 +15,8 @@ module.exports = function(config){
       'js/siteCTL.js',
       'js/roomCTL.js',
       'js/equipmentCTL.js',
+      'js/loginCTL.js',
+      'js/headerCTL.js',
       'js/mestoHelper.js',
  
       // include unit test specs

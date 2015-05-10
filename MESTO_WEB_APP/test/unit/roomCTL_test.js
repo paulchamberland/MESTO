@@ -6,6 +6,12 @@ describe('Testing the controller of room object =>', function() {
         // The injector unwraps the underscores (_) from around the parameter names when matching
         scope = $rootScope;//.$new();
         controller = _$controller_('roomCTL', { $scope: scope });
+        
+        $ = function() {return {
+                fadeOut : function() {},
+                fadeIn : function() {}
+            };
+        };
     }));
     
     it('Testing: creation object', function() {

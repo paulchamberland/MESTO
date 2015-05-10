@@ -18,6 +18,7 @@ describe('E2E: Site => ', function() {
         
         element(by.id('login')).click();
         
+        element(by.id('mnAdmin')).click();
         browser.actions().mouseMove(element(by.id('mnManage'))).perform();
         browser.sleep(500);
         element(by.id('mnSites')).click();

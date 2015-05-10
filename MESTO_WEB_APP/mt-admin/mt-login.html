@@ -1,0 +1,22 @@
+<div style="height:100%;display: block;background: rgb(236, 236, 236);">
+<div id="loginMainPage" data-ng-controller="loginCTL as loginCTL">
+    <div style="clear:both"></div>
+    <div id="loginBox" >              
+        <form id="loginForm" name="loginForm" data-ng-submit="loginCTL.adminLogin(logInfo)" novalidate>
+            <fieldset id="body">
+                <fieldset>
+                    <label for="username">User Name</label>
+                    <input type="text" name="username" id="username" data-ng-model="logInfo.username"/>
+                </fieldset>
+                <fieldset>
+                    <label for="pwd">Password</label>
+                    <input type="password" name="pwd" id="pwd" data-ng-model="logInfo.pwd"/>
+                </fieldset>
+                <input type="submit" id="login" value="Sign in" />
+                <label for="checkbox"><input type="checkbox" id="checkbox" />Remember me</label>
+            </fieldset>
+            <span><a href="#">Forgot your password?</a></span>
+        </form>
+    </div>
+</div>
+</div>

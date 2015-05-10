@@ -19,6 +19,7 @@ describe('E2E: Equipment => ', function() {
         
         element(by.id('login')).click();
         
+        element(by.id('mnAdmin')).click();
         browser.actions().mouseMove(element(by.id('mnManage'))).perform();
         browser.sleep(1000);
         element(by.id('mnEquipements')).click();

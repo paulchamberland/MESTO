@@ -55,24 +55,24 @@
     <script type="text/javascript" src="./js/siteCTL.js"></script>
     <script type="text/javascript" src="./js/roomCTL.js"></script>
     <script type="text/javascript" src="./js/equipmentCTL.js"></script>
+    <script type="text/javascript" src="./js/headerCTL.js"></script>
     
-	<!-- Script to load the top menu bar in div id menu -->
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$('#search_bar').load('search_bar.html');
-		});
-	</script>
   </head>
   <body data-ng-app="MESTO">
-  <header>
+  <header data-ng-controller="headerCTL as headCTL">
 	<div id="logo">
 		<img src="./ressources/images/mesto.png" alt="Mesto" style="width:250px;height:70px">
 	</div>
-	<div id="search_bar"></div>
-		<div id="container">
+	<div id="search_bar" data-ng-if="headCTL.isSearchDisplay()">
+        <form class="searchform cf">
+            <input type="text" placeholder="Is it me you&#39;re looking for?">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+		<div id="container" data-ng-if="headCTL.isLoginDisplay()">
             <!-- Login Starts Here -->
             <div id="loginContainer" data-ng-controller="loginCTL as loginCTL">
-                <span style="padding-right:5px" data-ng-if="loginCTL.isLogged()">Welcome {{username}}</span>
+                <span style="padding-right:5px" data-ng-if="loginCTL.isLogged()">Welcome {{loginCTL.getUsername()}}</span>
                 <a id="logoutButton" data-ng-if="loginCTL.isLogged()" data-ng-click="loginCTL.logout()"><span>Logout</span></a>
                 <a id="loginButton" data-ng-if="!loginCTL.isLogged()" onclick="$('#loginBox').toggle();$('#loginForm').toggleClass('active');"><span>Login</span><em></em></a>
                 <div style="clear:both"></div>
