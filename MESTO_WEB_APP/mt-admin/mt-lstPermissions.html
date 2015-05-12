@@ -1,0 +1,28 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#menu').load('mt-admin/mt-menu.html');
+    });
+</script>
+<div id="menu" class="v"></div>
+<div class="main">
+	<div>
+        <h1 class="">Permission List</h1>
+        <table border="1">
+            <tr><th>Code name</th><th>Name</th><th>Description</th></tr>
+			<tr data-ng-repeat="p in lstPermission" data-ng-click="permissionCTL.openPermission(p)">
+				<td>{{p.codeName}}</td><td>{{p.name}}</td><td>{{p.description}}</td>
+			</tr>
+		</table>
+	</div>
+    
+    <div id="details" class="details mt">
+        <div class="top">{{permission.codeName}}</div>
+        <div class="core" >
+            <div class="inner first">Name : {{permission.name}}</div>
+            <div class="inner last">Description : {{permission.description}}</div>
+        </div>
+        <div class="bot"><button onclick="$('#details').fadeOut('slow');">Close</button></div>
+    </div>  
+    
+    <div class="wrap"></div>
+</div>

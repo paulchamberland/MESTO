@@ -72,6 +72,12 @@ div.main {
     min-width: 400px;
     display:none;
 }
+
+.mt {
+    top: 160px;
+    left: 220px;
+}
+
 .details > .core {
     background: white;
     border: 1px solid #000000;

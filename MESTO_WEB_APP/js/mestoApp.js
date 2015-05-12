@@ -12,11 +12,12 @@ app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/admin/rooms', {templateUrl:'mt-admin/mt-lstRooms.html', controller:'roomCTL', controllerAs:'roomCTL'});
     $routeProvider.when('/admin/equip', {templateUrl:'mt-admin/mt-equipments.html', controller:'equipmentCTL', controllerAs:'equipCTL'});
     $routeProvider.when('/admin/equipments', {templateUrl:'mt-admin/mt-lstEquipments.html', controller:'equipmentCTL', controllerAs:'equipCTL'});
+    $routeProvider.when('/admin/permissions', {templateUrl:'mt-admin/mt-lstPermissions.html', controller:'permissionCTL', controllerAs:'permissionCTL'});
     $routeProvider.otherwise({redirectTo:"/home"});
 }]);
 
 app.run(function($rootScope, $location, securitySrv) {
-    var routeRestricted = ['/admin/home', '/admin/site', '/admin/sites', '/admin/room', '/admin/rooms', '/admin/equip', '/admin/equipments'];
+    var routeRestricted = ['/admin/home', '/admin/site', '/admin/sites', '/admin/room', '/admin/rooms', '/admin/equip', '/admin/equipments', '/admin/permissions'];
     var forbiddenCall = ['.html', '.php'];
     $rootScope.$on('$routeChangeStart', function() {
         if ("/admin/".indexOf($location.path()) != -1 && securitySrv.isLogged()) {
