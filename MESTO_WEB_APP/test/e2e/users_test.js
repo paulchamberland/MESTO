@@ -201,6 +201,17 @@ describe('E2E: User => ', function() {
             expect(element(by.binding('SQLMsgs')).getText()).toEqual('User updated successfully!!!');
         });
         
+        it('Testing: change a user password', function() {
+            getLastUser();
+            element(by.id('btnChgPassword')).click();
+            
+            element(by.model('user.password')).sendKeys('Test%5test');// changed
+             
+            element(by.id('btnSave')).click();
+            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
+            expect(element(by.binding('SQLMsgs')).getText()).toEqual('User updated successfully!!!');
+        });
+        
         
         it('Testing: Delete an user', function() {
             getLastUser();

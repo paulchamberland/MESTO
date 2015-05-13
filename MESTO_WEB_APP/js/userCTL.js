@@ -16,11 +16,16 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv) {
                     phone:""};
     this.emptyUser = {};
     $scope.canDelete = false;
+    $scope.changePassword = false;
     
     this.getLabelRole = function(pRole) {
         for (t in $scope.ROLE) {
             if ($scope.ROLE[t].value == pRole) return $scope.ROLE[t].label;
         }
+    };
+    
+    this.changePassword = function() {
+        $scope.changePassword = ! $scope.changePassword;
     };
     
     function init() {

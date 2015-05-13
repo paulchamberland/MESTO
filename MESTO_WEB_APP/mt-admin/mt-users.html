@@ -24,6 +24,7 @@
 				<div class="field"><label for="email">Email *(lowercase only) :</label><input type="text" id="email" name="email" data-ng-model="user.email" required data-ng-pattern="/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/" /></div>
                 <div class="field"><label for="username">UserName * :</label><input type="text" id="username" name="username" data-ng-model="user.username" required /></div>
 				<div class="field" data-ng-if="user.id <= 0"><label for="pwd">Password * :</label><input type="password" id="pwd" name="password" data-ng-model="user.password" required data-ng-pattern="/^(?=.*[A-Z])(?=.*[$%?&*!#])(?=.*[0-9]).{8,}$/" /></div>
+				<div class="field" data-ng-if="changePassword == true"><label for="pwd">Change Password * :</label><input type="password" id="pwd" name="password" data-ng-model="user.password" required data-ng-pattern="/^(?=.*[A-Z])(?=.*[$%?&*!#])(?=.*[0-9]).{8,}$/" /></div>
                 <div class="field"><label for="role">Role * :</label><select id="role" data-ng-model="user.role" name="role" data-ng-options="role.value as role.label for role in ROLE" required ></select></div>
                 <div class="field"><label for="active">Active?</label>
                     <input type="checkbox" id="active" name="active" data-ng-checked="user.active == true" data-ng-model="user.active"/>
@@ -38,6 +39,7 @@
 		<button id="btnSave" data-ng-click="userCTL.save();" ng-disabled="userForm.$pristine || userForm.$invalid">Save</button>
 		<button id="btnDelete" data-ng-click="userCTL.delete();" ng-disabled="!canDelete">Delete</button>
         <button id="btnReset" data-ng-click="userCTL.resetFrm();userCTL.resetMsg();" ng-disabled="userForm.$pristine">Reset</button>
+        <button id="btnChgPassword" data-ng-click="userCTL.changePassword()" data-ng-if="user.id > 0">Password</button>
 	</div>
     
     <div class="wrap"></div>

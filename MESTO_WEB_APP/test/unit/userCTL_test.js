@@ -34,6 +34,18 @@ describe('Testing the controller of user object', function() {
         expect(controller.getLabelTYPE('SWT')).toEqual("Switch");
     });
     
+    it('Testing: Active to changePassword', function() {
+        expect(scope.changePassword).toBeFalsy();
+        
+        controller.changePassword();
+        
+        expect(scope.changePassword).toBeTruthy();
+        
+        controller.changePassword();
+        
+        expect(scope.changePassword).toBeFalsy();
+    });
+    
     describe('Dependancy to navigateSrv', function() {
         var location, navigateSrv;
         
