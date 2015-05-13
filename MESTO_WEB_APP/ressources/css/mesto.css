@@ -27,7 +27,7 @@ div.section2 {
 .field label {
 	padding-right: 5px;
 }
-.field input[type=text], select{
+.field input[type=text], input[type=password], select{
 	float: right;
 }
 

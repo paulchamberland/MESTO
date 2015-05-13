@@ -13,11 +13,13 @@ app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/admin/equip', {templateUrl:'mt-admin/mt-equipments.html', controller:'equipmentCTL', controllerAs:'equipCTL'});
     $routeProvider.when('/admin/equipments', {templateUrl:'mt-admin/mt-lstEquipments.html', controller:'equipmentCTL', controllerAs:'equipCTL'});
     $routeProvider.when('/admin/permissions', {templateUrl:'mt-admin/mt-lstPermissions.html', controller:'permissionCTL', controllerAs:'permissionCTL'});
+    $routeProvider.when('/admin/user', {templateUrl:'mt-admin/mt-users.html', controller:'userCTL', controllerAs:'userCTL'});
+    $routeProvider.when('/admin/users', {templateUrl:'mt-admin/mt-lstUsers.html', controller:'userCTL', controllerAs:'userCTL'});
     $routeProvider.otherwise({redirectTo:"/home"});
 }]);
 
 app.run(function($rootScope, $location, securitySrv) {
-    var routeRestricted = ['/admin/home', '/admin/site', '/admin/sites', '/admin/room', '/admin/rooms', '/admin/equip', '/admin/equipments', '/admin/permissions'];
+    var routeRestricted = ['/admin/home', '/admin/site', '/admin/sites', '/admin/room', '/admin/rooms', '/admin/equip', '/admin/equipments', '/admin/permissions', '/admin/user', '/admin/users'];
     var forbiddenCall = ['.html', '.php'];
     $rootScope.$on('$routeChangeStart', function() {
         if ("/admin/".indexOf($location.path()) != -1 && securitySrv.isLogged()) {
@@ -36,21 +38,32 @@ app.factory('navigateSrv', function() {
     var equip = null;
     var room = null;
     var site = null;
+    var user = null;
     
+    // TODO: to each 'set' we could use "cleanMemory" instead of manual nullation
     function setEquip(p_equip) {
         equip = angular.copy(p_equip); 
         room = null;
         site = null;
+        user = user;
     };
     function setRoom(p_room) {
         equip = null; 
         room = angular.copy(p_room);
         site = null;
+        user = user;
     };
     function setSite(p_site) {
         equip = null; 
         room = null;
         site = angular.copy(p_site);
+        user = user;
+    };
+    function setUser(p_user) {
+        equip = null; 
+        room = null;
+        site = null;
+        user = angular.copy(p_user);
     };
     
     function getEquip() {
@@ -62,11 +75,15 @@ app.factory('navigateSrv', function() {
     function getSite() {
         return site;
     };
+    function getUser() {
+        return user;
+    };
     
     function cleanMemory() {
         equip = null; 
         room = null;
         site = null;
+        user = null;
     }
     
     return {
@@ -76,7 +93,9 @@ app.factory('navigateSrv', function() {
         setRoom : setRoom,
         getRoom : getRoom,
         setSite : setSite,
-        getSite : getSite
+        getSite : getSite,
+        setUser : setUser,
+        getUser : getUser
     };
 });
 
