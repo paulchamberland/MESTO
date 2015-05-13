@@ -18,12 +18,12 @@ describe('Testing the Login Controller => ', function() {
         
     }));
     
-    it('Testing: getUsername function', function() {
-        spyOn(securitySrv, "getUsername");
+    it('Testing: getUserName function', function() {
+        spyOn(securitySrv, "getUserName");
         
-        controller.getUsername();
+        controller.getUserName();
         
-        expect(securitySrv.getUsername).toHaveBeenCalled();
+        expect(securitySrv.getUserName).toHaveBeenCalled();
     });
     
     it('Testing: isLogged function', function() {
@@ -56,9 +56,9 @@ describe('Testing the Login Controller => ', function() {
             $httpBackend.flush();
             
             expect(securitySrv.isLogged()).toBeFalsy();
-            expect(securitySrv.getUsername()).toBeNull();
+            expect(securitySrv.getUserName()).toBeNull();
             
-            expect(scope.username).not.toBeDefined();
+            expect(controller.getUserName()).toBeNull();
             expect(scope.loginForm.username.$setValidity).toHaveBeenCalledWith('wrong', false);
             expect(scope.loginForm.pwd.$setValidity).toHaveBeenCalledWith('wrong', false);
         });
@@ -70,14 +70,15 @@ describe('Testing the Login Controller => ', function() {
             $httpBackend.flush();
             
             expect(securitySrv.isLogged()).toBeFalsy();
-            expect(securitySrv.getUsername()).toBeNull();
+            expect(securitySrv.getUserName()).toBeNull();
             
-            expect(scope.username).not.toBeDefined();
+            expect(controller.getUserName()).toBeNull();
             expect(scope.loginForm.username.$setValidity).toHaveBeenCalledWith('wrong', false);
             expect(scope.loginForm.pwd.$setValidity).toHaveBeenCalledWith('wrong', false);
         });
         it('Testing: worked login function', function() {
             $httpBackend.whenPOST("/MESTO/MESTO_WEB_APP/php/login.php").respond(200, {msg:"Login success", error:""});
+            $httpBackend.whenPOST("/MESTO/MESTO_WEB_APP/php/DAOUser.php").respond(200, [{name:"adminTest"}]);
             spyOn(location, 'path');
             
             controller.login({username:"teest", pwd:"t53t"});
@@ -85,7 +86,7 @@ describe('Testing the Login Controller => ', function() {
             $httpBackend.flush();
             
             expect(securitySrv.isLogged()).toBeTruthy();
-            expect(scope.username).toEqual('Jooj');
+            expect(controller.getUserName()).toEqual('adminTest');
             
             expect(scope.loginForm.username.$setValidity).toHaveBeenCalledWith('wrong', true);
             expect(scope.loginForm.pwd.$setValidity).toHaveBeenCalledWith('wrong', true);
@@ -101,9 +102,9 @@ describe('Testing the Login Controller => ', function() {
             $httpBackend.flush();
             
             expect(securitySrv.isLogged()).toBeFalsy();
-            expect(securitySrv.getUsername()).toBeNull();
+            expect(securitySrv.getUserName()).toBeNull();
             
-            expect(scope.username).not.toBeDefined();
+            expect(controller.getUserName()).toBeNull();
             expect(scope.loginForm.username.$setValidity).toHaveBeenCalledWith('wrong', false);
             expect(scope.loginForm.pwd.$setValidity).toHaveBeenCalledWith('wrong', false);
         });
@@ -115,14 +116,16 @@ describe('Testing the Login Controller => ', function() {
             $httpBackend.flush();
             
             expect(securitySrv.isLogged()).toBeFalsy();
-            expect(securitySrv.getUsername()).toBeNull();
+            expect(securitySrv.getUserName()).toBeNull();
             
-            expect(scope.username).not.toBeDefined();
+            expect(controller.getUserName()).toBeNull();
             expect(scope.loginForm.username.$setValidity).toHaveBeenCalledWith('wrong', false);
             expect(scope.loginForm.pwd.$setValidity).toHaveBeenCalledWith('wrong', false);
         });
         it('Testing: worked adminLogin function', function() {
             $httpBackend.whenPOST("/MESTO/MESTO_WEB_APP/php/login.php").respond(200, {msg:"Login success", error:""});
+            $httpBackend.whenPOST("/MESTO/MESTO_WEB_APP/php/DAOUser.php").respond(200, [{name:"adminTest"}]);
+            
             spyOn(location, 'path');
             
             controller.adminLogin({username:"teest", pwd:"t53t"});
@@ -131,7 +134,7 @@ describe('Testing the Login Controller => ', function() {
             
             expect(location.path).toHaveBeenCalledWith('/admin/home');
             expect(securitySrv.isLogged()).toBeTruthy();
-            expect(scope.username).toEqual('Jooj');
+            expect(controller.getUserName()).toEqual('adminTest');
             
             expect(scope.loginForm.username.$setValidity).toHaveBeenCalledWith('wrong', true);
             expect(scope.loginForm.pwd.$setValidity).toHaveBeenCalledWith('wrong', true);

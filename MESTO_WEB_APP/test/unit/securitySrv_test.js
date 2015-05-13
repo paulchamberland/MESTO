@@ -9,8 +9,8 @@ describe('Testing the service Security => ', function() {
         location = _$location_;
     }));
     
-    it('Testing: getUsername function', function() {
-        expect(securitySrv.getUsername()).toBeNull();
+    it('Testing: getUserName function', function() {
+        expect(securitySrv.getUserName()).toBeNull();
     });
     
     it('Testing: isLogged function', function() {
@@ -25,7 +25,7 @@ describe('Testing the service Security => ', function() {
         $httpBackend.flush();
         
         expect(securitySrv.isLogged()).toBeFalsy();
-        expect(securitySrv.getUsername()).toBeNull();
+        expect(securitySrv.getUserName()).toBeNull();
     });
     it('Testing: error login function', function() {
         $httpBackend.whenPOST("/MESTO/MESTO_WEB_APP/php/login.php").respond(404, 'server not found');
@@ -35,10 +35,37 @@ describe('Testing the service Security => ', function() {
         $httpBackend.flush();
         
         expect(securitySrv.isLogged()).toBeFalsy();
-        expect(securitySrv.getUsername()).toBeNull();
+        expect(securitySrv.getUserName()).toBeNull();
+    });
+    it('Testing: worked login but failed loadUser functions', function() {
+        $httpBackend.whenPOST("/MESTO/MESTO_WEB_APP/php/login.php").respond(200, {msg:"Login success", error:"", obj:"2"});
+        $httpBackend.whenPOST("/MESTO/MESTO_WEB_APP/php/DAOUser.php").respond(200, {msg:"", error:"Login Failed"});
+        spyOn(location, 'path');
+        
+        securitySrv.login({username:"teest", pwd:"t53t"});
+        
+        $httpBackend.flush();
+        
+        expect(location.path).not.toHaveBeenCalled();
+        expect(securitySrv.isLogged()).toBeFalsy();
+        expect(securitySrv.getUserName()).toBeNull();
+    });
+    it('Testing: worked login but error loadUser functions', function() {
+        $httpBackend.whenPOST("/MESTO/MESTO_WEB_APP/php/login.php").respond(200, {msg:"Login success", error:"", obj:"2"});
+        $httpBackend.whenPOST("/MESTO/MESTO_WEB_APP/php/DAOUser.php").respond(404, 'server not found');
+        spyOn(location, 'path');
+        
+        securitySrv.login({username:"teest", pwd:"t53t"});
+        
+        $httpBackend.flush();
+        
+        expect(location.path).not.toHaveBeenCalled();
+        expect(securitySrv.isLogged()).toBeFalsy();
+        expect(securitySrv.getUserName()).toBeNull();
     });
     it('Testing: worked login & createUser functions', function() {
-        $httpBackend.whenPOST("/MESTO/MESTO_WEB_APP/php/login.php").respond(200, {msg:"Login success", error:""});
+        $httpBackend.whenPOST("/MESTO/MESTO_WEB_APP/php/login.php").respond(200, {msg:"Login success", error:"", obj:"2"});
+        $httpBackend.whenPOST("/MESTO/MESTO_WEB_APP/php/DAOUser.php").respond(200, [{name:"adminTest"}]);
         spyOn(location, 'path');
         
         securitySrv.login({username:"teest", pwd:"t53t"});
@@ -47,11 +74,13 @@ describe('Testing the service Security => ', function() {
         
         expect(location.path).not.toHaveBeenCalled();
         expect(securitySrv.isLogged()).toBeTruthy();
-        expect(securitySrv.getUsername()).toEqual('Jooj');
+        expect(securitySrv.getUserName()).toEqual('adminTest');
     });
     
     it('Testing: logout after login function', function() {
-        $httpBackend.whenPOST("/MESTO/MESTO_WEB_APP/php/login.php").respond(200, {msg:"Login success", error:""});
+        $httpBackend.whenPOST("/MESTO/MESTO_WEB_APP/php/login.php").respond(200, {msg:"Login success", error:"", obj:"2"});
+        $httpBackend.whenPOST("/MESTO/MESTO_WEB_APP/php/DAOUser.php").respond(200, [{name:"adminTest"}]);
+        
         spyOn(location, 'path');
         
         securitySrv.login({username:"teest", pwd:"t53t"});
@@ -62,6 +91,6 @@ describe('Testing the service Security => ', function() {
         
         expect(location.path).toHaveBeenCalledWith('/home');
         expect(securitySrv.isLogged()).toBeFalsy();
-        expect(securitySrv.getUsername()).toBeNull();
+        expect(securitySrv.getUserName()).toBeNull();
     });
 });

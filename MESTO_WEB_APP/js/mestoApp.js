@@ -110,8 +110,8 @@ app.factory('securitySrv', function($http, $location) {
             headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
         }).success(
             function(data, status) {
-                if (data.msg != '') {
-                    createUser({id: "id", userId: "Jooj"});
+                if (data.msg != '' && data.obj != '') {
+                    loadUser(data.obj);
                 }
                 else {
                 }
@@ -121,6 +121,26 @@ app.factory('securitySrv', function($http, $location) {
                 // TODO: error server handling
             }
         );
+    }
+    
+    function loadUser(pId) {
+        return $http({
+            method: 'POST',
+            url: "/MESTO/MESTO_WEB_APP/php/DAOUser.php", // TODO: Make a config with path
+            data: {id:pId},
+            headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+        }).success(
+            function(data, status) {
+                if (data.error == null) {
+                    createUser(data[0]);
+                }
+                else {
+                }
+            }
+        ).error(
+            function(data, status, headers, config, statusText) {
+                // TODO: error server handling
+            });
     }
     
     function logout() {
@@ -136,15 +156,15 @@ app.factory('securitySrv', function($http, $location) {
         currentUser = user;
     };
     
-    function getUsername() {
-        return (currentUser) ? currentUser.userId : null;
+    function getUserName() {
+        return (currentUser) ? currentUser.name : null;
     }
     
     return {
         login : login,
         logout : logout,
         isLogged : isLogged,
-        getUsername : getUsername
+        getUserName : getUserName
     }
 });
 

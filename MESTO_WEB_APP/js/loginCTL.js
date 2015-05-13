@@ -15,8 +15,6 @@ app.controller('loginCTL', function($scope, $rootScope, $http, $location, securi
                     $scope.loginForm.pwd.$setValidity('wrong', true);
                     $('#loginBox').toggle();
                     $('#loginButton').toggleClass('active');
-                    
-                    $scope.username = securitySrv.getUsername();
                 }
                 else {
                     $scope.loginForm.username.$setValidity('wrong', false);
@@ -37,7 +35,6 @@ app.controller('loginCTL', function($scope, $rootScope, $http, $location, securi
                     $scope.loginForm.username.$setValidity('wrong', true);
                     $scope.loginForm.pwd.$setValidity('wrong', true);
                     
-                    $scope.username = self.getUsername();
                     $location.path('/admin/home');
                 }
                 else {
@@ -55,7 +52,7 @@ app.controller('loginCTL', function($scope, $rootScope, $http, $location, securi
     this.isLogged = function() {
         return securitySrv.isLogged();
     };
-    this.getUsername = function() {
-        return securitySrv.getUsername();
+    this.getUserName = function() {
+        return securitySrv.getUserName();
     };
 });
