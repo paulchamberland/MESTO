@@ -111,7 +111,8 @@ app.factory('securitySrv', function($http, $location) {
         }).success(
             function(data, status) {
                 if (data.msg != '' && data.obj != '') {
-                    loadUser(data.obj);
+                    createUser({username: pData.username}); // temp user create to overpass the asynchone problem of routing and parralalism of http promise
+                    loadUser(data.obj)
                 }
                 else {
                 }
@@ -124,7 +125,7 @@ app.factory('securitySrv', function($http, $location) {
     }
     
     function loadUser(pId) {
-        return $http({
+        $http({
             method: 'POST',
             url: "/MESTO/MESTO_WEB_APP/php/DAOUser.php", // TODO: Make a config with path
             data: {id:pId},
@@ -135,11 +136,13 @@ app.factory('securitySrv', function($http, $location) {
                     createUser(data[0]);
                 }
                 else {
+                    currentUser = null;
                 }
             }
         ).error(
             function(data, status, headers, config, statusText) {
                 // TODO: error server handling
+                currentUser = null;
             });
     }
     
