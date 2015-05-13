@@ -35,7 +35,10 @@ try {
         }
         else {
             if ($rs[0]['nbUser'] == 0) {
-                $sql = 'UPDATE mtuser SET username="'.$user['username'].'", name="'.$user['name'].'", email="'.$user['email'].'", title="'.$user['title'].'", supervisor="'.$user['supervisor'].'", role="'.$user['role'].'", active="'.$user['active'].'", address="'.$user['address'].'", phone="'.$user['phone'].'", updateBy="apps", updateDate=NOW() WHERE id="'.$user['id'].'"';
+                $sql = 'UPDATE mtuser SET username="'.$user['username'];
+                if (!empty($user['password'])) $sql .= '", password="'.password_hash($user['password'], PASSWORD_BCRYPT);
+                $sql .= '", name="'.$user['name'].'", email="'.$user['email'].'", title="'.$user['title'].'", supervisor="'.$user['supervisor'].'", role="'.$user['role'].'", active="'.$user['active'].'", address="'.$user['address'].'", phone="'.$user['phone'].'", updateBy="apps", updateDate=NOW() WHERE id="'.$user['id'].'"';
+                
                 $con->exec($sql);
                 $arr["msg"] = "User updated successfully!!!";
             } else {

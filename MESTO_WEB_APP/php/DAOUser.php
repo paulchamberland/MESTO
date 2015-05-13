@@ -41,7 +41,7 @@ try {
         $stmt = $con->prepare("SELECT id, username, name, email, title, supervisor, role, active, address, phone, updateBy, updateDate FROM mtuser");
 	}
     else {
-        $stmt = $con->prepare("SELECT id, username, name, email, title, supervisor, role, active, address, phone, updateBy, updateDate FROM mtuser  WHERE id = '".$data['id']."'");
+        $stmt = $con->prepare("SELECT id, username, name, email, title, supervisor, role, active, address, phone, updateBy, updateDate FROM mtuser WHERE id = '".$data['id']."'");
     }
     
 	$stmt->execute();
