@@ -10,7 +10,7 @@ app.controller('loginCTL', function($scope, $rootScope, $http, $location, securi
                 username : pLogInfo.username,
                 pwd : pLogInfo.pwd
             }).then(function(response) {
-                if (response.data.msg != '') {
+                if (response.data.msg != null && response.data.msg != '' ) {
                     $scope.loginForm.username.$setValidity('wrong', true);
                     $scope.loginForm.pwd.$setValidity('wrong', true);
                     $('#loginBox').toggle();
@@ -31,7 +31,7 @@ app.controller('loginCTL', function($scope, $rootScope, $http, $location, securi
                 username : pLogInfo.username,
                 pwd : pLogInfo.pwd
             }).then(function(response) {
-                if (response.data.msg != '') {
+                if (response.data.msg != null && response.data.msg != '') {
                     $scope.loginForm.username.$setValidity('wrong', true);
                     $scope.loginForm.pwd.$setValidity('wrong', true);
                     

@@ -5,16 +5,23 @@ header('Content-Type: application/json');
 try {
     $con = new PDO("mysql:host=localhost;dbname=mesto", "root", "");
     $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $stmt = $con->prepare("SELECT id FROM mtuser WHERE username = '".$logInfo['username']."' AND password='".$logInfo['pwd']."';");
+    $stmt = $con->prepare("SELECT id, password FROM mtuser WHERE username = '".$logInfo['username']."';");
     $stmt->execute();
-    $rs = $stmt->fetchAll(PDO::FETCH_COLUMN);
+    $rs = $stmt->fetchAll();
     
     if (sizeOf($rs) > 0) {
-        // TODO: PHP START SESSION
+        if (password_verify($logInfo['pwd'], $rs[0]['password'])) {
+            // TODO: PHP START SESSION
         
-        echo $json = json_encode(array("msg" => "Login success", "error" => "", "obj" => $rs[0]));
+            echo $json = json_encode(array("msg" => "Login success", "error" => "", "obj" => $rs[0]['id']));
+        }
+        else {
+            // user Invalid password.
+            echo $json = json_encode(array("msg" => "", "error" => "Login Failed"));
+        }
     }
     else {
+        // user not found
         echo $json = json_encode(array("msg" => "", "error" => "Login Failed"));
     }
 }

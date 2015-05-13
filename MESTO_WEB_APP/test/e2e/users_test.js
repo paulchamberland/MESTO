@@ -7,9 +7,7 @@ describe('E2E: User => ', function() {
         element.all(by.repeater('userList')).last().click();
     };
     
-    beforeAll(function() {
-        browser.get('http://localhost/MESTO/MESTO_WEB_APP/#/home');
-        
+    function logTesterUser() {
         element(by.id('loginButton')).click();
         
         element(by.model('logInfo.username')).clear();
@@ -24,9 +22,16 @@ describe('E2E: User => ', function() {
         browser.sleep(500);
         element(by.id('mnVwUsers')).click();
         element(by.id('btnNewUser')).click();
+    }
+    
+    beforeAll(function() {
+        browser.get('http://localhost/MESTO/MESTO_WEB_APP/#/home');
+        
+        logTesterUser();
     });
     
     beforeEach(function() {
+        element(by.model('user.name')).sendKeys('t'); // just to be sure btnReset is actif
         element(by.id('btnReset')).click();
     });
  
@@ -149,6 +154,18 @@ describe('E2E: User => ', function() {
             element(by.model('user.name')).sendKeys('t');
             expect(btn.isEnabled()).toBeTruthy();
         });
+        
+        it('Testing: State of Delete button', function() {
+            var btn = element(by.id('btnDelete'));
+            
+            expect(btn.isEnabled()).toBeFalsy();
+            
+            element(by.model('user.name')).sendKeys('t');
+            expect(btn.isEnabled()).toBeFalsy();
+            
+            getLastUser();
+            expect(btn.isEnabled()).toBeTruthy();
+        });
     });
 
     describe(' - Basic Database Operation => ', function() {
@@ -176,20 +193,6 @@ describe('E2E: User => ', function() {
             expect(element(by.binding('SQLErrors')).getText()).toEqual('User already exists with same username or email.');
             expect(element(by.binding('SQLMsgs')).getText()).toEqual('');
         });
-
-        /******************** need data ****************************/
-        it('Testing: State of Delete button', function() {
-            var btn = element(by.id('btnDelete'));
-            
-            expect(btn.isEnabled()).toBeFalsy();
-            
-            element(by.model('user.name')).sendKeys('t');
-            expect(btn.isEnabled()).toBeFalsy();
-            
-            getLastUser();
-            expect(btn.isEnabled()).toBeTruthy();
-        });
-        /***********************************************************/
         
         it('Testing: Update a user', function() {
             getLastUser();
@@ -201,7 +204,7 @@ describe('E2E: User => ', function() {
             expect(element(by.binding('SQLMsgs')).getText()).toEqual('User updated successfully!!!');
         });
         
-        it('Testing: change a user password', function() {
+        it('Testing: change a user password and test this password', function() {
             getLastUser();
             element(by.id('btnChgPassword')).click();
             
@@ -210,6 +213,21 @@ describe('E2E: User => ', function() {
             element(by.id('btnSave')).click();
             expect(element(by.binding('SQLErrors')).getText()).toEqual('');
             expect(element(by.binding('SQLMsgs')).getText()).toEqual('User updated successfully!!!');
+            
+            element(by.id('logoutButton')).click();
+            element(by.id('loginButton')).click();
+        
+            element(by.model('logInfo.username')).clear();
+            element(by.model('logInfo.username')).sendKeys('testE2E');
+            element(by.model('logInfo.pwd')).clear();
+            element(by.model('logInfo.pwd')).sendKeys('Test%5test');
+            
+            element(by.id('login')).click();
+            
+            expect(element(by.binding('loginCTL.getUserName()')).getText()).toEqual('Welcome testV2');
+            
+            element(by.id('logoutButton')).click();
+            logTesterUser();
         });
         
         

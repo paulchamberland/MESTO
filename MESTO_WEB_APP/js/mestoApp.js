@@ -110,7 +110,7 @@ app.factory('securitySrv', function($http, $location) {
             headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
         }).success(
             function(data, status) {
-                if (data.msg != '' && data.obj != '') {
+                if (data.msg != null && data.msg != '' && data.obj != '') {
                     createUser({username: pData.username}); // temp user create to overpass the asynchone problem of routing and parralalism of http promise
                     loadUser(data.obj)
                 }
