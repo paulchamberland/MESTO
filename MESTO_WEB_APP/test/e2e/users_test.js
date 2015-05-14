@@ -176,6 +176,7 @@ describe('E2E: User => ', function() {
             element(by.model('user.password')).sendKeys('Test$4test');
             element(by.model('user.phone')).sendKeys('514-555-1401');
             element(by.model('user.role')).sendKeys('A');
+            element(by.model('user.active')).click();
             
             element(by.id('btnSave')).click();
             expect(element(by.binding('SQLErrors')).getText()).toEqual('');
@@ -309,6 +310,34 @@ describe('E2E: User => ', function() {
             expect(element(by.model('user.active')).isSelected()).toBeTruthy();
             expect(element(by.model('user.address')).getAttribute("value")).toEqual('test adr');
                     
+            element(by.id('btnDelete')).click();
+        });
+        
+        it('Testing: Inactive a user and try to log', function() {
+            element(by.model('user.username')).sendKeys('testE2E'); // unique & required
+            element(by.model('user.email')).sendKeys('inactive@tett.ca');
+            element(by.model('user.password')).sendKeys('Test$4test');
+            element(by.model('user.role')).sendKeys('A');
+            
+            element(by.id('btnSave')).click();
+            
+            element(by.id('logoutButton')).click();
+            element(by.id('loginButton')).click();
+            
+            element(by.model('logInfo.username')).clear();
+            element(by.model('logInfo.username')).sendKeys('testE2E');
+            element(by.model('logInfo.pwd')).clear();
+            element(by.model('logInfo.pwd')).sendKeys('Test$4test');
+            
+            element(by.id('login')).click();
+            
+            expect(element(by.model('logInfo.username')).getAttribute("class")).toMatch("ng-invalid-wrong");
+            expect(element(by.model('logInfo.pwd')).getAttribute("class")).toMatch("ng-invalid-wrong");
+            
+            element(by.id('loginButton')).click(); // close to open popup login
+            logTesterUser();
+            
+            getLastUser();
             element(by.id('btnDelete')).click();
         });
     });

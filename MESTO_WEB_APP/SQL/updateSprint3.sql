@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS mtuser (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
 INSERT INTO mtuser (username, password) VALUES
-('tester', 'tester');
+('tester', '$2y$10$/Fv/DJJPa6x5.qeEUG5GlOzh88tjrcrTkhjKsiA9DUNRl0PIYOOTW');
 
 ALTER TABLE `site` ADD `pointOfContact` varchar(45) NULL AFTER `role`;
 ALTER TABLE `site` ADD `phoneNumberPoC` varchar(12) NULL AFTER `pointOfContact`;

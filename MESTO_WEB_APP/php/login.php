@@ -5,7 +5,7 @@ header('Content-Type: application/json');
 try {
     $con = new PDO("mysql:host=localhost;dbname=mesto", "root", "");
     $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $stmt = $con->prepare("SELECT id, password FROM mtuser WHERE username = '".$logInfo['username']."';");
+    $stmt = $con->prepare("SELECT id, password FROM mtuser WHERE active = true AND username = '".$logInfo['username']."';");
     $stmt->execute();
     $rs = $stmt->fetchAll();
     
