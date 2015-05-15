@@ -1,4 +1,4 @@
-app.controller('userRoleCTL', function($scope, $http, $location, navigateSrv) {
+app.controller('userRoleCTL', function($scope, $http, $location, navigateSrv, permissionSrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
 
@@ -8,6 +8,9 @@ app.controller('userRoleCTL', function($scope, $http, $location, navigateSrv) {
                     lstPermissions :[]}
                     
     $scope.lstSelectedPermissionsObj = [];
+    $scope.lstAvailablePermissions = [];
+    //$scope.lstSelectAvailablePermissions = [];
+    
     this.emptyUserRole = {};
     $scope.canDelete = false;
     
@@ -43,6 +46,8 @@ app.controller('userRoleCTL', function($scope, $http, $location, navigateSrv) {
     this.resetFrm = function() {
         self.setUserRole(self.emptyUserRole);
         $scope.lstSelectedPermissionsObj = [];
+        self.setLstAvailablePermissions();
+        
         $scope.userRoleForm.$setPristine();
         $scope.canDelete = false;
     };
@@ -144,11 +149,31 @@ app.controller('userRoleCTL', function($scope, $http, $location, navigateSrv) {
         $location.path("/admin/role");
     };
     
+    this.setLstAvailablePermissions = function (pLstAffectedPerms) {
+        pLstAffectedPerms = !pLstAffectedPerms ? [] : pLstAffectedPerms;
+        
+        $scope.lstAvailablePermissions = angular.copy(permissionSrv.lstPermissions);
+        
+        var index = -1;
+        for (var i = 0; i != pLstAffectedPerms.length; i++) {
+            index = $scope.lstAvailablePermissions.map(function(e) {return e.codeName}).indexOf(pLstAffectedPerms[i].codeName);
+            if (index != -1) {
+                $scope.lstAvailablePermissions.splice(index, 1);
+                index = -1;
+            }
+        }
+        
+        $scope.TEMP2 = null;
+        $scope.TEMP = null;
+    };
+    
     this.affectPermissions = function(pSelectPermCodes, pLstAvailablePermissions) {
         if (pSelectPermCodes == null)
             pSelectPermCodes = $scope.userRole.lstPermissions
         else
             $scope.userRole.lstPermissions = $scope.userRole.lstPermissions.concat(pSelectPermCodes);
+        
+        pLstAvailablePermissions = !pLstAvailablePermissions ? angular.copy(permissionSrv.lstPermissions) : pLstAvailablePermissions;        
         
         var index = -1;
         for (var i=0; i != pSelectPermCodes.length; i++) {

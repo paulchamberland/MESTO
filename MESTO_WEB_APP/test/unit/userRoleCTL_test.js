@@ -18,6 +18,8 @@ describe('Testing the controller of userRole object', function() {
         expect(scope.userRole).toEqual(userRole);
         
         expect(controller.emptyUserRole).toEqual(userRole);
+        
+        expect(scope.lstAvailablePermissions).toEqual([]);
         expect(scope.lstSelectedPermissionsObj).toEqual([]);
     });
     
@@ -84,6 +86,30 @@ describe('Testing the controller of userRole object', function() {
                                 description: "",
                                 lstPermissions :[]});
         expect(scope.lstSelectedPermissionsObj).toEqual([]);
+        expect(scope.lstAvailablePermissions).toEqual([{codeName:"test1",name:"first test", description:"this is a first test of permission with a description as long as my sentence can be in the recurrent contexte of developpement at this point"}
+                                    ,{codeName:"test2",name:"second test", description:"this is a second test of permission"}
+                                    ,{codeName:"test3",name:"third test", description:"this is a third test of permission"}
+                                    ,{codeName:"adminAccess",name:"Access to Admin Section", description:"Block Logging, show/hide navigation button"}
+                                    ,{codeName:"deleteRole",name:"Delete existing role", description:"Show/Hide the delete button"}
+                                    ,{codeName:"deleteUser",name:"Delete existing user", description:"Show/Hide the delete button"}
+                                    ,{codeName:"deleteEquip",name:"Delete existing equipement", description:"Show/Hide the delete button"}
+                                    ,{codeName:"deleteRoom",name:"Delete existing room", description:"Show/Hide the delete button"}
+                                    ,{codeName:"deleteSite",name:"Delete existing site", description:"Show/Hide the delete button"}
+                                    ,{codeName:"updateRole",name:"Modify existing role", description:"Enable/Disable the update function"}
+                                    ,{codeName:"chgRoleUser",name:"Change Role of a User", description:"Show/Hide button of Role Management in UserForm"}
+                                    ,{codeName:"chgPWDUser",name:"Change password of a User", description:"Block the update function when this value change "}
+                                    ,{codeName:"updateUser",name:"Modify existing user", description:"Enable/Disable the update function"}
+                                    ,{codeName:"updateEquip",name:"Modify existing equipment", description:"Enable/Disable the update function"}
+                                    ,{codeName:"updateRoom",name:"Modify existing room", description:"Enable/Disable the update function"}
+                                    ,{codeName:"updateSite",name:"Modify existing site", description:"Enable/Disable the update function"}
+                                    ,{codeName:"createRole",name:"Create new Role", description:"Show/Hide functionalities in the Menu"}
+                                    ,{codeName:"createUser",name:"Create new user", description:"Show/Hide functionalities in the Menu"}
+                                    ,{codeName:"createEquip",name:"Create new equipment", description:"Show/Hide functionalities in the Menu"}
+                                    ,{codeName:"createRoom",name:"Create new room", description:"Show/Hide functionalities in the Menu"}
+                                    ,{codeName:"createSite",name:"Create new site", description:"Show/Hide functionalities in the Menu"}
+                                    ,{codeName:"detailRoom",name:"See details of a room", description:"Stop the open Details Popup from list"}
+                                    ,{codeName:"detailEquip",name:"See details of an equipment", description:"Stop the open Details Popup from list"}
+                                    ,{codeName:"detailSite",name:"See details of a site", description:"Stop the open Details Popup from list"}]);
     });
     
     it('Testing: Reset Messages ', function() {
@@ -104,6 +130,65 @@ describe('Testing the controller of userRole object', function() {
         scope.lstSelectedPermissionsObj = ["test"];
         
         expect(controller.getLstSelectedPermissionsObj()).toEqual(["test"]);
+    });
+    it('Testing: setLstAvailablePermissions function', function() {
+        controller.setLstAvailablePermissions();
+        
+        expect(scope.lstAvailablePermissions).toEqual([{codeName:"test1",name:"first test", description:"this is a first test of permission with a description as long as my sentence can be in the recurrent contexte of developpement at this point"}
+                                    ,{codeName:"test2",name:"second test", description:"this is a second test of permission"}
+                                    ,{codeName:"test3",name:"third test", description:"this is a third test of permission"}
+                                    ,{codeName:"adminAccess",name:"Access to Admin Section", description:"Block Logging, show/hide navigation button"}
+                                    ,{codeName:"deleteRole",name:"Delete existing role", description:"Show/Hide the delete button"}
+                                    ,{codeName:"deleteUser",name:"Delete existing user", description:"Show/Hide the delete button"}
+                                    ,{codeName:"deleteEquip",name:"Delete existing equipement", description:"Show/Hide the delete button"}
+                                    ,{codeName:"deleteRoom",name:"Delete existing room", description:"Show/Hide the delete button"}
+                                    ,{codeName:"deleteSite",name:"Delete existing site", description:"Show/Hide the delete button"}
+                                    ,{codeName:"updateRole",name:"Modify existing role", description:"Enable/Disable the update function"}
+                                    ,{codeName:"chgRoleUser",name:"Change Role of a User", description:"Show/Hide button of Role Management in UserForm"}
+                                    ,{codeName:"chgPWDUser",name:"Change password of a User", description:"Block the update function when this value change "}
+                                    ,{codeName:"updateUser",name:"Modify existing user", description:"Enable/Disable the update function"}
+                                    ,{codeName:"updateEquip",name:"Modify existing equipment", description:"Enable/Disable the update function"}
+                                    ,{codeName:"updateRoom",name:"Modify existing room", description:"Enable/Disable the update function"}
+                                    ,{codeName:"updateSite",name:"Modify existing site", description:"Enable/Disable the update function"}
+                                    ,{codeName:"createRole",name:"Create new Role", description:"Show/Hide functionalities in the Menu"}
+                                    ,{codeName:"createUser",name:"Create new user", description:"Show/Hide functionalities in the Menu"}
+                                    ,{codeName:"createEquip",name:"Create new equipment", description:"Show/Hide functionalities in the Menu"}
+                                    ,{codeName:"createRoom",name:"Create new room", description:"Show/Hide functionalities in the Menu"}
+                                    ,{codeName:"createSite",name:"Create new site", description:"Show/Hide functionalities in the Menu"}
+                                    ,{codeName:"detailRoom",name:"See details of a room", description:"Stop the open Details Popup from list"}
+                                    ,{codeName:"detailEquip",name:"See details of an equipment", description:"Stop the open Details Popup from list"}
+                                    ,{codeName:"detailSite",name:"See details of a site", description:"Stop the open Details Popup from list"}]);
+                                    
+        var affectedPermission = [{codeName:"test1",name:"first test", description:"this is a first test of permission with a description as long as my sentence can be in the recurrent contexte of developpement at this point"}
+                                    ,{codeName:"test2",name:"second test", description:"this is a second test of permission"}
+                                    ,{codeName:"test3",name:"third test", description:"this is a third test of permission"}
+                                    ,{codeName:"adminAccess",name:"Access to Admin Section", description:"Block Logging, show/hide navigation button"}
+                                    ,{codeName:"updateRole",name:"Modify existing role", description:"Enable/Disable the update function"}
+                                    ,{codeName:"chgRoleUser",name:"Change Role of a User", description:"Show/Hide button of Role Management in UserForm"}
+                                    ,{codeName:"updateUser",name:"Modify existing user", description:"Enable/Disable the update function"}
+                                    ,{codeName:"updateEquip",name:"Modify existing equipment", description:"Enable/Disable the update function"}
+                                    ,{codeName:"updateRoom",name:"Modify existing room", description:"Enable/Disable the update function"}
+                                    ,{codeName:"updateSite",name:"Modify existing site", description:"Enable/Disable the update function"}
+                                    ,{codeName:"createRole",name:"Create new Role", description:"Show/Hide functionalities in the Menu"}
+                                    ,{codeName:"createUser",name:"Create new user", description:"Show/Hide functionalities in the Menu"}
+                                    ,{codeName:"createEquip",name:"Create new equipment", description:"Show/Hide functionalities in the Menu"}
+                                    ,{codeName:"createRoom",name:"Create new room", description:"Show/Hide functionalities in the Menu"}
+                                    ,{codeName:"createSite",name:"Create new site", description:"Show/Hide functionalities in the Menu"}
+                                    ,{codeName:"detailRoom",name:"See details of a room", description:"Stop the open Details Popup from list"}
+                                    ,{codeName:"detailEquip",name:"See details of an equipment", description:"Stop the open Details Popup from list"}
+                                    ,{codeName:"detailSite",name:"See details of a site", description:"Stop the open Details Popup from list"}]
+        
+        controller.setLstAvailablePermissions(affectedPermission);
+        
+        expect(scope.lstAvailablePermissions).toEqual([{codeName:"deleteRole",name:"Delete existing role", description:"Show/Hide the delete button"}
+                                    ,{codeName:"deleteUser",name:"Delete existing user", description:"Show/Hide the delete button"}
+                                    ,{codeName:"deleteEquip",name:"Delete existing equipement", description:"Show/Hide the delete button"}
+                                    ,{codeName:"deleteRoom",name:"Delete existing room", description:"Show/Hide the delete button"}
+                                    ,{codeName:"deleteSite",name:"Delete existing site", description:"Show/Hide the delete button"}
+                                    ,{codeName:"chgPWDUser",name:"Change password of a User", description:"Block the update function when this value change "}]);
+                                    
+        expect(scope.TEMP).toBeNull();
+        expect(scope.TEMP2).toBeNull();
     });
     
     it('Testing: affectPermissions  function', function() {

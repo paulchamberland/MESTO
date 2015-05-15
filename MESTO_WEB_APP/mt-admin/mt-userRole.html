@@ -22,16 +22,14 @@
                 <span>Available Permissions:</span>
                 <span style="float:right;">Affected Permissions:</span>
             </div>
-            <div style="display:inline-block;" data-ng-controller="permissionCTL as permCTL" data-ng-init="userRoleCTL.affectPermissions(null, lstPermissions); permCTL.setLstAvailablePermissions(userRoleCTL.getLstSelectedPermissionsObj());">
-                
-                <select id="" class="lstPerm" ng-model="lstSelectAvailablePermissions" name="" ng-options="avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions" size="15" multiple>
+            <div style="display:inline-block;" data-ng-init="userRoleCTL.affectPermissions(null, null); userRoleCTL.setLstAvailablePermissions(userRoleCTL.getLstSelectedPermissionsObj()); ">
+                <select id="" class="lstPerm" ng-model="TEMP2" name="" ng-options="avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions" size="15" multiple>
                 </select>
-                <button id="btnUnaffectPerm" data-ng-click="userRoleCTL.unaffectPermissions(TEMP);permCTL.setLstAvailablePermissions(userRoleCTL.getLstSelectedPermissionsObj())"><-</button>
-                <button id="btnAffectPerm" data-ng-click="userRoleCTL.affectPermissions(lstSelectAvailablePermissions, lstAvailablePermissions);permCTL.setLstAvailablePermissions(userRoleCTL.getLstSelectedPermissionsObj())">-></button>
+                <button id="btnUnaffectPerm" data-ng-click="userRoleCTL.unaffectPermissions(TEMP);userRoleCTL.setLstAvailablePermissions(userRoleCTL.getLstSelectedPermissionsObj())"><-</button>
+                <button id="btnAffectPerm" data-ng-click="userRoleCTL.affectPermissions(TEMP2, lstAvailablePermissions);userRoleCTL.setLstAvailablePermissions(userRoleCTL.getLstSelectedPermissionsObj())">-></button>
             </div>
             
             <div style="display:inline-block;">
-                
                 <select id="" class="lstPerm" ng-model="TEMP" name="" ng-options="perm.codeName as perm.name for perm in lstSelectedPermissionsObj" size="15" multiple>
                 </select>
             </div>
