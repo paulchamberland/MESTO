@@ -74,7 +74,7 @@ describe('Testing the controller of user object', function() {
             expect(navigateSrv.getUser()).toEqual(user);
         });
         
-        it('Testing: Add a new sub-object User', function() {
+        it('Testing: Add a new object User', function() {
             spyOn(location, 'path');
             
             controller.newUser();
