@@ -13,13 +13,15 @@ app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/admin/equip', {templateUrl:'mt-admin/mt-equipments.html', controller:'equipmentCTL', controllerAs:'equipCTL'});
     $routeProvider.when('/admin/equipments', {templateUrl:'mt-admin/mt-lstEquipments.html', controller:'equipmentCTL', controllerAs:'equipCTL'});
     $routeProvider.when('/admin/permissions', {templateUrl:'mt-admin/mt-lstPermissions.html', controller:'permissionCTL', controllerAs:'permissionCTL'});
+    $routeProvider.when('/admin/role', {templateUrl:'mt-admin/mt-userRole.html', controller:'userRoleCTL', controllerAs:'userRoleCTL'});
+    $routeProvider.when('/admin/roles', {templateUrl:'mt-admin/mt-lstUserRoles.html', controller:'userRoleCTL', controllerAs:'userRoleCTL'});
     $routeProvider.when('/admin/user', {templateUrl:'mt-admin/mt-users.html', controller:'userCTL', controllerAs:'userCTL'});
     $routeProvider.when('/admin/users', {templateUrl:'mt-admin/mt-lstUsers.html', controller:'userCTL', controllerAs:'userCTL'});
     $routeProvider.otherwise({redirectTo:"/home"});
 }]);
 
 app.run(function($rootScope, $location, securitySrv) {
-    var routeRestricted = ['/admin/home', '/admin/site', '/admin/sites', '/admin/room', '/admin/rooms', '/admin/equip', '/admin/equipments', '/admin/permissions', '/admin/user', '/admin/users'];
+    var routeRestricted = ['/admin/home', '/admin/site', '/admin/sites', '/admin/room', '/admin/rooms', '/admin/equip', '/admin/equipments', '/admin/permissions', '/admin/role', '/admin/roles', '/admin/user', '/admin/users'];
     var forbiddenCall = ['.html', '.php'];
     $rootScope.$on('$routeChangeStart', function() {
         if ("/admin/".indexOf($location.path()) != -1 && securitySrv.isLogged()) {
@@ -39,6 +41,7 @@ app.factory('navigateSrv', function() {
     var room = null;
     var site = null;
     var user = null;
+    var userRole = null;
     
     // TODO: to each 'set' we could use "cleanMemory" instead of manual nullation
     function setEquip(p_equip) {
@@ -65,6 +68,13 @@ app.factory('navigateSrv', function() {
         site = null;
         user = angular.copy(p_user);
     };
+    function setUserRole(p_userRole) {
+        equip = null; 
+        room = null;
+        site = null;
+        user = null;
+        userRole = angular.copy(p_userRole);
+    };
     
     function getEquip() {
         return equip;
@@ -78,12 +88,16 @@ app.factory('navigateSrv', function() {
     function getUser() {
         return user;
     };
+    function getUserRole() {
+        return userRole;
+    };
     
     function cleanMemory() {
         equip = null; 
         room = null;
         site = null;
         user = null;
+        userRole = null;
     }
     
     return {
@@ -95,7 +109,9 @@ app.factory('navigateSrv', function() {
         setSite : setSite,
         getSite : getSite,
         setUser : setUser,
-        getUser : getUser
+        getUser : getUser,
+        setUserRole : setUserRole,
+        getUserRole : getUserRole
     };
 });
 

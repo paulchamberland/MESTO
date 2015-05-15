@@ -1,0 +1,45 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#menu').load('mt-admin/mt-menu.html');
+    });
+</script>
+<div id="menu" class="v" ></div>
+<div class="main" >
+	<span class="titre">Add an user role</span>
+	<div>
+		<div data-ng-show="userRoleForm.$dirty && userRoleForm.$invalid">
+			<span class="error" data-ng-show="userRoleForm.name.$error.required">A name is required.</span>
+		</div>
+        <span class="error">{{SQLErrors}}</span>
+        <span class="t">{{SQLMsgs}}</span>
+		<form class="basic" name="userRoleForm" novalidate >
+			<input type="hidden" id="id" name="id" data-ng-model="userRole.id" />
+			<div class="section">
+				<div class="field"><label for="name">Name :</label><input type="text" id="name" name="name" data-ng-model="userRole.name" required /></div>
+				<div class="field"><label for="description">Description:</label><textarea cols="38" rows="5" id="description" name="description" data-ng-model="userRole.description"></textarea></div>
+			</div>
+            <div>
+                <span>Available Permissions:</span>
+                <span style="float:right;">Affected Permissions:</span>
+            </div>
+            <div style="display:inline-block;" data-ng-controller="permissionCTL as permCTL" data-ng-init="userRoleCTL.affectPermissions(null, lstPermissions); permCTL.setLstAvailablePermissions(userRoleCTL.getLstSelectedPermissionsObj());">
+                
+                <select id="" class="lstPerm" ng-model="lstSelectAvailablePermissions" name="" ng-options="avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions" size="15" multiple>
+                </select>
+                <button id="btnUnaffectPerm" data-ng-click="userRoleCTL.unaffectPermissions(TEMP);permCTL.setLstAvailablePermissions(userRoleCTL.getLstSelectedPermissionsObj())"><-</button>
+                <button id="btnAffectPerm" data-ng-click="userRoleCTL.affectPermissions(lstSelectAvailablePermissions, lstAvailablePermissions);permCTL.setLstAvailablePermissions(userRoleCTL.getLstSelectedPermissionsObj())">-></button>
+            </div>
+            
+            <div style="display:inline-block;">
+                
+                <select id="" class="lstPerm" ng-model="TEMP" name="" ng-options="perm.codeName as perm.name for perm in lstSelectedPermissionsObj" size="15" multiple>
+                </select>
+            </div>
+		</form>
+		<button id="btnSave" data-ng-click="userRoleCTL.save();" ng-disabled="userRoleForm.$pristine || userRoleForm.$invalid">Save</button>
+		<button id="btnDelete" data-ng-click="userRoleCTL.delete();" ng-disabled="!canDelete">Delete</button>
+        <button id="btnReset" data-ng-click="userRoleCTL.resetFrm();userRoleCTL.resetMsg();" ng-disabled="userRoleForm.$pristine">Reset</button>
+	</div>
+    
+    <div class="wrap"></div>
+</div>

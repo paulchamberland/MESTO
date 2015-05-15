@@ -27,7 +27,13 @@ div.section2 {
 .field label {
 	padding-right: 5px;
 }
-.field input[type=text], input[type=password], select{
+.field input[type=text] {
+	float: right;
+}
+.field  input[type=password] {
+	float: right;
+}
+.field  select {
 	float: right;
 }
 
@@ -98,4 +104,8 @@ div.main {
 }
 .details > .bot {
     padding: 5px 5px 5px 15px;
+}
+
+.lstPerm {
+    min-width: 190px;
 }

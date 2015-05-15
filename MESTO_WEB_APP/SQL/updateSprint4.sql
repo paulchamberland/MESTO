@@ -14,3 +14,14 @@ ALTER TABLE `mtuser`
     ADD `updateDate` DATE NOT NULL,
     ADD UNIQUE (`email`)
     CHANGE `password` `password` VARCHAR(100);
+    
+CREATE TABLE IF NOT EXISTS `userrole` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `description` text COLLATE utf8_unicode_ci NOT NULL,
+  `list_permissions` text COLLATE utf8_unicode_ci NOT NULL,
+  `updateBy` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `updateDate` date NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
