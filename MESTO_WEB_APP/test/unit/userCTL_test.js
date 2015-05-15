@@ -194,7 +194,7 @@ describe('Testing the controller of user object', function() {
 
             $httpBackend.flush();
             
-            expect(scope.equipmentList).not.toBeDefined();
+            expect(scope.userList).not.toBeDefined();
             expect(scope.lstError).toEqual('error: 500:undefined'); // Principal test
         });
  
@@ -203,7 +203,7 @@ describe('Testing the controller of user object', function() {
             scope.canDelete = true;
             scope.user = {username:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond('{"msg":"Equipment created successfully!!!", "error":""}');
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond('{"msg":"User created successfully!!!", "error":""}');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond([{}]);
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('[{"id": "1",'
                                                                                         +'"username":"admin",'

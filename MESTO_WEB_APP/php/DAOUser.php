@@ -1,5 +1,5 @@
 <?php
-class User { // structure of an equipment
+class User { 
 	public $id;
 	public $username;
 	public $name;

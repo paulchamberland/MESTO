@@ -1,7 +1,7 @@
 <?php
 $user = json_decode(file_get_contents("php://input"), true);
 // TODO: htmlspecialchars() and json_decode are not compatible for some reason, find a ways to secure data from XSS
-//PASSWORD(str)
+
 try {
     $con = new PDO("mysql:host=localhost;dbname=mesto", "root", "");
     $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
