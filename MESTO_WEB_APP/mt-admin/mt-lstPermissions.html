@@ -9,7 +9,7 @@
         <h1 class="">Permission List</h1>
         <table border="1">
             <tr><th>Code name</th><th>Name</th><th>Description</th></tr>
-			<tr data-ng-repeat="p in lstPermission" data-ng-click="permissionCTL.openPermission(p)">
+			<tr data-ng-repeat="p in lstPermissions" data-ng-click="permissionCTL.openPermission(p)">
 				<td>{{p.codeName}}</td><td>{{p.name}}</td><td>{{p.description}}</td>
 			</tr>
 		</table>
