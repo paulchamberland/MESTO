@@ -8,6 +8,7 @@ class User {
     public $supervisor;
     public $title;
     public $role;
+    public $lstPermissions;
     public $active;
     public $address;
     public $phone;
@@ -23,6 +24,10 @@ class User {
         $this->supervisor = $objSQL->supervisor;
         $this->title = $objSQL->title;
         $this->role = $objSQL->fk_userRoleId;
+        
+        if (isset($objSQL->list_permissions))
+            $this->lstPermissions = $objSQL->list_permissions;
+        
         $this->active = $objSQL->active;
         $this->address = $objSQL->address;
         $this->phone = $objSQL->phone;
@@ -40,6 +45,9 @@ try {
     if (empty($data['id'])) {
         $stmt = $con->prepare("SELECT id, username, name, email, title, supervisor, fk_userRoleId, active, address, phone, updateBy, updateDate FROM mtuser");
 	}
+    else if (!empty($data['activity']) && $data['activity'] == "login" && !empty($data['id'])) {
+        $stmt = $con->prepare("SELECT u.*, ur.list_permissions FROM mtuser u LEFT JOIN userrole ur ON u.fk_userRoleId = ur.id WHERE u.id = '".$data['id']."'");
+    }
     else {
         $stmt = $con->prepare("SELECT id, username, name, email, title, supervisor, fk_userRoleId, active, address, phone, updateBy, updateDate FROM mtuser WHERE id = '".$data['id']."'");
     }

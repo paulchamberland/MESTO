@@ -36,10 +36,10 @@
                 <div class="field"><label for="phone">Phone :</label><input type="text" id="phone" name="phone" data-ng-model="user.phone" data-ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" /></div>
 			</div>
 		</form>
-		<button id="btnSave" data-ng-click="userCTL.save();" ng-disabled="userForm.$pristine || userForm.$invalid">Save</button>
-		<button id="btnDelete" data-ng-click="userCTL.delete();" ng-disabled="!canDelete">Delete</button>
+		<button id="btnSave" data-ng-click="userCTL.save();" ng-disabled="userForm.$pristine || userForm.$invalid" data-ng-if="canSave">Save</button>
+		<button id="btnDelete" data-ng-click="userCTL.delete();" ng-disabled="!canDelete" data-ng-if="isAutorizeDeletingUser">Delete</button>
         <button id="btnReset" data-ng-click="userCTL.resetFrm();userCTL.resetMsg();" ng-disabled="userForm.$pristine">Reset</button>
-        <button id="btnChgPassword" data-ng-click="userCTL.changePassword()" data-ng-if="user.id > 0">Password</button>
+        <button id="btnChgPassword" data-ng-click="userCTL.changePassword()" data-ng-if="user.id > 0 && isAutorizeChangingPassword == true">Password</button>
 	</div>
     
     <div class="wrap"></div>

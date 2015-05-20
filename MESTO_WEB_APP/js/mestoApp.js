@@ -118,9 +118,6 @@ app.factory('navigateSrv', function() {
 app.factory('permissionSrv', function() {
     var lstPermissions = [];
     
-    lstPermissions.push({codeName:"test1",name:"first test", description:"this is a first test of permission with a description as long as my sentence can be in the recurrent contexte of developpement at this point"});
-    lstPermissions.push({codeName:"test2",name:"second test", description:"this is a second test of permission"});
-    lstPermissions.push({codeName:"test3",name:"third test", description:"this is a third test of permission"});
     lstPermissions.push({codeName:"adminAccess",name:"Access to Admin Section", description:"Block Logging, show/hide navigation button"});
     lstPermissions.push({codeName:"deleteRole",name:"Delete existing role", description:"Show/Hide the delete button"});
     lstPermissions.push({codeName:"deleteUser",name:"Delete existing user", description:"Show/Hide the delete button"});
@@ -177,7 +174,8 @@ app.factory('securitySrv', function($http, $location) {
         $http({
             method: 'POST',
             url: "/MESTO/MESTO_WEB_APP/php/DAOUser.php", // TODO: Make a config with path
-            data: {id:pId},
+            data: {id:pId,
+                   activity:'login'},
             headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
         }).success(
             function(data, status) {
@@ -212,11 +210,16 @@ app.factory('securitySrv', function($http, $location) {
         return (currentUser) ? currentUser.name : null;
     }
     
+    function isAuthorized(pPermission) {
+        return currentUser.lstPermissions.indexOf(pPermission) != -1;
+    }
+    
     return {
         login : login,
         logout : logout,
         isLogged : isLogged,
-        getUserName : getUserName
+        getUserName : getUserName,
+        isAuthorized : isAuthorized
     }
 });
 

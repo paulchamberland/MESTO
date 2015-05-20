@@ -1,4 +1,4 @@
-app.controller('userCTL', function($scope, $http, $location, navigateSrv) {
+app.controller('userCTL', function($scope, $http, $location, navigateSrv, securitySrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
 
@@ -15,7 +15,13 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv) {
                     phone:""};
     this.emptyUser = {};
     $scope.canDelete = false;
+    $scope.canSave = true;
     $scope.changePassword = false;
+    
+    $scope.isAutorizeChangingPassword = false;
+    $scope.isAutorizeUpdatingUser = false;
+    $scope.isAutorizeCreatingUser = false;
+    $scope.isAutorizeDeletingUser = false;
     
     this.getNameRole = function(pRole) {
         for (t in $scope.roleList) {
@@ -40,6 +46,13 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv) {
         }
         
         self.loadRolesList();
+        
+        $scope.isAutorizeChangingPassword = securitySrv.isAuthorized('chgPWDUser');
+        $scope.isAutorizeUpdatingUser = securitySrv.isAuthorized('updateUser');
+        $scope.isAutorizeCreatingUser = securitySrv.isAuthorized('createUser');
+        $scope.isAutorizeDeletingUser = securitySrv.isAuthorized('deleteUser');
+        
+        $scope.canSave = ($scope.user.id > 0 && $scope.isAutorizeUpdatingUser) || ($scope.user.id <= 0 && $scope.isAutorizeCreatingUser);
     };
     
     this.setUser = function (pUser) {
