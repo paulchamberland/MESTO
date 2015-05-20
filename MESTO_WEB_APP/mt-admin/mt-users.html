@@ -25,7 +25,7 @@
                 <div class="field"><label for="username">UserName * :</label><input type="text" id="username" name="username" data-ng-model="user.username" required /></div>
 				<div class="field" data-ng-if="user.id <= 0"><label for="pwd">Password * :</label><input type="password" id="pwd" name="password" data-ng-model="user.password" required data-ng-pattern="/^(?=.*[A-Z])(?=.*[$%?&*!#])(?=.*[0-9]).{8,}$/" /></div>
 				<div class="field" data-ng-if="changePassword == true"><label for="pwd">Change Password * :</label><input type="password" id="pwd" name="password" data-ng-model="user.password" required data-ng-pattern="/^(?=.*[A-Z])(?=.*[$%?&*!#])(?=.*[0-9]).{8,}$/" /></div>
-                <div class="field"><label for="role">Role * :</label><select id="role" data-ng-model="user.role" name="role" data-ng-options="role.value as role.label for role in ROLE" required ></select></div>
+                <div class="field"><label for="role">Role * :</label><select id="role" data-ng-model="user.role" name="role" data-ng-options="role.id as role.name for role in roleList" required ></select></div>
                 <div class="field"><label for="active">Active?</label>
                     <input type="checkbox" id="active" name="active" data-ng-checked="user.active == true" data-ng-model="user.active"/>
                 </div>

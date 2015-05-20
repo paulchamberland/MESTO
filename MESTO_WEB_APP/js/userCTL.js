@@ -1,7 +1,6 @@
 app.controller('userCTL', function($scope, $http, $location, navigateSrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
-    $scope.ROLE = [{value:'ADM',label:'Admin'},{value:'TC',label:'Tech'},{value:'FLW',label:'Follower'}];
 
     $scope.user = {id: "",
                     username :"",
@@ -18,10 +17,11 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv) {
     $scope.canDelete = false;
     $scope.changePassword = false;
     
-    this.getLabelRole = function(pRole) {
-        for (t in $scope.ROLE) {
-            if ($scope.ROLE[t].value == pRole) return $scope.ROLE[t].label;
+    this.getNameRole = function(pRole) {
+        for (t in $scope.roleList) {
+            if ($scope.roleList[t].id == pRole) return $scope.roleList[t].name;
         }
+        return "";
     };
     
     this.changePassword = function() {
@@ -38,6 +38,8 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv) {
         else {
             self.loadList();
         }
+        
+        self.loadRolesList();
     };
     
     this.setUser = function (pUser) {
@@ -157,6 +159,22 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv) {
                 // TODO: error server handling
                 $scope.lstError = "error: "+status+":"+statusText;
                 //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
+            }
+        );
+    };
+    
+    this.loadRolesList = function() {
+        $http.post("/MESTO/MESTO_WEB_APP/php/DAOUserRole.php").success( // TODO: Make a config with path
+            function(data) {
+                if (data.error == null) {
+                    $scope.roleList = data;
+                }
+                else {
+                }
+            }
+        ).error(
+            function(data, status, headers, config, statusText) {
+                // TODO: error server handling
             }
         );
     };

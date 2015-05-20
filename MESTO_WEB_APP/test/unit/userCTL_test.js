@@ -1,4 +1,4 @@
-describe('Testing the controller of user object', function() {
+describe('Testing the controller of user object => ', function() {
     beforeEach(module('MESTO'));
     var controller, scope;
 
@@ -27,12 +27,10 @@ describe('Testing the controller of user object', function() {
         expect(controller.emptyUser).toEqual(user);
     });
     
-    xit('Testing: Get the label from TYPE value', function() {
-        expect(controller.getLabelTYPE('RT')).toEqual("Router");
-        expect(controller.getLabelTYPE('HUB')).toEqual("Hub");
-        expect(controller.getLabelTYPE('SRV')).toEqual("Server");
-        expect(controller.getLabelTYPE('SWT')).toEqual("Switch");
-    });
+    it('Testing: Get the Name from Role value', function() {
+            expect(controller.getNameRole('1')).toEqual("");
+            expect(controller.getNameRole('2')).toEqual("");
+        });
     
     it('Testing: Active to changePassword', function() {
         expect(scope.changePassword).toBeFalsy();
@@ -46,7 +44,7 @@ describe('Testing the controller of user object', function() {
         expect(scope.changePassword).toBeFalsy();
     });
     
-    describe('Dependancy to navigateSrv', function() {
+    describe('Dependancy to navigateSrv => ', function() {
         var location, navigateSrv;
         
         beforeEach(inject(function(_navigateSrv_, _$location_) {
@@ -60,7 +58,7 @@ describe('Testing the controller of user object', function() {
                     email :"admin@test.ca",
                     password :"fj387dj2i",
                     supervisor :"testeur",
-                    role :"ADM",
+                    role :"1",
                     title :"test",
                     active : true,
                     address :"some address",
@@ -93,7 +91,7 @@ describe('Testing the controller of user object', function() {
                     email :"admin@test.ca",
                     password :"fj387dj2i",
                     supervisor :"testeur",
-                    role :"ADM",
+                    role :"1",
                     title :"test",
                     active : true,
                     address :"some address",
@@ -114,7 +112,7 @@ describe('Testing the controller of user object', function() {
                             name :"Ad Mean",
                             email :"admin@test.ca",
                             password :"fj387dj2i",
-                            role :"ADM",
+                            role :"1",
                             active : true});
         
         controller.resetFrm();
@@ -147,18 +145,32 @@ describe('Testing the controller of user object', function() {
         expect(scope.SQLErrors).not.toBeDefined();
     });
     
-    describe('Testing Ajax call from User object', function() {
+    describe('Testing Ajax call from User object => ', function() {
         beforeEach(inject(function(_$httpBackend_) {
             $httpBackend = _$httpBackend_;
         }));
+        
+        it('Testing: Get the Name from Role value', function() {
+            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{id:"1",name:"admin"},{id:"2",name:"test"}]);
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('[{}]');
+            
+            controller.loadRolesList();
+            
+            $httpBackend.flush();
+            
+            expect(controller.getNameRole('1')).toEqual("admin");
+            expect(controller.getNameRole('2')).toEqual("test");
+            expect(controller.getNameRole('3')).toEqual("");
+        });
  
         it('Testing: Refresh users list with success', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond(200, '[{"id": "1",'
                                                                                             +'"username":"admin",'
                                                                                             +'"name":"Ad Mean",'
                                                                                             +'"email":"admin@test.ca",'
                                                                                             +'"password":"fj387dj2i",'
-                                                                                            +'"role":"ADM",'
+                                                                                            +'"role":"1",'
                                                                                             +'"active":"true"}]');
 
             controller.refreshList(); // <--- TEST
@@ -171,13 +183,14 @@ describe('Testing the controller of user object', function() {
                                                 "name":"Ad Mean",
                                                 "email":"admin@test.ca",
                                                 "password":"fj387dj2i",
-                                                "role":"ADM",
+                                                "role":"1",
                                                 "active":"true"}]);
         });
         it('Testing: Generated error for Refresh', function() {
             scope.canDelete = true;
             scope.user = {username:"fake"};
             
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             
             controller.refreshList(); // <--- TEST
@@ -188,6 +201,7 @@ describe('Testing the controller of user object', function() {
             expect(scope.lstError).toEqual('Database error, Contact administrator. Try later'); // Principal test
         });
         it('Testing: Refresh users list and failed...', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond(500, 'server error');
 
             controller.refreshList(); // <--- TEST
@@ -204,14 +218,15 @@ describe('Testing the controller of user object', function() {
             scope.user = {username:"fake"};
             
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond('{"msg":"User created successfully!!!", "error":""}');
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond([{}]);
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('[{}]');
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('[{"id": "1",'
                                                                                         +'"username":"admin",'
                                                                                         +'"name":"Ad Mean",'
                                                                                         +'"email":"admin@test.ca",'
                                                                                         +'"password":"fj387dj2i",'
-                                                                                        +'"role":"ADM",'
+                                                                                        +'"role":"1",'
                                                                                         +'"active":"true"}]');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
 
             controller.save(); // <--- TEST
 
@@ -237,9 +252,10 @@ describe('Testing the controller of user object', function() {
                                                                                         +'"name":"Ad Mean",'
                                                                                         +'"email":"admin@test.ca",'
                                                                                         +'"password":"fj387dj2i",'
-                                                                                        +'"role":"ADM",'
+                                                                                        +'"role":"1",'
                                                                                         +'"active":"true"}]');
-
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
+            
             controller.save(); // <--- TEST
 
             $httpBackend.flush();
@@ -263,7 +279,7 @@ describe('Testing the controller of user object', function() {
                                                 "name":"Ad Mean",
                                                 "email":"admin@test.ca",
                                                 "password":"fj387dj2i",
-                                                "role":"ADM",
+                                                "role":"1",
                                                 "active":"true"}]);
         });
         it('Testing: Generated error for Saving', function() {
@@ -273,6 +289,7 @@ describe('Testing the controller of user object', function() {
             
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond({});
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
             
             controller.save(); // <--- TEST
 
@@ -291,6 +308,7 @@ describe('Testing the controller of user object', function() {
             
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond(500, 'server error');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond({});
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
             
             controller.save(); // <--- TEST
 
@@ -312,15 +330,16 @@ describe('Testing the controller of user object', function() {
             scope.user = {username:"fake"};
             
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond('{"msg":"User deleted successfully!!!", "error":""}');
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('[{}]');
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('[{"id": "1",'
                                                                                         +'"username":"admin",'
                                                                                         +'"name":"Ad Mean",'
                                                                                         +'"email":"admin@test.ca",'
                                                                                         +'"password":"fj387dj2i",'
-                                                                                        +'"role":"ADM",'
+                                                                                        +'"role":"1",'
                                                                                         +'"active":"true"}]');
-
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
+            
             controller.delete(); // <--- TEST
 
             $httpBackend.flush();
@@ -344,7 +363,7 @@ describe('Testing the controller of user object', function() {
                                                 "name":"Ad Mean",
                                                 "email":"admin@test.ca",
                                                 "password":"fj387dj2i",
-                                                "role":"ADM",
+                                                "role":"1",
                                                 "active":"true"}]);
         });
         it('Testing: Generating error for Deleting', function() {
@@ -353,6 +372,7 @@ describe('Testing the controller of user object', function() {
             
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('fake');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
             
             controller.delete(); // <--- TEST
 
@@ -370,6 +390,7 @@ describe('Testing the controller of user object', function() {
             
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond(500, 'server error');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond({});
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
             
             controller.delete(); // <--- TEST
 

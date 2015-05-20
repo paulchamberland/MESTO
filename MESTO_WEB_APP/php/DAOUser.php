@@ -22,7 +22,7 @@ class User {
         //$this->password = $objSQL->password;
         $this->supervisor = $objSQL->supervisor;
         $this->title = $objSQL->title;
-        $this->role = $objSQL->role;
+        $this->role = $objSQL->fk_userRoleId;
         $this->active = $objSQL->active;
         $this->address = $objSQL->address;
         $this->phone = $objSQL->phone;
@@ -38,10 +38,10 @@ try {
 	$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     if (empty($data['id'])) {
-        $stmt = $con->prepare("SELECT id, username, name, email, title, supervisor, role, active, address, phone, updateBy, updateDate FROM mtuser");
+        $stmt = $con->prepare("SELECT id, username, name, email, title, supervisor, fk_userRoleId, active, address, phone, updateBy, updateDate FROM mtuser");
 	}
     else {
-        $stmt = $con->prepare("SELECT id, username, name, email, title, supervisor, role, active, address, phone, updateBy, updateDate FROM mtuser WHERE id = '".$data['id']."'");
+        $stmt = $con->prepare("SELECT id, username, name, email, title, supervisor, fk_userRoleId, active, address, phone, updateBy, updateDate FROM mtuser WHERE id = '".$data['id']."'");
     }
     
 	$stmt->execute();
