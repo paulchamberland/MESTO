@@ -1,5 +1,6 @@
-var app = angular.module('MESTO', ['ngRoute']);
-app.config(['$routeProvider', function($routeProvider) {
+var app = angular.module('MESTO', ['ngRoute', 'ngIdle']);
+
+app.config(function($routeProvider, IdleProvider) {
     $routeProvider.when('/home', {templateUrl:'home.html', controller:'mapCTL'});
     $routeProvider.when('/site', {templateUrl:'sites.html', controller:'siteCTL', controllerAs:'siteCTL'});
     $routeProvider.when('/room', {templateUrl:'rooms.html', controller:'roomCTL', controllerAs:'roomCTL'});
@@ -18,7 +19,11 @@ app.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/admin/user', {templateUrl:'mt-admin/mt-users.html', controller:'userCTL', controllerAs:'userCTL'});
     $routeProvider.when('/admin/users', {templateUrl:'mt-admin/mt-lstUsers.html', controller:'userCTL', controllerAs:'userCTL'});
     $routeProvider.otherwise({redirectTo:"/home"});
-}]);
+    
+    IdleProvider.idle(10);
+    IdleProvider.timeout(5);
+    IdleProvider.keepalive(false);
+});
 
 app.run(function($rootScope, $location, securitySrv) {
     var routeRestricted = ['/admin/home', '/admin/site', '/admin/sites', '/admin/room', '/admin/rooms', '/admin/equip', '/admin/equipments', '/admin/permissions', '/admin/role', '/admin/roles', '/admin/user', '/admin/users'];
@@ -33,6 +38,19 @@ app.run(function($rootScope, $location, securitySrv) {
         else if (forbiddenCall.indexOf($location.path()) != -1) {
             $location.path('/home');
         }
+    });
+    
+    $rootScope.$on('IdleStart', function() {
+        console.log('idle start');
+    });
+
+    $rootScope.$on('IdleEnd', function() {
+        console.log('Idle end');
+    });
+    $rootScope.$on('IdleTimeout', function() {
+        securitySrv.logout();
+        alert('you have been aways? By security we log you out');
+        console.log('log out');
     });
 });
 
@@ -145,7 +163,7 @@ app.factory('permissionSrv', function() {
     }
 });
 
-app.factory('securitySrv', function($http, $location) {
+app.factory('securitySrv', function($http, $location, Idle) {
     var currentUser = null;
     
     function login(pData) {
@@ -158,7 +176,8 @@ app.factory('securitySrv', function($http, $location) {
             function(data, status) {
                 if (data.msg != null && data.msg != '' && data.obj != '') {
                     createUser({username: pData.username}); // temp user create to overpass the asynchone problem of routing and parralalism of http promise
-                    loadUser(data.obj)
+                    loadUser(data.obj);
+                    Idle.watch();
                 }
                 else {
                 }
@@ -195,6 +214,9 @@ app.factory('securitySrv', function($http, $location) {
     
     function logout() {
         currentUser = null;
+
+        Idle.unwatch();
+        
         $location.path('/home');
     }
     
