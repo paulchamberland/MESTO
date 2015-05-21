@@ -24,10 +24,10 @@ app.run(function($rootScope, $location, securitySrv) {
     var routeRestricted = ['/admin/home', '/admin/site', '/admin/sites', '/admin/room', '/admin/rooms', '/admin/equip', '/admin/equipments', '/admin/permissions', '/admin/role', '/admin/roles', '/admin/user', '/admin/users'];
     var forbiddenCall = ['.html', '.php'];
     $rootScope.$on('$routeChangeStart', function() {
-        if ("/admin/".indexOf($location.path()) != -1 && securitySrv.isLogged()) {
+        if ("/admin/".indexOf($location.path()) != -1 && securitySrv.isLogged() && securitySrv.isAuthorized('adminAccess')) {
             $location.path('/admin/home');
         }
-        else if (routeRestricted.indexOf($location.path()) != -1 && !securitySrv.isLogged()) {
+        else if (routeRestricted.indexOf($location.path()) != -1 && (!securitySrv.isLogged() || !securitySrv.isAuthorized('adminAccess'))) {
             $location.path('/home');
         }
         else if (forbiddenCall.indexOf($location.path()) != -1) {
@@ -125,7 +125,7 @@ app.factory('permissionSrv', function() {
     lstPermissions.push({codeName:"deleteRoom",name:"Delete existing room", description:"Show/Hide the delete button"});
     lstPermissions.push({codeName:"deleteSite",name:"Delete existing site", description:"Show/Hide the delete button"});
     lstPermissions.push({codeName:"updateRole",name:"Modify existing role", description:"Enable/Disable the update function"});
-    lstPermissions.push({codeName:"chgRoleUser",name:"Change Role of a User", description:"Show/Hide button of Role Management in UserForm"});
+    //lstPermissions.push({codeName:"chgRoleUser",name:"Change Role of a User", description:"Show/Hide button of Role Management in UserForm"});
     lstPermissions.push({codeName:"chgPWDUser",name:"Change password of a User", description:"Block the update function when this value change "});
     lstPermissions.push({codeName:"updateUser",name:"Modify existing user", description:"Enable/Disable the update function"});
     lstPermissions.push({codeName:"updateEquip",name:"Modify existing equipment", description:"Enable/Disable the update function"});
@@ -211,7 +211,7 @@ app.factory('securitySrv', function($http, $location) {
     }
     
     function isAuthorized(pPermission) {
-        return currentUser.lstPermissions.indexOf(pPermission) != -1;
+        return (currentUser && currentUser.lstPermissions) ? currentUser.lstPermissions.indexOf(pPermission) != -1 : false;
     }
     
     return {
