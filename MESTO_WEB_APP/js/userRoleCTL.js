@@ -1,4 +1,4 @@
-app.controller('userRoleCTL', function($scope, $http, $location, navigateSrv, permissionSrv) {
+app.controller('userRoleCTL', function($scope, $http, $location, navigateSrv, permissionSrv, securitySrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
 
@@ -13,6 +13,11 @@ app.controller('userRoleCTL', function($scope, $http, $location, navigateSrv, pe
     
     this.emptyUserRole = {};
     $scope.canDelete = false;
+    $scope.canSave = true;
+    
+    $scope.isAutorizeUpdatingRole = false;
+    $scope.isAutorizeCreatingRole = false;
+    $scope.isAutorizeDeletingRole = false;
     
     function init() {
         self.emptyUserRole = angular.copy($scope.userRole);
@@ -24,6 +29,12 @@ app.controller('userRoleCTL', function($scope, $http, $location, navigateSrv, pe
         else {
             self.loadList();
         }
+        
+        $scope.isAutorizeUpdatingRole = securitySrv.isAuthorized('createRole');
+        $scope.isAutorizeCreatingRole = securitySrv.isAuthorized('updateRole');
+        $scope.isAutorizeDeletingRole = securitySrv.isAuthorized('deleteRole');
+        
+        $scope.canSave = ($scope.userRole.id > 0 && $scope.isAutorizeUpdatingRole) || ($scope.userRole.id <= 0 && $scope.isAutorizeCreatingRole);
     };
     
     this.setUserRole = function (pUserRole) {

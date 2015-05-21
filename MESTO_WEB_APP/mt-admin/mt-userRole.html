@@ -34,8 +34,8 @@
                 </select>
             </div>
 		</form>
-		<button id="btnSave" data-ng-click="userRoleCTL.save();" ng-disabled="userRoleForm.$pristine || userRoleForm.$invalid">Save</button>
-		<button id="btnDelete" data-ng-click="userRoleCTL.delete();" ng-disabled="!canDelete">Delete</button>
+		<button id="btnSave" data-ng-click="userRoleCTL.save();" ng-disabled="userRoleForm.$pristine || userRoleForm.$invalid" data-ng-if="canSave">Save</button>
+		<button id="btnDelete" data-ng-click="userRoleCTL.delete();" ng-disabled="!canDelete" data-ng-if="isAutorizeDeletingRole">Delete</button>
         <button id="btnReset" data-ng-click="userRoleCTL.resetFrm();userRoleCTL.resetMsg();" ng-disabled="userRoleForm.$pristine">Reset</button>
 	</div>
     

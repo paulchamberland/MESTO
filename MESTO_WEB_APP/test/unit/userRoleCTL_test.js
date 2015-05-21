@@ -21,6 +21,11 @@ describe('Testing the controller of userRole object', function() {
         
         expect(scope.lstAvailablePermissions).toEqual([]);
         expect(scope.lstSelectedPermissionsObj).toEqual([]);
+        
+        expect(scope.isAutorizeUpdatingRole).toBeFalsy();
+        expect(scope.isAutorizeCreatingRole).toBeFalsy();
+        expect(scope.isAutorizeDeletingRole).toBeFalsy();
+        expect(scope.canSave).toBeFalsy();
     });
     
     describe('Dependancy to navigateSrv', function() {
