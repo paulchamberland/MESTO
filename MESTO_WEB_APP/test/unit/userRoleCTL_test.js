@@ -98,7 +98,7 @@ describe('Testing the controller of userRole object', function() {
                                     ,{codeName:"deleteRoom",name:"Delete existing room", description:"Show/Hide the delete button"}
                                     ,{codeName:"deleteSite",name:"Delete existing site", description:"Show/Hide the delete button"}
                                     ,{codeName:"updateRole",name:"Modify existing role", description:"Enable/Disable the update function"}
-                                    ,{codeName:"chgRoleUser",name:"Change Role of a User", description:"Show/Hide button of Role Management in UserForm"}
+                                    //,{codeName:"chgRoleUser",name:"Change Role of a User", description:"Show/Hide button of Role Management in UserForm"}
                                     ,{codeName:"chgPWDUser",name:"Change password of a User", description:"Block the update function when this value change "}
                                     ,{codeName:"updateUser",name:"Modify existing user", description:"Enable/Disable the update function"}
                                     ,{codeName:"updateEquip",name:"Modify existing equipment", description:"Enable/Disable the update function"}
@@ -143,7 +143,7 @@ describe('Testing the controller of userRole object', function() {
                                     ,{codeName:"deleteRoom",name:"Delete existing room", description:"Show/Hide the delete button"}
                                     ,{codeName:"deleteSite",name:"Delete existing site", description:"Show/Hide the delete button"}
                                     ,{codeName:"updateRole",name:"Modify existing role", description:"Enable/Disable the update function"}
-                                    ,{codeName:"chgRoleUser",name:"Change Role of a User", description:"Show/Hide button of Role Management in UserForm"}
+                                    //,{codeName:"chgRoleUser",name:"Change Role of a User", description:"Show/Hide button of Role Management in UserForm"}
                                     ,{codeName:"chgPWDUser",name:"Change password of a User", description:"Block the update function when this value change "}
                                     ,{codeName:"updateUser",name:"Modify existing user", description:"Enable/Disable the update function"}
                                     ,{codeName:"updateEquip",name:"Modify existing equipment", description:"Enable/Disable the update function"}
@@ -160,7 +160,7 @@ describe('Testing the controller of userRole object', function() {
                                     
         var affectedPermission = [{codeName:"adminAccess",name:"Access to Admin Section", description:"Block Logging, show/hide navigation button"}
                                     ,{codeName:"updateRole",name:"Modify existing role", description:"Enable/Disable the update function"}
-                                    ,{codeName:"chgRoleUser",name:"Change Role of a User", description:"Show/Hide button of Role Management in UserForm"}
+                                    //,{codeName:"chgRoleUser",name:"Change Role of a User", description:"Show/Hide button of Role Management in UserForm"}
                                     ,{codeName:"updateUser",name:"Modify existing user", description:"Enable/Disable the update function"}
                                     ,{codeName:"updateEquip",name:"Modify existing equipment", description:"Enable/Disable the update function"}
                                     ,{codeName:"updateRoom",name:"Modify existing room", description:"Enable/Disable the update function"}
