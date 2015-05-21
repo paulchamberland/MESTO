@@ -100,10 +100,6 @@ describe('e2e User Autority : ', function () {
         expect(element(by.id("btnChgPassword")).isPresent()).toBeFalsy();
     });
     
-    xit('Testing : changing password', function() {
-        // TODO: implement a change Role permission, and test the change...
-    });
-    
     afterAll(function() {
         // Logout
         element(by.id('logoutButton')).click();
