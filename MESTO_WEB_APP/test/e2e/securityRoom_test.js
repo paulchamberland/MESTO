@@ -26,7 +26,8 @@ describe('e2e Room Autority : ', function () {
         
         // Create the corresponding Role
         element(by.model('userRole.name')).sendKeys('Full -roomMng');
-        element(by.model('userRole.description')).sendKeys('this is a role test for Security equipement object');
+        element(by.model('userRole.description')).sendKeys('this is a role test for Security room object');
+        
         element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).get(0).click();
         element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).get(1).click();
         element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).get(2).click();
