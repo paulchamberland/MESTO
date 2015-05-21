@@ -32,6 +32,12 @@ describe('Testing the controller of room object =>', function() {
         expect(scope.room).toEqual(room);
         
         expect(controller.emptyRoom).toEqual(room);
+        
+        expect(scope.isAutorizeUpdatingRoom).toBeFalsy();
+        expect(scope.isAutorizeCreatingRoom).toBeFalsy();
+        expect(scope.isAutorizeDeletingRoom).toBeFalsy();
+        expect(scope.isAutorizeSeeDetailsRoom).toBeFalsy();
+        expect(scope.canSave).toBeFalsy();
     });
     
     it('Testing: Get the label from ROLE value', function() {
@@ -49,10 +55,15 @@ describe('Testing the controller of room object =>', function() {
                     role:"TC"};
                     
         // TODO: Spy on the sub list private function
-        controller.openRoom(room);
+        controller.openRoom(room); // security ON
+        
+        expect(scope.room).toEqual(controller.emptyRoom);
+        // TODO: make a spy on jquery without or sub object function
+        
+        scope.isAutorizeSeeDetailsRoom = true;
+        controller.openRoom(room); // security OFF
         
         expect(scope.room).toEqual(room);
-        // TODO: make a spy on jquery without or sub object function
     });
     
     describe('Dependancy to navigateSrv/location', function() {
@@ -71,7 +82,13 @@ describe('Testing the controller of room object =>', function() {
             
             spyOn(location, 'path');
             
-            controller.navigateToRoom(room);
+            controller.navigateToRoom(room); // security ON
+            
+            expect(location.path).not.toHaveBeenCalled();
+            expect(navigateSrv.getRoom()).toBeNull();
+            
+            scope.isAutorizeUpdatingRoom = true;
+            controller.navigateToRoom(room); // security OFF
             
             expect(location.path).toHaveBeenCalledWith('/admin/room');
             expect(navigateSrv.getRoom()).toEqual(room);

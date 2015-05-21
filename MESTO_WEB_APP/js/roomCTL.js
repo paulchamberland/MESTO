@@ -1,4 +1,4 @@
-app.controller('roomCTL', function($scope, $http, $location, navigateSrv) {
+app.controller('roomCTL', function($scope, $http, $location, navigateSrv, securitySrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
     var ACTIVITY_ADDING_ASSO_EQUIP = "add-ass-rm|eq";
@@ -19,6 +19,12 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv) {
                     lstEquips:[]};
     this.emptyRoom = {};
     $scope.canDelete = false; // Flag disable button delete
+    $scope.canSave = true;
+    
+    $scope.isAutorizeUpdatingRoom = false;
+    $scope.isAutorizeCreatingRoom = false;
+    $scope.isAutorizeDeletingRoom = false;
+    $scope.isAutorizeSeeDetailsRoom = false;
     
     this.getLabelROLE = function(pRole) {
         for (t in $scope.ROLE) {
@@ -26,38 +32,32 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv) {
         }
     };
     
-    // TODO: To remove at some point
-    $scope.room_init = {id: "1",
-                    roomID :"erv324r23",
-                    pointOfContact :"sgt bilbo",
-                    technicalPointOfContact :"sgt bilbo",
-                    roomSize :"43",
-                    role:"TC",
-                    parentSite:{
-                        id:"2",
-                        name:"siteTest"
-                    },
-                    lstEquips:[]};
-    
     function init() {
         self.emptyRoom = angular.copy($scope.room);
         
         if (navigateSrv.getRoom() != null) {
             self.loadRoom(navigateSrv.getRoom());
             navigateSrv.cleanMemory();
-            //$scope.room = angular.copy($scope.room_init); // TODO: to remove at some point...
         }
         else {
             self.loadList();
         }
+        
+        $scope.isAutorizeUpdatingRoom = securitySrv.isAuthorized('createRoom');
+        $scope.isAutorizeCreatingRoom = securitySrv.isAuthorized('updateRoom');
+        $scope.isAutorizeDeletingRoom = securitySrv.isAuthorized('deleteRoom');
+        $scope.isAutorizeSeeDetailsRoom = securitySrv.isAuthorized('detailRoom');
+        
+        $scope.canSave = ($scope.room.id > 0 && $scope.isAutorizeUpdatingRoom) || ($scope.room.id <= 0 && $scope.isAutorizeCreatingRoom);
     }
     
+    /** Secure function **/
     this.openRoom = function(pRoom) {
-        self.setRoom(pRoom);
-        
-        self.loadEquipsList();
-        
-        $('#details').fadeIn('slow');
+        if ($scope.isAutorizeSeeDetailsRoom) {
+            self.setRoom(pRoom);
+            self.loadEquipsList();
+            $('#details').fadeIn('slow');
+        }
     }
     
     this.setRoom = function(pRoom) {
@@ -73,9 +73,12 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv) {
         self.loadEquipsList();
     };
     
+    /** Secure function **/
     this.navigateToRoom = function(p_room) {
-        navigateSrv.setRoom(p_room);
-        $location.path("/admin/room");
+        if ($scope.isAutorizeUpdatingRoom) {
+            navigateSrv.setRoom(p_room);
+            $location.path("/admin/room");
+        }
     };
     
     this.resetFrm = function() {
