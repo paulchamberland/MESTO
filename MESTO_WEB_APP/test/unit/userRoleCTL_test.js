@@ -86,10 +86,7 @@ describe('Testing the controller of userRole object', function() {
                                 description: "",
                                 lstPermissions :[]});
         expect(scope.lstSelectedPermissionsObj).toEqual([]);
-        expect(scope.lstAvailablePermissions).toEqual([{codeName:"test1",name:"first test", description:"this is a first test of permission with a description as long as my sentence can be in the recurrent contexte of developpement at this point"}
-                                    ,{codeName:"test2",name:"second test", description:"this is a second test of permission"}
-                                    ,{codeName:"test3",name:"third test", description:"this is a third test of permission"}
-                                    ,{codeName:"adminAccess",name:"Access to Admin Section", description:"Block Logging, show/hide navigation button"}
+        expect(scope.lstAvailablePermissions).toEqual([{codeName:"adminAccess",name:"Access to Admin Section", description:"Block Logging, show/hide navigation button"}
                                     ,{codeName:"deleteRole",name:"Delete existing role", description:"Show/Hide the delete button"}
                                     ,{codeName:"deleteUser",name:"Delete existing user", description:"Show/Hide the delete button"}
                                     ,{codeName:"deleteEquip",name:"Delete existing equipement", description:"Show/Hide the delete button"}
@@ -134,10 +131,7 @@ describe('Testing the controller of userRole object', function() {
     it('Testing: setLstAvailablePermissions function', function() {
         controller.setLstAvailablePermissions();
         
-        expect(scope.lstAvailablePermissions).toEqual([{codeName:"test1",name:"first test", description:"this is a first test of permission with a description as long as my sentence can be in the recurrent contexte of developpement at this point"}
-                                    ,{codeName:"test2",name:"second test", description:"this is a second test of permission"}
-                                    ,{codeName:"test3",name:"third test", description:"this is a third test of permission"}
-                                    ,{codeName:"adminAccess",name:"Access to Admin Section", description:"Block Logging, show/hide navigation button"}
+        expect(scope.lstAvailablePermissions).toEqual([{codeName:"adminAccess",name:"Access to Admin Section", description:"Block Logging, show/hide navigation button"}
                                     ,{codeName:"deleteRole",name:"Delete existing role", description:"Show/Hide the delete button"}
                                     ,{codeName:"deleteUser",name:"Delete existing user", description:"Show/Hide the delete button"}
                                     ,{codeName:"deleteEquip",name:"Delete existing equipement", description:"Show/Hide the delete button"}
@@ -159,10 +153,7 @@ describe('Testing the controller of userRole object', function() {
                                     ,{codeName:"detailEquip",name:"See details of an equipment", description:"Stop the open Details Popup from list"}
                                     ,{codeName:"detailSite",name:"See details of a site", description:"Stop the open Details Popup from list"}]);
                                     
-        var affectedPermission = [{codeName:"test1",name:"first test", description:"this is a first test of permission with a description as long as my sentence can be in the recurrent contexte of developpement at this point"}
-                                    ,{codeName:"test2",name:"second test", description:"this is a second test of permission"}
-                                    ,{codeName:"test3",name:"third test", description:"this is a third test of permission"}
-                                    ,{codeName:"adminAccess",name:"Access to Admin Section", description:"Block Logging, show/hide navigation button"}
+        var affectedPermission = [{codeName:"adminAccess",name:"Access to Admin Section", description:"Block Logging, show/hide navigation button"}
                                     ,{codeName:"updateRole",name:"Modify existing role", description:"Enable/Disable the update function"}
                                     ,{codeName:"chgRoleUser",name:"Change Role of a User", description:"Show/Hide button of Role Management in UserForm"}
                                     ,{codeName:"updateUser",name:"Modify existing user", description:"Enable/Disable the update function"}

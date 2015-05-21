@@ -21,10 +21,7 @@ describe('Testing the controller of permission object', function() {
                     description :""};
         
         expect(scope.permission).toEqual(permission);
-        expect(scope.lstPermissions).toEqual([{codeName:"test1",name:"first test", description:"this is a first test of permission with a description as long as my sentence can be in the recurrent contexte of developpement at this point"}
-                                            ,{codeName:"test2",name:"second test", description:"this is a second test of permission"}
-                                            ,{codeName:"test3",name:"third test", description:"this is a third test of permission"}
-                                            ,{codeName:"adminAccess",name:"Access to Admin Section", description:"Block Logging, show/hide navigation button"}
+        expect(scope.lstPermissions).toEqual([{codeName:"adminAccess",name:"Access to Admin Section", description:"Block Logging, show/hide navigation button"}
                                             ,{codeName:"deleteRole",name:"Delete existing role", description:"Show/Hide the delete button"}
                                             ,{codeName:"deleteUser",name:"Delete existing user", description:"Show/Hide the delete button"}
                                             ,{codeName:"deleteEquip",name:"Delete existing equipement", description:"Show/Hide the delete button"}
