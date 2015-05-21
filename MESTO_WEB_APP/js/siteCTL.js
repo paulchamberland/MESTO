@@ -1,4 +1,4 @@
-app.controller('siteCTL', function($scope, $http, $location, navigateSrv) {
+app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securitySrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
     var ACTIVITY_ADDING_ASSO_EQUIP = "add-ass-st|eq";
@@ -32,6 +32,12 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv) {
                     lstEquips:[]};
     this.emptySite = {};
     $scope.canDelete = false;
+    $scope.canSave = true;
+    
+    $scope.isAutorizeUpdatingSite = false;
+    $scope.isAutorizeCreatingSite = false;
+    $scope.isAutorizeDeletingSite = false;
+    $scope.isAutorizeSeeDetailsSite = false;
     
     this.getLabelROLE = function(pRole) {
         for (t in $scope.ROLE) {
@@ -39,47 +45,35 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv) {
         }
     };
     
-    // TODO: To remove at some point
-    $scope.site_init = {id: "1",
-                    reference :"test",
-                    latitude:"12.123456",
-                    longitude:"43.123456",
-                    siteName:"test4",
-                    description:"test5",
-                    isTemporary:true,
-                    startDate:"12-12-12",
-                    endDate:"11-11-1900",
-                    address:"test9",
-                    city:"test10",
-                    province:"test11",
-                    country:"test12",
-                    postalCode:"X5X 5X5",
-                    role:"COP",
-                    pointOfContact:"Lt. Bariton",
-                    phoneNumberPoC:"514-555-4321",
-                    lstRooms:[],
-                    lstEquips:[]};
-    
     function init() {
         self.emptySite = angular.copy($scope.site);
         
         if (navigateSrv.getSite() != null) {
             self.loadSite(navigateSrv.getSite());
             navigateSrv.cleanMemory();
-            //$scope.site = angular.copy($scope.site_init); // TODO: to remove at some point...
         }
         else {
             self.loadList();
         }
+        
+        $scope.isAutorizeUpdatingSite = securitySrv.isAuthorized('createSite');
+        $scope.isAutorizeCreatingSite = securitySrv.isAuthorized('updateSite');
+        $scope.isAutorizeDeletingSite = securitySrv.isAuthorized('deleteSite');
+        $scope.isAutorizeSeeDetailsSite = securitySrv.isAuthorized('detailSite');
+        
+        $scope.canSave = ($scope.site.id > 0 && $scope.isAutorizeUpdatingSite) || ($scope.site.id <= 0 && $scope.isAutorizeCreatingSite);
     }
     
+    /** Secure function **/
     this.openSite = function(pSite) {
-        self.setSite(pSite);
-        
-        self.loadRoomsList();
-        self.loadEquipsList();
-        
-        $('#details').fadeIn('slow');
+        if ($scope.isAutorizeSeeDetailsSite) {
+            self.setSite(pSite);
+            
+            self.loadRoomsList();
+            self.loadEquipsList();
+            
+            $('#details').fadeIn('slow');
+        }
     }
     
     this.setSite = function(pSite) {
@@ -98,9 +92,12 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv) {
         self.loadEquipsList();
     };
     
+    /** Secure function **/
     this.navigateToSite = function(p_site) {
-        navigateSrv.setSite(p_site);
-        $location.path("/admin/site");
+        if ($scope.isAutorizeUpdatingSite) {
+            navigateSrv.setSite(p_site);
+            $location.path("/admin/site");
+        }
     };
     
     this.resetFrm = function() {

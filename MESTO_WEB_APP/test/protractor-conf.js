@@ -9,7 +9,8 @@ exports.config = {
             'e2e/users_test.js',
             
             'e2e/securityEquipement_test.js',
-            'e2e/securityRoom_test.js'
+            'e2e/securityRoom_test.js',
+            'e2e/securitySite_test.js'
             ],
     //capabilities: [{browserName: 'IE'/*, browserName:'chrome'*/}] // TODO: make working IE Selenium plugins
     capabilities: {browserName: 'chrome'}

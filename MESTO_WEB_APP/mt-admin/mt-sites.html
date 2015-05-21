@@ -54,8 +54,8 @@
 				<div class="field"><label for="numTel">Phone number of PoC :</label><input type="text" id="numTel" name="phoneNumberPoC" data-ng-model="site.phoneNumberPoC" data-ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" /></div>
 			</div>
 		</form>
-		<button id="btnSave" data-ng-click="siteCTL.save();" ng-disabled="siteForm.$pristine || siteForm.$invalid">Save</button>
-		<button id="btnDelete" data-ng-click="siteCTL.delete();" ng-disabled="!canDelete">Delete</button>
+		<button id="btnSave" data-ng-click="siteCTL.save();" ng-disabled="siteForm.$pristine || siteForm.$invalid" data-ng-if="canSave">Save</button>
+		<button id="btnDelete" data-ng-click="siteCTL.delete();" ng-disabled="!canDelete" data-ng-if="isAutorizeDeletingSite">Delete</button>
         <button id="btnReset" data-ng-click="siteCTL.resetFrm();siteCTL.resetMsg();" ng-disabled="siteForm.$pristine">Reset</button>
 	</div>
     <div style="padding-top:15px;">

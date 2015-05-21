@@ -39,6 +39,12 @@ describe('Testing the controller of site object =>', function() {
         expect(scope.site).toEqual(site);
         
         expect(controller.emptySite).toEqual(site);
+        
+        expect(scope.isAutorizeUpdatingSite).toBeFalsy();
+        expect(scope.isAutorizeCreatingSite).toBeFalsy();
+        expect(scope.isAutorizeDeletingSite).toBeFalsy();
+        expect(scope.isAutorizeSeeDetailsSite).toBeFalsy();
+        expect(scope.canSave).toBeFalsy();
     });
     
     it('Testing: Get the label from ROLE value', function() {
@@ -57,11 +63,15 @@ describe('Testing the controller of site object =>', function() {
                     siteName:"test4"};
                     
         // TODO: Spy on both sub list private function
-        controller.openSite(site);
+        controller.openSite(site); // security ON
+        
+        expect(scope.site).toEqual(controller.emptySite);
+        // TODO: make a spy of jquery without or sub object function
+        
+        scope.isAutorizeSeeDetailsSite = true;
+        controller.openSite(site); // security OFF
         
         expect(scope.site).toEqual(site);
-        
-        // TODO: make a spy of jquery without or sub object function
     });
     
     describe('Dependancy to navigateSrv/location', function() {
@@ -80,7 +90,13 @@ describe('Testing the controller of site object =>', function() {
             
             spyOn(location, 'path');
             
-            controller.navigateToSite(site);
+            controller.navigateToSite(site); // Security ON
+            
+            expect(location.path).not.toHaveBeenCalled();
+            expect(navigateSrv.getSite()).toBeNull();
+            
+            scope.isAutorizeUpdatingSite = true;
+            controller.navigateToSite(site); // Security OFF
             
             expect(location.path).toHaveBeenCalledWith('/admin/site');
             expect(navigateSrv.getSite()).toEqual(site);
