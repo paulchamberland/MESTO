@@ -1,4 +1,4 @@
-app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv) {
+app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv, securitySrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
     $scope.TYPE = [{value:'RT',label:'Router'},{value:'HUB',label:'Hub'},{value:'SRV',label:'Server'},{value:'SWT',label:'Switch'}];
@@ -22,8 +22,14 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv) {
                     }};
     this.emptyEquipment = {};
     $scope.canDelete = false;
+    $scope.canSave = true;
     $scope.isRoomListOpened = false; // Flag to manage GUI display of the list
     $scope.isSiteListOpened = false; // Flag to manage GUI display of the list
+    
+    $scope.isAutorizeUpdatingEquip = false;
+    $scope.isAutorizeCreatingEquip = false;
+    $scope.isAutorizeDeletingEquip = false;
+    $scope.isAutorizeSeeDetailsEquip = false;
     
     this.getLabelTYPE = function(pType) {
         for (t in $scope.TYPE) {
@@ -31,41 +37,31 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv) {
         }
     };
     
-    // TODO: To remove at some point
-    $scope.equipment_init = {id: "",
-                    serialNumber :"432-43453454-4ref4",
-                    barCode :"code",
-                    manufacturer :"avenger",
-                    model :"XW-5",
-                    configHW :"some config",
-                    configSW :"some config 2",
-                    type:"HUB",
-                    parentRoom:{
-                        id:"32",
-                        roomID:"Test pRoom",
-                        siteName:"Site Parent room test"
-                    },
-                    parentSite:{
-                        id:"21",
-                        name:"test pSite"
-                    }};
-    
     function init() {
         self.emptyEquipment = angular.copy($scope.equipment);
         
         if (navigateSrv.getEquip() != null) {
             self.loadEquipment(navigateSrv.getEquip());
             navigateSrv.cleanMemory();
-            //$scope.equipment = angular.copy($scope.equipment_init); // TODO: to remove at some point...
         }
         else {
             self.loadList();
         }
+        
+        $scope.isAutorizeUpdatingEquip = securitySrv.isAuthorized('updateEquip');
+        $scope.isAutorizeCreatingEquip = securitySrv.isAuthorized('createEquip');
+        $scope.isAutorizeDeletingEquip = securitySrv.isAuthorized('deleteEquip');
+        $scope.isAutorizeSeeDetailsEquip = securitySrv.isAuthorized('detailEquip');
+        
+        $scope.canSave = ($scope.equipment.id > 0 && $scope.isAutorizeUpdatingEquip) || ($scope.equipment.id <= 0 && $scope.isAutorizeCreatingEquip);
     }
     
+    /** Secure function **/
     this.openEquipment = function(pEquip) {
-        self.setEquipment(pEquip);
-        $('#details').fadeIn('slow');
+        if ($scope.isAutorizeSeeDetailsEquip) {
+            self.setEquipment(pEquip);
+            $('#details').fadeIn('slow');
+        }
     }
     
     this.setEquipment = function (p_equip) {
@@ -79,9 +75,12 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv) {
         self.resetMsg();
     };
     
+    /** Secure function **/
     this.navigateToEquipment = function(p_equip) {
-        navigateSrv.setEquip(p_equip);
-        $location.path("/admin/equip");
+        if ($scope.isAutorizeUpdatingEquip) {
+            navigateSrv.setEquip(p_equip);
+            $location.path("/admin/equip");
+        }
     };
     
     this.resetFrm = function() {

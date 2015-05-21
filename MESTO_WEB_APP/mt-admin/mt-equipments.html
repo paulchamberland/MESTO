@@ -36,8 +36,8 @@
                 </div>
 			</div>
 		</form>
-		<button id="btnSave" data-ng-click="equipCTL.save();" ng-disabled="equipmentForm.$pristine || equipmentForm.$invalid">Save</button>
-		<button id="btnDelete" data-ng-click="equipCTL.delete();" ng-disabled="!canDelete">Delete</button>
+		<button id="btnSave" data-ng-click="equipCTL.save();" ng-disabled="equipmentForm.$pristine || equipmentForm.$invalid" data-ng-if="canSave">Save</button>
+		<button id="btnDelete" data-ng-click="equipCTL.delete();" ng-disabled="!canDelete" data-ng-if="isAutorizeDeletingEquip">Delete</button>
         <button id="btnReset" data-ng-click="equipCTL.resetFrm();equipCTL.resetMsg();" ng-disabled="equipmentForm.$pristine">Reset</button>
 	</div>
     

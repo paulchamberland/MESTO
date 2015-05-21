@@ -1,11 +1,12 @@
 describe('Testing the controller of equipment object', function() {
     beforeEach(module('MESTO'));
-    var controller, scope;
+    var controller, scope, securitySrv;
 
-    beforeEach(inject(function(_$controller_, $rootScope){
+    beforeEach(inject(function(_$controller_, $rootScope, _securitySrv_){
         // The injector unwraps the underscores (_) from around the parameter names when matching
         scope = $rootScope;//.$new();
         controller = _$controller_('equipmentCTL', { $scope: scope });
+        securitySrv = _securitySrv_;
         $ = function() {return {
                     fadeOut : function() {},
                     fadeIn : function() {}
@@ -18,6 +19,8 @@ describe('Testing the controller of equipment object', function() {
             };*/ // mock JQuery 
             
         //jasmine.createSpyObj('$'
+        
+        //securitySrv.isAuthorized = function(p) {return false;};
     }));
     
     it('Testing: creation object', function() {
@@ -46,6 +49,13 @@ describe('Testing the controller of equipment object', function() {
         expect(scope.equipment).toEqual(equipment);
         
         expect(controller.emptyEquipment).toEqual(equipment);
+        
+        
+        expect(scope.isAutorizeUpdatingEquip).toBeFalsy();
+        expect(scope.isAutorizeCreatingEquip).toBeFalsy();
+        expect(scope.isAutorizeDeletingEquip).toBeFalsy();
+        expect(scope.isAutorizeSeeDetailsEquip).toBeFalsy();
+        expect(scope.canSave).toBeFalsy();
     });
     
     it('Testing: Get the label from TYPE value', function() {
@@ -64,10 +74,15 @@ describe('Testing the controller of equipment object', function() {
                     type:"HUB"};
         
         //spyOn($, '().fadeIn'); // TODO: make a spy of a function without or sub object function
-        controller.openEquipment(equip);
+        controller.openEquipment(equip); // security ON
+        
+        expect(scope.equipment).toEqual(controller.emptyEquipment);
+        //expect($().fadeIn).toHaveBeenCalled();// TODO: make a spy on jquery without or sub object function
+        
+        scope.isAutorizeSeeDetailsEquip = true;
+        controller.openEquipment(equip); // security OFF
         
         expect(scope.equipment).toEqual(equip);
-        //expect($().fadeIn).toHaveBeenCalled();// TODO: make a spy on jquery without or sub object function
     });
     
     describe('Dependancy to navigateSrv', function() {
@@ -86,8 +101,13 @@ describe('Testing the controller of equipment object', function() {
                             type:"HUB"};
             
             spyOn(location, 'path');
+            controller.navigateToEquipment(equip); // Security ON
             
-            controller.navigateToEquipment(equip);
+            expect(location.path).not.toHaveBeenCalled();
+            expect(navigateSrv.getEquip()).toBeNull();
+            
+            scope.isAutorizeUpdatingEquip = true;
+            controller.navigateToEquipment(equip); // Security OFF
             
             expect(location.path).toHaveBeenCalledWith('/admin/equip');
             expect(navigateSrv.getEquip()).toEqual(equip);
