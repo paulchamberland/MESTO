@@ -25,6 +25,12 @@ describe('Testing the controller of user object => ', function() {
         expect(scope.user).toEqual(user);
         
         expect(controller.emptyUser).toEqual(user);
+        
+        expect(scope.isAutorizeUpdatingUser).toBeFalsy();
+        expect(scope.isAutorizeCreatingUser).toBeFalsy();
+        expect(scope.isAutorizeDeletingUser).toBeFalsy();
+        expect(scope.isAutorizeChangingPassword).toBeFalsy();
+        expect(scope.canSave).toBeFalsy();
     });
     
     it('Testing: Get the Name from Role value', function() {
