@@ -49,7 +49,8 @@ describe('Testing the Login Controller => ', function() {
         });
         
         it('Testing: failed login function', function() {
-            $httpBackend.whenPOST("/MESTO/MESTO_WEB_APP/php/login.php").respond(200, {msg:"", error:"Login Failed"});
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST("/MESTO/MESTO_WEB_APP/php/login.php").respond(200, {msg:"", error:"Login Failed"});
             
             controller.login({username:"teest", pwd:"t53t"});
             
@@ -63,7 +64,8 @@ describe('Testing the Login Controller => ', function() {
             expect(scope.loginForm.pwd.$setValidity).toHaveBeenCalledWith('wrong', false);
         });
         it('Testing: error login function', function() {
-            $httpBackend.whenPOST("/MESTO/MESTO_WEB_APP/php/login.php").respond(404, 'server not found');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST("/MESTO/MESTO_WEB_APP/php/login.php").respond(404, 'server not found');
             
             controller.login({username:"teest", pwd:"t53t"});
             
@@ -77,8 +79,9 @@ describe('Testing the Login Controller => ', function() {
             expect(scope.loginForm.pwd.$setValidity).toHaveBeenCalledWith('wrong', false);
         });
         it('Testing: worked login function', function() {
-            $httpBackend.whenPOST("/MESTO/MESTO_WEB_APP/php/login.php").respond(200, {msg:"Login success", error:""});
-            $httpBackend.whenPOST("/MESTO/MESTO_WEB_APP/php/DAOUser.php").respond(200, [{name:"adminTest"}]);
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST("/MESTO/MESTO_WEB_APP/php/login.php").respond(200, {msg:"Login success", error:""});
+            $httpBackend.expectPOST("/MESTO/MESTO_WEB_APP/php/DAOUser.php").respond(200, [{name:"adminTest"}]);
             spyOn(location, 'path');
             
             controller.login({username:"teest", pwd:"t53t"});
@@ -95,7 +98,8 @@ describe('Testing the Login Controller => ', function() {
         });
         
         it('Testing: failed adminLogin function', function() {
-            $httpBackend.whenPOST("/MESTO/MESTO_WEB_APP/php/login.php").respond(200, {msg:"", error:"Login Failed"});
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST("/MESTO/MESTO_WEB_APP/php/login.php").respond(200, {msg:"", error:"Login Failed"});
             
             controller.adminLogin({username:"teest", pwd:"t53t"});
             
@@ -109,7 +113,8 @@ describe('Testing the Login Controller => ', function() {
             expect(scope.loginForm.pwd.$setValidity).toHaveBeenCalledWith('wrong', false);
         });
         it('Testing: error adminLogin function', function() {
-            $httpBackend.whenPOST("/MESTO/MESTO_WEB_APP/php/login.php").respond(404, 'server not found');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST("/MESTO/MESTO_WEB_APP/php/login.php").respond(404, 'server not found');
             
             controller.adminLogin({username:"teest", pwd:"t53t"});
             
@@ -123,8 +128,9 @@ describe('Testing the Login Controller => ', function() {
             expect(scope.loginForm.pwd.$setValidity).toHaveBeenCalledWith('wrong', false);
         });
         it('Testing: worked adminLogin function', function() {
-            $httpBackend.whenPOST("/MESTO/MESTO_WEB_APP/php/login.php").respond(200, {msg:"Login success", error:""});
-            $httpBackend.whenPOST("/MESTO/MESTO_WEB_APP/php/DAOUser.php").respond(200, [{name:"adminTest"}]);
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST("/MESTO/MESTO_WEB_APP/php/login.php").respond(200, {msg:"Login success", error:""});
+            $httpBackend.expectPOST("/MESTO/MESTO_WEB_APP/php/DAOUser.php").respond(200, [{name:"adminTest"}]);
             
             spyOn(location, 'path');
             

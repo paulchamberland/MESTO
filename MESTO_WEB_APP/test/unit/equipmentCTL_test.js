@@ -259,7 +259,9 @@ describe('Testing the controller of equipment object', function() {
         }));
  
         it('Testing: Refresh equipments list with success', function() {
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(200, '[{"id": "1",'
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(''); // CTL INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(200, '[{"id": "1",'
                                                                                             +'"serialNumber":"432-43453454-4ref4",'
                                                                                             +'"barCode":"code",'
                                                                                             +'"manufacturer":"avenger",'
@@ -286,23 +288,27 @@ describe('Testing the controller of equipment object', function() {
             scope.canDelete = true;
             scope.equipment = {serialNumber:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('lst'); // CTL INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             
             controller.refreshList(); // <--- TEST
 
             $httpBackend.flush();
             
-            expect(scope.equipmentList).not.toBeDefined();
+            expect(scope.equipmentList).toEqual('lst');
             expect(scope.lstError).toEqual('Database error, Contact administrator. Try later'); // Principal test
         });
         it('Testing: Refresh equipements list and failed...', function() {
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(500, 'server error');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('lst'); // CTL INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(500, 'server error');
 
             controller.refreshList(); // <--- TEST
 
             $httpBackend.flush();
             
-            expect(scope.equipmentList).not.toBeDefined();
+            expect(scope.equipmentList).toEqual('lst');
             expect(scope.lstError).toEqual('error: 500:undefined'); // Principal test
         });
  
@@ -311,16 +317,8 @@ describe('Testing the controller of equipment object', function() {
             scope.canDelete = true;
             scope.equipment = {serialNumber:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"Equipment created successfully!!!", "error":""}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond([{}]);
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('[{"id": "1",'
-                                                                                        +'"serialNumber":"432-43453454-4ref4",'
-                                                                                        +'"barCode":"code",'
-                                                                                        +'"manufacturer":"avenger",'
-                                                                                        +'"model":"XW-5",'
-                                                                                        +'"configHW":"some config",'
-                                                                                        +'"configSW":"some config",'
-                                                                                        +'"type":"HUB"}]');
 
             controller.save(); // <--- TEST
 
@@ -348,9 +346,10 @@ describe('Testing the controller of equipment object', function() {
                                     name:""
                                 }};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"Equipment created successfully!!!", "error":""}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('');
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('[{"id": "1",'
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"Equipment created successfully!!!", "error":""}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('[{"id": "1",'
                                                                                         +'"serialNumber":"432-43453454-4ref4",'
                                                                                         +'"barCode":"code",'
                                                                                         +'"manufacturer":"avenger",'
@@ -406,8 +405,9 @@ describe('Testing the controller of equipment object', function() {
                                     name:""
                                 }};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond({});
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             
             controller.save(); // <--- TEST
 
@@ -441,8 +441,9 @@ describe('Testing the controller of equipment object', function() {
                                     name:""
                                 }};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(500, 'server error');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond({});
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(500, 'server error');
             
             controller.save(); // <--- TEST
 
@@ -471,9 +472,10 @@ describe('Testing the controller of equipment object', function() {
             scope.canDelete = true;
             scope.equipment = {serialNumber:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"Equipment deleted successfully!!!", "error":""}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('');
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('[{"id": "1",'
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"Equipment deleted successfully!!!", "error":""}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('[{"id": "1",'
                                                                                         +'"serialNumber":"432-43453454-4ref4",'
                                                                                         +'"barCode":"code",'
                                                                                         +'"manufacturer":"avenger",'
@@ -519,8 +521,9 @@ describe('Testing the controller of equipment object', function() {
             scope.canDelete = true;
             scope.equipment = {serialNumber:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('fake');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             
             controller.delete(); // <--- TEST
 
@@ -536,8 +539,9 @@ describe('Testing the controller of equipment object', function() {
             scope.canDelete = true;
             scope.equipment = {serialNumber:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(500, 'server error');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond({});
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(500, 'server error');
             
             controller.delete(); // <--- TEST
 
@@ -551,6 +555,7 @@ describe('Testing the controller of equipment object', function() {
         });
         
         it('Testing : openSiteList function', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond({}); // basic call from constructor
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond({});
             expect(scope.siteList).not.toBeDefined();
@@ -562,6 +567,7 @@ describe('Testing the controller of equipment object', function() {
             expect(scope.siteList).toEqual({});
         });
         it('Testing : openRoomList function', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond({}); // basic call from constructor
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond({});
             expect(scope.roomList).not.toBeDefined();

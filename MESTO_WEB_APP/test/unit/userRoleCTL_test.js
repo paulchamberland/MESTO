@@ -243,7 +243,9 @@ describe('Testing the controller of userRole object', function() {
         }));
  
         it('Testing: Refresh users list with success', function() {
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond(200, '[{"id": "1",'
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond('');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond(200, '[{"id": "1",'
                                                                                             +'"name":"SpecialTester",'
                                                                                             +'"lstPermissions":"test,test2"}]');
 
@@ -260,23 +262,27 @@ describe('Testing the controller of userRole object', function() {
             scope.canDelete = true;
             scope.userRole = {name:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond('');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             
             controller.refreshList(); // <--- TEST
 
             $httpBackend.flush();
             
-            expect(scope.userRoleList).not.toBeDefined();
+            expect(scope.userRoleList).toEqual('');
             expect(scope.lstError).toEqual('Database error, Contact administrator. Try later'); // Principal test
         });
         it('Testing: Refresh userRoles list and failed...', function() {
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond(500, 'server error');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond('');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond(500, 'server error');
 
             controller.refreshList(); // <--- TEST
 
             $httpBackend.flush();
             
-            expect(scope.userRoleList).not.toBeDefined();
+            expect(scope.userRoleList).toEqual('');
             expect(scope.lstError).toEqual('error: 500:undefined'); // Principal test
         });
  
@@ -285,11 +291,8 @@ describe('Testing the controller of userRole object', function() {
             scope.canDelete = true;
             scope.userRole = {name:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveUserRole.php').respond('{"msg":"Role created successfully!!!", "error":""}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond('[{"id": "1",'
-                                                                                            +'"name":"SpecialTester",'
-                                                                                            +'"lstPermissions":"test,test2"}]');
 
             controller.save(); // <--- TEST
 
@@ -310,9 +313,10 @@ describe('Testing the controller of userRole object', function() {
                               lstPermissions:["test","test2"]
                              };
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveUserRole.php').respond('{"msg":"Role created successfully!!!", "error":""}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond('');
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond('[{"id": "1",'
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveUserRole.php').respond(200, '{"msg":"Role created successfully!!!", "error":""}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond('[{"id": "1",'
                                                                                         +'"name":"SpecialTester",'
                                                                                         +'"lstPermissions":"test,test2"}]');
 
@@ -338,8 +342,10 @@ describe('Testing the controller of userRole object', function() {
                               lstPermissions:["test","test2"]
                              };
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveUserRole.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond({});
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveUserRole.php').respond(200, '{"msg":"", "error":"Database error, Contact administrator. Try later"}');
+            
             
             controller.save(); // <--- TEST
 
@@ -360,9 +366,10 @@ describe('Testing the controller of userRole object', function() {
                               lstPermissions:["test","test2"]
                              };
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveUserRole.php').respond(500, 'server error');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond({});
-            
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveUserRole.php').respond(500, 'server error');
+
             controller.save(); // <--- TEST
 
             $httpBackend.flush();
@@ -386,9 +393,10 @@ describe('Testing the controller of userRole object', function() {
                               lstPermissions:["test","test2"]
                              };
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveUserRole.php').respond('{"msg":"Role deleted successfully!!!", "error":""}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond('');
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond('[{"id": "1",'
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveUserRole.php').respond('{"msg":"Role deleted successfully!!!", "error":""}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond('[{"id": "1",'
                                                                                         +'"name":"SpecialTester",'
                                                                                         +'"lstPermissions":"test,test2"}]');
 
@@ -412,8 +420,9 @@ describe('Testing the controller of userRole object', function() {
             scope.canDelete = true;
             scope.userRole = {name:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveUserRole.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond('fake');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveUserRole.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             
             controller.delete(); // <--- TEST
 
@@ -429,8 +438,9 @@ describe('Testing the controller of userRole object', function() {
             scope.canDelete = true;
             scope.userRole = {name:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveUserRole.php').respond(500, 'server error');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond({});
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveUserRole.php').respond(500, 'server error');
             
             controller.delete(); // <--- TEST
 

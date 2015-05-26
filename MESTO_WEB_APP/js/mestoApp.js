@@ -28,16 +28,19 @@ app.config(function($routeProvider, IdleProvider) {
 app.run(function($rootScope, $location, securitySrv) {
     var routeRestricted = ['/admin/home', '/admin/site', '/admin/sites', '/admin/room', '/admin/rooms', '/admin/equip', '/admin/equipments', '/admin/permissions', '/admin/role', '/admin/roles', '/admin/user', '/admin/users'];
     var forbiddenCall = ['.html', '.php'];
-    $rootScope.$on('$routeChangeStart', function() {
-        if ("/admin/".indexOf($location.path()) != -1 && securitySrv.isLogged() && securitySrv.isAuthorized('adminAccess')) {
-            $location.path('/admin/home');
-        }
-        else if (routeRestricted.indexOf($location.path()) != -1 && (!securitySrv.isLogged() || !securitySrv.isAuthorized('adminAccess'))) {
-            $location.path('/home');
-        }
-        else if (forbiddenCall.indexOf($location.path()) != -1) {
-            $location.path('/home');
-        }
+
+    securitySrv.checkLoggedUser().then(function () {
+        $rootScope.$on('$routeChangeStart', function() {
+            if ("/admin/".indexOf($location.path()) != -1 && securitySrv.isLogged() && securitySrv.isAuthorized('adminAccess')) {
+                $location.path('/admin/home');
+            }
+            else if (routeRestricted.indexOf($location.path()) != -1 && (!securitySrv.isLogged() || !securitySrv.isAuthorized('adminAccess'))) {
+                $location.path('/home');
+            }
+            else if (forbiddenCall.indexOf($location.path()) != -1) {
+                $location.path('/home');
+            }
+        });
     });
     
     $rootScope.$on('IdleStart', function() {
@@ -165,6 +168,8 @@ app.factory('permissionSrv', function() {
 
 app.factory('securitySrv', function($http, $location, Idle) {
     var currentUser = null;
+    var uId = null;
+    var checkSession = false;
     
     function login(pData) {
         return $http({
@@ -176,6 +181,7 @@ app.factory('securitySrv', function($http, $location, Idle) {
             function(data, status) {
                 if (data.msg != null && data.msg != '' && data.obj != '') {
                     createUser({username: pData.username}); // temp user create to overpass the asynchone problem of routing and parralalism of http promise
+                    uId = data.uId;
                     loadUser(data.obj);
                     Idle.watch();
                 }
@@ -212,12 +218,44 @@ app.factory('securitySrv', function($http, $location, Idle) {
             });
     }
     
+    function checkLoggedUser() {
+       return $http({
+            method: 'POST',
+            url: "/MESTO/MESTO_WEB_APP/php/loggedUser.php", // TODO: Make a config with path
+            headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+        }).success(
+            function(data, status) {
+                if (data != "") {
+                    createUser(data.obj);
+                    uId = data.uId;
+                    Idle.watch();
+                }
+            }
+        ).error(
+            function(data, status, headers, config, statusText) {
+                // TODO: error server handling
+            }
+        );
+    }
+    
     function logout() {
-        currentUser = null;
+        $http({
+            method: 'POST',
+            url: "/MESTO/MESTO_WEB_APP/php/logout.php", // TODO: Make a config with path
+            headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+        }).success(
+            function(data, status) {
+                currentUser = null;
 
-        Idle.unwatch();
-        
-        $location.path('/home');
+                Idle.unwatch();
+                
+                $location.path('/home');
+            }
+        ).error(
+            function(data, status, headers, config, statusText) {
+                // TODO: error server handling
+            }
+        );
     }
     
     function isLogged() {
@@ -226,7 +264,7 @@ app.factory('securitySrv', function($http, $location, Idle) {
     
     function createUser(user) {
         currentUser = user;
-    };
+    }
     
     function getUserName() {
         return (currentUser) ? currentUser.name : null;
@@ -239,10 +277,11 @@ app.factory('securitySrv', function($http, $location, Idle) {
     return {
         login : login,
         logout : logout,
+        checkLoggedUser : checkLoggedUser,
         isLogged : isLogged,
         getUserName : getUserName,
         isAuthorized : isAuthorized
-    }
+    };
 });
 
 app.factory('googleMap', function() {

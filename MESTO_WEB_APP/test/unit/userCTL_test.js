@@ -157,8 +157,10 @@ describe('Testing the controller of user object => ', function() {
         }));
         
         it('Testing: Get the Name from Role value', function() {
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{id:"1",name:"admin"},{id:"2",name:"test"}]);
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('[{}]');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond('');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{id:"1",name:"admin"},{id:"2",name:"test"}]);
             
             controller.loadRolesList();
             
@@ -170,8 +172,10 @@ describe('Testing the controller of user object => ', function() {
         });
  
         it('Testing: Refresh users list with success', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond(200, '[{"id": "1",'
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond(200, '[{"id": "1",'
                                                                                             +'"username":"admin",'
                                                                                             +'"name":"Ad Mean",'
                                                                                             +'"email":"admin@test.ca",'
@@ -196,25 +200,29 @@ describe('Testing the controller of user object => ', function() {
             scope.canDelete = true;
             scope.user = {username:"fake"};
             
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('lst');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond(200, '{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             
             controller.refreshList(); // <--- TEST
 
             $httpBackend.flush();
             
-            expect(scope.userList).not.toBeDefined();
+            expect(scope.userList).toEqual('lst');
             expect(scope.lstError).toEqual('Database error, Contact administrator. Try later'); // Principal test
         });
         it('Testing: Refresh users list and failed...', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('lst');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond(500, 'server error');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond(500, 'server error');
 
             controller.refreshList(); // <--- TEST
 
             $httpBackend.flush();
             
-            expect(scope.userList).not.toBeDefined();
+            expect(scope.userList).toEqual('lst');
             expect(scope.lstError).toEqual('error: 500:undefined'); // Principal test
         });
  
@@ -223,16 +231,10 @@ describe('Testing the controller of user object => ', function() {
             scope.canDelete = true;
             scope.user = {username:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond('{"msg":"User created successfully!!!", "error":""}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('[{}]');
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('[{"id": "1",'
-                                                                                        +'"username":"admin",'
-                                                                                        +'"name":"Ad Mean",'
-                                                                                        +'"email":"admin@test.ca",'
-                                                                                        +'"password":"fj387dj2i",'
-                                                                                        +'"role":"1",'
-                                                                                        +'"active":"true"}]');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
+            
 
             controller.save(); // <--- TEST
 
@@ -251,16 +253,18 @@ describe('Testing the controller of user object => ', function() {
             scope.canDelete = true;
             scope.user = {username:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond('{"msg":"User created successfully!!!", "error":""}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('');
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('[{"id": "1",'
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond('');
+            
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond(200, '{"msg":"User created successfully!!!", "error":""}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('[{"id": "1",'
                                                                                         +'"username":"admin",'
                                                                                         +'"name":"Ad Mean",'
                                                                                         +'"email":"admin@test.ca",'
                                                                                         +'"password":"fj387dj2i",'
                                                                                         +'"role":"1",'
                                                                                         +'"active":"true"}]');
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
             
             controller.save(); // <--- TEST
 
@@ -293,9 +297,10 @@ describe('Testing the controller of user object => ', function() {
             scope.canDelete = true;
             scope.user = {username:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond({});
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             
             controller.save(); // <--- TEST
 
@@ -312,9 +317,10 @@ describe('Testing the controller of user object => ', function() {
             scope.canDelete = true;
             scope.user = {username:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond(500, 'server error');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond({});
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond(500, 'server error');
             
             controller.save(); // <--- TEST
 
@@ -335,16 +341,18 @@ describe('Testing the controller of user object => ', function() {
             scope.canDelete = true;
             scope.user = {username:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond('{"msg":"User deleted successfully!!!", "error":""}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('[{}]');
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('[{"id": "1",'
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond('{"msg":"User deleted successfully!!!", "error":""}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('[{"id": "1",'
                                                                                         +'"username":"admin",'
                                                                                         +'"name":"Ad Mean",'
                                                                                         +'"email":"admin@test.ca",'
                                                                                         +'"password":"fj387dj2i",'
                                                                                         +'"role":"1",'
                                                                                         +'"active":"true"}]');
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
+
             
             controller.delete(); // <--- TEST
 
@@ -376,9 +384,11 @@ describe('Testing the controller of user object => ', function() {
             scope.canDelete = true;
             scope.user = {username:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('fake');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
+            
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond(200, '{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             
             controller.delete(); // <--- TEST
 
@@ -394,9 +404,10 @@ describe('Testing the controller of user object => ', function() {
             scope.canDelete = true;
             scope.user = {username:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond(500, 'server error');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond({});
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond(500, 'server error');
             
             controller.delete(); // <--- TEST
 

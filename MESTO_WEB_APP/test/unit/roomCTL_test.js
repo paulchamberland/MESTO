@@ -218,6 +218,7 @@ describe('Testing the controller of room object =>', function() {
         }));
  
         it('Testing: Refresh rooms list with success', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(200, '[{"id": "1",'
                                                                                         +'"roomID":"erv324r23",'
                                                                                         +'"pointOfContact":"sgt bilbo",'
@@ -245,6 +246,7 @@ describe('Testing the controller of room object =>', function() {
             scope.canDelete = true;
             scope.room = {roomID:"fake"};
             
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             
             controller.refreshList(); // <--- TEST
@@ -255,6 +257,7 @@ describe('Testing the controller of room object =>', function() {
             expect(scope.lstError).toEqual('Database error, Contact administrator. Try later'); // Principal test
         });
         it('Testing: Refresh rooms list and failed...', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(500, 'server error');
 
             controller.refreshList(); // <--- TEST
@@ -270,16 +273,8 @@ describe('Testing the controller of room object =>', function() {
             scope.canDelete = true;
             scope.room = {roomID:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond('{"msg":"Room created successfully!!!", "error":""}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond([{}]);
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('[{"id": "1",'
-                                                                                        +'"roomID":"erv324r23",'
-                                                                                        +'"pointOfContact":"sgt bilbo",'
-                                                                                        +'"technicalPointOfContact":"sgt bilbo",'
-                                                                                        +'"roomSize":"43",'
-                                                                                        +'"role":"TC",'
-                                                                                        +'"parentSite":{"id":"2","name":"siteTest"}'
-                                                                                        +'}]');
 
             controller.save(); // <--- TEST
 
@@ -298,9 +293,10 @@ describe('Testing the controller of room object =>', function() {
             scope.canDelete = true;
             scope.room = {roomID:"fake",parentSite:{},lstEquips:[]};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond('{"msg":"Room created successfully!!!", "error":""}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('');
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('[{"id": "1",'
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond('{"msg":"Room created successfully!!!", "error":""}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('[{"id": "1",'
                                                                                         +'"roomID":"erv324r23",'
                                                                                         +'"pointOfContact":"sgt bilbo",'
                                                                                         +'"technicalPointOfContact":"sgt bilbo",'
@@ -343,8 +339,9 @@ describe('Testing the controller of room object =>', function() {
             scope.canDelete = true;
             scope.room = {roomID:"fake",parentSite:{id:"3"}};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond({});
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             
             controller.save(); // <--- TEST
 
@@ -361,8 +358,9 @@ describe('Testing the controller of room object =>', function() {
             scope.canDelete = true;
             scope.room = {roomID:"fake",parentSite:{id:"3"}};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond(500, 'server error');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond({});
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond(500, 'server error');
             
             controller.save(); // <--- TEST
 
@@ -376,8 +374,9 @@ describe('Testing the controller of room object =>', function() {
         });
 
         it('Testing: Failed to Load sub list of Equipements', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(''); // CTR init
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(200, '{"msg":"", "error":"Database error"}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(200, '{"msg":"", "error":"Database error"}');
             
             controller.loadEquipsList();
             $httpBackend.flush();
@@ -386,8 +385,9 @@ describe('Testing the controller of room object =>', function() {
             expect(scope.room.lstEquips).toEqual([]);
         });
         it('Testing: Error to Load sub list of Equipements', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(''); // CTR init
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(500, '{"msg":"", "error":"error"}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(500, '{"msg":"", "error":"error"}');
             
             controller.loadEquipsList();
             $httpBackend.flush();
@@ -396,8 +396,9 @@ describe('Testing the controller of room object =>', function() {
             expect(scope.room.lstEquips).toEqual([]);
         });
         it('Testing: Success to Load sub list of Equipements', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(''); // CTR init
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(200, '[{"test":"test"}]');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(200, '[{"test":"test"}]');
             
             controller.loadEquipsList();
             $httpBackend.flush();
@@ -413,9 +414,10 @@ describe('Testing the controller of room object =>', function() {
             scope.canDelete = true;
             scope.room = {roomID:"fake",parentSite:{},lstEquips:[]};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond('{"msg":"Room deleted successfully!!!", "error":""}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('');
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('[{"id": "1",'
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond('{"msg":"Room deleted successfully!!!", "error":""}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('[{"id": "1",'
                                                                                         +'"roomID":"erv324r23",'
                                                                                         +'"pointOfContact":"sgt bilbo",'
                                                                                         +'"technicalPointOfContact":"sgt bilbo",'
@@ -457,8 +459,9 @@ describe('Testing the controller of room object =>', function() {
             scope.canDelete = true;
             scope.room = {roomID:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('fake');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             
             controller.delete(); // <--- TEST
 
@@ -474,8 +477,9 @@ describe('Testing the controller of room object =>', function() {
             scope.canDelete = true;
             scope.room = {roomID:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond(500, 'server error');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond({});
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond(500, 'server error');
             
             controller.delete(); // <--- TEST
 
@@ -489,6 +493,7 @@ describe('Testing the controller of room object =>', function() {
         });
         
         it('Testing : openSiteList function', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond({}); // basic call from constructor
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond({});
             expect(scope.siteList).not.toBeDefined();
@@ -500,8 +505,11 @@ describe('Testing the controller of room object =>', function() {
         });
         
         it('Testing: Failed to remove a associated equipment', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(''); // CTR init
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '{"msg":"", "error":"Database error"}');
+            
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '{"msg":"", "error":"Database error"}');
+            
             
             controller.removeAssEquip(12);
             $httpBackend.flush();
@@ -509,8 +517,9 @@ describe('Testing the controller of room object =>', function() {
             expect(scope.lstEquipErr).toEqual("Database error");
         });
         it('Testing: Error to remove a associated equipment', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(''); // CTR init
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(500, '{"msg":"", "error":"error"}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(500, '{"msg":"", "error":"error"}');
             
             controller.removeAssEquip(12);
             $httpBackend.flush();
@@ -518,9 +527,10 @@ describe('Testing the controller of room object =>', function() {
             expect(scope.lstEquipErr).toEqual("error: 500:undefined");
         });
         it('Testing: Success to remove a associated equipment', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(''); // CTR init
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '{"msg":"success", "error":""}');
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('[{"test":"test"}]');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '{"msg":"success", "error":""}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('[{"test":"test"}]');
             
             controller.removeAssEquip(12);
             $httpBackend.flush();
@@ -530,8 +540,9 @@ describe('Testing the controller of room object =>', function() {
         });
         
         it('Testing: Failed to load Free Equips List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(''); // CTR init
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(200, '{"msg":"", "error":"Database error"}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(200, '{"msg":"", "error":"Database error"}');
             
             controller.loadFreeEquipsList();
             $httpBackend.flush();
@@ -540,8 +551,9 @@ describe('Testing the controller of room object =>', function() {
             expect(scope.lstFreeEquips).not.toBeDefined();
         });
         it('Testing: Error to load Free Equips List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(''); // CTR init
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(500, '{"msg":"", "error":"error"}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(500, '{"msg":"", "error":"error"}');
             
             controller.loadFreeEquipsList();
             $httpBackend.flush();
@@ -550,8 +562,9 @@ describe('Testing the controller of room object =>', function() {
             expect(scope.lstFreeEquips).not.toBeDefined();
         });
         it('Testing: Success to load Free Equips List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(''); // CTR init
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(200, '[{"test":"test"}]');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(200, '[{"test":"test"}]');
             
             controller.loadFreeEquipsList();
             $httpBackend.flush();
@@ -561,8 +574,9 @@ describe('Testing the controller of room object =>', function() {
         });
         
         it('Testing: Failed to add Free Equips List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(''); // CTR init
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '{"msg":"", "error":"Database error"}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '{"msg":"", "error":"Database error"}');
             scope.lstFreeEquips = [43,41,3];
             
             controller.addFreeEquipsList();
@@ -571,8 +585,9 @@ describe('Testing the controller of room object =>', function() {
             expect(scope.lstFreeEquipErr).toEqual("Database error");
         });
         it('Testing: Error to add Free Equips List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(''); // CTR init
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(500, '{"msg":"", "error":"error"}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(500, '{"msg":"", "error":"error"}');
             scope.lstFreeEquips = [43,41,3];
             
             controller.addFreeEquipsList();
@@ -581,9 +596,9 @@ describe('Testing the controller of room object =>', function() {
             expect(scope.lstFreeEquipErr).toEqual("error: 500:undefined");
         });
         it('Testing: Success to add Free Equips List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(''); // CTR init
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '[{"test":"test"}]');
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '[{"test":"test"}]');
             scope.lstFreeEquips = [43,41,3];
             
             controller.closeFreeEquipsList = jasmine.createSpy("closeFreeEquipsList");

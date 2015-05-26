@@ -11,9 +11,9 @@ try {
     
     if (sizeOf($rs) > 0) {
         if (password_verify($logInfo['pwd'], $rs[0]['password'])) {
-            // TODO: PHP START SESSION
-        
-            echo $json = json_encode(array("msg" => "Login success", "error" => "", "obj" => $rs[0]['id']));
+            session_start();
+            $_SESSION['uId'] = uniqid($rs[0]['id']);
+            echo $json = json_encode(array("msg" => "Login success", "error" => "", "obj" => $rs[0]['id'], "uId" => $_SESSION['uId']));
         }
         else {
             // user Invalid password.

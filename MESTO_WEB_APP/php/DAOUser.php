@@ -59,6 +59,18 @@ try {
         array_push($arr, new User($obj));
     }
     
+    if (!empty($data['activity']) && $data['activity'] == "login" && !empty($data['id'])) {
+        session_id();
+        session_start();
+
+        if (isset($_SESSION['uId'])) {
+            $_SESSION['user'] = $arr[0];
+        }
+        else {
+            // DELETE the possible create sessions
+        }
+    }
+    
     $json = json_encode($arr);
     
     header('Content-Type: application/json');
