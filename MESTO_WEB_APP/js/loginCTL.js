@@ -7,12 +7,14 @@ app.controller('loginCTL', function($scope, $rootScope, $http, $location, securi
     
     this.login = function(pLogInfo) {
         securitySrv.login({
-                username : pLogInfo.username,
-                pwd : pLogInfo.pwd
-            }).then(function(response) {
-                if (response.data.msg != null && response.data.msg != '' ) {
+            username : pLogInfo.username,
+            pwd : pLogInfo.pwd
+            },
+            [function(response) {
+                if (response.data.error == null) {
                     $scope.loginForm.username.$setValidity('wrong', true);
                     $scope.loginForm.pwd.$setValidity('wrong', true);
+                    
                     $('#loginBox').toggle();
                     $('#loginButton').toggleClass('active');
                 }
@@ -23,28 +25,31 @@ app.controller('loginCTL', function($scope, $rootScope, $http, $location, securi
             }, function() {
                 $scope.loginForm.username.$setValidity('wrong', false);
                 $scope.loginForm.pwd.$setValidity('wrong', false);
-            });
+            }]
+        );
     };
     
     this.adminLogin = function(pLogInfo) {
         securitySrv.login({
                 username : pLogInfo.username,
                 pwd : pLogInfo.pwd
-            }).then(function(response) {
-                if (response.data.msg != null && response.data.msg != '') {
-                    $scope.loginForm.username.$setValidity('wrong', true);
-                    $scope.loginForm.pwd.$setValidity('wrong', true);
-                    
-                    $location.path('/admin/home');
-                }
-                else {
+                },
+                [function(response) {
+                    if (response.data.error == null) {
+                        $scope.loginForm.username.$setValidity('wrong', true);
+                        $scope.loginForm.pwd.$setValidity('wrong', true);
+                        
+                        $location.path('/admin/home');
+                    }
+                    else {
+                        $scope.loginForm.username.$setValidity('wrong', false);
+                        $scope.loginForm.pwd.$setValidity('wrong', false);
+                    }
+                }, function() {
                     $scope.loginForm.username.$setValidity('wrong', false);
                     $scope.loginForm.pwd.$setValidity('wrong', false);
-                }
-            }, function() {
-                $scope.loginForm.username.$setValidity('wrong', false);
-                $scope.loginForm.pwd.$setValidity('wrong', false);
-            });
+                }]
+            );
     };
     this.logout = function() {
         securitySrv.logout();

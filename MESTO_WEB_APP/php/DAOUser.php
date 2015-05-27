@@ -43,7 +43,7 @@ try {
 	$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     if (empty($data['id'])) {
-        $stmt = $con->prepare("SELECT id, username, name, email, title, supervisor, fk_userRoleId, active, address, phone, updateBy, updateDate FROM mtuser");
+        $stmt = $con->prepare("SELECT id, username, name, email, title, supervisor, fk_userRoleId, active, address, phone, updateBy, updateDate FROM mtuser ORDER BY id");
 	}
     else if (!empty($data['activity']) && $data['activity'] == "login" && !empty($data['id'])) {
         $stmt = $con->prepare("SELECT u.*, ur.list_permissions FROM mtuser u LEFT JOIN userrole ur ON u.fk_userRoleId = ur.id WHERE u.id = '".$data['id']."'");

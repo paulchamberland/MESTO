@@ -25,6 +25,10 @@ describe('E2E: Equipment => ', function() {
         element(by.id('mnEquipements')).click();
     });
     
+    afterAll(function() {
+        element(by.id('logoutButton')).click();
+    });
+    
     beforeEach(function() {
         element(by.id('btnReset')).click();
     });

@@ -3,6 +3,10 @@ describe('E2E: Login Pop-up =>', function() {
         browser.get('http://localhost/MESTO/MESTO_WEB_APP/#/home');
     });
     
+    afterAll(function() {
+        element(by.id('logoutButton')).click();
+    });
+    
     it('Testing: Open the popup and log with error', function() {
         element(by.id('loginButton')).click();
         

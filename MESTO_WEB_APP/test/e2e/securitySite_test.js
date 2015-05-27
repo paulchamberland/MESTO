@@ -39,16 +39,15 @@ describe('e2e Site Autority : ', function () {
         element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).get(8).click();
         element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).get(9).click();
         element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).get(10).click();
-        element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).get(11).click();
-        //element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).get(12).click();
+        //element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).get(11).click();
+        element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).get(12).click();
         element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).get(13).click();
         element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).get(14).click();
         element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).get(15).click();
-        element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).get(16).click();
-        //element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).get(17).click();
+        //element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).get(16).click();
+        element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).get(17).click();
         element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).get(18).click();
-        element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).get(19).click();
-        //element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).get(20).click();
+        //element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).get(19).click();
         element(by.id('btnAffectPerm')).click();
         
         element(by.id('btnSave')).click();
@@ -111,6 +110,14 @@ describe('e2e Site Autority : ', function () {
     });
     
     afterAll(function() {
+        // Logout
+        element(by.id('logoutButton')).click();
+        
+        // Log new user
+        logUser('tester', 'tester');
+        
+        element(by.id('mnAdmin')).click();
+        
         // delete the user create
         browser.actions().mouseMove(element(by.id('mnUser'))).perform();
         browser.sleep(500);
@@ -126,5 +133,8 @@ describe('e2e Site Autority : ', function () {
         
         element.all(by.repeater('userRoleList')).last().click();
         element(by.id('btnDelete')).click();
+        
+        // Logout
+        element(by.id('logoutButton')).click();
     });
 });

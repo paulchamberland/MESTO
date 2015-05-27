@@ -24,6 +24,10 @@ describe('E2E: Site => ', function() {
         element(by.id('mnSites')).click();
     });
     
+    afterAll(function() {
+        element(by.id('logoutButton')).click();
+    });
+    
     beforeEach(function() {
         element(by.model('site.city')).sendKeys('t'); // be sure that Reset is active
         element(by.id('btnReset')).click();

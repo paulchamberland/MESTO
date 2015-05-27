@@ -27,6 +27,10 @@ describe('E2E: UserRole => ', function() {
         element(by.id('btnNewUserRole')).click();
     });
     
+    afterAll(function() {
+        element(by.id('logoutButton')).click();
+    });
+    
     beforeEach(function() {
         element(by.model('userRole.description')).sendKeys('t'); // be sure that Reset is active
         element(by.id('btnReset')).click();
@@ -113,7 +117,7 @@ describe('E2E: UserRole => ', function() {
             element(by.id('btnAffectPerm')).click();
             
             expect(element.all(by.options('perm.codeName as perm.name for perm in lstSelectedPermissionsObj')).count()).toEqual(2);
-            expect(element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).count()).toEqual(22);
+            expect(element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).count()).toEqual(18);
         });
         
         it('Testing: Remove a associate permission', function() {
@@ -127,7 +131,7 @@ describe('E2E: UserRole => ', function() {
             element(by.id('btnUnaffectPerm')).click();
             
             expect(element.all(by.options('perm.codeName as perm.name for perm in lstSelectedPermissionsObj')).count()).toEqual(1);
-            expect(element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).count()).toEqual(23);
+            expect(element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).count()).toEqual(19);
         });
         
         it('Testing: Delete a Role', function() {

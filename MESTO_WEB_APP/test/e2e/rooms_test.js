@@ -24,6 +24,10 @@ describe('E2E: Room => ', function() {
         element(by.id('mnRooms')).click();
     });
     
+    afterAll(function() {
+        element(by.id('logoutButton')).click();
+    });
+    
     beforeEach(function() {
         element(by.model('room.pointOfContact')).sendKeys('t'); // be sure RESET is active
         element(by.id('btnReset')).click();

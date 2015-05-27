@@ -30,6 +30,10 @@ describe('E2E: User => ', function() {
         logTesterUser();
     });
     
+    afterAll(function() {
+        element(by.id('logoutButton')).click();
+    });
+    
     beforeEach(function() {
         element(by.model('user.name')).sendKeys('t'); // just to be sure btnReset is actif
         element(by.id('btnReset')).click();

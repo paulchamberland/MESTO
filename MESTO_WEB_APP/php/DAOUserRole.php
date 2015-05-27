@@ -24,10 +24,10 @@ try {
 	$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     if (empty($data['id'])) {
-        $stmt = $con->prepare("SELECT id, name, description, list_permissions, updateBy, updateDate FROM userrole");
+        $stmt = $con->prepare("SELECT id, name, description, list_permissions, updateBy, updateDate FROM userrole ORDER BY id");
 	}
     else {
-        $stmt = $con->prepare("SELECT id, name, description, list_permissions, updateBy, updateDate FROM userrole WHERE id = '".$data['id']."'");
+        $stmt = $con->prepare("SELECT id, name, description, list_permissions, updateBy, updateDate FROM userrole WHERE id = '".$data['id']."' ORDER BY id");
     }
     
 	$stmt->execute();

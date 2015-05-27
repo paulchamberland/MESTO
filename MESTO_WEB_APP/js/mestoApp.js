@@ -169,10 +169,11 @@ app.factory('permissionSrv', function() {
 app.factory('securitySrv', function($http, $location, Idle) {
     var currentUser = null;
     var uId = null;
-    var checkSession = false;
     
-    function login(pData) {
-        return $http({
+    function login(pData, then) {
+        if (!then) return;
+        
+        $http({
             method: 'POST',
             url: "/MESTO/MESTO_WEB_APP/php/login.php", // TODO: Make a config with path
             data: pData,
@@ -180,23 +181,23 @@ app.factory('securitySrv', function($http, $location, Idle) {
         }).success(
             function(data, status) {
                 if (data.msg != null && data.msg != '' && data.obj != '') {
-                    createUser({username: pData.username}); // temp user create to overpass the asynchone problem of routing and parralalism of http promise
                     uId = data.uId;
-                    loadUser(data.obj);
-                    Idle.watch();
+                    loadUser(data.obj).then(then[0], then[1])
+                                      .then(function(resp){if (currentUser != null) Idle.watch()});
                 }
                 else {
+                    then[1]();
                 }
             }
         ).error(
             function(data, status, headers, config, statusText) {
-                // TODO: error server handling
+                then[1]();
             }
         );
     }
     
     function loadUser(pId) {
-        $http({
+        return $http({
             method: 'POST',
             url: "/MESTO/MESTO_WEB_APP/php/DAOUser.php", // TODO: Make a config with path
             data: {id:pId,
