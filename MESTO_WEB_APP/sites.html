@@ -10,9 +10,9 @@
         <h1 class="test">Sites List</h1>
         <span class="error" data-ng-show="lstError">{{lstError}}</span>
 		<table border="1">
-            <tr><th>Reference</th><th>Name</th><th>Latitude</th><th>Longitude</th></tr>
+            <tr><th>Name</th><th>Address</th><th>City</th><th>Province</th><th>Postal code</th><th>Role</th><th>Point of Contact</th><th>Phone number of PoC</th></tr>
 			<tr data-ng-repeat="s in siteList" data-ng-click="siteCTL.openSite(s);">
-				<td>{{s.reference}}</td><td>{{s.siteName}}</td><td>{{s.latitude}}</td><td>{{s.longitude}}</td>
+				<td>{{s.siteName}}</td><td>{{s.address}}</td><td>{{s.city}}</td><td>{{s.province}}</td><td>{{s.postalCode}}</td><td>{{siteCTL.getLabelROLE(s.role)}}</td><td>{{s.pointOfContact}}</td><td>{{s.phoneNumberPoC}}</td>
 			</tr>
 		</table>
 	</div>
