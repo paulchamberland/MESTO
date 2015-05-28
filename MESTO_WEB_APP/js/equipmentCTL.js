@@ -116,9 +116,10 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv, s
                 function(data, status) {
                     self.resetMsg();
                     if (data.msg != '') {
-                        $scope.SQLMsgs = data.msg;
-                        self.loadList();
+                        //$scope.SQLMsgs = data.msg;
+                        //self.loadList();
                         self.resetFrm();
+                        $location.path("/admin/equipments");
                     }
                     else {
                         $scope.SQLErrors = data.error;
@@ -146,9 +147,10 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv, s
                 function(data, status) {
                     self.resetMsg();
                     if (data.msg != '') {
-                        $scope.SQLMsgs = data.msg;
-                        self.loadList();
+                        //$scope.SQLMsgs = data.msg;
+                        //self.loadList();
                         self.resetFrm();
+                        $location.path("/admin/equipments");
                     }
                     else {
                         $scope.SQLErrors = data.error;

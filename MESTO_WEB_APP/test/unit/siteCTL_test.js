@@ -313,8 +313,11 @@ describe('Testing the controller of site object =>', function() {
         // TODO : add test and spy for JQuery
     });
     describe('Testing Ajax call from site object =>', function() {
-        beforeEach(inject(function(_$httpBackend_) {
+        var location;
+        
+        beforeEach(inject(function(_$httpBackend_, _$location_) {
             $httpBackend = _$httpBackend_;
+            location = _$location_;
         }));
  
         it('Testing: Refresh sites list with success', function() {
@@ -414,26 +417,11 @@ describe('Testing the controller of site object =>', function() {
             scope.canDelete = true;
             scope.site = {reference:"fake"};
             
+            spyOn(location, 'path');  
+            
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTL INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveSite.php').respond('{"msg":"Site created successfully!!!", "error":""}');
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond('[{"id": "1",'
-                                                                                        +'"reference":"test",'
-                                                                                        +'"latitude":"12.123456",'
-                                                                                        +'"longitude":"43.123456",'
-                                                                                        +'"siteName":"test4",'
-                                                                                        +'"description":"test5",'
-                                                                                        +'"isTemporary":true,'
-                                                                                        +'"startDate":"1912-12-12",'
-                                                                                        +'"endDate":"1900-11-11",'
-                                                                                        +'"address":"test9",'
-                                                                                        +'"city":"test10",'
-                                                                                        +'"province":"test11",'
-                                                                                        +'"country":"test12",'
-                                                                                        +'"postalCode":"X5X 5X5",'
-                                                                                        +'"role":"COP",'
-                                                                                        +'"pointOfContact":"Lt. Bariton",'
-                                                                                        +'"phoneNumberPoC":"514-555-4321"}]');
 
             controller.save(); // <--- TEST
 
@@ -459,25 +447,12 @@ describe('Testing the controller of site object =>', function() {
                                     phoneNumberPoC:"",
                                     lstRooms:[],
                                     lstEquips:[]});
-            expect(scope.SQLMsgs).toEqual('Site created successfully!!!');
+                                    
+            expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
-            expect(scope.siteList).toEqual([{"id": "1",
-                                                "reference":"test",
-                                                "latitude":"12.123456",
-                                                "longitude":"43.123456",
-                                                "siteName":"test4",
-                                                "description":"test5",
-                                                "isTemporary":true,
-                                                "startDate":"1912-12-12",
-                                                "endDate":"1900-11-11",
-                                                "address":"test9",
-                                                "city":"test10",
-                                                "province":"test11",
-                                                "country":"test12",
-                                                "postalCode":"X5X 5X5",
-                                                "role":"COP",
-                                                "pointOfContact":"Lt. Bariton",
-                                                "phoneNumberPoC":"514-555-4321"}]);
+            expect(scope.siteList).toEqual('');
+            
+            expect(location.path).toHaveBeenCalledWith("/admin/sites");
         });
         it('Testing: Generated error for Saving', function() {
             scope.siteForm = {$dirty:true, $valid:true};
@@ -526,26 +501,11 @@ describe('Testing the controller of site object =>', function() {
             scope.canDelete = true;
             scope.site = {reference:"fake"};
             
+            spyOn(location, 'path');
+            
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTL INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveSite.php').respond('{"msg":"Site deleted successfully!!!", "error":""}');
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond('[{"id": "1",'
-                                                                                        +'"reference":"test",'
-                                                                                        +'"latitude":"12.123456",'
-                                                                                        +'"longitude":"43.123456",'
-                                                                                        +'"siteName":"test4",'
-                                                                                        +'"description":"test5",'
-                                                                                        +'"isTemporary":true,'
-                                                                                        +'"startDate":"12-12-1912",'
-                                                                                        +'"endDate":"11-11-1900",'
-                                                                                        +'"address":"test9",'
-                                                                                        +'"city":"test10",'
-                                                                                        +'"province":"test11",'
-                                                                                        +'"country":"test12",'
-                                                                                        +'"postalCode":"X5X 5X5",'
-                                                                                        +'"role":"COP",'
-                                                                                        +'"pointOfContact":"Lt. Bariton",'
-                                                                                        +'"phoneNumberPoC":"514-555-4321"}]');
 
             controller.delete(); // <--- TEST
 
@@ -571,25 +531,12 @@ describe('Testing the controller of site object =>', function() {
                                     phoneNumberPoC:"",
                                     lstRooms:[],
                                     lstEquips:[]});
-            expect(scope.SQLMsgs).toEqual('Site deleted successfully!!!');
+            
+            expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
-            expect(scope.siteList).toEqual([{"id": "1",
-                                                "reference":"test",
-                                                "latitude":"12.123456",
-                                                "longitude":"43.123456",
-                                                "siteName":"test4",
-                                                "description":"test5",
-                                                "isTemporary":true,
-                                                "startDate":"12-12-1912",
-                                                "endDate":"11-11-1900",
-                                                "address":"test9",
-                                                "city":"test10",
-                                                "province":"test11",
-                                                "country":"test12",
-                                                "postalCode":"X5X 5X5",
-                                                "role":"COP",
-                                                "pointOfContact":"Lt. Bariton",
-                                                "phoneNumberPoC":"514-555-4321"}]);
+            expect(scope.siteList).toEqual('');
+            
+            expect(location.path).toHaveBeenCalledWith("/admin/sites");
         });
         it('Testing: Generating error for Deleting', function() {
             scope.canDelete = true;

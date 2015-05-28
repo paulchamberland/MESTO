@@ -33,13 +33,13 @@ describe('E2E: User => ', function() {
     afterAll(function() {
         element(by.id('logoutButton')).click();
     });
-    
-    beforeEach(function() {
-        element(by.model('user.name')).sendKeys('t'); // just to be sure btnReset is actif
-        element(by.id('btnReset')).click();
-    });
  
     describe('Field Validation => ', function() {
+        beforeEach(function() {
+            element(by.model('user.name')).sendKeys('t'); // just to be sure btnReset is actif
+            element(by.id('btnReset')).click();
+        });
+    
         it('Testing: Required form fields', function() {
             element(by.model('user.name')).sendKeys('t'); // started state
             
@@ -134,6 +134,11 @@ describe('E2E: User => ', function() {
     });
     
     describe('basic operation => ', function() {
+        beforeEach(function() {
+            element(by.model('user.name')).sendKeys('t'); // just to be sure btnReset is actif
+            element(by.id('btnReset')).click();
+        });
+    
         it('Testing: State of Saving button', function() {
             var btn = element(by.id('btnSave'));
             
@@ -174,6 +179,9 @@ describe('E2E: User => ', function() {
 
     describe(' - Basic Database Operation => ', function() {
         it('Testing: Save a user', function() {
+            element(by.model('user.name')).sendKeys('t'); // just to be sure btnReset is actif
+            element(by.id('btnReset')).click();
+            
             element(by.model('user.username')).sendKeys('testE2E'); // unique & required
             element(by.model('user.name')).sendKeys('test');
             element(by.model('user.email')).sendKeys('tester@tett.ca');
@@ -183,10 +191,11 @@ describe('E2E: User => ', function() {
             element(by.model('user.active')).click();
             
             element(by.id('btnSave')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('User created successfully!!!');
+            expect(browser.getCurrentUrl()).toMatch("#/admin/users");
         });
         it('Testing: Save a user, already exist', function() {
+            element(by.id('btnNewUser')).click();
+            
             element(by.model('user.username')).sendKeys('testE2E'); // unique & required
             element(by.model('user.name')).sendKeys('test');
             element(by.model('user.email')).sendKeys('tester@tett.ca');
@@ -205,8 +214,7 @@ describe('E2E: User => ', function() {
             element(by.model('user.name')).sendKeys('V2');// changed
              
             element(by.id('btnSave')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('User updated successfully!!!');
+            expect(browser.getCurrentUrl()).toMatch("#/admin/users");
         });
         
         it('Testing: change a user password and test this password', function() {
@@ -216,8 +224,7 @@ describe('E2E: User => ', function() {
             element(by.model('user.password')).sendKeys('Test%5test');// changed
              
             element(by.id('btnSave')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('User updated successfully!!!');
+            expect(browser.getCurrentUrl()).toMatch("#/admin/users");
             
             element(by.id('logoutButton')).click();
             element(by.id('loginButton')).click();
@@ -240,21 +247,23 @@ describe('E2E: User => ', function() {
             getLastUser();
             
             element(by.id('btnDelete')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('User deleted successfully!!!');
+            expect(browser.getCurrentUrl()).toMatch("#/admin/users");
         });
     });
     
     describe(' - Advance database operation => ', function() {
         it('Testing: Updating an user with a other existing unique username value', function() {
+            element(by.id('btnNewUser')).click();
+            
             element(by.model('user.username')).sendKeys('testE2E_V3'); // unique & required
             element(by.model('user.email')).sendKeys('tester3@tett.ca'); // unique & required
             element(by.model('user.password')).sendKeys('Test$4test'); // required
             element(by.model('user.role')).sendKeys('A'); // required
             
             element(by.id('btnSave')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('User created successfully!!!');
+            expect(browser.getCurrentUrl()).toMatch("#/admin/users");
+            
+            element(by.id('btnNewUser')).click();
             
             element(by.model('user.username')).sendKeys('testE2E_V4'); // unique & required
             element(by.model('user.email')).sendKeys('tester4@tett.ca'); // unique & required
@@ -262,8 +271,7 @@ describe('E2E: User => ', function() {
             element(by.model('user.role')).sendKeys('A'); // required
             
             element(by.id('btnSave')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('User created successfully!!!');
+            expect(browser.getCurrentUrl()).toMatch("#/admin/users");
             
             getLastUser();
             
@@ -289,6 +297,8 @@ describe('E2E: User => ', function() {
         });
         
         it('Testing: Full data validation with database', function() {
+            element(by.id('btnNewUser')).click();
+            
             element(by.model('user.username')).sendKeys('testE2E'); // unique & required
             element(by.model('user.name')).sendKeys('test');
             element(by.model('user.email')).sendKeys('tester@tett.ca');
@@ -318,6 +328,8 @@ describe('E2E: User => ', function() {
         });
         
         it('Testing: Inactive a user and try to log', function() {
+            element(by.id('btnNewUser')).click();
+            
             element(by.model('user.username')).sendKeys('testE2E'); // unique & required
             element(by.model('user.email')).sendKeys('inactive@tett.ca');
             element(by.model('user.password')).sendKeys('Test$4test');

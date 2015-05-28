@@ -152,8 +152,11 @@ describe('Testing the controller of user object => ', function() {
     });
     
     describe('Testing Ajax call from User object => ', function() {
-        beforeEach(inject(function(_$httpBackend_) {
+        var location;
+        
+        beforeEach(inject(function(_$httpBackend_, _$location_) {
             $httpBackend = _$httpBackend_;
+            location = _$location_;
         }));
         
         it('Testing: Get the Name from Role value', function() {
@@ -253,18 +256,13 @@ describe('Testing the controller of user object => ', function() {
             scope.canDelete = true;
             scope.user = {username:"fake"};
             
+            spyOn(location, 'path');
+            
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond('');
             
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond(200, '{"msg":"User created successfully!!!", "error":""}');
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('[{"id": "1",'
-                                                                                        +'"username":"admin",'
-                                                                                        +'"name":"Ad Mean",'
-                                                                                        +'"email":"admin@test.ca",'
-                                                                                        +'"password":"fj387dj2i",'
-                                                                                        +'"role":"1",'
-                                                                                        +'"active":"true"}]');
             
             controller.save(); // <--- TEST
 
@@ -282,15 +280,11 @@ describe('Testing the controller of user object => ', function() {
                                         active : false,
                                         address :"",
                                         phone:""});
-            expect(scope.SQLMsgs).toEqual('User created successfully!!!');
+            expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
-            expect(scope.userList).toEqual([{"id":"1",
-                                                "username":"admin",
-                                                "name":"Ad Mean",
-                                                "email":"admin@test.ca",
-                                                "password":"fj387dj2i",
-                                                "role":"1",
-                                                "active":"true"}]);
+            expect(scope.userList).toEqual('');
+                                                
+            expect(location.path).toHaveBeenCalledWith("/admin/users");
         });
         it('Testing: Generated error for Saving', function() {
             scope.userForm = {$dirty:true, $valid:true};
@@ -341,18 +335,12 @@ describe('Testing the controller of user object => ', function() {
             scope.canDelete = true;
             scope.user = {username:"fake"};
             
+            spyOn(location, 'path');
+            
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('[{}]');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond('{"msg":"User deleted successfully!!!", "error":""}');
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('[{"id": "1",'
-                                                                                        +'"username":"admin",'
-                                                                                        +'"name":"Ad Mean",'
-                                                                                        +'"email":"admin@test.ca",'
-                                                                                        +'"password":"fj387dj2i",'
-                                                                                        +'"role":"1",'
-                                                                                        +'"active":"true"}]');
-
             
             controller.delete(); // <--- TEST
 
@@ -370,15 +358,10 @@ describe('Testing the controller of user object => ', function() {
                                         active : false,
                                         address :"",
                                         phone:""});
-            expect(scope.SQLMsgs).toEqual('User deleted successfully!!!');
+            expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
-            expect(scope.userList).toEqual([{"id":"1",
-                                                "username":"admin",
-                                                "name":"Ad Mean",
-                                                "email":"admin@test.ca",
-                                                "password":"fj387dj2i",
-                                                "role":"1",
-                                                "active":"true"}]);
+            expect(scope.userList).toEqual('');
+            expect(location.path).toHaveBeenCalledWith("/admin/users");
         });
         it('Testing: Generating error for Deleting', function() {
             scope.canDelete = true;

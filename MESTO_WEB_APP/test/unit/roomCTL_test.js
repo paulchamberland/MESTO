@@ -221,8 +221,11 @@ describe('Testing the controller of room object =>', function() {
     });
     
     describe('Testing Ajax call from Room object => ', function() {
-        beforeEach(inject(function(_$httpBackend_) {
+        var location;
+        
+        beforeEach(inject(function(_$httpBackend_, _$location_) {
             $httpBackend = _$httpBackend_;
+            location = _$location_;
         }));
  
         it('Testing: Refresh rooms list with success', function() {
@@ -301,17 +304,11 @@ describe('Testing the controller of room object =>', function() {
             scope.canDelete = true;
             scope.room = {roomID:"fake",parentSite:{},lstEquips:[]};
             
+            spyOn(location, 'path');
+            
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond('{"msg":"Room created successfully!!!", "error":""}');
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('[{"id": "1",'
-                                                                                        +'"roomID":"erv324r23",'
-                                                                                        +'"pointOfContact":"sgt bilbo",'
-                                                                                        +'"technicalPointOfContact":"sgt bilbo",'
-                                                                                        +'"roomSize":"43",'
-                                                                                        +'"role":"TC",'
-                                                                                        +'"parentSite":{"id":"2","name":"siteTest"}'
-                                                                                        +'}]');
 
             controller.save(); // <--- TEST
 
@@ -329,18 +326,12 @@ describe('Testing the controller of room object =>', function() {
                                         name:""
                                     },
                                     lstEquips:[]});
-            expect(scope.SQLMsgs).toEqual('Room created successfully!!!');
+
+            expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
-            expect(scope.roomList).toEqual([{"id":"1",
-                                                "roomID":"erv324r23",
-                                                "pointOfContact":"sgt bilbo",
-                                                "technicalPointOfContact":"sgt bilbo",
-                                                "roomSize":"43",
-                                                "role":"TC",
-                                                "parentSite":{
-                                                    "id":"2",
-                                                    "name":"siteTest"
-                                                }}]);
+            expect(scope.roomList).toEqual('');
+            
+            expect(location.path).toHaveBeenCalledWith("/admin/rooms");
         });
         it('Testing: Generated error for Saving', function() {
             scope.roomForm = {$dirty:true, $valid:true};
@@ -422,17 +413,11 @@ describe('Testing the controller of room object =>', function() {
             scope.canDelete = true;
             scope.room = {roomID:"fake",parentSite:{},lstEquips:[]};
             
+            spyOn(location, 'path');
+            
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond('{"msg":"Room deleted successfully!!!", "error":""}');
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('[{"id": "1",'
-                                                                                        +'"roomID":"erv324r23",'
-                                                                                        +'"pointOfContact":"sgt bilbo",'
-                                                                                        +'"technicalPointOfContact":"sgt bilbo",'
-                                                                                        +'"roomSize":"43",'
-                                                                                        +'"role":"TC",'
-                                                                                        +'"parentSite":{"id":"2","name":"siteTest"}'
-                                                                                        +'}]');
 
             controller.delete(); // <--- TEST
 
@@ -450,18 +435,12 @@ describe('Testing the controller of room object =>', function() {
                                         name:""
                                     },
                                     lstEquips:[]});
-            expect(scope.SQLMsgs).toEqual('Room deleted successfully!!!');
+            
+            expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
-            expect(scope.roomList).toEqual([{"id":"1",
-                                                "roomID":"erv324r23",
-                                                "pointOfContact":"sgt bilbo",
-                                                "technicalPointOfContact":"sgt bilbo",
-                                                "roomSize":"43",
-                                                "role":"TC",
-                                                "parentSite":{
-                                                    "id":"2",
-                                                    "name":"siteTest"
-                                                }}]);
+            expect(scope.roomList).toEqual('');
+                                                
+            expect(location.path).toHaveBeenCalledWith("/admin/rooms");
         });
         it('Testing: Generating error for Deleting', function() {
             scope.canDelete = true;

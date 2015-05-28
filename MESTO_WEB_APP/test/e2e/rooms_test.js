@@ -26,12 +26,12 @@ describe('E2E: Room => ', function() {
         element(by.id('logoutButton')).click();
     });
     
-    beforeEach(function() {
-        element(by.model('room.pointOfContact')).sendKeys('t'); // be sure RESET is active
-        element(by.id('btnReset')).click();
-    });
-    
     describe('Field Validation => ', function() {
+        beforeEach(function() {
+            element(by.model('room.pointOfContact')).sendKeys('t'); // be sure RESET is active
+            element(by.id('btnReset')).click();
+        });
+    
         it('Testing: Required form fields', function() {
             element(by.model('room.pointOfContact')).sendKeys('t'); // started state
             
@@ -62,6 +62,11 @@ describe('E2E: Room => ', function() {
     });
     
     describe('basic operation => ', function() {
+        beforeEach(function() {
+            element(by.model('room.pointOfContact')).sendKeys('t'); // be sure RESET is active
+            element(by.id('btnReset')).click();
+        });
+        
         it('Testing: Associate a site and required', function() {
             element(by.id('btnLinkSite')).click();
             element.all(by.repeater('siteList')).first().click();
@@ -105,6 +110,9 @@ describe('E2E: Room => ', function() {
 
     describe(' - Basic Database Operation => ', function() {
         it('Testing: Save a room', function() {
+            element(by.model('room.pointOfContact')).sendKeys('t');
+            element(by.id('btnReset')).click();
+            
             element(by.model('room.roomID')).sendKeys('testE2E'); // unique & required
             element(by.model('room.pointOfContact')).sendKeys('tester');
             element(by.model('room.roomSize')).sendKeys('24');
@@ -113,12 +121,12 @@ describe('E2E: Room => ', function() {
             browser.sleep(1000);
             element.all(by.repeater('siteList')).first().click();
             
-            
             element(by.id('btnSave')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Room created successfully!!!');
+            expect(browser.getCurrentUrl()).toMatch("#/admin/rooms");
         });
         it('Testing: Save a room, already exist', function() {
+            element(by.id('btnNewRoom')).click();
+            
             element(by.model('room.roomID')).sendKeys('testE2E'); // unique & required
             element(by.model('room.pointOfContact')).sendKeys('tester');
             element(by.model('room.roomSize')).sendKeys('24');
@@ -127,6 +135,7 @@ describe('E2E: Room => ', function() {
             element.all(by.repeater('siteList')).first().click();
             
             element(by.id('btnSave')).click();
+            expect(browser.getCurrentUrl()).toMatch("#/admin/room");
             expect(element(by.binding('SQLErrors')).getText()).toEqual('Room already exists with same room ID.');
             expect(element(by.binding('SQLMsgs')).getText()).toEqual('');
         });
@@ -150,8 +159,7 @@ describe('E2E: Room => ', function() {
             element(by.model('room.pointOfContact')).sendKeys('V2');// changed
              
             element(by.id('btnSave')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Room updated successfully!!!');
+            expect(browser.getCurrentUrl()).toMatch("#/admin/rooms");
         });
         
         it('Testing: Associate a equipement to a Room', function() {
@@ -176,13 +184,14 @@ describe('E2E: Room => ', function() {
             getLastRoom();
             
             element(by.id('btnDelete')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Room deleted successfully!!!');
+            expect(browser.getCurrentUrl()).toMatch("#/admin/rooms");
         });
     });
     
     describe(' - Advance database operation => ', function() {
         it('Testing: Update a room with a other existing unique roomID value', function() {
+            element(by.id('btnNewRoom')).click();
+            
             element(by.model('room.roomID')).sendKeys('testE2E_V3'); // unique & required
             element(by.model('room.pointOfContact')).sendKeys('tester_3');
             element(by.model('room.roomSize')).sendKeys('24');
@@ -191,8 +200,9 @@ describe('E2E: Room => ', function() {
             element.all(by.repeater('siteList')).first().click();
             
             element(by.id('btnSave')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Room created successfully!!!');
+            expect(browser.getCurrentUrl()).toMatch("#/admin/rooms");
+            
+            element(by.id('btnNewRoom')).click();
             
             element(by.model('room.roomID')).sendKeys('testE2E_V4'); // unique & required
             element(by.model('room.pointOfContact')).sendKeys('tester_4');
@@ -202,8 +212,7 @@ describe('E2E: Room => ', function() {
             element.all(by.repeater('siteList')).first().click();
             
             element(by.id('btnSave')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Room created successfully!!!');
+            expect(browser.getCurrentUrl()).toMatch("#/admin/rooms");
             
             getLastRoom();
             element(by.model('room.roomID')).clear();
@@ -220,6 +229,8 @@ describe('E2E: Room => ', function() {
         });
 
         it('Testing: Full data validation with database', function() {
+            element(by.id('btnNewRoom')).click();
+            
             element(by.model('room.roomID')).sendKeys('testE2E'); // unique & required
             element(by.model('room.pointOfContact')).sendKeys('tester');
             element(by.model('room.technicalPointOfContact')).sendKeys('tester technical');

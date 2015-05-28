@@ -111,9 +111,10 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv, securi
                 function(data, status) {
                     self.resetMsg();
                     if (data.msg != '') {
-                        $scope.SQLMsgs = data.msg;
-                        self.loadList();
+                        //$scope.SQLMsgs = data.msg;
+                        //self.loadList();
                         self.resetFrm();
+                        $location.path("/admin/rooms");
                     }
                     else {
                         $scope.SQLErrors = data.error;
@@ -141,9 +142,10 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv, securi
                 function(data, status) {
                     self.resetMsg();
                     if (data.msg != '') {
-                        $scope.SQLMsgs = data.msg;
-                        self.loadList();
+                        //$scope.SQLMsgs = data.msg;
+                        //self.loadList();
                         self.resetFrm();
+                        $location.path("/admin/rooms");
                     }
                     else {
                         $scope.SQLErrors = data.error;

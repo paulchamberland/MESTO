@@ -238,8 +238,11 @@ describe('Testing the controller of userRole object', function() {
     });
     
     describe('Testing Ajax call from UserRole object', function() {
-        beforeEach(inject(function(_$httpBackend_) {
+        var location;
+        
+        beforeEach(inject(function(_$httpBackend_, _$location_) {
             $httpBackend = _$httpBackend_;
+            location = _$location_;
         }));
  
         it('Testing: Refresh users list with success', function() {
@@ -313,12 +316,11 @@ describe('Testing the controller of userRole object', function() {
                               lstPermissions:["test","test2"]
                              };
             
+            spyOn(location, 'path');
+            
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond('');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveUserRole.php').respond(200, '{"msg":"Role created successfully!!!", "error":""}');
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond('[{"id": "1",'
-                                                                                        +'"name":"SpecialTester",'
-                                                                                        +'"lstPermissions":"test,test2"}]');
 
             controller.save(); // <--- TEST
 
@@ -329,11 +331,10 @@ describe('Testing the controller of userRole object', function() {
                                         name :"",
                                         description :"",
                                         lstPermissions :[]});
-            expect(scope.SQLMsgs).toEqual('Role created successfully!!!');
+            expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
-            expect(scope.userRoleList).toEqual([{"id":"1",
-                                                    "name":"SpecialTester",
-                                                    "lstPermissions":"test,test2"}]);
+            expect(scope.userRoleList).toEqual('');
+            expect(location.path).toHaveBeenCalledWith("/admin/roles");
         });
         it('Testing: Generated error for Saving', function() {
             scope.userRoleForm = {$dirty:true, $valid:true};
@@ -392,13 +393,12 @@ describe('Testing the controller of userRole object', function() {
             scope.userRole = {name:"fake",
                               lstPermissions:["test","test2"]
                              };
+                             
+            spyOn(location, 'path');
             
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond('');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveUserRole.php').respond('{"msg":"Role deleted successfully!!!", "error":""}');
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond('[{"id": "1",'
-                                                                                        +'"name":"SpecialTester",'
-                                                                                        +'"lstPermissions":"test,test2"}]');
 
             controller.delete(); // <--- TEST
 
@@ -410,11 +410,10 @@ describe('Testing the controller of userRole object', function() {
                                             description :"",
                                             lstPermissions :[]
                                            });
-            expect(scope.SQLMsgs).toEqual('Role deleted successfully!!!');
+            expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
-            expect(scope.userRoleList).toEqual([{"id":"1",
-                                                    "name":"SpecialTester",
-                                                    "lstPermissions":"test,test2"}]);
+            expect(scope.userRoleList).toEqual('');   
+            expect(location.path).toHaveBeenCalledWith("/admin/roles");
         });
         it('Testing: Generating error for Deleting', function() {
             scope.canDelete = true;

@@ -31,12 +31,12 @@ describe('E2E: UserRole => ', function() {
         element(by.id('logoutButton')).click();
     });
     
-    beforeEach(function() {
-        element(by.model('userRole.description')).sendKeys('t'); // be sure that Reset is active
-        element(by.id('btnReset')).click();
-    });
-    
     describe('Field Validation => ', function() {
+        beforeEach(function() {
+            element(by.model('userRole.description')).sendKeys('t'); // be sure that Reset is active
+            element(by.id('btnReset')).click();
+        });
+    
         it('Testing: Required form fields', function() {
             element(by.model('userRole.description')).sendKeys('t'); // started state
             
@@ -46,6 +46,11 @@ describe('E2E: UserRole => ', function() {
     });
     
     describe('basic operation => ', function() {
+        beforeEach(function() {
+            element(by.model('userRole.description')).sendKeys('t'); // be sure that Reset is active
+            element(by.id('btnReset')).click();
+        });
+    
         it('Testing: State of Saving button', function() {
             var btn = element(by.id('btnSave'));
             
@@ -79,36 +84,6 @@ describe('E2E: UserRole => ', function() {
             element(by.model('userRole.description')).sendKeys('t');
             expect(btn.isEnabled()).toBeTruthy();
         });
-    });
-    
-    describe(' - Basic Database Operation => ', function() {
-        it('Testing: Save a site', function() {
-            element(by.model('userRole.name')).sendKeys('testE2E');
-            element(by.model('userRole.description')).sendKeys('test descr');
-            
-            element(by.id('btnSave')).click();
-            
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Role created successfully!!!');
-        });
-        it('Testing: Save a site, already exist', function() {
-            element(by.model('userRole.name')).sendKeys('testE2E');// unique 
-            element(by.model('userRole.description')).sendKeys('test descr');
-            
-            element(by.id('btnSave')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('Role already exists with same name.');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('');
-        });
-
-        it('Testing: Update a site', function() {
-            getLastUserRole();
-            
-            element(by.model('userRole.description')).sendKeys('V2');// changed
-             
-            element(by.id('btnSave')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Role updated successfully!!!');
-        });
         
         it('Testing: Associate permission', function() {
             element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).get(5).click();
@@ -133,31 +108,65 @@ describe('E2E: UserRole => ', function() {
             expect(element.all(by.options('perm.codeName as perm.name for perm in lstSelectedPermissionsObj')).count()).toEqual(1);
             expect(element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).count()).toEqual(19);
         });
+    });
+    
+    describe(' - Basic Database Operation => ', function() {
+        it('Testing: Save a site', function() {
+            element(by.model('userRole.description')).sendKeys('t'); // be sure that Reset is active
+            element(by.id('btnReset')).click();
+            
+            element(by.model('userRole.name')).sendKeys('testE2E');
+            element(by.model('userRole.description')).sendKeys('test descr');
+            
+            element(by.id('btnSave')).click();
+            
+            expect(browser.getCurrentUrl()).toMatch("#/admin/roles");
+        });
+        it('Testing: Save a site, already exist', function() {
+            element(by.id('btnNewUserRole')).click();
+            
+            element(by.model('userRole.name')).sendKeys('testE2E');// unique 
+            element(by.model('userRole.description')).sendKeys('test descr');
+            
+            element(by.id('btnSave')).click();
+            expect(element(by.binding('SQLErrors')).getText()).toEqual('Role already exists with same name.');
+            expect(element(by.binding('SQLMsgs')).getText()).toEqual('');
+        });
+
+        it('Testing: Update a site', function() {
+            getLastUserRole();
+            
+            element(by.model('userRole.description')).sendKeys('V2');// changed
+             
+            element(by.id('btnSave')).click();
+            expect(browser.getCurrentUrl()).toMatch("#/admin/roles");
+        });
         
         it('Testing: Delete a Role', function() {
             getLastUserRole();
             
             element(by.id('btnDelete')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Role deleted successfully!!!');
+            expect(browser.getCurrentUrl()).toMatch("#/admin/roles");
         });
     });
     
     describe(' - Advance database operation => ', function() {
         it('Testing: Update a userRole with a other existing unique reference value', function() {
+            element(by.id('btnNewUserRole')).click();
+            
             element(by.model('userRole.name')).sendKeys('testE2E_V2');
             element(by.model('userRole.description')).sendKeys('test descr');
             
             element(by.id('btnSave')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Role created successfully!!!');
+            expect(browser.getCurrentUrl()).toMatch("#/admin/roles");
+            
+            element(by.id('btnNewUserRole')).click();
             
             element(by.model('userRole.name')).sendKeys('testE2E_V3');
             element(by.model('userRole.description')).sendKeys('test descr');
             
             element(by.id('btnSave')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Role created successfully!!!');
+            expect(browser.getCurrentUrl()).toMatch("#/admin/roles");
             
             getLastUserRole();
             
@@ -175,6 +184,8 @@ describe('E2E: UserRole => ', function() {
         });
         
         it('Testing: Full data validation with database', function() {
+            element(by.id('btnNewUserRole')).click();
+        
             element(by.model('userRole.name')).sendKeys('testE2E');
             element(by.model('userRole.description')).sendKeys('description');
             element.all(by.options('avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions')).get(8).click();

@@ -27,16 +27,16 @@ describe('E2E: Site => ', function() {
         element(by.id('logoutButton')).click();
     });
     
-    beforeEach(function() {
-        element(by.model('site.city')).sendKeys('t'); // be sure that Reset is active
-        element(by.id('btnReset')).click();
-    });
-    
     /*it('Testing : Web label display', function() {
         expect(browser.getTitle()).toEqual('Manage Sites');
     });*/
     
     describe('Field Validation => ', function() {
+        beforeEach(function() {
+            element(by.model('site.city')).sendKeys('t'); // be sure that Reset is active
+            element(by.id('btnReset')).click();
+        });
+    
         it('Testing: Required form fields', function() {
             element(by.model('site.city')).sendKeys('t'); // started state
             
@@ -297,6 +297,11 @@ describe('E2E: Site => ', function() {
     });
     
     describe('basic operation => ', function() {
+        beforeEach(function() {
+            element(by.model('site.city')).sendKeys('t'); // be sure that Reset is active
+            element(by.id('btnReset')).click();
+        });
+    
         it('Testing: State of Saving button', function() {
             var btn = element(by.id('btnSave'));
             
@@ -354,22 +359,27 @@ describe('E2E: Site => ', function() {
     
     describe(' - Basic Database Operation => ', function() {
         it('Testing: Save a site', function() {
+            element(by.model('site.city')).sendKeys('t'); // be sure that Reset is active
+            element(by.id('btnReset')).click();
+            
             element(by.model('site.reference')).sendKeys('testE2E');
             element(by.model('site.latitude')).sendKeys('12.432132');
             element(by.model('site.longitude')).sendKeys('12.321321');
             element(by.model('site.siteName')).sendKeys('test scenario data');
             
             element(by.id('btnSave')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Site created successfully!!!');
+            expect(browser.getCurrentUrl()).toMatch("#/admin/sites");
         });
         it('Testing: Save a site, already exist', function() {
+            element(by.id('btnNewSite')).click();
+            
             element(by.model('site.reference')).sendKeys('testE2E'); // unique 
             element(by.model('site.latitude')).sendKeys('12.432132');
             element(by.model('site.longitude')).sendKeys('12.321321');
             element(by.model('site.siteName')).sendKeys('test scenario data');
             
             element(by.id('btnSave')).click();
+            expect(browser.getCurrentUrl()).toMatch("#/admin/site");
             expect(element(by.binding('SQLErrors')).getText()).toEqual('Site already exists with same reference.');
             expect(element(by.binding('SQLMsgs')).getText()).toEqual('');
         });
@@ -380,8 +390,7 @@ describe('E2E: Site => ', function() {
             element(by.model('site.siteName')).sendKeys('V2');// changed
              
             element(by.id('btnSave')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Site updated successfully!!!');
+            expect(browser.getCurrentUrl()).toMatch("#/admin/sites");
         });
         
         it('Testing: Associate a room to a Site', function() {
@@ -424,21 +433,23 @@ describe('E2E: Site => ', function() {
             getLastSite();
             
             element(by.id('btnDelete')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Site deleted successfully!!!');
+            expect(browser.getCurrentUrl()).toMatch("#/admin/sites");
         });
     });
     
     describe(' - Advance database operation => ', function() {
         it('Testing: Update a site with a other existing unique reference value', function() {
+            element(by.id('btnNewSite')).click();
+            
             element(by.model('site.reference')).sendKeys('testE2E_V3');
             element(by.model('site.latitude')).sendKeys('12.432132');
             element(by.model('site.longitude')).sendKeys('12.321321');
             element(by.model('site.siteName')).sendKeys('test scenario data 3');
             
             element(by.id('btnSave')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Site created successfully!!!');
+            expect(browser.getCurrentUrl()).toMatch("#/admin/sites");
+            
+            element(by.id('btnNewSite')).click();
             
             element(by.model('site.reference')).sendKeys('testE2E_V4');
             element(by.model('site.latitude')).sendKeys('12.432132');
@@ -446,8 +457,7 @@ describe('E2E: Site => ', function() {
             element(by.model('site.siteName')).sendKeys('test scenario data 4');
             
             element(by.id('btnSave')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Site created successfully!!!');
+            expect(browser.getCurrentUrl()).toMatch("#/admin/sites");
             
             getLastSite();
             
@@ -465,6 +475,8 @@ describe('E2E: Site => ', function() {
         });
         
         it('Testing: Full data validation with database', function() {
+            element(by.id('btnNewSite')).click();
+            
             element(by.model('site.reference')).sendKeys('testE2E');
             element(by.model('site.latitude')).sendKeys('12.432132');
             element(by.model('site.longitude')).sendKeys('12.321321');

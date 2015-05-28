@@ -26,11 +26,6 @@ describe('E2E: Equipment => ', function() {
         element(by.id('logoutButton')).click();
     });
     
-    beforeEach(function() {
-        element(by.model('equipment.model')).sendKeys('t'); // started state
-        element(by.id('btnReset')).click();
-    });
- 
     describe('Field Validation => ', function() {
         it('Testing: Required form fields', function() {
             element(by.model('equipment.model')).sendKeys('t'); // started state
@@ -41,6 +36,11 @@ describe('E2E: Equipment => ', function() {
     });
     
     describe('basic operation => ', function() {
+        beforeEach(function() {
+            element(by.model('equipment.model')).sendKeys('t'); // started state
+            element(by.id('btnReset')).click();
+        });
+    
         it('Testing: Associate a room', function() {
             element(by.id('btnLinkRoom')).click();
             element.all(by.repeater('roomList')).first().click();
@@ -99,6 +99,11 @@ describe('E2E: Equipment => ', function() {
     });
 
     describe(' - Basic Database Operation => ', function() {
+        beforeAll(function() {
+            element(by.model('equipment.model')).sendKeys('t'); // started state
+            element(by.id('btnReset')).click();
+        });
+        
         it('Testing: Save an equipment', function() {
             element(by.model('equipment.serialNumber')).sendKeys('testE2E'); // unique & required
             element(by.model('equipment.barCode')).sendKeys('test');
@@ -109,10 +114,11 @@ describe('E2E: Equipment => ', function() {
             element(by.model('equipment.type')).sendKeys('SRV');
             
             element(by.id('btnSave')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Equipment created successfully!!!');
+            expect(browser.getCurrentUrl()).toMatch("#/admin/equipments");
         });
         it('Testing: Save a equipment, already exist', function() {
+            element(by.id('btnNewEquip')).click();
+            
             element(by.model('equipment.serialNumber')).sendKeys('testE2E'); // unique & required
             element(by.model('equipment.manufacturer')).sendKeys('tester');
             element(by.model('equipment.model')).sendKeys('Xw-133');
@@ -121,6 +127,7 @@ describe('E2E: Equipment => ', function() {
             element(by.id('btnSave')).click();
             expect(element(by.binding('SQLErrors')).getText()).toEqual('Equipment already exists with same serial number.');
             expect(element(by.binding('SQLMsgs')).getText()).toEqual('');
+            expect(browser.getCurrentUrl()).toMatch("#/admin/equip");
         });
 
         /******************** need data ****************************/
@@ -143,8 +150,8 @@ describe('E2E: Equipment => ', function() {
             element(by.model('equipment.model')).sendKeys('V2');// changed
              
             element(by.id('btnSave')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Equipment updated successfully!!!');
+            
+            expect(browser.getCurrentUrl()).toMatch("#/admin/equipments");
         });
         
         
@@ -152,21 +159,24 @@ describe('E2E: Equipment => ', function() {
             getLastEquipement();
             
             element(by.id('btnDelete')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Equipment deleted successfully!!!');
+            
+            expect(browser.getCurrentUrl()).toMatch("#/admin/equipments");
         });
     });
     
     describe(' - Advance database operation => ', function() {
         it('Testing: Updating a equipement with a other existing unique serialNumber value', function() {
+            element(by.id('btnNewEquip')).click();
+            
             element(by.model('equipment.serialNumber')).sendKeys('ztestE2E_V3'); // unique 
             element(by.model('equipment.manufacturer')).sendKeys('tester');
             element(by.model('equipment.model')).sendKeys('Xw-133');
             element(by.model('equipment.type')).sendKeys('SRV');
             
             element(by.id('btnSave')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Equipment created successfully!!!');
+            expect(browser.getCurrentUrl()).toMatch("#/admin/equipments");
+            
+            element(by.id('btnNewEquip')).click();
             
             element(by.model('equipment.serialNumber')).sendKeys('ztestE2E_V4'); // unique
             element(by.model('equipment.manufacturer')).sendKeys('tester-4');
@@ -174,8 +184,7 @@ describe('E2E: Equipment => ', function() {
             element(by.model('equipment.type')).sendKeys('SRV');
             
             element(by.id('btnSave')).click();
-            expect(element(by.binding('SQLErrors')).getText()).toEqual('');
-            expect(element(by.binding('SQLMsgs')).getText()).toEqual('Equipment created successfully!!!');
+            expect(browser.getCurrentUrl()).toMatch("#/admin/equipments");
             
             getLastEquipement();
             
@@ -194,6 +203,8 @@ describe('E2E: Equipment => ', function() {
         });
         
         it('Testing: Full data validation with database', function() {
+            element(by.id('btnNewEquip')).click();
+        
             element(by.model('equipment.serialNumber')).sendKeys('testE2E_V2'); // unique & required
             element(by.model('equipment.barCode')).sendKeys('test barcode');
             element(by.model('equipment.manufacturer')).sendKeys('tester');

@@ -262,8 +262,11 @@ describe('Testing the controller of equipment object', function() {
     });
     
     describe('Testing Ajax call from Equipment object', function() {
-        beforeEach(inject(function(_$httpBackend_) {
+        var location;
+        
+        beforeEach(inject(function(_$httpBackend_, _$location_) {
             $httpBackend = _$httpBackend_;
+            location = _$location_;
         }));
  
         it('Testing: Refresh equipments list with success', function() {
@@ -354,17 +357,11 @@ describe('Testing the controller of equipment object', function() {
                                     name:""
                                 }};
             
+            spyOn(location, 'path');  
+            
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"Equipment created successfully!!!", "error":""}');
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('[{"id": "1",'
-                                                                                        +'"serialNumber":"432-43453454-4ref4",'
-                                                                                        +'"barCode":"code",'
-                                                                                        +'"manufacturer":"avenger",'
-                                                                                        +'"model":"XW-5",'
-                                                                                        +'"configHW":"some config",'
-                                                                                        +'"configSW":"some config",'
-                                                                                        +'"type":"HUB"}]');
 
             controller.save(); // <--- TEST
 
@@ -388,16 +385,12 @@ describe('Testing the controller of equipment object', function() {
                                             id:"",
                                             name:""
                                         }});
-            expect(scope.SQLMsgs).toEqual('Equipment created successfully!!!');
+                                        
+            expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
-            expect(scope.equipmentList).toEqual([{"id":"1",
-                                                "serialNumber":"432-43453454-4ref4",
-                                                "barCode":"code",
-                                                "manufacturer":"avenger",
-                                                "model":"XW-5",
-                                                "configHW":"some config",
-                                                "configSW":"some config",
-                                                "type":"HUB"}]);
+            expect(scope.equipmentList).toEqual('');
+                     
+            expect(location.path).toHaveBeenCalledWith("/admin/equipments");
         });
         it('Testing: Generated error for Saving', function() {
             scope.equipmentForm = {$dirty:true, $valid:true};
@@ -480,17 +473,11 @@ describe('Testing the controller of equipment object', function() {
             scope.canDelete = true;
             scope.equipment = {serialNumber:"fake"};
             
+            spyOn(location, 'path');
+            
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('');
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"Equipment deleted successfully!!!", "error":""}');
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('[{"id": "1",'
-                                                                                        +'"serialNumber":"432-43453454-4ref4",'
-                                                                                        +'"barCode":"code",'
-                                                                                        +'"manufacturer":"avenger",'
-                                                                                        +'"model":"XW-5",'
-                                                                                        +'"configHW":"some config",'
-                                                                                        +'"configSW":"some config",'
-                                                                                        +'"type":"HUB"}]');
 
             controller.delete(); // <--- TEST
 
@@ -514,16 +501,12 @@ describe('Testing the controller of equipment object', function() {
                                             id:"",
                                             name:""
                                         }});
-            expect(scope.SQLMsgs).toEqual('Equipment deleted successfully!!!');
+            
+            expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
-            expect(scope.equipmentList).toEqual([{"id":"1",
-                                                "serialNumber":"432-43453454-4ref4",
-                                                "barCode":"code",
-                                                "manufacturer":"avenger",
-                                                "model":"XW-5",
-                                                "configHW":"some config",
-                                                "configSW":"some config",
-                                                "type":"HUB"}]);
+            expect(scope.equipmentList).toEqual('');
+                                                
+            expect(location.path).toHaveBeenCalledWith("/admin/equipments");
         });
         it('Testing: Generating error for Deleting', function() {
             scope.canDelete = true;

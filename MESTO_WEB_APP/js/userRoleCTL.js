@@ -84,9 +84,10 @@ app.controller('userRoleCTL', function($scope, $http, $location, navigateSrv, pe
                 function(data, status) {
                     self.resetMsg();
                     if (data.msg != '') {
-                        $scope.SQLMsgs = data.msg;
-                        self.loadList();
+                        //$scope.SQLMsgs = data.msg;
+                        //self.loadList();
                         self.resetFrm();
+                        $location.path("/admin/roles");
                     }
                     else {
                         $scope.SQLErrors = data.error;
@@ -114,9 +115,10 @@ app.controller('userRoleCTL', function($scope, $http, $location, navigateSrv, pe
                 function(data, status) {
                     self.resetMsg();
                     if (data.msg != '') {
-                        $scope.SQLMsgs = data.msg;
-                        self.loadList();
+                        //$scope.SQLMsgs = data.msg;
+                        //self.loadList();
                         self.resetFrm();
+                        $location.path("/admin/roles");
                     }
                     else {
                         $scope.SQLErrors = data.error;
