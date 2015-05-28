@@ -86,26 +86,27 @@ describe('e2e Equipment Autority : ', function () {
         expect(element(by.id("details")).getAttribute("style")).toEqual('');
     });
     
-    it('Testing : updating with menu call', function() {
+    it('Testing : creating (with button)', function() {
         element(by.id('mnAdmin')).click();
         
-        browser.actions().mouseMove(element(by.id('mnView'))).perform();
-        browser.sleep(500);
-        element(by.id('mnVwEquipements')).click();
+        element(by.id('mnEquipements')).click();
         
         element.all(by.repeater('equipmentList')).last().click();
-        expect(browser.getCurrentUrl()).toMatch("#/admin/equipments");
-        
-        // TODO: Missing test of the save button : How see the update button when is not autorized to load existing data?!
+        expect(element(by.id('btnNewEquip')).isPresent()).toBeFalsy();
     });
-    
-    it('Testing : creating & Deleting', function() {
-        browser.actions().mouseMove(element(by.id('mnManage'))).perform();
-        browser.sleep(500);
-        element(by.id('mnEquipements')).click();
+    it('Testing : creating & deleting(with directCall)', function() {
+        browser.get('http://localhost/MESTO/MESTO_WEB_APP/#/admin/equip');
         
         expect(element(by.id("btnSave")).isPresent()).toBeFalsy();
         expect(element(by.id("btnDelete")).isPresent()).toBeFalsy();
+    });
+    
+    it('Testing : updating', function() {
+        element(by.id('mnEquipements')).click();
+        
+        element.all(by.repeater('equipmentList')).last().click();
+        
+        expect(browser.getCurrentUrl()).toMatch("#/admin/equipments");
     });
     
     afterAll(function() {
@@ -122,16 +123,23 @@ describe('e2e Equipment Autority : ', function () {
         browser.sleep(500);
         element(by.id('mnVwUsers')).click();
         
-        element.all(by.repeater('userList')).last().click();
-        element(by.id('btnDelete')).click();
+        var userData = element.all(by.repeater('userList')).last();
         
-        // delete the user's role
-        browser.actions().mouseMove(element(by.id('mnUser'))).perform();
-        browser.sleep(500);
-        element(by.id('mnRoles')).click();
-        
-        element.all(by.repeater('userRoleList')).last().click();
-        element(by.id('btnDelete')).click();
+        userData.element(by.binding('u.username')).getText().then(function(str) {
+            if (str == "equipSecurity") {
+                // delete user
+                element.all(by.repeater('userList')).last().click();
+                element(by.id('btnDelete')).click();
+                
+                // delete the user's role
+                browser.actions().mouseMove(element(by.id('mnUser'))).perform();
+                browser.sleep(500);
+                element(by.id('mnRoles')).click();
+                
+                element.all(by.repeater('userRoleList')).last().click();
+                element(by.id('btnDelete')).click();
+            }
+        });
         
         // Logout
         element(by.id('logoutButton')).click();

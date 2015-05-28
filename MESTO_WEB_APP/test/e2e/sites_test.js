@@ -1,7 +1,6 @@
 describe('E2E: Site => ', function() {
     function getLastSite() {
-        browser.actions().mouseMove(element(by.id('mnView'))).perform();
-        element(by.id('mnVwSites')).click();
+        element(by.id('mnSites')).click();
         
         element.all(by.repeater('siteList')).last().click();
     };
@@ -19,9 +18,9 @@ describe('E2E: Site => ', function() {
         element(by.id('login')).click();
         
         element(by.id('mnAdmin')).click();
-        browser.actions().mouseMove(element(by.id('mnManage'))).perform();
-        browser.sleep(500);
         element(by.id('mnSites')).click();
+        
+        element(by.id('btnNewSite')).click();
     });
     
     afterAll(function() {

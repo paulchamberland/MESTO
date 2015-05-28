@@ -117,6 +117,14 @@ describe('Testing the controller of site object =>', function() {
             
             expect(location.path).toHaveBeenCalledWith('/admin/equip');
         });
+        
+        it('Testing: Add a new object Site', function() {
+            spyOn(location, 'path');
+            
+            controller.newSite();
+            
+            expect(location.path).toHaveBeenCalledWith('/admin/site');
+        });
     });
     
     it('Testing: Load of a site', function() {

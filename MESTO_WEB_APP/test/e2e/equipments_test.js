@@ -1,8 +1,6 @@
 describe('E2E: Equipment => ', function() {
     function getLastEquipement() {
-        browser.actions().mouseMove(element(by.id('mnView'))).perform();
-        browser.sleep(500);
-        element(by.id('mnVwEquipements')).click();
+        element(by.id('mnEquipements')).click();
         
         element.all(by.repeater('equipmentList')).last().click();
     };
@@ -20,9 +18,8 @@ describe('E2E: Equipment => ', function() {
         element(by.id('login')).click();
         
         element(by.id('mnAdmin')).click();
-        browser.actions().mouseMove(element(by.id('mnManage'))).perform();
-        browser.sleep(1000);
         element(by.id('mnEquipements')).click();
+        element(by.id('btnNewEquip')).click();
     });
     
     afterAll(function() {
@@ -30,6 +27,7 @@ describe('E2E: Equipment => ', function() {
     });
     
     beforeEach(function() {
+        element(by.model('equipment.model')).sendKeys('t'); // started state
         element(by.id('btnReset')).click();
     });
  

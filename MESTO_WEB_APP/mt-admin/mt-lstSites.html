@@ -6,7 +6,7 @@
 <div id="menu" class="v"></div> 
 <div class="main">
 	<div>
-        <h1>Sites List</h1>
+        <h1>Sites List</h1><button id="btnNewSite" style="float:right;" data-ng-click="siteCTL.newSite()" data-ng-if="isAutorizeCreatingSite">Add</button>
         <span class="error" data-ng-show="lstError">{{lstError}}</span>
 		<table border="1">
             <tr><th>Reference</th><th>Name</th><th>Latitude</th><th>Longitude</th></tr>

@@ -1,7 +1,6 @@
 describe('E2E: Room => ', function() {
     function getLastRoom() {
-        browser.actions().mouseMove(element(by.id('mnView'))).perform();
-        element(by.id('mnVwRooms')).click();
+        element(by.id('mnRooms')).click();
         
         element.all(by.repeater('roomList')).last().click();
     };
@@ -19,9 +18,8 @@ describe('E2E: Room => ', function() {
         element(by.id('login')).click();
         
         element(by.id('mnAdmin')).click();
-        browser.actions().mouseMove(element(by.id('mnManage'))).perform();
-        browser.sleep(1000);
         element(by.id('mnRooms')).click();
+        element(by.id('btnNewRoom')).click();
     });
     
     afterAll(function() {

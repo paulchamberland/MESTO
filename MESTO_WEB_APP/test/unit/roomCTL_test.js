@@ -101,6 +101,14 @@ describe('Testing the controller of room object =>', function() {
             
             expect(location.path).toHaveBeenCalledWith('/admin/equip');
         });
+        
+        it('Testing: Add a new object Room', function() {
+            spyOn(location, 'path');
+            
+            controller.newRoom();
+            
+            expect(location.path).toHaveBeenCalledWith('/admin/room');
+        });
     });
 
     it('Testing: Load of a room', function() {

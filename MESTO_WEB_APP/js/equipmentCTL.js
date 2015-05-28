@@ -298,5 +298,9 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv, s
         );
     };
     
+    this.newEquip = function() {
+        $location.path("/admin/equip");
+    };
+    
     init();
 });

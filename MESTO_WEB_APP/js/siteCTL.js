@@ -479,5 +479,9 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securi
         $location.path("/admin/equip"); // TODO: complete by sending the ID and do the comportement on the Room page
     };
     
+    this.newSite = function() {
+        $location.path("/admin/site");
+    };
+    
     init();
 });

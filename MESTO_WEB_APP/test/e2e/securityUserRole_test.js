@@ -112,16 +112,23 @@ describe('e2e UserRole Autority : ', function () {
         browser.sleep(500);
         element(by.id('mnVwUsers')).click();
         
-        element.all(by.repeater('userList')).last().click();
-        element(by.id('btnDelete')).click();
+        var userData = element.all(by.repeater('userList')).last();
         
-        // delete the user's role
-        browser.actions().mouseMove(element(by.id('mnUser'))).perform();
-        browser.sleep(500);
-        element(by.id('mnRoles')).click();
-        
-        element.all(by.repeater('userRoleList')).last().click();
-        element(by.id('btnDelete')).click();
+        userData.element(by.binding('u.username')).getText().then(function(str) {
+            if (str == "userRoleSecurity") {
+                // delete user
+                element.all(by.repeater('userList')).last().click();
+                element(by.id('btnDelete')).click();
+                
+                // delete the user's role
+                browser.actions().mouseMove(element(by.id('mnUser'))).perform();
+                browser.sleep(500);
+                element(by.id('mnRoles')).click();
+                
+                element.all(by.repeater('userRoleList')).last().click();
+                element(by.id('btnDelete')).click();
+            }
+        });
         
         // Logout
         element(by.id('logoutButton')).click();

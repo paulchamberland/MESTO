@@ -112,6 +112,14 @@ describe('Testing the controller of equipment object', function() {
             expect(location.path).toHaveBeenCalledWith('/admin/equip');
             expect(navigateSrv.getEquip()).toEqual(equip);
         });
+        
+        it('Testing: Add a new object Equipement', function() {
+            spyOn(location, 'path');
+            
+            controller.newEquip();
+            
+            expect(location.path).toHaveBeenCalledWith('/admin/equip');
+        });
     });
 
     it('Testing: Load of an equipment', function() {
