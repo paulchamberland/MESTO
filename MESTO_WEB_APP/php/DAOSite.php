@@ -17,6 +17,10 @@ class site { // structure of a site
     public $role;
     public $pointOfContact;
     public $phoneNumberPoC;
+    public $techPoC;
+    public $phoneTechPoC;
+    public $employesNumber;
+    public $organization;
 	public $updateBy;
     public $updateDate;
 }

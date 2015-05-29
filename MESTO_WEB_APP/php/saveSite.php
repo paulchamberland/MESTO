@@ -25,10 +25,10 @@ try {
             
         if (empty($site['id'])) {
             if ($rs[0]['nbSite'] == 0) {
-                $sql = 'INSERT INTO site (reference, latitude, longitude, siteName, description, address, city, province, country, postalCode, isTemporary, startDate, endDate, role, pointOfContact, phoneNumberPoC, updateBy, updateDate)'
+                $sql = 'INSERT INTO site (reference, latitude, longitude, siteName, description, address, city, province, country, postalCode, isTemporary, startDate, endDate, role, pointOfContact, phoneNumberPoC, techPoC, phoneTechPoC, employesNumber, organization, updateBy, updateDate)'
                     .' values ("'.$site['reference'].'","'.$site['latitude'].'","'.$site['longitude'].'","'.$site['siteName'].'","'.$site['description'].'","'.$site['address']
                     .'","'.$site['city'].'","'.$site['province'].'","'.$site['country'].'","'.$site['postalCode'].'","'.$site['isTemporary'].'","'.$site['startDate']
-                    .'","'.$site['endDate'].'","'.$site['role'].'","'.$site['pointOfContact'].'","'.$site['phoneNumberPoC'].'","apps", NOW())';
+                    .'","'.$site['endDate'].'","'.$site['role'].'","'.$site['pointOfContact'].'","'.$site['phoneNumberPoC'].'","'.$site['techPoC'].'","'.$site['phoneTechPoC'].'","'.$site['employesNumber'].'","'.$site['organization'].'","apps", NOW())';
                 $con->exec($sql);
                 $arr["msg"] = "Site created successfully!!!";
             } else {
@@ -40,7 +40,9 @@ try {
                 $sql = 'UPDATE site SET reference="'.$site['reference'].'", latitude="'.$site['latitude'].'", longitude="'.$site['longitude'].'", siteName="'.$site['siteName']
                             .'", description="'.$site['description'].'", address="'.$site['address'].'", city="'.$site['city'].'", province="'.$site['province']
                             .'", country="'.$site['country'].'", postalCode="'.$site['postalCode'].'", isTemporary="'.$site['isTemporary'].'", startDate="'.$site['startDate']
-                            .'", endDate="'.$site['endDate'].'", role="'.$site['role'].'", pointOfContact="'.$site['pointOfContact'].'", phoneNumberPoC="'.$site['phoneNumberPoC'].'", updateBy="apps", updateDate=NOW() WHERE id="'.$site['id'].'"';
+                            .'", endDate="'.$site['endDate'].'", role="'.$site['role'].'", pointOfContact="'.$site['pointOfContact'].'", phoneNumberPoC="'.$site['phoneNumberPoC']
+                            .'", techPoC="'.$site['techPoC'].'", phoneTechPoC="'.$site['phoneTechPoC'].'", employesNumber="'.$site['employesNumber'].'", organization="'.$site['organization']
+                            .'", updateBy="apps", updateDate=NOW() WHERE id="'.$site['id'].'"';
                 $con->exec($sql);
                 $arr["msg"] = "Site updated successfully!!!";
             }
@@ -85,7 +87,7 @@ try {
     }
 }
 catch (PDOException $e) {
-    /*echo "[error:'".$e->getMessage()."']";*/
+    echo "[error:'".$e->getMessage()."']";
     $arr = array("msg" => "", "error" => "Database error, Contact administrator. Try later");
     header('Content-Type: application/json');
 	echo $json = json_encode($arr);

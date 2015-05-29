@@ -20,6 +20,8 @@
 			<span class="error" data-ng-show="siteForm.endDate.$error.pattern">Invalid end date format.</span>
             <span class="error" data-ng-show="siteForm.endDate.$error.greaterThan">End date need to be greater than start date.</span>
 			<span class="error" data-ng-show="siteForm.phoneNumberPoC.$error.pattern">Invalid Phone number of PoC format.</span>
+			<span class="error" data-ng-show="siteForm.phoneTechPoC.$error.pattern">Invalid Phone number of Tech PoC format.</span>
+            <span class="error" data-ng-show="siteForm.employesNumber.$error.pattern">Employes number need to be digit only.</span>
 		</div>
         <span class="error">{{SQLErrors}}</span>
         <span class="t">{{SQLMsgs}}</span>
@@ -50,8 +52,12 @@
 				<div class="field"><label for="country">country:</label><input type="text" id="country" name="country" data-ng-model="site.country" /></div>
 				<div class="field"><label for="postalCode">postal code (X5X 5X5):</label><input type="text" id="postalCode" name="postalCode" data-ng-model="site.postalCode" data-ng-pattern="/^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] [0-9][A-Z][0-9]$/" /></div>
                 <div class="field"><label for="role">Role:</label><select id="role" ng-model="site.role" name="role" ng-options="role.value as role.label for role in ROLE"></select></div>
+                <div class="field"><label for="organise">Organization:</label><select id="organise" ng-model="site.organization" name="organization" ng-options="organization.value as organization.label for organization in ORGANIZATION"></select></div>
+                <div class="field"><label for="employesNumber">Employes number :</label><input type="text" id="employesNumber" name="employesNumber" data-ng-model="site.employesNumber" data-ng-pattern="/^[0-9]*$/" /></div>
                 <div class="field"><label for="PoC">Point of Contact :</label><input type="text" id="PoC" name="pointOfContact" data-ng-model="site.pointOfContact" /></div>
 				<div class="field"><label for="numTel">Phone number of PoC :</label><input type="text" id="numTel" name="phoneNumberPoC" data-ng-model="site.phoneNumberPoC" data-ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" /></div>
+				<div class="field"><label for="techPoC">Tech PoC :</label><input type="text" id="techPoC" name="techPoC" data-ng-model="site.techPoC" /></div>
+                <div class="field"><label for="techNumTel">Phone of Tech PoC :</label><input type="text" id="techNumTel" name="phoneTechPoC" data-ng-model="site.phoneTechPoC" data-ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" /></div>
 			</div>
 		</form>
 		<button id="btnSave" data-ng-click="siteCTL.save();" ng-disabled="siteForm.$pristine || siteForm.$invalid" data-ng-if="canSave">Save</button>

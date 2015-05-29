@@ -33,6 +33,10 @@ describe('Testing the controller of site object =>', function() {
                     role:"",
                     pointOfContact:"",
                     phoneNumberPoC:"",
+                    organization:"",
+                    techPoC:"",
+                    phoneTechPoC:"",
+                    employesNumber:"",
                     lstRooms:[],
                     lstEquips:[]};
         
@@ -53,6 +57,14 @@ describe('Testing the controller of site object =>', function() {
         expect(controller.getLabelROLE('FOB')).toEqual("FOB");
         expect(controller.getLabelROLE('COP')).toEqual("COP");
         expect(controller.getLabelROLE('CMP')).toEqual("CAMP");
+    });
+    
+    it('Testing: Get the label from ORGANIZATION value', function() {
+        expect(controller.getLabelORGANIZATION('TC')).toEqual("TC");
+        expect(controller.getLabelORGANIZATION('DND')).toEqual("DND");
+        expect(controller.getLabelORGANIZATION('RCMP')).toEqual("RCMP");
+        expect(controller.getLabelORGANIZATION('ASC')).toEqual("ASC");
+        expect(controller.getLabelORGANIZATION('CSC')).toEqual("CSC");
     });
 
     it('Testing: Open site', function() {
@@ -149,6 +161,10 @@ describe('Testing the controller of site object =>', function() {
                     role:"COP",
                     pointOfContact:"Lt. Bariton",
                     phoneNumberPoC:"514-555-4321",
+                    organization:"TC",
+                    techPoC:"Sgt. Soprano",
+                    phoneTechPoC:"514-555-5432",
+                    employesNumber:"200",
                     lstRooms:[{id:"2",name:"test"},{id:"3",name:"testV2"}],
                     lstEquips:[{id:"2",roomID:"test"},{id:"3",roomID:"testV2"}]};
                     
@@ -171,6 +187,10 @@ describe('Testing the controller of site object =>', function() {
                                     role:"COP",
                                     pointOfContact:"Lt. Bariton",
                                     phoneNumberPoC:"514-555-4321",
+                                    organization:"TC",
+                                    techPoC:"Sgt. Soprano",
+                                    phoneTechPoC:"514-555-5432",
+                                    employesNumber:"200",
                                     lstRooms:[{id:"2",name:"test"},{id:"3",name:"testV2"}],
                                     lstEquips:[{id:"2",roomID:"test"},{id:"3",roomID:"testV2"}]});
         expect(scope.canDelete).toBe(true);
@@ -240,6 +260,10 @@ describe('Testing the controller of site object =>', function() {
                     role:"COP",
                     pointOfContact:"Lt. Bariton",
                     phoneNumberPoC:"514-555-4321",
+                    organization:"TC",
+                    techPoC:"Sgt. Soprano",
+                    phoneTechPoC:"514-555-5432",
+                    employesNumber:"200",
                     lstRooms:[{id:"2",name:"test"},{id:"3",name:"testV2"}],
                     lstEquips:[{id:"2",roomID:"test"},{id:"3",roomID:"testV2"}]});
         
@@ -263,6 +287,10 @@ describe('Testing the controller of site object =>', function() {
                                     role:"",
                                     pointOfContact:"",
                                     phoneNumberPoC:"",
+                                    organization:"",
+                                    techPoC:"",
+                                    phoneTechPoC:"",
+                                    employesNumber:"",
                                     lstRooms:[],
                                     lstEquips:[]});
     });
@@ -339,7 +367,12 @@ describe('Testing the controller of site object =>', function() {
                                                                                         +'"postalCode":"X5X 5X5",'
                                                                                         +'"role":"COP",'
                                                                                         +'"pointOfContact":"Lt. Bariton",'
-                                                                                        +'"phoneNumberPoC":"514-555-4321"}]');
+                                                                                        +'"phoneNumberPoC":"514-555-4321",'
+                                                                                        +'"organization":"TC",'
+                                                                                        +'"techPoC":"Sgt. Soprano",'
+                                                                                        +'"phoneTechPoC":"514-555-5432",'
+                                                                                        +'"employesNumber":"200"'
+                                                                                        +'}]');
 
             controller.refreshList(); // <--- TEST
 
@@ -362,7 +395,11 @@ describe('Testing the controller of site object =>', function() {
                                                 "postalCode":"X5X 5X5",
                                                 "role":"COP",
                                                 "pointOfContact":"Lt. Bariton",
-                                                "phoneNumberPoC":"514-555-4321"}]);
+                                                "phoneNumberPoC":"514-555-4321",
+                                                "organization":"TC",
+                                                "techPoC":"Sgt. Soprano",
+                                                "phoneTechPoC":"514-555-5432",
+                                                "employesNumber":"200"}]);
         });
         it('Testing: Generated error for Refresh', function() {
             scope.canDelete = true;
@@ -445,6 +482,10 @@ describe('Testing the controller of site object =>', function() {
                                     role:"",
                                     pointOfContact:"",
                                     phoneNumberPoC:"",
+                                    organization:"",
+                                    techPoC:"",
+                                    phoneTechPoC:"",
+                                    employesNumber:"",
                                     lstRooms:[],
                                     lstEquips:[]});
                                     
@@ -529,6 +570,10 @@ describe('Testing the controller of site object =>', function() {
                                     role:"",
                                     pointOfContact:"",
                                     phoneNumberPoC:"",
+                                    organization:"",
+                                    techPoC:"",
+                                    phoneTechPoC:"",
+                                    employesNumber:"",
                                     lstRooms:[],
                                     lstEquips:[]});
             

@@ -10,6 +10,7 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securi
     var LOAD_FREE_EQUIP = "SITE_FREE";
     var LOAD_FREE_ROOM = "SITE_FREE";
     $scope.ROLE = [{value:'ED',label:'Edifice'},{value:'FLR',label:'Floor'},{value:'FOB',label:'FOB'},{value:'COP',label:'COP'},{value:'CMP',label:'CAMP'}];
+    $scope.ORGANIZATION = [{value:'TC',label:'TC'},{value:'DND',label:'DND'},{value:'RCMP',label:'RCMP'},{value:'ASC',label:'ASC'},{value:'CSC',label:'CSC'}];
     
     $scope.site = {id: "",
                     reference :"",
@@ -28,6 +29,10 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securi
                     role:"",
                     pointOfContact:"",
                     phoneNumberPoC:"",
+                    organization:"",
+                    techPoC:"",
+                    phoneTechPoC:"",
+                    employesNumber:"",
                     lstRooms:[],
                     lstEquips:[]};
     this.emptySite = {};
@@ -42,6 +47,12 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securi
     this.getLabelROLE = function(pRole) {
         for (t in $scope.ROLE) {
             if ($scope.ROLE[t].value == pRole) return $scope.ROLE[t].label;
+        }
+    };
+    
+    this.getLabelORGANIZATION = function(pOrg) {
+        for (t in $scope.ORGANIZATION) {
+            if ($scope.ORGANIZATION[t].value == pOrg) return $scope.ORGANIZATION[t].label;
         }
     };
     
@@ -132,8 +143,12 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securi
                     country : $scope.site.country,
                     postalCode : $scope.site.postalCode,
                     role : $scope.site.role,
+                    organization : $scope.site.organization,
                     pointOfContact : $scope.site.pointOfContact,
-                    phoneNumberPoC : $scope.site.phoneNumberPoC
+                    phoneNumberPoC : $scope.site.phoneNumberPoC,
+                    techPoC : $scope.site.techPoC,
+                    phoneTechPoC : $scope.site.phoneTechPoC,
+                    employesNumber : $scope.site.employesNumber,
                 },
                 headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
             }).success(

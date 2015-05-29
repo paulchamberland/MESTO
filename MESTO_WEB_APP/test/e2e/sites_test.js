@@ -294,6 +294,28 @@ describe('E2E: Site => ', function() {
             input.sendKeys('000-000-0000');
             expect(input.getAttribute("class")).toMatch("ng-valid-pattern");
         });
+        
+        it('Testing: Validation pattern of phone number of TechPoC', function() {
+            var input = element(by.model('site.phoneTechPoC'));
+            input.sendKeys('t');
+            expect(input.getAttribute("class")).toMatch("ng-invalid-pattern");
+            
+            input.clear();
+            input.sendKeys('54343223243');
+            expect(input.getAttribute("class")).toMatch("ng-invalid-pattern");
+            
+            input.clear();
+            input.sendKeys('514 555 2321');
+            expect(input.getAttribute("class")).toMatch("ng-invalid-pattern");
+            
+            input.clear();
+            input.sendKeys('514-541-4324');
+            expect(input.getAttribute("class")).toMatch("ng-valid-pattern");
+            
+            input.clear();
+            input.sendKeys('000-000-0000');
+            expect(input.getAttribute("class")).toMatch("ng-valid-pattern");
+        });
     });
     
     describe('basic operation => ', function() {
@@ -316,22 +338,13 @@ describe('E2E: Site => ', function() {
             element(by.model('site.siteName')).sendKeys('t');
             
             expect(btn.isEnabled()).toBeTruthy();
-        });
-        
-        it('Testing: State of Delete button', function() {
-            var btn = element(by.id('btnDelete'));
             
-            expect(btn.isEnabled()).toBeFalsy();
-            
-            element(by.model('site.city')).sendKeys('t');
-            expect(btn.isEnabled()).toBeFalsy();
-            
-            //element(by.repeater('s in siteList').row(0)).click(); // need to have data 
-            getLastSite();
-            expect(btn.isEnabled()).toBeTruthy();
+            element(by.id('btnSave')).click();// Saving to have a Test data
+            browser.get('http://localhost/MESTO/MESTO_WEB_APP/#/admin/site');
         });
         
         it('Testing: State of Reset button', function() {
+            
             var btn = element(by.id('btnReset'));
             
             expect(btn.isEnabled()).toBeFalsy();
@@ -355,12 +368,25 @@ describe('E2E: Site => ', function() {
             
             expect(element(by.id('btnOpenFreeLstRoom')).isPresent()).toBeTruthy();
         });
+        
+        it('Testing: State of Delete button', function() {
+            var btn = element(by.id('btnDelete'));
+            
+            expect(btn.isEnabled()).toBeFalsy();
+            
+            element(by.model('site.city')).sendKeys('t');
+            expect(btn.isEnabled()).toBeFalsy();
+            
+            getLastSite();
+            expect(btn.isEnabled()).toBeTruthy();
+            
+            btn.click(); // delete the test
+        });
     });
     
     describe(' - Basic Database Operation => ', function() {
         it('Testing: Save a site', function() {
-            element(by.model('site.city')).sendKeys('t'); // be sure that Reset is active
-            element(by.id('btnReset')).click();
+            element(by.id('btnNewSite')).click();
             
             element(by.model('site.reference')).sendKeys('testE2E');
             element(by.model('site.latitude')).sendKeys('12.432132');
@@ -493,6 +519,10 @@ describe('E2E: Site => ', function() {
             element(by.model('site.endDate')).sendKeys('01-01-2020');
             element(by.model('site.pointOfContact')).sendKeys('Lt. Bariton');
             element(by.model('site.phoneNumberPoC')).sendKeys('514-555-4321');
+            element(by.model('site.organization')).sendKeys('T');
+            element(by.model('site.techPoC')).sendKeys('Sgt. Soprano');
+            element(by.model('site.phoneTechPoC')).sendKeys('514-555-4321');
+            element(by.model('site.employesNumber')).sendKeys('200');
             
             element(by.id('btnSave')).click();
             getLastSite();
@@ -513,6 +543,10 @@ describe('E2E: Site => ', function() {
             expect(element(by.model('site.endDate')).getAttribute("value")).toEqual('01-01-2020');
             expect(element(by.model('site.pointOfContact')).getAttribute("value")).toEqual('Lt. Bariton');
             expect(element(by.model('site.phoneNumberPoC')).getAttribute("value")).toEqual('514-555-4321');
+            expect(element(by.model('site.organization')).$('option:checked').getText()).toEqual('TC');
+            expect(element(by.model('site.techPoC')).getAttribute("value")).toEqual('Sgt. Soprano');
+            expect(element(by.model('site.phoneTechPoC')).getAttribute("value")).toEqual('514-555-4321');
+            expect(element(by.model('site.employesNumber')).getAttribute("value")).toEqual('200');
             
             element(by.id('btnDelete')).click();
         });

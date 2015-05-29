@@ -12,7 +12,7 @@
 		<table border="1">
             <tr><th>Name</th><th>Address</th><th>City</th><th>Province</th><th>Postal code</th><th>Role</th><th>Point of Contact</th><th>Phone number of PoC</th></tr>
 			<tr data-ng-repeat="s in siteList" data-ng-click="siteCTL.openSite(s);">
-				<td>{{s.siteName}}</td><td>{{s.address}}</td><td>{{s.city}}</td><td>{{s.province}}</td><td>{{s.postalCode}}</td><td>{{siteCTL.getLabelROLE(s.role)}}</td><td>{{s.pointOfContact}}</td><td>{{s.phoneNumberPoC}}</td>
+				<td>{{s.siteName}}</td><td>{{s.address}}</td><td>{{s.city}}</td><td>{{s.province}}</td><td>{{s.postalCode}}</td><td>{{siteCTL.getLabelORGANIZATION(s.role)}}</td><td>{{s.pointOfContact}}</td><td>{{s.phoneNumberPoC}}</td>
 			</tr>
 		</table>
 	</div>
@@ -23,7 +23,7 @@
             <div class="inner first"># Reference : {{site.reference}}</div>
             <div class="inner">Latitude : {{site.latitude}}</div>
             <div class="inner">Longitude : {{site.longitude}}</div>
-            <div class="inner">Description : {{site.description}}</div>
+            <div class="inner" style="max-width=800;">Description : {{site.description}}</div>
             <div class="inner">Is temporary? <input type="checkbox" data-ng-checked="site.isTemporary == true" data-ng-model="site.isTemporary" disabled /></div>
             <div class="inner">Start date : {{site.startDate}}</div>
             <div class="inner">End date : {{site.endDate}}</div>
@@ -32,9 +32,13 @@
 			<div class="inner">Province : {{site.province}}</div>
 			<div class="inner">Country : {{site.country}}</div>
 			<div class="inner">Postal code : {{site.postalCode}}</div>
-            <div class="inner">Role : {{getLabelROLE(site.role)}}</div>
+            <div class="inner">Role : {{siteCTL.getLabelROLE(site.role)}}</div>
+            <div class="inner">Organization : {{siteCTL.getLabelORGANIZATION(site.organization)}}</div>
             <div class="inner">Point of Contact : {{site.pointOfContact}}</div>
 			<div class="inner">Phone number of PoC : {{site.phoneNumberPoC}}</div>
+			<div class="inner">Tech PoC : {{site.techPoC}}</div>
+			<div class="inner">Phone of Tech PoC : {{site.phoneTechPoC}}</div>
+			<div class="inner">Employes Number : {{site.employesNumber}}</div>
             <div class="inner">
                 <span style="font-weight: bold; font-size: 12px;">Rooms of this building</span>
                 <span class="error" data-ng-show="lstRoomErr">{{lstRoomErr}}</span>
