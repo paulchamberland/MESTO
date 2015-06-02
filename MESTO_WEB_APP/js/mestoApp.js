@@ -1,7 +1,7 @@
 var app = angular.module('MESTO', ['ngRoute', 'ngIdle']);
 
 app.config(function($routeProvider, IdleProvider) {
-    $routeProvider.when('/home', {templateUrl:'home.html', controller:'mapCTL'});
+    $routeProvider.when('/home', {templateUrl:'home.html', controller:'siteCTL', controllerAs:'siteCTL'});
     $routeProvider.when('/site', {templateUrl:'sites.html', controller:'siteCTL', controllerAs:'siteCTL'});
     $routeProvider.when('/room', {templateUrl:'rooms.html', controller:'roomCTL', controllerAs:'roomCTL'});
     $routeProvider.when('/equip', {templateUrl:'equipments.html', controller:'equipmentCTL', controllerAs:'equipCTL'});
@@ -293,6 +293,8 @@ app.factory('googleMap', function() {
     
     var mainMap = null;
     var zones = null;
+    var info = null;
+    var markersCluster = null;
     
     function getMap() {
         try {
@@ -308,11 +310,33 @@ app.factory('googleMap', function() {
                 });
                 zones.parse('limits/Zones.kml');
             //}
+            
+            info = new google.maps.InfoWindow({});
         }
-        catch (e) {}
+        catch (e) {console.error('Something wrong with google');}
         
         return mainMap;
     }
     
-    return { getMap : getMap };
+    function factoryMarker(latitude, longitude, map, title, strInfoContent) {
+        var mk = null;
+        try {
+            var mk = new google.maps.Marker({position: new google.maps.LatLng(latitude, longitude), map: map, title: title, animation: google.maps.Animation.DROP});
+            google.maps.event.addListener(mk, 'click', function() {
+                info.setContent(strInfoContent);
+                info.open(map, mk);  
+            });
+        }
+        catch(e) {console.error('Something wrong with google'+e.message);}
+        
+        return mk;
+    }
+    
+    function setMarkersCluster(map, arr) {
+        markersCluster = new MarkerClusterer(map, arr, {gridSize: 20, maxZoom: 15});
+    }
+    
+    return { getMap : getMap,
+            factoryMarker : factoryMarker,
+            setMarkersCluster : setMarkersCluster};
 });

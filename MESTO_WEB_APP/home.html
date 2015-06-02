@@ -11,4 +11,4 @@
             });
         </script>
         <div id="menu" style="position: relative; z-index: 1" ></div> 
-        <div id="map-canvas">Google Earth Not available</div>
+        <div id="map-canvas" data-ng-controller="mapCTL as mapCTL" data-ng-init="mapCTL.createMarkers(siteCTL.getListSites())">Google Earth Not available</div>

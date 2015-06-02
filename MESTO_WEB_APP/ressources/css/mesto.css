@@ -43,6 +43,7 @@ div.section2 {
 
 div.main {
     padding-left:10px;
+    padding-right:10px;
     /*float:left;
     display: block;*/
     display:table-cell;
@@ -108,4 +109,44 @@ div.main {
 
 .lstPerm {
     min-width: 190px;
+}
+
+.mapDetails {
+    min-width: 40px;
+    max-width: 180px;
+}
+
+.mapDetails > .top {
+    padding: 5px 5px 5px 15px;
+    font-size:1.1em;
+    text-decoration:underline;
+    text-align:left;
+    color: blue;
+    font-weight:bold;
+}
+
+.mapDetails > .core {
+    /*background: white;
+    border: 1px solid #000000;*/
+}
+
+.mapDetails > .core >.inner {
+    padding: 0px 10px 0px 10px;
+    font-size:0.9em;
+}
+
+.mapDetails > .core >.inner >.link {
+    font-size:0.8em;
+    text-decoration:underline;
+}
+.mapDetails > .core >.inner >.label {
+    font-size:0.9em;
+    font-weight:bold;
+}
+.mapDetails > .core >.inner.first {
+    padding-top: 10px;
+}
+.mapDetails > .core >.inner.last {
+    /*padding-bottom: 10px;*/
+    text-align:right;
 }

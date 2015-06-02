@@ -12,6 +12,7 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securi
     $scope.ROLE = [{value:'ED',label:'Edifice'},{value:'FLR',label:'Floor'},{value:'FOB',label:'FOB'},{value:'COP',label:'COP'},{value:'CMP',label:'CAMP'}];
     $scope.ORGANIZATION = [{value:'TC',label:'TC'},{value:'DND',label:'DND'},{value:'RCMP',label:'RCMP'},{value:'ASC',label:'ASC'},{value:'CSC',label:'CSC'}];
     
+    var promiseLstLoad = null;
     $scope.site = {id: "",
                     reference :"",
                     latitude:"",
@@ -64,7 +65,7 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securi
             navigateSrv.cleanMemory();
         }
         else {
-            self.loadList();
+            promiseLstLoad = self.loadList();
         }
         
         $scope.isAutorizeUpdatingSite = securitySrv.isAuthorized('createSite');
@@ -221,7 +222,7 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securi
     };
     
     this.loadList = function() {
-        $http.post("/MESTO/MESTO_WEB_APP/php/DAOSite.php").success( // TODO: Make a config with path
+        return $http.post("/MESTO/MESTO_WEB_APP/php/DAOSite.php").success( // TODO: Make a config with path
             function(data) {
                 if (data.error == null) {
                     $scope.siteList = data;
@@ -498,6 +499,10 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securi
     
     this.newSite = function() {
         $location.path("/admin/site");
+    };
+    
+    this.getListSites = function() {
+        return promiseLstLoad;
     };
     
     init();
