@@ -12,6 +12,12 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securi
     $scope.ROLE = [{value:'ED',label:'Edifice'},{value:'FLR',label:'Floor'},{value:'FOB',label:'FOB'},{value:'COP',label:'COP'},{value:'CMP',label:'CAMP'}];
     $scope.ORGANIZATION = [{value:'TC',label:'TC'},{value:'DND',label:'DND'},{value:'RCMP',label:'RCMP'},{value:'ASC',label:'ASC'},{value:'CSC',label:'CSC'}];
     
+    $scope.modifySite = false;
+    
+    this.modifySite = function() {
+        $scope.modifySite = true;
+    };
+    
     var promiseLstLoad = null;
     $scope.site = {id: "",
                     reference :"",
@@ -112,6 +118,14 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securi
         }
     };
     
+    /** Secure function **/
+    this.seeSiteDetails = function(p_site) {
+        if ($scope.isAutorizeSeeDetailsSite) {
+            navigateSrv.setSite(p_site);
+            $location.path("/site");
+        }
+    };
+    
     this.resetFrm = function() {
         self.setSite(self.emptySite);
         $scope.siteForm.$setPristine();
@@ -159,7 +173,13 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securi
                         //$scope.SQLMsgs = data.msg;
                         //self.loadList();
                         self.resetFrm();
-                        $location.path("/admin/sites");
+                        
+                        if ($location.path() == "/admin/site") {
+                            $location.path("/admin/sites");
+                        }
+                        else {
+                            $location.path("/sites");
+                        }
                     }
                     else {
                         $scope.SQLErrors = data.error;

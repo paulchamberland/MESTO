@@ -2,9 +2,10 @@ var app = angular.module('MESTO', ['ngRoute', 'ngIdle']);
 
 app.config(function($routeProvider, IdleProvider) {
     $routeProvider.when('/home', {templateUrl:'home.html', controller:'siteCTL', controllerAs:'siteCTL'});
-    $routeProvider.when('/site', {templateUrl:'sites.html', controller:'siteCTL', controllerAs:'siteCTL'});
-    $routeProvider.when('/room', {templateUrl:'rooms.html', controller:'roomCTL', controllerAs:'roomCTL'});
-    $routeProvider.when('/equip', {templateUrl:'equipments.html', controller:'equipmentCTL', controllerAs:'equipCTL'});
+    $routeProvider.when('/site', {templateUrl:'site.html', controller:'siteCTL', controllerAs:'siteCTL'});
+    $routeProvider.when('/sites', {templateUrl:'sites.html', controller:'siteCTL', controllerAs:'siteCTL'});
+    $routeProvider.when('/rooms', {templateUrl:'rooms.html', controller:'roomCTL', controllerAs:'roomCTL'});
+    $routeProvider.when('/equips', {templateUrl:'equipments.html', controller:'equipmentCTL', controllerAs:'equipCTL'});
     $routeProvider.when('/admin', {templateUrl:'mt-admin/mt-login.html'});
     $routeProvider.when('/admin/home', {templateUrl:'mt-admin/mt-home.html'});
     $routeProvider.when('/admin/site', {templateUrl:'mt-admin/mt-sites.html', controller:'siteCTL', controllerAs:'siteCTL'});
@@ -20,7 +21,7 @@ app.config(function($routeProvider, IdleProvider) {
     $routeProvider.when('/admin/users', {templateUrl:'mt-admin/mt-lstUsers.html', controller:'userCTL', controllerAs:'userCTL'});
     $routeProvider.otherwise({redirectTo:"/home"});
     
-    IdleProvider.idle(10);
+    IdleProvider.idle(10000);
     IdleProvider.timeout(5);
     IdleProvider.keepalive(false);
 });
@@ -318,12 +319,14 @@ app.factory('googleMap', function() {
         return mainMap;
     }
     
-    function factoryMarker(latitude, longitude, map, title, strInfoContent) {
+    function factoryMarker(latitude, longitude, map, title, strInfoContent, linkClicker) {
         var mk = null;
         try {
             var mk = new google.maps.Marker({position: new google.maps.LatLng(latitude, longitude), map: map, title: title, animation: google.maps.Animation.DROP});
+            
             google.maps.event.addListener(mk, 'click', function() {
                 info.setContent(strInfoContent);
+                $('.link').click(linkClicker);
                 info.open(map, mk);  
             });
         }
@@ -336,7 +339,14 @@ app.factory('googleMap', function() {
         markersCluster = new MarkerClusterer(map, arr, {gridSize: 20, maxZoom: 15});
     }
     
+    function setLoadFunctionOnInfoWindow(onload) {
+        google.maps.event.addListener(info, 'domready', function() {
+           onload();
+        });
+    }
+    
     return { getMap : getMap,
             factoryMarker : factoryMarker,
-            setMarkersCluster : setMarkersCluster};
+            setMarkersCluster : setMarkersCluster,
+            setLoadFunctionOnInfoWindow : setLoadFunctionOnInfoWindow};
 });

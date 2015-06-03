@@ -1,12 +1,21 @@
-app.controller('mapCTL', function($scope, googleMap) {
+app.controller('mapCTL', function($scope, $compile, $location, navigateSrv, securitySrv, googleMap) {
     var self = this;
+    $scope.isAutorizeSeeDetailsSite = securitySrv.isAuthorized('detailSite');
+    
     var map = googleMap.getMap(); // create or get the current instance of Map.
     
     var markers = [];
+    var lstSites = [];
+    
+    var onload = function() {
+        $scope.$apply(function(){
+            $compile($(".mapDetails"))($scope)
+        });
+    };
     
     this.createMarkers = function(promiseLstSite){
         promiseLstSite.then(function(resp) {
-            var lstSites = resp.data;
+            lstSites = resp.data;
             
             var strInfoContent = "";
             for (var i=0; i != lstSites.length; i++) {
@@ -17,17 +26,26 @@ app.controller('mapCTL', function($scope, googleMap) {
                                     +'    <div class="core">'
                                     +'        <div class="inner">'+lstSites[i].address+', '+lstSites[i].city+', '+lstSites[i].province+', '+lstSites[i].country+', '+lstSites[i].postalCode+'</div>'
                                     +'        </br>'
-                                    +'        <div class="inner"><span class="label">PoC</span>: '+lstSites[i].pointOfContact+'</div>'
-                                    +'        <div class="inner last"><a class="link" href="#/test">More Detail</a></div>'
-                                    +'    </div>'
+                                    +'        <div class="inner"><span class="label">PoC</span>: '+lstSites[i].pointOfContact+'</div>';
+                    if ($scope.isAutorizeSeeDetailsSite)
+                        strInfoContent += '        <div class="inner last"><a class="link" href="" data-ng-click="seeSiteDetails('+i+')">More Detail</a></div>'
+                                    
+                    strInfoContent +='    </div>'
                                     +'</div>'
-                    
                     //markers[lstSites[i].reference] = googleMap.factoryMarker(lstSites[i].latitude, lstSites[i].longitude, map, lstSites[i].reference, strInfoContent);
                     markers.push(googleMap.factoryMarker(lstSites[i].latitude, lstSites[i].longitude, map, lstSites[i].reference, strInfoContent));
                 //}, i + 300);
             }
             
             googleMap.setMarkersCluster(map, markers);
+            googleMap.setLoadFunctionOnInfoWindow(onload);
         });
+    };
+    
+    $scope.seeSiteDetails = function(siteIndex) {
+        if ($scope.isAutorizeSeeDetailsSite) {
+            navigateSrv.setSite(lstSites[siteIndex]);
+            $location.path("/site");
+        }
     };
 });

@@ -47,6 +47,7 @@ div.main {
     /*float:left;
     display: block;*/
     display:table-cell;
+    width:12000px;
 }
 
 #menu.v {
@@ -150,3 +151,35 @@ div.main {
     /*padding-bottom: 10px;*/
     text-align:right;
 }
+
+
+.pageDetails {
+    border-radius: 25px;
+    background: #CCCCCC;
+    border: 2px solid #000000;
+    box-shadow: 5px 5px 2px #888888;
+    margin: 20px 20px 10px 10px;
+}
+
+.pageDetails > .core {
+    background: white;
+    border: 1px solid #000000;
+}
+
+.pageDetails > .core >.inner {
+    padding: 0px 10px 0px 10px;
+}
+.pageDetails > .core >.inner.first {
+    padding-top: 10px;
+}
+.pageDetails > .core >.inner.last {
+    padding-bottom: 10px;
+}
+.pageDetails > .top {
+    padding: 5px 5px 5px 15px;
+    font-size:1.5em;
+    min-height: 25px;
+}
+.pageDetails > .bot {
+    padding: 5px 5px 5px 15px;
+    min-height: 25px;
