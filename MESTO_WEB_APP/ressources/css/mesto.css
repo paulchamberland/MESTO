@@ -256,16 +256,16 @@ div.main {
     top: 280px;
     right: 0;
     width: 25px;
-    padding: 29px 0;
+    padding: 28px 0;
 }
 #slideLayout > .slider_inner {
     position: fixed;
-    top: 180px;
+    top: 280px;
     right: -250px;
     background: rgb(100, 96, 96);;
     width: 200px;
     padding: 25px;
-    height: 160px;
+    height: 80px;
 }
 #slideLayout:hover {
     right: 249px;
