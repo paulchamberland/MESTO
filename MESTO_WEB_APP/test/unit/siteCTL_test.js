@@ -454,7 +454,7 @@ describe('Testing the controller of site object =>', function() {
             scope.canDelete = true;
             scope.site = {reference:"fake"};
             
-            spyOn(location, 'path');  
+            spyOn(location, 'path').and.returnValue("/admin/site");  
             
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTL INIT
@@ -493,6 +493,7 @@ describe('Testing the controller of site object =>', function() {
             expect(scope.SQLErrors).not.toBeDefined();
             expect(scope.siteList).toEqual('');
             
+            expect(location.path).toHaveBeenCalledWith();
             expect(location.path).toHaveBeenCalledWith("/admin/sites");
         });
         it('Testing: Generated error for Saving', function() {

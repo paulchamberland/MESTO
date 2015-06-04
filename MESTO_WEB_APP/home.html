@@ -10,5 +10,30 @@
                 $('#menu').load('menu.html');
             });
         </script>
-        <div id="menu" style="position: relative; z-index: 1" ></div> 
-        <div id="map-canvas" data-ng-controller="mapCTL as mapCTL" data-ng-init="mapCTL.createMarkers(siteCTL.getListSites())">Google Earth Not available</div>
+        <div id="menu" style="position: relative; z-index: 1" ></div>
+        <div id="map-canvas">Google Earth Not available</div>
+        <div data-ng-controller="mapCTL as mapCTL" data-ng-init="mapCTL.createMarkers(siteCTL.getListSites());mapCTL.initFilter(ROLE, ORGANIZATION);">
+            <div id="slideFilter" class="slider">
+                <span>Filters</span>
+                <div class="slider_inner">
+                    <span style="text-decoration:underline;">Filtering by Role :</span>
+                    <div data-ng-repeat="role in ROLE">
+                        <input type="checkbox" id="r{{role.value}}" ng-model="filterRole[role.value]" />{{role.label}}
+                    </div>
+                    <hr>
+                    <span style="text-decoration:underline;">Filtering by Organization :</span>
+                    <div data-ng-repeat="org in ORGANIZATION">
+                        <input type="checkbox" id="r{{org.value}}" ng-model="filterOrg[org.value]" />{{org.label}}
+                    </div>
+                </div>
+            </div>
+            <div id="slideLayout" class="slider">
+                <span>Layout</span>
+                <div class="slider_inner">
+                    <form>
+                        <textarea></textarea>
+                        <input type="submit" value="Post feedback"></input>
+                    </form>
+                </div>
+            </div>
+        </div>

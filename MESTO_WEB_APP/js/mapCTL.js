@@ -7,10 +7,23 @@ app.controller('mapCTL', function($scope, $compile, $location, navigateSrv, secu
     var markers = [];
     var lstSites = [];
     
+    $scope.filterRole = {};
+    $scope.filterOrg = {};
+    
     var onload = function() {
         $scope.$apply(function(){
             $compile($(".mapDetails"))($scope)
         });
+    };
+    
+    this.initFilter = function(roles, orgs) {
+        for (var i=0; i != roles.length; i++) {
+            $scope.filterRole[roles[i].value] = true;
+        }
+        
+        for (var i=0; i != orgs.length; i++) {
+            $scope.filterOrg[orgs[i].value] = true;
+        }
     };
     
     this.createMarkers = function(promiseLstSite){
