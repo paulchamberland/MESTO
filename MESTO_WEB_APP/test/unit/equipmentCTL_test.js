@@ -261,6 +261,33 @@ describe('Testing the controller of equipment object', function() {
         expect(controller.validDoubleAssociation).toHaveBeenCalled();
     });
     
+    it('Testing : openRoomList function', function() {
+        expect(scope.isRoomListOpened).toBeFalsy();
+        expect(scope.isSiteListOpened).toBeFalsy();
+        
+        spyOn(controller, 'loadRoomList');
+        
+        controller.openRoomList();
+        
+        expect(scope.isRoomListOpened).toBeTruthy();
+        expect(scope.isSiteListOpened).toBeFalsy();
+        expect(controller.loadRoomList).toHaveBeenCalled();
+        // TODO test call JQuery
+    });
+    it('Testing : openSiteList function', function() {
+        expect(scope.isRoomListOpened).toBeFalsy();
+        expect(scope.isSiteListOpened).toBeFalsy();
+        
+        spyOn(controller, 'loadSiteList');
+        
+        controller.openSiteList();
+        
+        expect(scope.isRoomListOpened).toBeFalsy();
+        expect(scope.isSiteListOpened).toBeTruthy();
+        expect(controller.loadSiteList).toHaveBeenCalled();
+        // TODO test call JQuery
+    });
+    
     describe('Testing Ajax call from Equipment object', function() {
         var location;
         
@@ -545,29 +572,72 @@ describe('Testing the controller of equipment object', function() {
             expect(scope.equipmentList).toEqual({});
         });
         
-        it('Testing : openSiteList function', function() {
+        it('Testing: Failed to load Rooms List', function() {
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond({}); // basic call from constructor
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond({});
-            expect(scope.siteList).not.toBeDefined();
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(200, '{"msg":"", "error":"Database error"}');
             
-            controller.openSiteList();
+            controller.loadRoomList();
             $httpBackend.flush();
             
-            expect(scope.isSiteListOpened).toBe(true);
-            expect(scope.siteList).toEqual({});
-        });
-        it('Testing : openRoomList function', function() {
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond({}); // basic call from constructor
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond({});
+            expect(scope.lstRmErr).toEqual("Database error");
             expect(scope.roomList).not.toBeDefined();
+        });
+        it('Testing: Error to load Rooms List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(500, '{"msg":"", "error":"error"}');
             
-            controller.openRoomList();
+            controller.loadRoomList();
             $httpBackend.flush();
             
-            expect(scope.isRoomListOpened).toBe(true);
-            expect(scope.roomList).toEqual({});
+            expect(scope.lstRmErr).toEqual("error: 500:undefined");
+            expect(scope.roomList).not.toBeDefined();
+        });
+        it('Testing: Success to load Rooms List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(200, '[{"test":"test"}]');
+            
+            controller.loadRoomList();
+            $httpBackend.flush();
+            
+            expect(scope.lstRmErr).not.toBeDefined();
+            expect(scope.roomList).toEqual([{test:"test"}]);
+        });
+        
+        it('Testing: Failed to load Sites List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(200, '{"msg":"", "error":"Database error"}');
+            
+            controller.loadSiteList();
+            $httpBackend.flush();
+            
+            expect(scope.lstStErr).toEqual("Database error");
+            expect(scope.siteList).not.toBeDefined();
+        });
+        it('Testing: Error to load Sites List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(500, '{"msg":"", "error":"error"}');
+            
+            controller.loadSiteList();
+            $httpBackend.flush();
+            
+            expect(scope.lstStErr).toEqual("error: 500:undefined");
+            expect(scope.siteList).not.toBeDefined();
+        });
+        it('Testing: Success to load Sites List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(200, '[{"test":"test"}]');
+            
+            controller.loadSiteList();
+            $httpBackend.flush();
+            
+            expect(scope.lstStErr).not.toBeDefined();
+            expect(scope.siteList).toEqual([{test:"test"}]);
         });
     });
 });

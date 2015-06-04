@@ -12,7 +12,7 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securi
     $scope.ROLE = [{value:'ED',label:'Edifice'},{value:'FLR',label:'Floor'},{value:'FOB',label:'FOB'},{value:'COP',label:'COP'},{value:'CMP',label:'CAMP'}];
     $scope.ORGANIZATION = [{value:'TC',label:'TC'},{value:'DND',label:'DND'},{value:'RCMP',label:'RCMP'},{value:'ASC',label:'ASC'},{value:'CSC',label:'CSC'}];
     
-    $scope.modifySite = false;
+    $scope.modifySite = false; // action flag to change the display of detail vs form page
     
     this.modifySite = function() {
         $scope.modifySite = true;

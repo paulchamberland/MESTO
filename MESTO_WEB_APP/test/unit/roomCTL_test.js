@@ -178,20 +178,34 @@ describe('Testing the controller of room object =>', function() {
         expect(scope.SQLMsgs).not.toBeDefined();
         expect(scope.SQLErrors).not.toBeDefined();
     });
+    
+    it('Testing : openSiteList function', function() {
+        spyOn(controller, "loadSiteList");
+        // TODO: Spy on jquery
+
+        controller.openSiteList();
+        
+        expect(controller.loadSiteList).toHaveBeenCalled();
+    });
  
     it('Testing: associateSite function', function() {
         var testDirty = false;
         scope.roomForm = {parentSiteName:{$setDirty : function(){testDirty=true;}}};
+        spyOn(controller, "closeSiteList");
         
         controller.associateSite({id:'3',siteName:"test"}); // test
         
         expect(scope.room.parentSite.id).toBe('3');
         expect(scope.room.parentSite.name).toEqual("test");
         expect(testDirty).toBeTruthy();
+        expect(controller.closeSiteList).toHaveBeenCalled();
         
         testDirty = false;
         controller.associateSite({id:'3',siteName:"test"});
-        expect(testDirty).toBeFalsy();
+        expect(testDirty).toBeFalsy(); // <- real test for the If sameName
+        expect(scope.room.parentSite.id).toBe('3');
+        expect(scope.room.parentSite.name).toEqual("test");
+        expect(controller.closeSiteList).toHaveBeenCalled();
     });
     
     it('Testing: cleanAssociateSite', function() {
@@ -479,16 +493,38 @@ describe('Testing the controller of room object =>', function() {
             expect(scope.roomList).toEqual({});
         });
         
-        it('Testing : openSiteList function', function() {
+        it('Testing: Failed to load Sites List', function() {
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond({}); // basic call from constructor
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond({});
-            expect(scope.siteList).not.toBeDefined();
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(200, '{"msg":"", "error":"Database error"}');
             
-            controller.openSiteList();
+            controller.loadSiteList();
             $httpBackend.flush();
             
-            expect(scope.siteList).toEqual({});
+            expect(scope.lstStErr).toEqual("Database error");
+            expect(scope.siteList).not.toBeDefined();
+        });
+        it('Testing: Error to load Sites List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(500, '{"msg":"", "error":"error"}');
+            
+            controller.loadSiteList();
+            $httpBackend.flush();
+            
+            expect(scope.lstStErr).toEqual("error: 500:undefined");
+            expect(scope.siteList).not.toBeDefined();
+        });
+        it('Testing: Success to load Sites List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(200, '[{"test":"test"}]');
+            
+            controller.loadSiteList();
+            $httpBackend.flush();
+            
+            expect(scope.lstStErr).not.toBeDefined();
+            expect(scope.siteList).toEqual([{test:"test"}]);
         });
         
         it('Testing: Failed to remove a associated equipment', function() {

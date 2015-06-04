@@ -44,11 +44,19 @@ describe('Testing the controller of site object =>', function() {
         
         expect(controller.emptySite).toEqual(site);
         
+        expect(scope.modifySite).toBeFalsy();
+        
         expect(scope.isAutorizeUpdatingSite).toBeFalsy();
         expect(scope.isAutorizeCreatingSite).toBeFalsy();
         expect(scope.isAutorizeDeletingSite).toBeFalsy();
         expect(scope.isAutorizeSeeDetailsSite).toBeFalsy();
         expect(scope.canSave).toBeFalsy();
+    });
+    
+    it('Testing: Modify site Flag setting', function() {
+        controller.modifySite();
+        
+        expect(scope.modifySite).toBeTruthy();
     });
     
     it('Testing: Get the label from ROLE value', function() {
@@ -74,7 +82,8 @@ describe('Testing the controller of site object =>', function() {
                     longitude:"43.123456",
                     siteName:"test4"};
                     
-        // TODO: Spy on both sub list private function
+        spyOn(controller, 'loadRoomsList');
+        spyOn(controller, 'loadEquipsList');
         controller.openSite(site); // security ON
         
         expect(scope.site).toEqual(controller.emptySite);
@@ -84,6 +93,15 @@ describe('Testing the controller of site object =>', function() {
         controller.openSite(site); // security OFF
         
         expect(scope.site).toEqual(site);
+        expect(controller.loadRoomsList).toHaveBeenCalled();
+        expect(controller.loadEquipsList).toHaveBeenCalled();
+    });
+    
+    it('Testing: Promise of getListSite', function() {
+        var promise = controller.getListSites();
+        
+        expect(promise).toBeDefined();
+        expect(promise.then).toBeDefined(); // object type Promise
     });
     
     describe('Dependancy to navigateSrv/location', function() {
@@ -114,6 +132,27 @@ describe('Testing the controller of site object =>', function() {
             expect(navigateSrv.getSite()).toEqual(site);
         });
         
+        it('Testing: seeSiteDetails function', function() {
+            var site = {id: "1",
+                    reference :"test",
+                    latitude:"12.123456",
+                    longitude:"43.123456",
+                    siteName:"test4"};
+            
+            spyOn(location, 'path');
+            
+            controller.seeSiteDetails(site); // Security ON
+            
+            expect(location.path).not.toHaveBeenCalled();
+            expect(navigateSrv.getSite()).toBeNull();
+            
+            scope.isAutorizeSeeDetailsSite = true;
+            controller.seeSiteDetails(site); // Security OFF
+            
+            expect(location.path).toHaveBeenCalledWith('/site');
+            expect(navigateSrv.getSite()).toEqual(site);
+        });
+        
         it('Testing: Add a new sub-object Room', function() {
             spyOn(location, 'path');
             
@@ -140,7 +179,8 @@ describe('Testing the controller of site object =>', function() {
     });
     
     it('Testing: Load of a site', function() {
-        //scope.siteForm = {$setPristine : function(){}};
+        spyOn(controller, "loadRoomsList");
+        spyOn(controller, "loadEquipsList");
         scope.SQLMsgs = "Good message";
         scope.SQLErrors = "bad message";
         
@@ -196,6 +236,9 @@ describe('Testing the controller of site object =>', function() {
         expect(scope.canDelete).toBe(true);
         expect(scope.SQLMsgs).not.toBeDefined();
         expect(scope.SQLErrors).not.toBeDefined();
+        
+        expect(controller.loadRoomsList).toHaveBeenCalled();
+        expect(controller.loadEquipsList).toHaveBeenCalled();
     });
     it('Testing: Validation of Date at loading', function() {
         scope.siteForm = {$setPristine : function(){}};
@@ -454,7 +497,7 @@ describe('Testing the controller of site object =>', function() {
             scope.canDelete = true;
             scope.site = {reference:"fake"};
             
-            spyOn(location, 'path').and.returnValue("/admin/site");  
+            spyOn(location, 'path').and.returnValue("/admin/site");
             
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTL INIT
@@ -495,6 +538,17 @@ describe('Testing the controller of site object =>', function() {
             
             expect(location.path).toHaveBeenCalledWith();
             expect(location.path).toHaveBeenCalledWith("/admin/sites");
+            
+            
+            location.path.calls.reset();   
+            location.path.and.returnValue("/site");
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveSite.php').respond('{"msg":"Site created successfully!!!", "error":""}');
+
+            controller.save(); // <--- TEST
+            $httpBackend.flush();
+            
+            expect(location.path).toHaveBeenCalledWith();
+            expect(location.path).toHaveBeenCalledWith("/sites");
         });
         it('Testing: Generated error for Saving', function() {
             scope.siteForm = {$dirty:true, $valid:true};
@@ -796,6 +850,40 @@ describe('Testing the controller of site object =>', function() {
             expect(controller.loadEquipsList).toHaveBeenCalled();
             
             expect(scope.lstFreeEquipErr).not.toBeDefined();
+        });
+        
+        it('Testing: Failed to load Rooms List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(200, '{"msg":"", "error":"Database error"}');
+            
+            controller.loadRoomsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstRoomErr).toEqual("Database error");
+            expect(scope.site.lstRooms).toEqual([]);
+        });
+        it('Testing: Error to load Rooms List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(500, '{"msg":"", "error":"error"}');
+            
+            controller.loadRoomsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstRoomErr).toEqual("error: 500:undefined");
+            expect(scope.site.lstRooms).toEqual([]);
+        });
+        it('Testing: Success to load Rooms List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(200, '[{"test":"test"}]');
+            
+            controller.loadRoomsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstRoomErr).not.toBeDefined();
+            expect(scope.site.lstRooms).toEqual([{test:"test"}]);
         });
         
         it('Testing: Failed to load Free Rooms List', function() {
