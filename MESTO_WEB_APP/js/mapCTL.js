@@ -10,12 +10,6 @@ app.controller('mapCTL', function($scope, $compile, $location, navigateSrv, secu
     $scope.filterRole = {};
     $scope.filterOrg = {};
     
-    var onload = function() {
-        $scope.$apply(function(){
-            $compile($(".mapDetails"))($scope)
-        });
-    };
-    
     this.initFilter = function(roles, orgs) {
         for (var i=0; i != roles.length; i++) {
             $scope.filterRole[roles[i].value] = true;
@@ -51,7 +45,11 @@ app.controller('mapCTL', function($scope, $compile, $location, navigateSrv, secu
             }
             
             googleMap.setMarkersCluster(map, markers);
-            googleMap.setLoadFunctionOnInfoWindow(onload);
+            googleMap.setLoadFunctionOnInfoWindow(function() {
+                $scope.$apply(function(){
+                    $compile($(".mapDetails"))($scope)
+                });
+            });
         });
     };
     
