@@ -425,7 +425,11 @@ MarkerClusterer.prototype.pushMarkerTo_ = function(marker) {
       that.repaint();
     });
   }
-  this.markers_.push(marker);
+  
+  if (marker.getMap() != null)
+    this.markers_.push(marker);
+  else
+    console.log("nope");
 };
 
 

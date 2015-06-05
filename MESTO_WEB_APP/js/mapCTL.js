@@ -45,6 +45,7 @@ app.controller('mapCTL', function($scope, $compile, $location, navigateSrv, secu
             }
             
             googleMap.setMarkersCluster(map, markers);
+            
             googleMap.setLoadFunctionOnInfoWindow(function() {
                 $scope.$apply(function(){
                     $compile($(".mapDetails"))($scope)
@@ -58,5 +59,21 @@ app.controller('mapCTL', function($scope, $compile, $location, navigateSrv, secu
             navigateSrv.setSite(lstSites[siteIndex]);
             $location.path("/site");
         }
+    };
+    
+    this.applyFilter = function() {
+        googleMap.resetMarkerCluster();
+        
+        for (var i=0; i != lstSites.length; i++) {
+            if ($scope.filterOrg[lstSites[i].organization] && $scope.filterRole[lstSites[i].role]) {
+                markers[i].setMap(map);
+                markers[i].setAnimation(google.maps.Animation.DROP);
+            }
+            else {
+                markers[i].setMap(null);
+            }
+        }
+        
+        googleMap.setMarkersCluster(map, markers);
     };
 });

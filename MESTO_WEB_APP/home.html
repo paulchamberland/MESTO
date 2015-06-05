@@ -18,12 +18,12 @@
                 <div class="slider_inner">
                     <span style="text-decoration:underline;">Filtering by Role :</span>
                     <div data-ng-repeat="role in ROLE">
-                        <input type="checkbox" id="r{{role.value}}" ng-model="filterRole[role.value]" />{{role.label}}
+                        <input type="checkbox" id="r{{role.value}}" data-ng-model="filterRole[role.value]" data-ng-change="mapCTL.applyFilter()" />{{role.label}}
                     </div>
                     <hr>
                     <span style="text-decoration:underline;">Filtering by Organization :</span>
                     <div data-ng-repeat="org in ORGANIZATION">
-                        <input type="checkbox" id="r{{org.value}}" ng-model="filterOrg[org.value]" />{{org.label}}
+                        <input type="checkbox" id="r{{org.value}}" data-ng-model="filterOrg[org.value]" data-ng-change="mapCTL.applyFilter()" />{{org.label}}
                     </div>
                 </div>
             </div>

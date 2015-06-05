@@ -335,6 +335,12 @@ app.factory('googleMap', function() {
         return mk;
     }
     
+    function resetMarkerCluster() {
+        markersCluster.clearMarkers();
+            
+        markersCluster = null;
+    }
+    
     function setMarkersCluster(map, arr) {
         markersCluster = new MarkerClusterer(map, arr, {gridSize: 20, maxZoom: 15});
     }
@@ -348,5 +354,6 @@ app.factory('googleMap', function() {
     return { getMap : getMap,
             factoryMarker : factoryMarker,
             setMarkersCluster : setMarkersCluster,
+            resetMarkerCluster : resetMarkerCluster,
             setLoadFunctionOnInfoWindow : setLoadFunctionOnInfoWindow};
 });
