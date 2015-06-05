@@ -21,7 +21,7 @@ app.config(function($routeProvider, IdleProvider) {
     $routeProvider.when('/admin/users', {templateUrl:'mt-admin/mt-lstUsers.html', controller:'userCTL', controllerAs:'userCTL'});
     $routeProvider.otherwise({redirectTo:"/home"});
     
-    IdleProvider.idle(10000);
+    IdleProvider.idle(600);
     IdleProvider.timeout(5);
     IdleProvider.keepalive(false);
 });
