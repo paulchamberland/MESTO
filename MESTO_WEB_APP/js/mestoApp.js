@@ -304,12 +304,12 @@ app.factory('googleMap', function() {
             //}
             
             //if (zones == null) {
-                zones = new geoXML3.parser({
-                    map: mainMap, 
-                    zoom: false,
-                    suppressInfoWindows: true
-                });
-                zones.parse('limits/Zones.kml');
+            zones = new geoXML3.parser({
+                map: mainMap, 
+                zoom: false,
+                suppressInfoWindows: true
+            });
+            zones.parse('limits/Zones.kml');
             //}
             
             info = new google.maps.InfoWindow({});
@@ -317,6 +317,14 @@ app.factory('googleMap', function() {
         catch (e) {console.error('Something wrong with google');}
         
         return mainMap;
+    }
+    
+    function showZone() {
+        zones.showDocument();
+    }
+    
+    function hideZone() {
+        zones.hideDocument();
     }
     
     function factoryMarker(latitude, longitude, map, title, strInfoContent, linkClicker) {
@@ -352,6 +360,8 @@ app.factory('googleMap', function() {
     }
     
     return { getMap : getMap,
+            hideZone : hideZone,
+            showZone : showZone,
             factoryMarker : factoryMarker,
             setMarkersCluster : setMarkersCluster,
             resetMarkerCluster : resetMarkerCluster,

@@ -10,6 +10,8 @@ app.controller('mapCTL', function($scope, $compile, $location, navigateSrv, secu
     $scope.filterRole = {};
     $scope.filterOrg = {};
     
+    $scope.optLayerZone = true;
+    
     this.initFilter = function(roles, orgs) {
         for (var i=0; i != roles.length; i++) {
             $scope.filterRole[roles[i].value] = true;
@@ -75,5 +77,14 @@ app.controller('mapCTL', function($scope, $compile, $location, navigateSrv, secu
         }
         
         googleMap.setMarkersCluster(map, markers);
+    };
+    
+    this.changeLayerZone = function() {
+        if ($scope.optLayerZone) {
+            googleMap.showZone();
+        }
+        else {
+            googleMap.hideZone();
+        }
     };
 });
