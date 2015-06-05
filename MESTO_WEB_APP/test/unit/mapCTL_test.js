@@ -15,6 +15,7 @@ describe('Testing the controller of map =>', function() {
         expect(scope.isAutorizeSeeDetailsSite).toBeFalsy();
         expect(scope.filterRole).toEqual({});
         expect(scope.filterOrg).toEqual({});
+        expect(scope.optLayerZone).toBeTruthy();
     });
     
     it('Testing: InitFilter function', function() {
@@ -54,5 +55,34 @@ describe('Testing the controller of map =>', function() {
         
         //expect(navigateSrv.getSite()).toEqual();
         expect(location.path).toHaveBeenCalledWith('/site');
+    });
+    
+    it('Testing: applyFilter function', function() {
+        spyOn(googleMap, 'resetMarkerCluster');
+        spyOn(googleMap, 'setMarkersCluster');
+        
+        controller.applyFilter();
+        
+        expect(googleMap.resetMarkerCluster).toHaveBeenCalled();
+        expect(googleMap.setMarkersCluster).toHaveBeenCalled();
+    });
+    
+    it('Testing: changeLayerZone function', function() {
+        spyOn(googleMap, 'showZone');
+        spyOn(googleMap, 'hideZone');
+        scope.optLayerZone = false;
+        
+        controller.changeLayerZone();
+        
+        expect(googleMap.showZone).not.toHaveBeenCalled();
+        expect(googleMap.hideZone).toHaveBeenCalled();
+        googleMap.hideZone.calls.reset();
+        
+        scope.optLayerZone = true;
+        
+        controller.changeLayerZone();
+        
+        expect(googleMap.showZone).toHaveBeenCalled();
+        expect(googleMap.hideZone).not.toHaveBeenCalled();
     });
 });
