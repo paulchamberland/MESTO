@@ -86,8 +86,8 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv, securi
     
     this.save = function() {
         if ($scope.userForm.$dirty && $scope.userForm.$valid) {
-            /*if (self.isSendingEmail) 
-                self.notifyUser($scope.user.email, "You're new user have been approved");*/
+            if (self.isSendingEmail) 
+                self.notifyUser($scope.user.email, "You're new user have been approved");
                 
             $http({
                 method: 'POST',
@@ -218,7 +218,35 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv, securi
         }
     };
     
-    
+    this.notifyUser = function(pEmailTo, pSubject) {
+        $http({
+            method: 'POST',
+            url: "/MESTO/MESTO_WEB_APP/php/emailNotification.php", // TODO: Make a config with path
+            data: {
+                to : pEmailTo,
+                subject : pSubject,
+                message : '<html>'
+                          +' <body>'
+                          +'    <div style="width:100%;background-color:#3E75A6;">'
+                          +'        <img src="http://localhost/MESTO/MESTO_WEB_APP/ressources/images/mesto.png" style="width:300px;"/>'
+                          +'    </div>'
+                          +'    <p style="text-align:center;">'
+                          +'        This is a automatic message, do not reply.</br>'
+                          +'        </br>'
+                          +'        You\'re administrator just approved you\'re new user creation.</br>'
+                          +'        You could now log in with you\'re username and password provided.</br>'
+                          +'        </br>'
+                          +'        Contact you\'re superior for help or information.</br>'
+                          +'        </br>'
+                          +'        Best regard,</br>'
+                          +'        Mesto</br>'
+                          +'    </p>'  
+                          +'  </body>'
+                          +'</html>'
+            },
+            headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+        });
+    };
     
     init();
 });

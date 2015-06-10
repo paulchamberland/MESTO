@@ -19,6 +19,7 @@ describe('Testing the controller of user object => ', function() {
                     role :"",
                     title :"",
                     active : false,
+                    approved : false,
                     address :"",
                     phone:""};
         
@@ -67,6 +68,7 @@ describe('Testing the controller of user object => ', function() {
                     role :"1",
                     title :"test",
                     active : true,
+                    approved : true,
                     address :"some address",
                     phone:"16156161"};
             
@@ -100,6 +102,7 @@ describe('Testing the controller of user object => ', function() {
                     role :"1",
                     title :"test",
                     active : true,
+                    approved : true,
                     address :"some address",
                     phone:"16156161"};
                     
@@ -133,6 +136,7 @@ describe('Testing the controller of user object => ', function() {
                                     role :"",
                                     title :"",
                                     active : false,
+                                    approved : false,
                                     address :"",
                                     phone:""});
     });
@@ -149,6 +153,21 @@ describe('Testing the controller of user object => ', function() {
         
         expect(scope.SQLMsgs).not.toBeDefined();
         expect(scope.SQLErrors).not.toBeDefined();
+    });
+    
+    it('Testing: Approve user created', function() {
+        scope.user.active = true;
+        
+        controller.approve();
+        
+        expect(scope.user.approved).toBeTruthy();
+        expect(controller.isSendingEmail).toBeTruthy();
+        
+        controller.isSendingEmail = false;
+        
+        controller.approve();
+        expect(scope.user.approved).toBeTruthy();
+        expect(controller.isSendingEmail).toBeFalsy();
     });
     
     describe('Testing Ajax call from User object => ', function() {
@@ -254,9 +273,12 @@ describe('Testing the controller of user object => ', function() {
             scope.SQLErrors = " error msg";
             scope.MsgErrors = "success msg";
             scope.canDelete = true;
-            scope.user = {username:"fake"};
+            scope.user = {username:"fake",
+                          email:"test@test.ca"};
+            controller.isSendingEmail = true;
             
-            spyOn(location, 'path');
+            spyOn(location, 'path').and.returnValue("/admin/user");
+            spyOn(controller, 'notifyUser');
             
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('');
@@ -278,6 +300,7 @@ describe('Testing the controller of user object => ', function() {
                                         role :"",
                                         title :"",
                                         active : false,
+                                        approved : false,
                                         address :"",
                                         phone:""});
             expect(scope.SQLMsgs).not.toBeDefined();
@@ -285,6 +308,18 @@ describe('Testing the controller of user object => ', function() {
             expect(scope.userList).toEqual('');
                                                 
             expect(location.path).toHaveBeenCalledWith("/admin/users");
+            expect(controller.notifyUser).toHaveBeenCalledWith('test@test.ca', "You're new user have been approved");
+            
+            location.path.calls.reset();   
+            location.path.and.returnValue("/user");
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond('{"msg":"User created successfully!!!", "error":""}');
+
+            controller.save(); // <--- TEST
+            $httpBackend.flush();
+            
+            expect(location.path).toHaveBeenCalledWith();
+            expect(scope.SQLMsgs).toEqual("User created successfully!!!");
+            expect(scope.SQLErrors).not.toBeDefined();
         });
         it('Testing: Generated error for Saving', function() {
             scope.userForm = {$dirty:true, $valid:true};
@@ -356,6 +391,7 @@ describe('Testing the controller of user object => ', function() {
                                         role :"",
                                         title :"",
                                         active : false,
+                                        approved : false,
                                         address :"",
                                         phone:""});
             expect(scope.SQLMsgs).not.toBeDefined();
@@ -401,6 +437,17 @@ describe('Testing the controller of user object => ', function() {
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).toEqual('error: 500:undefined'); // Principal test
             expect(scope.userList).toEqual({});
+        });
+        
+        it('Testing: Notify user', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond({});
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([]);
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/emailNotification.php').respond();
+            
+            controller.notifyUser("test@test.ca", "subject");
+            
+            $httpBackend.flush();
         });
     });
 });
