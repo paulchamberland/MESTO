@@ -428,8 +428,6 @@ MarkerClusterer.prototype.pushMarkerTo_ = function(marker) {
   
   if (marker.getMap() != null)
     this.markers_.push(marker);
-  else
-    console.log("nope");
 };
 
 
