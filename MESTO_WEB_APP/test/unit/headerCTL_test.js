@@ -19,6 +19,10 @@ describe('Testing the controller of Header section =>', function() {
         location.path('/admin');
         
         expect(controller.isSearchDisplay()).toBeFalsy();
+        
+        location.path('/createUser');
+        
+        expect(controller.isSearchDisplay()).toBeFalsy();
     });
     
     it('Testing isLoginDisplay function', function() {
@@ -29,6 +33,10 @@ describe('Testing the controller of Header section =>', function() {
         expect(controller.isLoginDisplay()).toBeTruthy();
         
         location.path('/admin');
+        
+        expect(controller.isLoginDisplay()).toBeFalsy();
+        
+        location.path('/createUser');
         
         expect(controller.isLoginDisplay()).toBeFalsy();
     });

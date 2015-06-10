@@ -10,6 +10,7 @@ class User {
     public $role;
     public $lstPermissions;
     public $active;
+    public $approved;
     public $address;
     public $phone;
 	public $updateBy;
@@ -29,6 +30,7 @@ class User {
             $this->lstPermissions = $objSQL->list_permissions;
         
         $this->active = $objSQL->active;
+        $this->approved = $objSQL->approved;
         $this->address = $objSQL->address;
         $this->phone = $objSQL->phone;
         $this->updateBy = $objSQL->updateBy;
@@ -43,13 +45,13 @@ try {
 	$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     if (empty($data['id'])) {
-        $stmt = $con->prepare("SELECT id, username, name, email, title, supervisor, fk_userRoleId, active, address, phone, updateBy, updateDate FROM mtuser ORDER BY id");
+        $stmt = $con->prepare("SELECT id, username, name, email, title, supervisor, fk_userRoleId, active, approved, address, phone, updateBy, updateDate FROM mtuser ORDER BY id");
 	}
     else if (!empty($data['activity']) && $data['activity'] == "login" && !empty($data['id'])) {
         $stmt = $con->prepare("SELECT u.*, ur.list_permissions FROM mtuser u LEFT JOIN userrole ur ON u.fk_userRoleId = ur.id WHERE u.id = '".$data['id']."'");
     }
     else {
-        $stmt = $con->prepare("SELECT id, username, name, email, title, supervisor, fk_userRoleId, active, address, phone, updateBy, updateDate FROM mtuser WHERE id = '".$data['id']."'");
+        $stmt = $con->prepare("SELECT id, username, name, email, title, supervisor, fk_userRoleId, active, approved, address, phone, updateBy, updateDate FROM mtuser WHERE id = '".$data['id']."'");
     }
     
 	$stmt->execute();

@@ -22,7 +22,7 @@ a { text-decoration:none }
 }
 
 /* Login Button */
-#loginButton, #logoutButton { 
+#loginButton, #logoutButton, #signUpButton{ 
     display:inline-block;
     float:right;
     background:#d2e0ea url(../images/buttonbg.png) repeat-x; 
@@ -32,10 +32,11 @@ a { text-decoration:none }
     position:relative;
     z-index:30;
     cursor:pointer;
+    margin-left: 5px;
 }
 
 /* Login Button Text */
-#loginButton span, #logoutButton span {
+#loginButton span, #logoutButton span, #signUpButton span {
     color:#445058; 
     font-size:14px; 
     font-weight:bold; 
@@ -46,11 +47,11 @@ a { text-decoration:none }
     padding:7px 29px 9px 10px;
     background:url(../images/loginArrow.png) no-repeat 53px 7px;
 }
-#logoutButton span {
+#logoutButton span, #signUpButton span {
     padding:7px 10px 9px 10px;
 }
 
-#loginButton:hover, #logoutButton:hover{
+#loginButton:hover, #logoutButton:hover, #signUpButton:hover{
     background:url(../images/buttonbgHover.png) repeat-x;
 }
 

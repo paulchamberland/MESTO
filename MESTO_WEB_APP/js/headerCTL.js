@@ -5,6 +5,9 @@ app.controller('headerCTL', function($scope, $location, securitySrv) {
         if ($location.path() != '' && "/admin".indexOf($location.path()) != -1 /*&& !securitySrv.isLogged()*/) {
             isDisplay = false;
         }
+        else if ($location.path() != '' && "/createUser".indexOf($location.path()) != -1) {
+            isDisplay = false;
+        }
         
         return isDisplay;
     };
@@ -12,6 +15,9 @@ app.controller('headerCTL', function($scope, $location, securitySrv) {
     this.isLoginDisplay = function() {
         var isDisplay = true;
         if ($location.path() != '' && "/admin".indexOf($location.path()) != -1 /*&& !securitySrv.isLogged()*/) {
+            isDisplay = false;
+        }
+        else if ($location.path() != '' && "/createUser".indexOf($location.path()) != -1) {
             isDisplay = false;
         }
         

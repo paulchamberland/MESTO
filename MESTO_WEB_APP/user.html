@@ -1,12 +1,6 @@
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#menu').load('mt-admin/mt-menu.html');
-    });
-</script>
-<div id="menu" class="v" ></div>
 <div class="main" >
-	<span class="titre">Add an user</span>
-	<div>
+	<span class="titre">Create your user</span>
+	<div data-ng-show="SQLMsgs == null">
 		<div data-ng-show="userForm.$dirty && userForm.$invalid">
 			<span class="error" data-ng-show="userForm.email.$error.required">An email is required.</span>
 			<span class="error" data-ng-show="userForm.email.$error.pattern">Invalid email.</span>
@@ -17,22 +11,13 @@
 			<span class="error" data-ng-show="userForm.phone.$error.pattern">Invalid Phone number.</span>
 		</div>
         <span class="error">{{SQLErrors}}</span>
-        <span class="t">{{SQLMsgs}}</span>
 		<form class="basic" name="userForm" novalidate >
 			<input type="hidden" id="id" name="id" data-ng-model="user.id" />
 			<div class="section">
 				<div class="field"><label for="email">Email *(lowercase only) :</label><input type="text" id="email" name="email" data-ng-model="user.email" required data-ng-pattern="/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/" /></div>
                 <div class="field"><label for="username">UserName * :</label><input type="text" id="username" name="username" data-ng-model="user.username" required /></div>
-				<div class="field" data-ng-if="user.id <= 0"><label for="pwd">Password * :</label><input type="password" id="pwd" name="password" data-ng-model="user.password" required data-ng-pattern="/^(?=.*[A-Z])(?=.*[$%?&*!#])(?=.*[0-9]).{8,}$/" /></div>
-				<div class="field" data-ng-if="changePassword == true"><label for="pwd">Change Password * :</label><input type="password" id="pwd" name="password" data-ng-model="user.password" required data-ng-pattern="/^(?=.*[A-Z])(?=.*[$%?&*!#])(?=.*[0-9]).{8,}$/" /></div>
+				<div class="field"><label for="pwd">Password * :</label><input type="password" id="pwd" name="password" data-ng-model="user.password" required data-ng-pattern="/^(?=.*[A-Z])(?=.*[$%?&*!#])(?=.*[0-9]).{8,}$/" /></div>
                 <div class="field"><label for="role">Role * :</label><select id="role" data-ng-model="user.role" name="role" data-ng-options="role.id as role.name for role in roleList" required ></select></div>
-                <div class="field"><label for="active">Active?</label>
-                    <input type="checkbox" id="active" name="active" data-ng-checked="user.active == true" data-ng-model="user.active" data-ng-change="userCTL.approve()"/>
-                    <div style="display:inline;" data-ng-switch on="user.approved">
-                        <span style="background:limegreen;" data-ng-switch-when="1">Approved</span>
-                        <span style="background:yellow;" data-ng-switch-default>Pending</span>
-                    </div>
-                </div>
                 <div class="field"><label for="name">Name :</label><input type="text" id="name" name="name" data-ng-model="user.name" /></div>
 				<div class="field"><label for="title">Title :</label><input type="text" id="title" name="title" data-ng-model="user.title" /></div>
 				<div class="field"><label for="supervisor">Supervisor :</label><input type="text" id="supervisor" name="supervisor" data-ng-model="user.supervisor" /></div>
@@ -40,11 +25,15 @@
                 <div class="field"><label for="phone">Phone :</label><input type="text" id="phone" name="phone" data-ng-model="user.phone" data-ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" /></div>
 			</div>
 		</form>
-		<button id="btnSave" data-ng-click="userCTL.save();" ng-disabled="userForm.$pristine || userForm.$invalid" data-ng-if="canSave">Save</button>
-		<button id="btnDelete" data-ng-click="userCTL.delete();" ng-disabled="!canDelete" data-ng-if="isAutorizeDeletingUser">Delete</button>
+		<button id="btnSave" data-ng-click="userCTL.save();" ng-disabled="userForm.$pristine || userForm.$invalid" >Sign Up</button>
         <button id="btnReset" data-ng-click="userCTL.resetFrm();userCTL.resetMsg();" ng-disabled="userForm.$pristine">Reset</button>
-        <button id="btnChgPassword" data-ng-click="userCTL.changePassword()" data-ng-if="user.id > 0 && isAutorizeChangingPassword == true">Password</button>
 	</div>
     
+    <div data-ng-show="SQLMsgs != null">
+        <p style="text-align:center">You're request have been submited to a administrator. After approval, a email will inform you than you may use your password.</p>
+    </div>
+    
+    </br>
+    <span><a href="#/home">Go back Home</a></span>
     <div class="wrap"></div>
 </div>

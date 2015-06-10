@@ -11,6 +11,7 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv, securi
                     role :"",
                     title :"",
                     active : false,
+                    approved : false,
                     address :"",
                     phone:""};
     this.emptyUser = {};
@@ -22,6 +23,8 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv, securi
     $scope.isAutorizeUpdatingUser = false;
     $scope.isAutorizeCreatingUser = false;
     $scope.isAutorizeDeletingUser = false;
+    
+    this.isSendingEmail = false;
     
     this.getNameRole = function(pRole) {
         for (t in $scope.roleList) {
@@ -83,6 +86,9 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv, securi
     
     this.save = function() {
         if ($scope.userForm.$dirty && $scope.userForm.$valid) {
+            /*if (self.isSendingEmail) 
+                self.notifyUser($scope.user.email, "You're new user have been approved");*/
+                
             $http({
                 method: 'POST',
                 url: "/MESTO/MESTO_WEB_APP/php/saveUser.php", // TODO: Make a config with path
@@ -96,6 +102,7 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv, securi
                     role : $scope.user.role,
                     title : $scope.user.title,
                     active : $scope.user.active,
+                    approved : $scope.user.approved,
                     address : $scope.user.address,
                     phone : $scope.user.phone
                 },
@@ -107,7 +114,13 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv, securi
                         //$scope.SQLMsgs = data.msg;
                         //self.loadList();
                         self.resetFrm();
-                        $location.path("/admin/users");
+                        
+                        if ($location.path() == "/admin/user") {
+                            $location.path("/admin/users");
+                        }
+                        else {
+                            $scope.SQLMsgs = data.msg;
+                        }
                     }
                     else {
                         $scope.SQLErrors = data.error;
@@ -197,6 +210,15 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv, securi
     this.newUser = function() {
         $location.path("/admin/user");
     };
+    
+    this.approve = function() {
+        if ($scope.user.approved != 1 && $scope.user.active == 1) {
+            $scope.user.approved = 1;
+            self.isSendingEmail = true;
+        }
+    };
+    
+    
     
     init();
 });

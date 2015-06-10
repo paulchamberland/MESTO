@@ -1,0 +1,1 @@
+ALTER TABLE `mtuser` ADD `approved` BOOLEAN NOT NULL DEFAULT FALSE AFTER `active`;
