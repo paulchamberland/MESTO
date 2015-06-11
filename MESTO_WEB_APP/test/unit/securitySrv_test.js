@@ -14,6 +14,10 @@ describe('Testing the service Security => ', function() {
         expect(securitySrv.getUserName()).toBeNull();
     });
     
+    it('Testing: getUser function', function() {
+        expect(securitySrv.getUser()).toBeNull();
+    });
+    
     it('Testing: isLogged function', function() {
         expect(securitySrv.isLogged()).toBeFalsy();
     });
@@ -109,6 +113,7 @@ describe('Testing the service Security => ', function() {
         expect(location.path).not.toHaveBeenCalled();
         expect(securitySrv.isLogged()).toBeTruthy();
         expect(securitySrv.getUserName()).toEqual('adminTest');
+        expect(securitySrv.getUser()).toEqual({name:"adminTest"});
         expect(thenSpy1).toHaveBeenCalled();
         expect(thenSpy2).not.toHaveBeenCalled();
         expect(Idle.watch).toHaveBeenCalled();

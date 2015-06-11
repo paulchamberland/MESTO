@@ -2,8 +2,19 @@ describe('E2E: Site => ', function() {
     function getLastSite() {
         element(by.id('mnSites')).click();
         
-        element.all(by.repeater('siteList')).last().click();
+        openLastSite();
     };
+    
+    function openLastSite() {
+        browser.sleep(500);
+        
+        browser.executeScript('window.scrollTo(0,2000);').then(function () {
+            browser.sleep(500);
+            element.all(by.repeater('siteList')).last().click();
+        })
+        
+        browser.sleep(500);
+    }
     
     beforeAll(function() {
         browser.get('http://localhost/MESTO/MESTO_WEB_APP/#/home');
@@ -420,7 +431,7 @@ describe('E2E: Site => ', function() {
         });
         
         it('Testing: Associate a room to a Site', function() {
-            getLastSite();
+            openLastSite();
             element(by.id('btnOpenFreeLstRoom')).click();
             
             element.all(by.repeater('lstFreeRooms')).get(0).element(by.model('r.adding')).click();
@@ -485,7 +496,7 @@ describe('E2E: Site => ', function() {
             element(by.id('btnSave')).click();
             expect(browser.getCurrentUrl()).toMatch("#/admin/sites");
             
-            getLastSite();
+            openLastSite();
             
             element(by.model('site.reference')).clear();
             element(by.model('site.reference')).sendKeys('testE2E_V3');
@@ -496,7 +507,7 @@ describe('E2E: Site => ', function() {
             
             getLastSite();
             element(by.id('btnDelete')).click();
-            getLastSite();
+            openLastSite();
             element(by.id('btnDelete')).click();
         });
         
@@ -525,7 +536,7 @@ describe('E2E: Site => ', function() {
             element(by.model('site.employesNumber')).sendKeys('200');
             
             element(by.id('btnSave')).click();
-            getLastSite();
+            openLastSite();
             
             expect(element(by.model('site.reference')).getAttribute("value")).toEqual('testE2E');
             expect(element(by.model('site.latitude')).getAttribute("value")).toEqual('12.432132');

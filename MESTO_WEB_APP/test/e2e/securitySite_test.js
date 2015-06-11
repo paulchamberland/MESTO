@@ -81,10 +81,13 @@ describe('e2e Site Autority : ', function () {
         browser.sleep(500);
         element(by.id('mnVwSites')).click();
         
-        element.all(by.repeater('siteList')).last().click();
+        browser.executeScript('window.scrollTo(0,2000);').then(function () {
+            browser.sleep(500);
+            element.all(by.repeater('siteList')).last().click();
+        });
+        
         browser.sleep(2000);
-        expect(element(by.id("details")).getAttribute("class")).toEqual('details');
-        expect(element(by.id("details")).getAttribute("style")).toEqual('');
+        expect(browser.getCurrentUrl()).toMatch("#/site");
     });
     
     it('Testing : creating (with button)', function() {
@@ -92,7 +95,6 @@ describe('e2e Site Autority : ', function () {
         
         element(by.id('mnSites')).click();
         
-        element.all(by.repeater('siteList')).last().click();
         expect(element(by.id('btnNewSite')).isPresent()).toBeFalsy();
     });
     it('Testing : creating & deleting(with directCall)', function() {
@@ -105,9 +107,13 @@ describe('e2e Site Autority : ', function () {
     it('Testing : updating', function() {
         element(by.id('mnSites')).click();
         
-        element.all(by.repeater('siteList')).last().click();
+        browser.executeScript('window.scrollTo(0,2000);').then(function () {
+            browser.sleep(500);
+            element.all(by.repeater('siteList')).last().click();
+        });
+        browser.sleep(2000);
         
-        expect(browser.getCurrentUrl()).toMatch("#/admin/sites");
+        expect(browser.getCurrentUrl()).toMatch("#/admin/site");
     });
     
     afterAll(function() {

@@ -84,6 +84,16 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv, securi
         if ($scope.SQLMsgs) delete $scope.SQLMsgs;
     };
     
+    this.resetPwdFrm = function() {
+        $scope.user.password = "";
+        $scope.userPwdForm.$setPristine();
+    };
+    
+    this.resetPwdMsg = function() {
+        if ($scope.SQLPwdErrors) delete $scope.SQLPwdErrors;
+        if ($scope.SQLPwdMsgs) delete $scope.SQLPwdMsgs;
+    };
+    
     this.save = function() {
         if ($scope.userForm.$dirty && $scope.userForm.$valid) {
             if (self.isSendingEmail) 
@@ -113,13 +123,16 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv, securi
                     if (data.msg != '') {
                         //$scope.SQLMsgs = data.msg;
                         //self.loadList();
-                        self.resetFrm();
+                        //self.resetFrm();
                         
                         if ($location.path() == "/admin/user") {
                             $location.path("/admin/users");
                         }
                         else {
                             $scope.SQLMsgs = data.msg;
+                            
+                            if (securitySrv.isLogged())
+                                securitySrv.loadUser($scope.user.id);
                         }
                     }
                     else {
@@ -130,6 +143,37 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv, securi
                 function(data, status, headers, config, statusText) {
                     // TODO: error server handling
                     $scope.SQLErrors = "error: "+status+":"+statusText;
+                }
+            );
+        }
+    };
+    
+    this.savePwd = function() {
+        if ($scope.userPwdForm.$dirty && $scope.userPwdForm.$valid) {
+            $http({
+                method: 'POST',
+                url: "/MESTO/MESTO_WEB_APP/php/saveUser.php", // TODO: Make a config with path
+                data: {
+                    id : $scope.user.id,
+                    password : $scope.user.password,
+                    activity : "chgPWD"
+                },
+                headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+            }).success(
+                function(data, status) {
+                    self.resetPwdMsg();
+                    if (data.msg != '') {
+                        $scope.SQLPwdMsgs = data.msg;
+                        self.resetPwdFrm();
+                    }
+                    else {
+                        $scope.SQLPwdErrors = data.error;
+                    }
+                }
+            ).error(
+                function(data, status, headers, config, statusText) {
+                    // TODO: error server handling
+                    $scope.SQLPwdErrors = "error: "+status+":"+statusText;
                 }
             );
         }

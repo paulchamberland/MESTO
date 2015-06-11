@@ -1,12 +1,13 @@
 describe('Testing the Login Controller => ', function() {
-    var scope, controller, securitySrv, location;
+    var scope, controller, securitySrv, location, navigateSrv;
     
     beforeEach(module('MESTO'));
     
-    beforeEach(inject(function(_$rootScope_, _$controller_, _securitySrv_, _$httpBackend_, _$location_) {
+    beforeEach(inject(function(_$rootScope_, _$controller_, _securitySrv_, _$httpBackend_, _$location_, _navigateSrv_) {
         scope = _$rootScope_;
         controller = _$controller_('loginCTL', { $scope: scope });
         securitySrv = _securitySrv_;
+        navigateSrv = _navigateSrv_;
         $httpBackend = _$httpBackend_;
         location = _$location_;
         
@@ -40,6 +41,18 @@ describe('Testing the Login Controller => ', function() {
         controller.logout();
         
         expect(securitySrv.logout).toHaveBeenCalled();
+    });
+    
+    it('Testing: open Profile', function() {
+        spyOn(securitySrv, 'getUser');
+        spyOn(navigateSrv, 'setUser');
+        spyOn(location, 'path');
+        
+        controller.openProfileUser();
+        
+        expect(securitySrv.getUser).toHaveBeenCalled();
+        expect(navigateSrv.setUser).toHaveBeenCalled();
+        expect(location.path).toHaveBeenCalled();
     });
     
     describe('Ajax calling =>', function() {

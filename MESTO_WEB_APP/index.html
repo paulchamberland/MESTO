@@ -77,7 +77,7 @@
 		<div id="container" data-ng-if="headCTL.isLoginDisplay()">
             <!-- Login Starts Here -->
             <div id="loginContainer" data-ng-controller="loginCTL as loginCTL">
-                <span style="padding-right:5px" data-ng-if="loginCTL.isLogged()">Welcome {{loginCTL.getUserName()}}</span>
+                <span style="padding-right:5px" data-ng-if="loginCTL.isLogged()">Welcome <span class="fake-link" data-ng-click="loginCTL.openProfileUser()">{{loginCTL.getUserName()}}</span></span>
                 <a id="logoutButton" data-ng-if="loginCTL.isLogged()" data-ng-click="loginCTL.logout()"><span>Logout</span></a>
                 <a id="signUpButton" data-ng-if="!loginCTL.isLogged()" href="#/createUser"><span>Sign Up</span></a>
                 <a id="loginButton" data-ng-if="!loginCTL.isLogged()" onclick="$('#loginBox').toggle();$('#loginForm').toggleClass('active');"><span>Login</span><em></em></a>

@@ -114,7 +114,7 @@ describe('Testing the controller of user object => ', function() {
         expect(scope.SQLErrors).not.toBeDefined();
     });
     
-    it('Testing: Reset form', function() {
+    it('Testing: Reset user form', function() {
         scope.userForm = {$setPristine : function(){}};
         controller.loadUser({id: "1",
                             username :"admin",
@@ -140,8 +140,30 @@ describe('Testing the controller of user object => ', function() {
                                     address :"",
                                     phone:""});
     });
+    it('Testing: Reset changePassword form', function() {
+        scope.userPwdForm = {$setPristine : function(){}};
+        scope.canDelete = true;
+        controller.loadUser({id: "1",
+                            username :"admin",
+                            name :"Ad Mean",
+                            email :"admin@test.ca",
+                            password :"fj387dj2i",
+                            role :"1",
+                            active : true});
+        
+        controller.resetPwdFrm();
+        
+        expect(scope.canDelete).toBe(true);
+        expect(scope.user).toEqual({id: "1",
+                                    username :"admin",
+                                    name :"Ad Mean",
+                                    email :"admin@test.ca",
+                                    password :"",
+                                    role :"1",
+                                    active : true});
+    });
     
-    it('Testing: Reset Messages ', function() {
+    it('Testing: Reset Messages of user Form', function() {
         controller.resetMsg(); // Test when already not define
         
         expect(scope.SQLMsgs).not.toBeDefined();
@@ -153,6 +175,19 @@ describe('Testing the controller of user object => ', function() {
         
         expect(scope.SQLMsgs).not.toBeDefined();
         expect(scope.SQLErrors).not.toBeDefined();
+    });
+    it('Testing: Reset Messages of user change password', function() {
+        controller.resetPwdMsg(); // Test when already not define
+        
+        expect(scope.SQLPwdMsgs).not.toBeDefined();
+        expect(scope.SQLPwdErrors).not.toBeDefined();
+        
+        scope.SQLPwdMsgs = "Good message";
+        scope.SQLPwdErrors = "bad message";
+        controller.resetPwdMsg(); // test when define
+        
+        expect(scope.SQLPwdMsgs).not.toBeDefined();
+        expect(scope.SQLPwdErrors).not.toBeDefined();
     });
     
     it('Testing: Approve user created', function() {
@@ -273,8 +308,18 @@ describe('Testing the controller of user object => ', function() {
             scope.SQLErrors = " error msg";
             scope.MsgErrors = "success msg";
             scope.canDelete = true;
-            scope.user = {username:"fake",
-                          email:"test@test.ca"};
+            scope.user = {id: "1",
+                            username :"fake",
+                            name :"toto",
+                            email :"test@test.ca",
+                            password :"",
+                            supervisor :"p",
+                            role :"",
+                            title :"truc",
+                            active : false,
+                            approved : false,
+                            address :"",
+                            phone:""};
             controller.isSendingEmail = true;
             
             spyOn(location, 'path').and.returnValue("/admin/user");
@@ -290,15 +335,15 @@ describe('Testing the controller of user object => ', function() {
 
             $httpBackend.flush();
             
-            expect(scope.canDelete).toBe(false);
-            expect(scope.user).toEqual({id: "",
-                                        username :"",
-                                        name :"",
-                                        email :"",
+            expect(scope.canDelete).toBe(true);
+            expect(scope.user).toEqual({id: "1",
+                                        username :"fake",
+                                        name :"toto",
+                                        email :"test@test.ca",
                                         password :"",
-                                        supervisor :"",
+                                        supervisor :"p",
                                         role :"",
-                                        title :"",
+                                        title :"truc",
                                         active : false,
                                         approved : false,
                                         address :"",
@@ -448,6 +493,113 @@ describe('Testing the controller of user object => ', function() {
             controller.notifyUser("test@test.ca", "subject");
             
             $httpBackend.flush();
+        });
+        
+        describe('Testing sub form of changing password =>', function() {
+            it('Testing: Skipping the password Saving', function() {
+                scope.userPwdForm = {$dirty:false, $valid:false};
+                scope.canDelete = true;
+                scope.user = {username:"fake",
+                              password:"testest"};
+                
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('[{}]');
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
+                
+
+                controller.savePwd(); // <--- TEST
+
+                $httpBackend.flush();
+                
+                expect(scope.canDelete).toBe(true);
+                expect(scope.user).toEqual({username :"fake",
+                                            password:"testest"});
+                expect(scope.SQLPwdMsgs).not.toBeDefined();
+                expect(scope.SQLPwdErrors).not.toBeDefined();
+                expect(scope.userList).toEqual([{}]);
+            });
+            it('Testing: Succeeding the password saving (with old msg)', function() {
+                scope.userPwdForm = {$setPristine:function(){}, $dirty:true, $valid:true};
+                scope.SQLPwdErrors = " error msg";
+                scope.MsgPwdErrors = "success msg";
+                scope.user = {id: "1",
+                                username :"fake",
+                                name :"toto",
+                                email :"test@test.ca",
+                                password :"testttt",
+                                supervisor :"p",
+                                role :"",
+                                title :"truc",
+                                active : false,
+                                approved : false,
+                                address :"",
+                                phone:""};
+                
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('');
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond('');
+                
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond(200, '{"msg":"Password change successfully!!!", "error":""}');
+                
+                controller.savePwd(); // <--- TEST
+
+                $httpBackend.flush();
+                
+                expect(scope.user).toEqual({id: "1",
+                                            username :"fake",
+                                            name :"toto",
+                                            email :"test@test.ca",
+                                            password :"",
+                                            supervisor :"p",
+                                            role :"",
+                                            title :"truc",
+                                            active : false,
+                                            approved : false,
+                                            address :"",
+                                            phone:""});
+                                            
+                expect(scope.SQLMsgs).not.toBeDefined();
+                expect(scope.SQLErrors).not.toBeDefined();
+                expect(scope.SQLPwdMsgs).toEqual("Password change successfully!!!");
+                expect(scope.SQLPwdErrors).not.toBeDefined();
+                expect(scope.userList).toEqual('');
+            });
+            it('Testing: Generated error for password Saving', function() {
+                scope.userPwdForm = {$dirty:true, $valid:true};
+                scope.user = {username:"fake", password :"test"};
+                
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond({});
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
+                
+                controller.savePwd(); // <--- TEST
+
+                $httpBackend.flush();
+                
+                expect(scope.user).toEqual({username:"fake", password :"test"});
+                expect(scope.SQLPwdMsgs).not.toBeDefined();
+                expect(scope.SQLPwdErrors).toEqual('Database error, Contact administrator. Try later'); // Principal test
+                expect(scope.userList).toEqual({});
+            });
+            it('Testing: Failing the password Saving', function() {
+                scope.userPwdForm = {$dirty:true, $valid:true};
+                scope.user = {username:"fake", password :"test"};
+                
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond({});
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveUser.php').respond(500, 'server error');
+                
+                controller.savePwd(); // <--- TEST
+
+                $httpBackend.flush();
+                
+                expect(scope.user).toEqual({username:"fake", password :"test"});
+                expect(scope.SQLPwdMsgs).not.toBeDefined();
+                expect(scope.SQLPwdErrors).toEqual('error: 500:undefined'); // Principal test
+                expect(scope.userList).toEqual({});
+            });
         });
     });
 });

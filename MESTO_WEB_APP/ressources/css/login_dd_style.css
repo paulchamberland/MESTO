@@ -186,3 +186,9 @@ fieldset#body {
 input:focus {
     outline:none;
 }
+
+.fake-link {
+    color: darkgray;
+    text-decoration: underline;
+    cursor: pointer;
+}

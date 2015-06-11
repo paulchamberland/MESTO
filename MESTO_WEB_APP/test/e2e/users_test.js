@@ -236,7 +236,7 @@ describe('E2E: User => ', function() {
             
             element(by.id('login')).click();
             
-            expect(element(by.binding('loginCTL.getUserName()')).getText()).toEqual('Welcome testV2');
+            expect(element(by.binding('loginCTL.getUserName()')).getText()).toEqual('testV2');
             
             element(by.id('logoutButton')).click();
             logTesterUser();

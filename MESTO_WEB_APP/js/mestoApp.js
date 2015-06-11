@@ -20,6 +20,7 @@ app.config(function($routeProvider, IdleProvider) {
     $routeProvider.when('/admin/user', {templateUrl:'mt-admin/mt-users.html', controller:'userCTL', controllerAs:'userCTL'});
     $routeProvider.when('/admin/users', {templateUrl:'mt-admin/mt-lstUsers.html', controller:'userCTL', controllerAs:'userCTL'});
     $routeProvider.when('/createUser', {templateUrl:'user.html', controller:'userCTL', controllerAs:'userCTL'});
+    $routeProvider.when('/profile', {templateUrl:'profile.html', controller:'userCTL', controllerAs:'userCTL'});
     $routeProvider.otherwise({redirectTo:"/home"});
     
     IdleProvider.idle(600);
@@ -277,12 +278,18 @@ app.factory('securitySrv', function($http, $location, Idle) {
         return (currentUser && currentUser.lstPermissions) ? currentUser.lstPermissions.indexOf(pPermission) != -1 : false;
     }
     
+    function getUser() {
+        return currentUser;
+    }
+    
     return {
         login : login,
         logout : logout,
+        loadUser : loadUser,
         checkLoggedUser : checkLoggedUser,
         isLogged : isLogged,
         getUserName : getUserName,
+        getUser : getUser,
         isAuthorized : isAuthorized
     };
 });

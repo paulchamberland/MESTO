@@ -1,4 +1,4 @@
-app.controller('loginCTL', function($scope, $rootScope, $http, $location, securitySrv) {
+app.controller('loginCTL', function($scope, $rootScope, $http, $location, securitySrv, navigateSrv) {
     var self = this;
     $scope.logInfo = {
         username : 'tester',
@@ -59,5 +59,10 @@ app.controller('loginCTL', function($scope, $rootScope, $http, $location, securi
     };
     this.getUserName = function() {
         return securitySrv.getUserName();
+    };
+    
+    this.openProfileUser = function() {
+        navigateSrv.setUser(securitySrv.getUser());
+        $location.path("/profile");
     };
 });

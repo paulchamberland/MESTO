@@ -12,6 +12,12 @@ try {
         $con->exec($sql);
         $arr["msg"] = "User deleted successfully!!!";
     }
+    else if (isset($user['activity']) && $user['activity'] == "chgPWD") {
+        $sql = 'UPDATE mtuser SET password="'.password_hash($user['password'], PASSWORD_BCRYPT).'" WHERE id="'.$user['id'].'"';
+        
+        $con->exec($sql);
+        $arr["msg"] = "User password updated successfully!!!";
+    }
     else if (!empty($user['username']) && !empty($user['email'])) {
         $sql = "SELECT count(*) as nbUser FROM mtuser WHERE (username = '".$user['username']."' OR email = '".$user['email']."')";
         // TODO: split the userName and email validation with some ajax call.
@@ -85,7 +91,7 @@ try {
 }
 catch (PDOException $e) {
     /*echo "[error:'".$e->getMessage()."']";*/
-    $arr = array("msg" => "", "error" => "Database error, Contact administrator. Try later");
+    $arr = array("msg" => "", "error" => "Database error, Contact administrator. Try later", "errMsg" => $e->getMessage());
     header('Content-Type: application/json');
 	echo $json = json_encode($arr);
 }
