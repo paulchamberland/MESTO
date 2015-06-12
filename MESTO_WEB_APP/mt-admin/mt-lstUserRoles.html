@@ -6,7 +6,7 @@
 <div id="menu" class="v" ></div>
 <div class="main" >
 	<div>
-        <h1>UserRole List</h1><button id="btnNewUserRole" style="float:right;" data-ng-click="userRoleCTL.newUserRole()" data-ng-if="isAutorizeCreatingRole">Add</button>
+        <h1>UserRole List</h1><a id="btnNewUserRole" class="btn" style="float:right;" data-ng-click="userRoleCTL.newUserRole()" data-ng-if="isAutorizeCreatingRole">Add</a>
         <span class="error" data-ng-show="lstError">{{lstError}}</span>
 		<table border="1">
             <tr><th>Name</th><th>Description</th><th>List of Permission</th></tr>

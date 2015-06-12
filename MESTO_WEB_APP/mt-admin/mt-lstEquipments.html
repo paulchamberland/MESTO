@@ -6,7 +6,7 @@
 <div id="menu" class="v" ></div>
 <div class="main" >
 	<div>
-        <h1>Equipment List</h1><button id="btnNewEquip" style="float:right;" data-ng-click="equipCTL.newEquip()" data-ng-if="isAutorizeCreatingEquip">Add</button>
+        <h1>Equipment List</h1><a id="btnNewEquip" class="btn" style="float:right;" data-ng-click="equipCTL.newEquip()" data-ng-if="isAutorizeCreatingEquip">Add</a>
         <span class="error" data-ng-show="lstError">{{lstError}}</span>
 		<table border="1">
             <tr><th>Serial Number</th><th>Model</th></tr>

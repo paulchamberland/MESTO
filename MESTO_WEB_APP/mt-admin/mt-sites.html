@@ -60,27 +60,27 @@
                 <div class="field"><label for="techNumTel">Phone of Tech PoC :</label><input type="text" id="techNumTel" name="phoneTechPoC" data-ng-model="site.phoneTechPoC" data-ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" /></div>
 			</div>
 		</form>
-		<button id="btnSave" data-ng-click="siteCTL.save();" ng-disabled="siteForm.$pristine || siteForm.$invalid" data-ng-if="canSave">Save</button>
-		<button id="btnDelete" data-ng-click="siteCTL.delete();" ng-disabled="!canDelete" data-ng-if="isAutorizeDeletingSite">Delete</button>
-        <button id="btnReset" data-ng-click="siteCTL.resetFrm();siteCTL.resetMsg();" ng-disabled="siteForm.$pristine">Reset</button>
+		<a id="btnSave" class="btn" data-ng-click="siteCTL.save();" ng-disabled="siteForm.$pristine || siteForm.$invalid" data-ng-if="canSave">Save</a>
+		<a id="btnDelete" class="btn" data-ng-click="siteCTL.delete();" ng-disabled="!canDelete" data-ng-if="isAutorizeDeletingSite">Delete</a>
+        <a id="btnReset" class="btn" data-ng-click="siteCTL.resetFrm();siteCTL.resetMsg();" ng-disabled="siteForm.$pristine">Reset</a>
 	</div>
     <div style="padding-top:15px;">
-        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Rooms of this site</span><button id="btnOpenFreeLstRoom" data-ng-if="site.id" data-ng-click="siteCTL.openFreeRoomsList();">Get</button>
+        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Rooms of this site</span><a id="btnOpenFreeLstRoom" class="btn" data-ng-if="site.id" data-ng-click="siteCTL.openFreeRoomsList();">Get</a>
         <span class="error" data-ng-show="lstRoomErr">{{lstRoomErr}}</span>
 		<table border="1">
             <tr><th>Room ID</th><th>Point of Contact</th><th></th></tr>
 			<tr data-ng-repeat="r in site.lstRooms" data-ng-click="">
-				<td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td><td><button id="btnRemoveRoom" data-ng-click="siteCTL.removeAssRoom(r.id)">Remove</button></td>
+				<td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td><td><a id="btnRemoveRoom" class="btn" data-ng-click="siteCTL.removeAssRoom(r.id)">Remove</a></td>
 			</tr>
 		</table>
 	</div>
     <div style="padding-top:15px">
-        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Equipments of this site</span><button id="btnOpenFreeLstEquip" data-ng-if="site.id" data-ng-click="siteCTL.openFreeEquipsList();">Get</button>
+        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Equipments of this site</span><a id="btnOpenFreeLstEquip" class="btn" data-ng-if="site.id" data-ng-click="siteCTL.openFreeEquipsList();">Get</a>
         <span class="error" data-ng-show="lstEquipErr">{{lstEquipErr}}</span>
 		<table border="1">
             <tr><th>Serial Number</th><th>Model</th><th></th></tr>
 			<tr data-ng-repeat="e in site.lstEquips" data-ng-click="">
-				<td>{{e.serialNumber}}</td><td>{{e.model}}</td><td><button id="btnRemoveEquip" data-ng-click="siteCTL.removeAssEquip(e.id)">Remove</button></td>
+				<td>{{e.serialNumber}}</td><td>{{e.model}}</td><td><a id="btnRemoveEquip" class="btn" data-ng-click="siteCTL.removeAssEquip(e.id)">Remove</a></td>
 			</tr>
 		</table>
 	</div>
@@ -99,11 +99,11 @@
                 </table>
             </div>
             <div class="inner last">
-                <button id="btnAddLstRooms" data-ng-click="siteCTL.addFreeRoomsList()" >Add</button>
-                <button id="btnNewRoom" style="float:right;" data-ng-click="siteCTL.newRoom()" >New</button>
+                <a id="btnAddLstRooms" class="btn" data-ng-click="siteCTL.addFreeRoomsList()" >Add</a>
+                <a id="btnNewRoom" class="btn" style="float:right;" data-ng-click="siteCTL.newRoom()" >New</a>
             </div>
         </div>
-        <div class="bot"><button id="btnCloseFreeLstRooms" data-ng-click="siteCTL.closeFreeRoomsList()" >Close</button></div>
+        <div class="bot"><a id="btnCloseFreeLstRooms" class="btn" data-ng-click="siteCTL.closeFreeRoomsList()" >Close</a></div>
     </div>
     
     <div id="lstFreeEquips" class="details" style="top:200px;left:400px;">
@@ -120,11 +120,11 @@
                 </table>
             </div>
             <div class="inner last">
-                <button id="btnAddLstEquips" data-ng-click="siteCTL.addFreeEquipsList()" >Add</button>
-                <button id="btnNewEquip" style="float:right;" data-ng-click="siteCTL.newEquip()" >New</button>
+                <a id="btnAddLstEquips" class="btn" data-ng-click="siteCTL.addFreeEquipsList()" >Add</a>
+                <a id="btnNewEquip" class="btn" style="float:right;" data-ng-click="siteCTL.newEquip()" >New</a>
             </div>
         </div>
-        <div class="bot"><button id="btnCloseFreeLstEquip" data-ng-click="siteCTL.closeFreeEquipsList()" >Close</button></div>
+        <div class="bot"><a id="btnCloseFreeLstEquip" class="btn" data-ng-click="siteCTL.closeFreeEquipsList()" >Close</a></div>
     </div>
     
     <div class="wrap"></div>

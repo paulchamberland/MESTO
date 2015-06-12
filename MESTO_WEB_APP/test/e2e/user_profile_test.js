@@ -184,20 +184,20 @@ describe('E2E: Profile => ', function() {
         it('Testing: State of Saving button', function() {
             var btn = element(by.id('btnSave'));
             
-            expect(btn.isEnabled()).toBeFalsy();
+            expect(btn.getAttribute('disabled')).toBeTruthy();
             
             element(by.model('user.name')).sendKeys('t');
-            expect(btn.isEnabled()).toBeTruthy();
+            expect(btn.getAttribute('disabled')).toBeFalsy();
         });
         
         it('Testing: State of Change password button', function() {
             var btn = element(by.id('btnSavePwd'));
             
-            expect(btn.isEnabled()).toBeFalsy();
+            expect(btn.getAttribute('disabled')).toBeTruthy();
             
             element(by.model('user.password')).sendKeys('Test$4test');
             
-            expect(btn.isEnabled()).toBeTruthy();
+            expect(btn.getAttribute('disabled')).toBeFalsy();
         });
     });
 

@@ -78,25 +78,25 @@ describe('E2E: Room => ', function() {
         it('Testing: State of Saving button', function() {
             var btn = element(by.id('btnSave'));
             
-            expect(btn.isEnabled()).toBeFalsy();
+            expect(btn.getAttribute('disabled')).toBeTruthy();
             
             element(by.model('room.pointOfContact')).sendKeys('t');
-            expect(btn.isEnabled()).toBeFalsy();
+            expect(btn.getAttribute('disabled')).toBeTruthy();
             
             element(by.model('room.roomID')).sendKeys('test');
             element(by.id('btnLinkSite')).click();
             element.all(by.repeater('siteList')).first().click();
             
-            expect(btn.isEnabled()).toBeTruthy();
+            expect(btn.getAttribute('disabled')).toBeFalsy();
         });
 
         it('Testing: State of Reset button', function() {
             var btn = element(by.id('btnReset'));
             
-            expect(btn.isEnabled()).toBeFalsy();
+            expect(btn.getAttribute('disabled')).toBeTruthy();
             
             element(by.model('room.pointOfContact')).sendKeys('t');
-            expect(btn.isEnabled()).toBeTruthy();
+            expect(btn.getAttribute('disabled')).toBeFalsy();
         });
         
         it('Testing: State of Get equipement button', function() {
@@ -143,13 +143,13 @@ describe('E2E: Room => ', function() {
         it('Testing: State of Delete button', function() {
             var btn = element(by.id('btnDelete'));
             
-            expect(btn.isEnabled()).toBeFalsy();
+            expect(btn.getAttribute('disabled')).toBeTruthy();
             
             element(by.model('room.pointOfContact')).sendKeys('t');
-            expect(btn.isEnabled()).toBeFalsy();
+            expect(btn.getAttribute('disabled')).toBeTruthy();
             
             getLastRoom();
-            expect(btn.isEnabled()).toBeTruthy();
+            expect(btn.getAttribute('disabled')).toBeFalsy();
         });
         /***********************************************************/
 

@@ -78,23 +78,23 @@ describe('E2E: Equipment => ', function() {
         it('Testing: State of Saving button', function() {
             var btn = element(by.id('btnSave'));
             
-            expect(btn.isEnabled()).toBeFalsy();
+            expect(btn.getAttribute('disabled')).toBeTruthy();
             
             element(by.model('equipment.model')).sendKeys('t');
-            expect(btn.isEnabled()).toBeFalsy();
+            expect(btn.getAttribute('disabled')).toBeTruthy();
             
             element(by.model('equipment.serialNumber')).sendKeys('test');
             
-            expect(btn.isEnabled()).toBeTruthy();
+            expect(btn.getAttribute('disabled')).toBeFalsy();
         });
         
         it('Testing: State of Reset button', function() {
             var btn = element(by.id('btnReset'));
             
-            expect(btn.isEnabled()).toBeFalsy();
+            expect(btn.getAttribute('disabled')).toBeTruthy();
             
             element(by.model('equipment.model')).sendKeys('t');
-            expect(btn.isEnabled()).toBeTruthy();
+            expect(btn.getAttribute('disabled')).toBeFalsy();
         });
     });
 
@@ -134,13 +134,13 @@ describe('E2E: Equipment => ', function() {
         it('Testing: State of Delete button', function() {
             var btn = element(by.id('btnDelete'));
             
-            expect(btn.isEnabled()).toBeFalsy();
+            expect(btn.getAttribute('disabled')).toBeTruthy();
             
             element(by.model('equipment.model')).sendKeys('t');
-            expect(btn.isEnabled()).toBeFalsy();
+            expect(btn.getAttribute('disabled')).toBeTruthy();
             
             getLastEquipement();
-            expect(btn.isEnabled()).toBeTruthy();
+            expect(btn.getAttribute('disabled')).toBeFalsy();
         });
         /***********************************************************/
         

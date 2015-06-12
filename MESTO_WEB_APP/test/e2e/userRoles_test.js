@@ -54,35 +54,35 @@ describe('E2E: UserRole => ', function() {
         it('Testing: State of Saving button', function() {
             var btn = element(by.id('btnSave'));
             
-            expect(btn.isEnabled()).toBeFalsy();
+            expect(btn.getAttribute('disabled')).toBeTruthy();
             
             element(by.model('userRole.description')).sendKeys('t');
-            expect(btn.isEnabled()).toBeFalsy();
+            expect(btn.getAttribute('disabled')).toBeTruthy();
             
             element(by.model('userRole.name')).sendKeys('test');
             
-            expect(btn.isEnabled()).toBeTruthy();
+            expect(btn.getAttribute('disabled')).toBeFalsy();
         });
         
         it('Testing: State of Delete button', function() {
             var btn = element(by.id('btnDelete'));
             
-            expect(btn.isEnabled()).toBeFalsy();
+            expect(btn.getAttribute('disabled')).toBeTruthy();
             
             element(by.model('userRole.description')).sendKeys('t');
-            expect(btn.isEnabled()).toBeFalsy();
+            expect(btn.getAttribute('disabled')).toBeTruthy();
             
             getLastUserRole();
-            expect(btn.isEnabled()).toBeTruthy();
+            expect(btn.getAttribute('disabled')).toBeFalsy();
         });
         
         it('Testing: State of Reset button', function() {
             var btn = element(by.id('btnReset'));
             
-            expect(btn.isEnabled()).toBeFalsy();
+            expect(btn.getAttribute('disabled')).toBeTruthy();
             
             element(by.model('userRole.description')).sendKeys('t');
-            expect(btn.isEnabled()).toBeTruthy();
+            expect(btn.getAttribute('disabled')).toBeFalsy();
         });
         
         it('Testing: Associate permission', function() {

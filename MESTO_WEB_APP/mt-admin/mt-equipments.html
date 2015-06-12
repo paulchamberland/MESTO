@@ -25,20 +25,20 @@
 				<div class="field"><label for="type">Type :</label><select id="type" data-ng-model="equipment.type" name="type" data-ng-options="type.value as type.label for type in TYPE"></select></div>
 				<div class="field">
                     <label for="prRoom">Assigned Room :</label><input type="text" id="prRoom" name="parentRoomName" data-ng-model="equipment.parentRoom.roomID" disabled />
-                    <button id="btnLinkRoom" data-ng-click="equipCTL.openRoomList()" >...</button>
-                    <button id="btnCleanRoom" data-ng-click="equipCTL.cleanAssociateRoom()" >X</button>
+                    <a id="btnLinkRoom" class="btn" data-ng-click="equipCTL.openRoomList()" >...</a>
+                    <a id="btnCleanRoom" class="btn" data-ng-click="equipCTL.cleanAssociateRoom()" >X</a>
                 </div>
                 <div class="field" data-ng-if="equipment.parentRoom.id > 0"><span>Associate Site Name : {{equipment.parentRoom.siteName}}</span></div>
                 <div class="field">
                     <label for="prSite">Assigned Site :</label><input type="text" id="prSite" name="parentSiteName" data-ng-model="equipment.parentSite.name" disabled />
-                    <button id="btnLinkSite" data-ng-click="equipCTL.openSiteList()" >...</button>
-                    <button id="btnCleanSite" data-ng-click="equipCTL.cleanAssociateSite()" >X</button>
+                    <a id="btnLinkSite" class="btn" data-ng-click="equipCTL.openSiteList()" >...</a>
+                    <a id="btnCleanSite" class="btn" data-ng-click="equipCTL.cleanAssociateSite()" >X</a>
                 </div>
 			</div>
 		</form>
-		<button id="btnSave" data-ng-click="equipCTL.save();" ng-disabled="equipmentForm.$pristine || equipmentForm.$invalid" data-ng-if="canSave">Save</button>
-		<button id="btnDelete" data-ng-click="equipCTL.delete();" ng-disabled="!canDelete" data-ng-if="isAutorizeDeletingEquip">Delete</button>
-        <button id="btnReset" data-ng-click="equipCTL.resetFrm();equipCTL.resetMsg();" ng-disabled="equipmentForm.$pristine">Reset</button>
+		<a id="btnSave" class="btn" data-ng-click="equipCTL.save();" ng-disabled="equipmentForm.$pristine || equipmentForm.$invalid" data-ng-if="canSave">Save</a>
+		<a id="btnDelete" class="btn" data-ng-click="equipCTL.delete();" ng-disabled="!canDelete" data-ng-if="isAutorizeDeletingEquip">Delete</a>
+        <a id="btnReset" class="btn" data-ng-click="equipCTL.resetFrm();equipCTL.resetMsg();" ng-disabled="equipmentForm.$pristine">Reset</a>
 	</div>
     
     <div id="lstRoom" class="details" style="top:200px;left:400px;">
@@ -55,7 +55,7 @@
                 </table>
             </div>
         </div>
-        <div class="bot"><button id="btnCloseLstRoom" data-ng-click="equipCTL.closeRoomList()">Close</button></div>
+        <div class="bot"><a id="btnCloseLstRoom" class="btn" data-ng-click="equipCTL.closeRoomList()">Close</a></div>
     </div>
     
     <div id="lstSite" class="details" style="top:200px;left:400px;">
@@ -72,7 +72,7 @@
                 </table>
             </div>
         </div>
-        <div class="bot"><button id="btnCloseLstSite" data-ng-click="equipCTL.closeSiteList()" >Close</button></div>
+        <div class="bot"><a id="btnCloseLstSite" class="btn" data-ng-click="equipCTL.closeSiteList()" >Close</a></div>
     </div>
     
     <div class="wrap"></div>

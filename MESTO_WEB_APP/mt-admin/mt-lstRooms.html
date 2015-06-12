@@ -6,7 +6,7 @@
 <div id="menu" class="v" ></div>
 <div class="main">
 	<div>
-        <h1>Room List</h1><button id="btnNewRoom" style="float:right;" data-ng-click="roomCTL.newRoom()" data-ng-if="isAutorizeCreatingRoom">Add</button>
+        <h1>Room List</h1><a id="btnNewRoom" class="btn" style="float:right;" data-ng-click="roomCTL.newRoom()" data-ng-if="isAutorizeCreatingRoom">Add</a>
         <span class="error" data-ng-show="lstError">{{lstError}}</span>
 		<table border="1">
             <tr><th>Room ID</th><th>Point of Contact</th></tr>

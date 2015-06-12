@@ -338,17 +338,17 @@ describe('E2E: Site => ', function() {
         it('Testing: State of Saving button', function() {
             var btn = element(by.id('btnSave'));
             
-            expect(btn.isEnabled()).toBeFalsy();
+            expect(btn.getAttribute('disabled')).toBeTruthy();
             
             element(by.model('site.city')).sendKeys('t');
-            expect(btn.isEnabled()).toBeFalsy();
+            expect(btn.getAttribute('disabled')).toBeTruthy();
             
             element(by.model('site.reference')).sendKeys('test');
             element(by.model('site.latitude')).sendKeys('12.432132');
             element(by.model('site.longitude')).sendKeys('12.321321');
             element(by.model('site.siteName')).sendKeys('t');
             
-            expect(btn.isEnabled()).toBeTruthy();
+            expect(btn.getAttribute('disabled')).toBeFalsy();
             
             element(by.id('btnSave')).click();// Saving to have a Test data
             browser.get('http://localhost/MESTO/MESTO_WEB_APP/#/admin/site');
@@ -358,10 +358,10 @@ describe('E2E: Site => ', function() {
             
             var btn = element(by.id('btnReset'));
             
-            expect(btn.isEnabled()).toBeFalsy();
+            expect(btn.getAttribute('disabled')).toBeTruthy();
             
             element(by.model('site.city')).sendKeys('t');
-            expect(btn.isEnabled()).toBeTruthy();
+            expect(btn.getAttribute('disabled')).toBeFalsy();
         });
         
         it('Testing: State of Get equipement button', function() {
@@ -383,13 +383,13 @@ describe('E2E: Site => ', function() {
         it('Testing: State of Delete button', function() {
             var btn = element(by.id('btnDelete'));
             
-            expect(btn.isEnabled()).toBeFalsy();
+            expect(btn.getAttribute('disabled')).toBeTruthy();
             
             element(by.model('site.city')).sendKeys('t');
-            expect(btn.isEnabled()).toBeFalsy();
+            expect(btn.getAttribute('disabled')).toBeTruthy();
             
             getLastSite();
-            expect(btn.isEnabled()).toBeTruthy();
+            expect(btn.getAttribute('disabled')).toBeFalsy();
             
             btn.click(); // delete the test
         });

@@ -25,8 +25,8 @@
             <div style="display:inline-block;" data-ng-init="userRoleCTL.affectPermissions(null, null); userRoleCTL.setLstAvailablePermissions(userRoleCTL.getLstSelectedPermissionsObj()); ">
                 <select id="" class="lstPerm" ng-model="TEMP2" name="" ng-options="avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions" size="15" multiple>
                 </select>
-                <button id="btnUnaffectPerm" data-ng-click="userRoleCTL.unaffectPermissions(TEMP);userRoleCTL.setLstAvailablePermissions(userRoleCTL.getLstSelectedPermissionsObj())"><-</button>
-                <button id="btnAffectPerm" data-ng-click="userRoleCTL.affectPermissions(TEMP2, lstAvailablePermissions);userRoleCTL.setLstAvailablePermissions(userRoleCTL.getLstSelectedPermissionsObj())">-></button>
+                <a id="btnUnaffectPerm" class="btn" data-ng-click="userRoleCTL.unaffectPermissions(TEMP);userRoleCTL.setLstAvailablePermissions(userRoleCTL.getLstSelectedPermissionsObj())"><-</a>
+                <a id="btnAffectPerm" class="btn" data-ng-click="userRoleCTL.affectPermissions(TEMP2, lstAvailablePermissions);userRoleCTL.setLstAvailablePermissions(userRoleCTL.getLstSelectedPermissionsObj())">-></a>
             </div>
             
             <div style="display:inline-block;">
@@ -34,9 +34,9 @@
                 </select>
             </div>
 		</form>
-		<button id="btnSave" data-ng-click="userRoleCTL.save();" ng-disabled="userRoleForm.$pristine || userRoleForm.$invalid" data-ng-if="canSave">Save</button>
-		<button id="btnDelete" data-ng-click="userRoleCTL.delete();" ng-disabled="!canDelete" data-ng-if="isAutorizeDeletingRole">Delete</button>
-        <button id="btnReset" data-ng-click="userRoleCTL.resetFrm();userRoleCTL.resetMsg();" ng-disabled="userRoleForm.$pristine">Reset</button>
+		<a id="btnSave" class="btn" data-ng-click="userRoleCTL.save();" ng-disabled="userRoleForm.$pristine || userRoleForm.$invalid" data-ng-if="canSave">Save</a>
+		<a id="btnDelete" class="btn" data-ng-click="userRoleCTL.delete();" ng-disabled="!canDelete" data-ng-if="isAutorizeDeletingRole">Delete</a>
+        <a id="btnReset" class="btn" data-ng-click="userRoleCTL.resetFrm();userRoleCTL.resetMsg();" ng-disabled="userRoleForm.$pristine">Reset</a>
 	</div>
     
     <div class="wrap"></div>

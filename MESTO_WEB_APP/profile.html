@@ -23,7 +23,7 @@
                 <div class="field"><label for="phone">Phone :</label><input type="text" id="phone" name="phone" data-ng-model="user.phone" data-ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" /></div>
 			</div>
 		</form>
-		<button id="btnSave" data-ng-click="userCTL.save();" ng-disabled="userForm.$pristine || userForm.$invalid" >Save</button>
+		<a id="btnSave" class="btn" data-ng-click="userCTL.save();" ng-disabled="userForm.$pristine || userForm.$invalid" >Save</a>
 	</div>
     
     <hr>
@@ -42,7 +42,7 @@
 				<div class="field"><label for="pwd">New Password * :</label><input type="password" id="pwd" name="password" data-ng-model="user.password" required data-ng-pattern="/^(?=.*[A-Z])(?=.*[$%?&*!#])(?=.*[0-9]).{8,}$/" /></div>
             </div>
 		</form>
-		<button id="btnSavePwd" data-ng-click="userCTL.savePwd();" ng-disabled="userPwdForm.$pristine || userPwdForm.$invalid" >Change</button>
+		<a id="btnSavePwd" class="btn" data-ng-click="userCTL.savePwd();" ng-disabled="userPwdForm.$pristine || userPwdForm.$invalid" >Change</a>
 	</div>
     
     </br>
