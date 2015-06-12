@@ -1,10 +1,4 @@
-<link rel="stylesheet" type="text/css" href="ressources/css/mesto.css">
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#menu').load('menu.html');
-    });
-</script>
-<div id="menu" style="position: relative; z-index: 1" ></div> 
+<div id="menu" data-ng-controller="loginCTL as loginCTL" data-ng-include="'menu.html'" style="position: relative; z-index: 1" ></div>
 <div class="main">
 	<div>
         <h1 class="test">Sites List</h1>
