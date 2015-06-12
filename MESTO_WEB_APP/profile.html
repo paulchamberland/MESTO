@@ -24,7 +24,6 @@
 			</div>
 		</form>
 		<button id="btnSave" data-ng-click="userCTL.save();" ng-disabled="userForm.$pristine || userForm.$invalid" >Save</button>
-        <button id="btnReset" data-ng-click="userCTL.resetFrm();userCTL.resetMsg();" ng-disabled="userForm.$pristine">Reset</button>
 	</div>
     
     <hr>
@@ -43,7 +42,7 @@
 				<div class="field"><label for="pwd">New Password * :</label><input type="password" id="pwd" name="password" data-ng-model="user.password" required data-ng-pattern="/^(?=.*[A-Z])(?=.*[$%?&*!#])(?=.*[0-9]).{8,}$/" /></div>
             </div>
 		</form>
-		<button id="btnSave" data-ng-click="userCTL.savePwd();" ng-disabled="userPwdForm.$pristine || userPwdForm.$invalid" >Change</button>
+		<button id="btnSavePwd" data-ng-click="userCTL.savePwd();" ng-disabled="userPwdForm.$pristine || userPwdForm.$invalid" >Change</button>
 	</div>
     
     </br>

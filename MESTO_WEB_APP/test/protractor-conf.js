@@ -9,6 +9,9 @@ exports.config = {
             'e2e/userRoles_test.js',
             'e2e/users_test.js',
             
+            'e2e/user_create_test.js',
+            'e2e/user_profile_test.js',
+            
             'e2e/securityUser_test.js',
             'e2e/securityUserRole_test.js',
             'e2e/securityEquipement_test.js',

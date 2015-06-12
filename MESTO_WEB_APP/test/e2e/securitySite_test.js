@@ -86,7 +86,7 @@ describe('e2e Site Autority : ', function () {
             element.all(by.repeater('siteList')).last().click();
         });
         
-        browser.sleep(2000);
+        browser.sleep(2500);
         expect(browser.getCurrentUrl()).toMatch("#/site");
     });
     

@@ -1,5 +1,5 @@
 <div class="main" >
-	<div data-ng-show="SQLMsgs == null">
+	<div id="form" data-ng-show="SQLMsgs == null">
         <span class="titre">Create your user</span>
 		<div data-ng-show="userForm.$dirty && userForm.$invalid">
 			<span class="error" data-ng-show="userForm.email.$error.required">An email is required.</span>
@@ -29,7 +29,7 @@
         <button id="btnReset" data-ng-click="userCTL.resetFrm();userCTL.resetMsg();" ng-disabled="userForm.$pristine">Reset</button>
 	</div>
     
-    <div data-ng-show="SQLMsgs != null">
+    <div id="result" data-ng-show="SQLMsgs != null">
         <span class="titre">User created</span>
         <p style="text-align:left;padding:10px;">You're request have been submited to a administrator.</br> After approval, a email will inform you than you may use your password.</p>
     </div>
