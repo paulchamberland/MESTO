@@ -3,6 +3,7 @@
 <div id='cssmenu'>
 <ul>
    <li class='active'><a href='#/home'><span>Home</span></a></li>
+   <li data-ng-if="loginCTL.isLogged()" ><a href='#/stream'><span>Activity stream</span></a></li>
    <li id="mnView" class='has-sub'><a><span>View</span></a>
       <ul>
          <li><a id="mnVwSites" href='#/sites'><span>Sites</span></a></li>

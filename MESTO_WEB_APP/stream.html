@@ -1,0 +1,13 @@
+<div id="menu" data-ng-controller="loginCTL as loginCTL" data-ng-include="'menu.html'" style="position: relative; z-index: 1" ></div>
+<div class="main">
+    <span class="error" data-ng-show="lstError">{{lstError}}</span>
+    <div data-ng-repeat="a in activities">
+        <div style="border: 2px solid black;">
+            <p><span>{{a.userName}}</span>, <span>{{a.date}}</span></p>
+            <span>{{a.title}}</span>
+            <p>Did a {{a.action}} of a {{a.concern}} in the {{a.parent.role}} - {{a.parent.info}}</p>
+        </div>
+    </div>
+    
+    <div class="wrap"></div>
+</div>

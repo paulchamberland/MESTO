@@ -25,8 +25,8 @@ class Equipment { // structure of an equipment
         $this->updateBy = $objSQL->updateBy;
         $this->updateDate = $objSQL->updateDate;
         
-        $this->parentRoom = new ParentRoom($objSQL->fk_roomId, $objSQL->roomID, $objSQL->siteName);
-        $this->parentSite = new ParentSite($objSQL->fk_siteId, $objSQL->siteName);
+        $this->parentRoom = new ParentRoom($objSQL->fk_roomId, $objSQL->roomID, $objSQL->roomRole, $objSQL->siteName);
+        $this->parentSite = new ParentSite($objSQL->fk_siteId, $objSQL->siteName, $objSQL->siteRole);
     }
 }
 
@@ -34,10 +34,12 @@ class ParentRoom {
     public $id;
     public $roomID;
     public $siteName;
+    public $role;
     
-    public function __construct($pId, $pRoomId, $pSiteName) {
+    public function __construct($pId, $pRoomId, $pRole, $pSiteName) {
         $this->id = $pId;
         $this->roomID = $pRoomId;
+        $this->role = $pRole;
         if ($pId > 0)
             $this->siteName = $pSiteName;
         else
@@ -48,9 +50,11 @@ class ParentRoom {
 class ParentSite {
     public $id;
     public $name;
+    public $role;
     
-    public function __construct($pId, $pName) {
+    public function __construct($pId, $pName, $pRole) {
         $this->id = $pId;
+        $this->role = $pRole;
         if ($pId > 0)
             $this->name = $pName;
         else
@@ -65,17 +69,17 @@ try {
 	$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     if (empty($data['id'])) {
-        $stmt = $con->prepare("SELECT e.*, r.roomID, s.siteName FROM equipment e LEFT JOIN room r ON e.fk_roomId = r.id LEFT JOIN site s ON r.fk_siteId = s.id OR e.fk_siteId = s.id ORDER BY e.id");
+        $stmt = $con->prepare("SELECT e.*, r.roomID, r.role as roomRole, s.siteName, s.role as siteRole FROM equipment e LEFT JOIN room r ON e.fk_roomId = r.id LEFT JOIN site s ON r.fk_siteId = s.id OR e.fk_siteId = s.id ORDER BY e.id");
 	}
     else {
         if (isset($data['type']) && $data['type'] == "SITE_INC") {
-            $stmt = $con->prepare("SELECT e.*, r.roomID, s.siteName FROM equipment e LEFT JOIN room r ON e.fk_roomId = r.id LEFT JOIN site s ON e.fk_siteId = s.id WHERE e.fk_siteId = '".$data['id']."' ORDER BY e.id");
+            $stmt = $con->prepare("SELECT e.*, r.roomID, r.role as roomRole, s.siteName, s.role as siteRole FROM equipment e LEFT JOIN room r ON e.fk_roomId = r.id LEFT JOIN site s ON e.fk_siteId = s.id WHERE e.fk_siteId = '".$data['id']."' ORDER BY e.id");
         }
         else if (isset($data['type']) && $data['type'] == "ROOM_INC") {
-            $stmt = $con->prepare("SELECT e.*, r.roomID, s.siteName FROM equipment e LEFT JOIN room r ON e.fk_roomId = r.id LEFT JOIN site s ON e.fk_siteId = s.id WHERE e.fk_roomId = '".$data['id']."' ORDER BY e.id");
+            $stmt = $con->prepare("SELECT e.*, r.roomID, r.role as roomRole, s.siteName, s.role as siteRole FROM equipment e LEFT JOIN room r ON e.fk_roomId = r.id LEFT JOIN site s ON e.fk_siteId = s.id WHERE e.fk_roomId = '".$data['id']."' ORDER BY e.id");
         }
         else if (isset($data['type']) && ($data['type'] == "SITE_FREE" || $data['type'] == "ROOM_FREE")) {
-            $stmt = $con->prepare("SELECT e.*, '' as roomID, '' as siteName FROM equipment e WHERE e.fk_roomId = '' AND e.fk_siteId = '' ORDER BY e.id");
+            $stmt = $con->prepare("SELECT e.*, '' as roomID, '' as roomRole, '' as siteName,  '' as siteRole FROM equipment e WHERE e.fk_roomId = '' AND e.fk_siteId = '' ORDER BY e.id");
         }
     }
     

@@ -1,4 +1,4 @@
-app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv, securitySrv) {
+app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv, securitySrv, streamSrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
     $scope.TYPE = [{value:'RT',label:'Router'},{value:'HUB',label:'Hub'},{value:'SRV',label:'Server'},{value:'SWT',label:'Switch'}];
@@ -14,11 +14,13 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv, s
                     parentRoom:{
                         id:"",
                         roomID:"",
-                        siteName:""
+                        siteName:"",
+                        role:""
                     },
                     parentSite:{
                         id:"",
-                        name:""
+                        name:"",
+                        role:""
                     }};
     this.emptyEquipment = {};
     $scope.canDelete = false;
@@ -108,14 +110,20 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv, s
                     configHW : $scope.equipment.configHW,
                     configSW : $scope.equipment.configSW,
                     type : $scope.equipment.type,
-                    parentRoomKey : $scope.equipment.parentRoom.id,
-                    parentSiteKey : $scope.equipment.parentSite.id
+                    parentRoomKey : ($scope.equipment.parentRoom) ? $scope.equipment.parentRoom.id : "",
+                    parentSiteKey : ($scope.equipment.parentSite) ? $scope.equipment.parentSite.id : ""
                 },
                 headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
             }).success(
                 function(data, status) {
                     self.resetMsg();
                     if (data.msg != '') {
+                        streamSrv.saveActivity($scope, ($scope.equipment.id == '') ? "add" : "mod", self.getLabelTYPE($scope.equipment.type)
+                                                , ($scope.equipment.parentSite && $scope.equipment.parentSite.id > 0) ? $scope.equipment.parentSite.role
+                                                                                       : $scope.equipment.parentRoom.role
+                                                , ($scope.equipment.parentSite && $scope.equipment.parentSite.id > 0) ? $scope.equipment.parentSite.name
+                                                                                       : $scope.equipment.parentRoom.roomID);
+                        
                         //$scope.SQLMsgs = data.msg;
                         //self.loadList();
                         self.resetFrm();
@@ -147,6 +155,12 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv, s
                 function(data, status) {
                     self.resetMsg();
                     if (data.msg != '') {
+                        streamSrv.saveActivity($scope, "del", self.getLabelTYPE($scope.equipment.type)
+                                                , ($scope.equipment.parentSite && $scope.equipment.parentSite.id > 0) ? $scope.equipment.parentSite.role
+                                                                                       : $scope.equipment.parentRoom.role
+                                                , ($scope.equipment.parentSite && $scope.equipment.parentSite.id > 0) ? $scope.equipment.parentSite.name
+                                                                                       : $scope.equipment.parentRoom.roomID);
+                                                                                       
                         //$scope.SQLMsgs = data.msg;
                         //self.loadList();
                         self.resetFrm();
@@ -234,6 +248,7 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv, s
         
         $scope.equipment.parentRoom.id = selectRoom.id;
         $scope.equipment.parentRoom.roomID = selectRoom.roomID;
+        $scope.equipment.parentRoom.role = selectRoom.role;
         $scope.equipment.parentRoom.siteName = selectRoom.siteName;
         
         self.closeRoomList();
@@ -245,6 +260,7 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv, s
         
         $scope.equipment.parentSite.id = selectSite.id;
         $scope.equipment.parentSite.name = selectSite.siteName;
+        $scope.equipment.parentSite.role = selectSite.role;
         
         self.closeSiteList();
     };
@@ -254,7 +270,9 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv, s
         
         $scope.equipment.parentRoom.id = "";
         $scope.equipment.parentRoom.roomID = "";
+        $scope.equipment.parentRoom.role = "";
         $scope.equipment.parentRoom.siteName = "";
+        
         self.validDoubleAssociation();
     };
     this.cleanAssociateSite = function() {
@@ -262,6 +280,8 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv, s
         
         $scope.equipment.parentSite.id = "";
         $scope.equipment.parentSite.name = "";
+        $scope.equipment.parentSite.role = "";
+        
         self.validDoubleAssociation();
     };
     

@@ -23,6 +23,7 @@ module.exports = function(config){
       'js/userRoleCTL.js',
       'js/permissionCTL.js',
       'js/mapCTL.js',
+      'js/streamCTL.js',
  
       // include unit test specs
       'test/unit/*.js'

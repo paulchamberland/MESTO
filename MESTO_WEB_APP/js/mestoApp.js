@@ -21,6 +21,7 @@ app.config(function($routeProvider, IdleProvider) {
     $routeProvider.when('/admin/users', {templateUrl:'mt-admin/mt-lstUsers.html', controller:'userCTL', controllerAs:'userCTL'});
     $routeProvider.when('/createUser', {templateUrl:'user.html', controller:'userCTL', controllerAs:'userCTL'});
     $routeProvider.when('/profile', {templateUrl:'profile.html', controller:'userCTL', controllerAs:'userCTL'});
+    $routeProvider.when('/stream', {templateUrl:'stream.html', controller:'streamCTL', controllerAs:'streamCTL'});
     $routeProvider.otherwise({redirectTo:"/home"});
     
     IdleProvider.idle(600);
@@ -166,6 +167,51 @@ app.factory('permissionSrv', function() {
     
     return {
         lstPermissions : lstPermissions
+    }
+});
+
+app.factory('streamSrv', function($http, securitySrv) {
+
+    function getActionLabel(pCode) {
+        switch (pCode) {
+            case 'add' : return "addition";
+            case 'mod' : return "modification";
+            case 'del' : return "deletion";
+            default : "thing";
+        }
+    }
+    
+    function saveActivity(_scope, pAction, pConcern, pParentRole, pParentInfo) {
+        if (securitySrv.isLogged()) {
+            $http({
+                method: 'POST',
+                url: "/MESTO/MESTO_WEB_APP/php/saveStream.php", // TODO: Make a config with path
+                data: {
+                    action : getActionLabel(pAction),
+                    concern : pConcern,
+                    parentRole : (pParentRole != "") ? pParentRole : "undefined",
+                    parentInfo : (pParentInfo != "") ? pParentInfo : "undefined",
+                    userName : securitySrv.getUser().name,
+                    title : securitySrv.getUser().title
+                },
+                headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+            }).success(
+                function(data, status) {
+                    if (data.error != '') { // sql error, no good return
+                        _scope.SQLErrors = data.error;
+                    }
+                }
+            ).error(
+                function(data, status, headers, config, statusText) {
+                    // TODO: error server handling
+                    _scope.SQLErrors = "error: "+status+":"+statusText;
+                }
+            );
+        }
+    }
+    
+    return {
+        saveActivity : saveActivity
     }
 });
 

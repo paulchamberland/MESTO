@@ -39,11 +39,13 @@ describe('Testing the controller of equipment object', function() {
                         parentRoom:{
                             id:"",
                             roomID:"",
+                            role:"",
                             siteName:""
                         },
                         parentSite:{
                             id:"",
-                            name:""
+                            name:"",
+                            role:""
                         }};
         
         expect(scope.equipment).toEqual(equipment);
@@ -169,11 +171,13 @@ describe('Testing the controller of equipment object', function() {
                                         parentRoom:{
                                             id:"",
                                             roomID:"",
+                                            role:"",
                                             siteName:""
                                         },
                                         parentSite:{
                                             id:"",
-                                            name:""
+                                            name:"",
+                                            role:""
                                         }});
     });
     
@@ -243,21 +247,21 @@ describe('Testing the controller of equipment object', function() {
     
     it('Testing: cleanAssociateRoom function', function() {
         spyOn(controller, "validDoubleAssociation");
-        scope.equipment.parentRoom = {id:"21", roomID:"test", siteName:""};
+        scope.equipment.parentRoom = {id:"21", roomID:"test", role:"", siteName:""};
         scope.equipmentForm = {parentRoomName:{$setDirty : function(){testDirty=true;}}};
         
         controller.cleanAssociateRoom();
-        expect(scope.equipment.parentRoom).toEqual({id:"", roomID:"", siteName:""});
+        expect(scope.equipment.parentRoom).toEqual({id:"", roomID:"",role:"", siteName:""});
         expect(controller.validDoubleAssociation).toHaveBeenCalled();
     });
     
     it('Testing: cleanAssociateSite function', function() {
         spyOn(controller, "validDoubleAssociation");
-        scope.equipment.parentSite = {id:"21", name:"test"};
+        scope.equipment.parentSite = {id:"21", name:"test", role:""};
         scope.equipmentForm = {parentSiteName:{$setDirty : function(){testDirty=true;}}};
         
         controller.cleanAssociateSite();
-        expect(scope.equipment.parentSite).toEqual({id:"", name:""});
+        expect(scope.equipment.parentSite).toEqual({id:"", name:"", role:""});
         expect(controller.validDoubleAssociation).toHaveBeenCalled();
     });
     
@@ -289,11 +293,12 @@ describe('Testing the controller of equipment object', function() {
     });
     
     describe('Testing Ajax call from Equipment object', function() {
-        var location;
+        var location, streamSrv;
         
-        beforeEach(inject(function(_$httpBackend_, _$location_) {
+        beforeEach(inject(function(_$httpBackend_, _$location_, _streamSrv_) {
             $httpBackend = _$httpBackend_;
             location = _$location_;
+            streamSrv = _streamSrv_;
         }));
  
         it('Testing: Refresh equipments list with success', function() {
@@ -377,14 +382,17 @@ describe('Testing the controller of equipment object', function() {
                                 parentRoom:{
                                     id:"",
                                     roomID:"",
+                                    role:"",
                                     siteName:""
                                 },
                                 parentSite:{
                                     id:"",
-                                    name:""
+                                    name:"",
+                                    role:""
                                 }};
             
             spyOn(location, 'path');  
+            spyOn(streamSrv, 'saveActivity');  
             
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('');
@@ -405,12 +413,14 @@ describe('Testing the controller of equipment object', function() {
                                         type:"",
                                         parentRoom:{
                                             id:"",
-                                            roomID:"", 
+                                            roomID:"",
+                                            role:"",
                                             siteName:""
                                         },
                                         parentSite:{
                                             id:"",
-                                            name:""
+                                            name:"",
+                                            role:""
                                         }});
                                         
             expect(scope.SQLMsgs).not.toBeDefined();
@@ -418,6 +428,7 @@ describe('Testing the controller of equipment object', function() {
             expect(scope.equipmentList).toEqual('');
                      
             expect(location.path).toHaveBeenCalledWith("/admin/equipments");
+            expect(streamSrv.saveActivity).toHaveBeenCalled();
         });
         it('Testing: Generated error for Saving', function() {
             scope.equipmentForm = {$dirty:true, $valid:true};
@@ -498,9 +509,21 @@ describe('Testing the controller of equipment object', function() {
             scope.SQLErrors = " error msg";
             scope.MsgErrors = "success msg";
             scope.canDelete = true;
-            scope.equipment = {serialNumber:"fake"};
+            scope.equipment = {serialNumber:"fake",
+                                    parentRoom:{
+                                        id:"",
+                                        roomID:"",
+                                        role:"",
+                                        siteName:""
+                                    },
+                                    parentSite:{
+                                        id:"",
+                                        name:"",
+                                        role:""
+                                    }};
             
             spyOn(location, 'path');
+            spyOn(streamSrv, 'saveActivity');
             
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('');
@@ -522,11 +545,13 @@ describe('Testing the controller of equipment object', function() {
                                         parentRoom:{
                                             id:"",
                                             roomID:"",
+                                            role:"",
                                             siteName:""
                                         },
                                         parentSite:{
                                             id:"",
-                                            name:""
+                                            name:"",
+                                            role:""
                                         }});
             
             expect(scope.SQLMsgs).not.toBeDefined();
@@ -534,6 +559,7 @@ describe('Testing the controller of equipment object', function() {
             expect(scope.equipmentList).toEqual('');
                                                 
             expect(location.path).toHaveBeenCalledWith("/admin/equipments");
+            expect(streamSrv.saveActivity).toHaveBeenCalled();;
         });
         it('Testing: Generating error for Deleting', function() {
             scope.canDelete = true;
