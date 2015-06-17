@@ -1,7 +1,7 @@
-app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv, securitySrv, streamSrv) {
+app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv, securitySrv, streamSrv, enumManagerSrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
-    $scope.TYPE = [{value:'RT',label:'Router'},{value:'HUB',label:'Hub'},{value:'SRV',label:'Server'},{value:'SWT',label:'Switch'}];
+    $scope.TYPE = enumManagerSrv.getEquip_TYPE();
 
     $scope.equipment = {id: "",
                     serialNumber :"",
@@ -33,11 +33,7 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv, s
     $scope.isAutorizeDeletingEquip = false;
     $scope.isAutorizeSeeDetailsEquip = false;
     
-    this.getLabelTYPE = function(pType) {
-        for (t in $scope.TYPE) {
-            if ($scope.TYPE[t].value == pType) return $scope.TYPE[t].label;
-        }
-    };
+    this.getLabelTYPE = enumManagerSrv.getEquipLabelTYPE;
     
     function init() {
         self.emptyEquipment = angular.copy($scope.equipment);
@@ -119,10 +115,12 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv, s
                     self.resetMsg();
                     if (data.msg != '') {
                         streamSrv.saveActivity($scope, ($scope.equipment.id == '') ? "add" : "mod", self.getLabelTYPE($scope.equipment.type)
-                                                , ($scope.equipment.parentSite && $scope.equipment.parentSite.id > 0) ? $scope.equipment.parentSite.role
-                                                                                       : $scope.equipment.parentRoom.role
-                                                , ($scope.equipment.parentSite && $scope.equipment.parentSite.id > 0) ? $scope.equipment.parentSite.name
-                                                                                       : $scope.equipment.parentRoom.roomID);
+                                                , ($scope.equipment.parentSite && $scope.equipment.parentSite.id > 0) 
+                                                        ? enumManagerSrv.getSiteLabelROLE($scope.equipment.parentSite.role)
+                                                        : enumManagerSrv.getRoomLabelROLE($scope.equipment.parentRoom.role)
+                                                , ($scope.equipment.parentSite && $scope.equipment.parentSite.id > 0) 
+                                                        ? $scope.equipment.parentSite.name
+                                                        : $scope.equipment.parentRoom.roomID);
                         
                         //$scope.SQLMsgs = data.msg;
                         //self.loadList();
@@ -156,10 +154,12 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv, s
                     self.resetMsg();
                     if (data.msg != '') {
                         streamSrv.saveActivity($scope, "del", self.getLabelTYPE($scope.equipment.type)
-                                                , ($scope.equipment.parentSite && $scope.equipment.parentSite.id > 0) ? $scope.equipment.parentSite.role
-                                                                                       : $scope.equipment.parentRoom.role
-                                                , ($scope.equipment.parentSite && $scope.equipment.parentSite.id > 0) ? $scope.equipment.parentSite.name
-                                                                                       : $scope.equipment.parentRoom.roomID);
+                                                , ($scope.equipment.parentSite && $scope.equipment.parentSite.id > 0) 
+                                                        ? enumManagerSrv.getSiteLabelROLE($scope.equipment.parentSite.role)
+                                                        : enumManagerSrv.getRoomLabelROLE($scope.equipment.parentRoom.role)
+                                                , ($scope.equipment.parentSite && $scope.equipment.parentSite.id > 0) 
+                                                        ? $scope.equipment.parentSite.name
+                                                        : $scope.equipment.parentRoom.roomID);
                                                                                        
                         //$scope.SQLMsgs = data.msg;
                         //self.loadList();

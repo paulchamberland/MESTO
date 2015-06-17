@@ -1,12 +1,14 @@
 describe('Testing the controller of equipment object', function() {
     beforeEach(module('MESTO'));
-    var controller, scope, securitySrv;
+    var controller, scope, securitySrv, enumManagerSrv;
 
-    beforeEach(inject(function(_$controller_, $rootScope, _securitySrv_){
+    beforeEach(inject(function(_$controller_, $rootScope, _securitySrv_, _enumManagerSrv_){
         // The injector unwraps the underscores (_) from around the parameter names when matching
         scope = $rootScope;//.$new();
         controller = _$controller_('equipmentCTL', { $scope: scope });
         securitySrv = _securitySrv_;
+        enumManagerSrv = _enumManagerSrv_;
+        
         $ = function() {return {
                     fadeOut : function() {},
                     fadeIn : function() {}
@@ -378,7 +380,8 @@ describe('Testing the controller of equipment object', function() {
             scope.SQLErrors = " error msg";
             scope.MsgErrors = "success msg";
             scope.canDelete = true;
-            scope.equipment = {roomID:"fake",
+            scope.equipment = {id: "",
+                                serialNumber:"fake",
                                 parentRoom:{
                                     id:"",
                                     roomID:"",
@@ -393,6 +396,7 @@ describe('Testing the controller of equipment object', function() {
             
             spyOn(location, 'path');  
             spyOn(streamSrv, 'saveActivity');  
+            spyOn(enumManagerSrv, 'getRoomLabelROLE');  
             
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('');
@@ -429,6 +433,67 @@ describe('Testing the controller of equipment object', function() {
                      
             expect(location.path).toHaveBeenCalledWith("/admin/equipments");
             expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(enumManagerSrv.getRoomLabelROLE).toHaveBeenCalled();
+        });
+        it('Testing: Succeeding the Saving and change de path of Logger', function() {
+            scope.equipmentForm = {$setPristine:function(){}, $dirty:true, $valid:true};
+            scope.SQLErrors = " error msg";
+            scope.MsgErrors = "success msg";
+            scope.canDelete = true;
+            scope.equipment = {id:"1",
+                                serialNumber:"fake",
+                                parentRoom:{
+                                    id:"",
+                                    roomID:"",
+                                    role:"",
+                                    siteName:""
+                                },
+                                parentSite:{
+                                    id:"1",
+                                    name:"test",
+                                    role:"TS"
+                                }};
+            
+            spyOn(location, 'path');  
+            spyOn(streamSrv, 'saveActivity');  
+            spyOn(enumManagerSrv, 'getSiteLabelROLE');  
+            
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"Equipment created successfully!!!", "error":""}');
+
+            controller.save(); // <--- TEST
+
+            $httpBackend.flush();
+            
+            expect(scope.canDelete).toBe(false);
+            expect(scope.equipment).toEqual({id: "",
+                                        serialNumber :"",
+                                        barCode :"",
+                                        manufacturer :"",
+                                        model :"",
+                                        configHW :"",
+                                        configSW :"",
+                                        type:"",
+                                        parentRoom:{
+                                            id:"",
+                                            roomID:"",
+                                            role:"",
+                                            siteName:""
+                                        },
+                                        parentSite:{
+                                            id:"",
+                                            name:"",
+                                            role:""
+                                        }});
+                                        
+            expect(scope.SQLMsgs).not.toBeDefined();
+            expect(scope.SQLErrors).not.toBeDefined();
+            expect(scope.equipmentList).toEqual('');
+                     
+            expect(location.path).toHaveBeenCalledWith("/admin/equipments");
+            expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(enumManagerSrv.getSiteLabelROLE).toHaveBeenCalled();
         });
         it('Testing: Generated error for Saving', function() {
             scope.equipmentForm = {$dirty:true, $valid:true};
@@ -524,6 +589,7 @@ describe('Testing the controller of equipment object', function() {
             
             spyOn(location, 'path');
             spyOn(streamSrv, 'saveActivity');
+            spyOn(enumManagerSrv, 'getRoomLabelROLE');
             
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('');
@@ -559,7 +625,67 @@ describe('Testing the controller of equipment object', function() {
             expect(scope.equipmentList).toEqual('');
                                                 
             expect(location.path).toHaveBeenCalledWith("/admin/equipments");
-            expect(streamSrv.saveActivity).toHaveBeenCalled();;
+            expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(enumManagerSrv.getRoomLabelROLE).toHaveBeenCalled();
+        });
+        it('Testing: Succeeding the Deleting and change de path of Logger', function() {
+            scope.equipmentForm = {$setPristine:function(){}};
+            scope.SQLErrors = " error msg";
+            scope.MsgErrors = "success msg";
+            scope.canDelete = true;
+            scope.equipment = {serialNumber:"fake",
+                                    parentRoom:{
+                                        id:"",
+                                        roomID:"",
+                                        role:"",
+                                        siteName:""
+                                    },
+                                    parentSite:{
+                                        id:"1",
+                                        name:"test",
+                                        role:"TE"
+                                    }};
+            
+            spyOn(location, 'path');
+            spyOn(streamSrv, 'saveActivity');
+            spyOn(enumManagerSrv, 'getSiteLabelROLE');
+            
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"Equipment deleted successfully!!!", "error":""}');
+
+            controller.delete(); // <--- TEST
+
+            $httpBackend.flush();
+            
+            expect(scope.canDelete).toBe(false);
+            expect(scope.equipment).toEqual({id: "",
+                                        serialNumber :"",
+                                        barCode :"",
+                                        manufacturer :"",
+                                        model :"",
+                                        configHW :"",
+                                        configSW :"",
+                                        type:"",
+                                        parentRoom:{
+                                            id:"",
+                                            roomID:"",
+                                            role:"",
+                                            siteName:""
+                                        },
+                                        parentSite:{
+                                            id:"",
+                                            name:"",
+                                            role:""
+                                        }});
+            
+            expect(scope.SQLMsgs).not.toBeDefined();
+            expect(scope.SQLErrors).not.toBeDefined();
+            expect(scope.equipmentList).toEqual('');
+                                                
+            expect(location.path).toHaveBeenCalledWith("/admin/equipments");
+            expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(enumManagerSrv.getSiteLabelROLE).toHaveBeenCalled();
         });
         it('Testing: Generating error for Deleting', function() {
             scope.canDelete = true;

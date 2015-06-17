@@ -1,4 +1,4 @@
-app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securitySrv) {
+app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securitySrv, enumManagerSrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
     var ACTIVITY_ADDING_ASSO_EQUIP = "add-ass-st|eq";
@@ -9,8 +9,8 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securi
     var LOAD_INCLUDE_ROOM = "SITE_INC";
     var LOAD_FREE_EQUIP = "SITE_FREE";
     var LOAD_FREE_ROOM = "SITE_FREE";
-    $scope.ROLE = [{value:'ED',label:'Edifice'},{value:'FLR',label:'Floor'},{value:'FOB',label:'FOB'},{value:'COP',label:'COP'},{value:'CMP',label:'CAMP'}];
-    $scope.ORGANIZATION = [{value:'TC',label:'TC'},{value:'DND',label:'DND'},{value:'RCMP',label:'RCMP'},{value:'ASC',label:'ASC'},{value:'CSC',label:'CSC'}];
+    $scope.ROLE = enumManagerSrv.getSite_ROLE();
+    $scope.ORGANIZATION = enumManagerSrv.getSite_ORGANIZATION();
     
     $scope.modifySite = false; // action flag to change the display of detail vs form page
     
@@ -51,17 +51,9 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securi
     $scope.isAutorizeDeletingSite = false;
     $scope.isAutorizeSeeDetailsSite = false;
     
-    this.getLabelROLE = function(pRole) {
-        for (t in $scope.ROLE) {
-            if ($scope.ROLE[t].value == pRole) return $scope.ROLE[t].label;
-        }
-    };
+    this.getLabelROLE = enumManagerSrv.getSiteLabelROLE;
     
-    this.getLabelORGANIZATION = function(pOrg) {
-        for (t in $scope.ORGANIZATION) {
-            if ($scope.ORGANIZATION[t].value == pOrg) return $scope.ORGANIZATION[t].label;
-        }
-    };
+    this.getLabelORGANIZATION = enumManagerSrv.getSiteLabelORGANIZATION;
     
     function init() {
         self.emptySite = angular.copy($scope.site);

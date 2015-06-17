@@ -1,10 +1,10 @@
-app.controller('roomCTL', function($scope, $http, $location, navigateSrv, securitySrv) {
+app.controller('roomCTL', function($scope, $http, $location, navigateSrv, securitySrv, enumManagerSrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
     var ACTIVITY_ADDING_ASSO_EQUIP = "add-ass-rm|eq";
     var ACTIVITY_REMOVE_ASSO_EQUIP = "rem-ass-rm|eq";
     var LOAD_FREE_EQUIP = "ROOM_FREE";
-    $scope.ROLE = [{value:'MTC',label:'Main Telecom'},{value:'TC',label:'Telecom'},{value:'SPR',label:'Spare'},{value:'STR',label:'Storage'}];
+    $scope.ROLE = enumManagerSrv.getRoom_ROLE();
     
     $scope.room = {id: "",
                     roomID :"",
@@ -26,11 +26,7 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv, securi
     $scope.isAutorizeDeletingRoom = false;
     $scope.isAutorizeSeeDetailsRoom = false;
     
-    this.getLabelROLE = function(pRole) {
-        for (t in $scope.ROLE) {
-            if ($scope.ROLE[t].value == pRole) return $scope.ROLE[t].label;
-        }
-    };
+    this.getLabelROLE = enumManagerSrv.getRoomLabelROLE;
     
     function init() {
         self.emptyRoom = angular.copy($scope.room);

@@ -170,6 +170,65 @@ app.factory('permissionSrv', function() {
     }
 });
 
+app.factory('enumManagerSrv', function() {
+    var equip_TYPE = [{value:'RT',label:'Router'},{value:'HUB',label:'Hub'},{value:'SRV',label:'Server'},{value:'SWT',label:'Switch'}];
+    var room_ROLE = [{value:'MTC',label:'Main Telecom'},{value:'TC',label:'Telecom'},{value:'SPR',label:'Spare'},{value:'STR',label:'Storage'}];
+    var site_ROLE = [{value:'ED',label:'Edifice'},{value:'FLR',label:'Floor'},{value:'FOB',label:'FOB'},{value:'COP',label:'COP'},{value:'CMP',label:'CAMP'}];
+    var site_ORGANIZATION = [{value:'TC',label:'TC'},{value:'DND',label:'DND'},{value:'RCMP',label:'RCMP'},{value:'ASC',label:'ASC'},{value:'CSC',label:'CSC'}];
+    
+    function getEquip_TYPE() {
+        return equip_TYPE;
+    }
+    
+    function getRoom_ROLE() {
+        return room_ROLE;
+    }
+    
+    function getSite_ROLE() {
+        return site_ROLE;
+    }
+    
+    function getSite_ORGANIZATION() {
+        return site_ORGANIZATION;
+    }
+    
+    function getEquipLabelTYPE(pType) {
+        for (t in equip_TYPE) {
+            if (equip_TYPE[t].value == pType) return equip_TYPE[t].label;
+        }
+    }
+    
+    function getRoomLabelROLE(pRole) {
+        for (t in room_ROLE) {
+            if (room_ROLE[t].value == pRole) return room_ROLE[t].label;
+        }
+    };
+    
+    function getSiteLabelROLE(pRole) {
+        for (t in site_ROLE) {
+            if (site_ROLE[t].value == pRole) return site_ROLE[t].label;
+        }
+    };
+    
+    function getSiteLabelORGANIZATION(pOrg) {
+        for (t in site_ORGANIZATION) {
+            if (site_ORGANIZATION[t].value == pOrg) return site_ORGANIZATION[t].label;
+        }
+    };
+    
+    return {
+        getEquip_TYPE : getEquip_TYPE,
+        getEquipLabelTYPE : getEquipLabelTYPE,
+        getRoom_ROLE : getRoom_ROLE,
+        getRoomLabelROLE : getRoomLabelROLE,
+        getSite_ROLE : getSite_ROLE,
+        getSiteLabelROLE : getSiteLabelROLE,
+        getSite_ORGANIZATION : getSite_ORGANIZATION,
+        getSiteLabelORGANIZATION : getSiteLabelORGANIZATION,
+        
+    }
+});
+
 app.factory('streamSrv', function($http, securitySrv) {
 
     function getActionLabel(pCode) {
