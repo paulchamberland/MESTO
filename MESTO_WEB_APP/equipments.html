@@ -37,7 +37,7 @@
             <div class="inner">Model : {{equipment.model}}</div>
             <div class="inner">HW Config : {{equipment.configHW}}</div>
             <div class="inner">SW Config : {{equipment.configSW}}</div>
-            <div class="inner">Type : {{getLabelTYPE(equipment.type)}}</div>
+            <div class="inner">Type : {{equipCTL.getLabelTYPE(equipment.type)}}</div>
             <div class="inner">Assigned Room : {{equipment.parentRoom.roomID}}</div>
             <div class="inner last" data-ng-if="equipment.parentRoom.id <= 0">Assigned Site : {{equipment.parentSite.name}}</div>
             <div class="inner last" data-ng-if="equipment.parentRoom.id > 0">Associate Site : {{equipment.parentRoom.siteName}}</div>
