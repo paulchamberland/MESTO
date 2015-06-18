@@ -384,11 +384,12 @@ describe('Testing the controller of site object =>', function() {
         // TODO : add test and spy for JQuery
     });
     describe('Testing Ajax call from site object =>', function() {
-        var location;
+        var location, streamSrv;
         
-        beforeEach(inject(function(_$httpBackend_, _$location_) {
+        beforeEach(inject(function(_$httpBackend_, _$location_, _streamSrv_) {
             $httpBackend = _$httpBackend_;
             location = _$location_;
+            streamSrv = _streamSrv_;
         }));
  
         it('Testing: Refresh sites list with success', function() {
@@ -498,6 +499,8 @@ describe('Testing the controller of site object =>', function() {
             scope.site = {reference:"fake"};
             
             spyOn(location, 'path').and.returnValue("/admin/site");
+            spyOn(streamSrv, 'saveActivity');
+            spyOn(controller, 'getLabelROLE');
             
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTL INIT
@@ -538,7 +541,8 @@ describe('Testing the controller of site object =>', function() {
             
             expect(location.path).toHaveBeenCalledWith();
             expect(location.path).toHaveBeenCalledWith("/admin/sites");
-            
+            expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(controller.getLabelROLE).toHaveBeenCalled();
             
             location.path.calls.reset();   
             location.path.and.returnValue("/site");
@@ -549,6 +553,8 @@ describe('Testing the controller of site object =>', function() {
             
             expect(location.path).toHaveBeenCalledWith();
             expect(location.path).toHaveBeenCalledWith("/sites");
+            expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(controller.getLabelROLE).toHaveBeenCalled();
         });
         it('Testing: Generated error for Saving', function() {
             scope.siteForm = {$dirty:true, $valid:true};
@@ -598,6 +604,8 @@ describe('Testing the controller of site object =>', function() {
             scope.site = {reference:"fake"};
             
             spyOn(location, 'path');
+            spyOn(streamSrv, 'saveActivity');
+            spyOn(controller, 'getLabelROLE');
             
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTL INIT
@@ -637,6 +645,8 @@ describe('Testing the controller of site object =>', function() {
             expect(scope.siteList).toEqual('');
             
             expect(location.path).toHaveBeenCalledWith("/admin/sites");
+            expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(controller.getLabelROLE).toHaveBeenCalled();
         });
         it('Testing: Generating error for Deleting', function() {
             scope.canDelete = true;
