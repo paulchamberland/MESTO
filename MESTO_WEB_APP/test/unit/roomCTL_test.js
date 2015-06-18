@@ -1,11 +1,12 @@
 describe('Testing the controller of room object =>', function() {
     beforeEach(module('MESTO'));
-    var controller, scope;
+    var controller, scope, enumManagerSrv;
 
-    beforeEach(inject(function(_$controller_, $rootScope){
+    beforeEach(inject(function(_$controller_, $rootScope, _enumManagerSrv_){
         // The injector unwraps the underscores (_) from around the parameter names when matching
         scope = $rootScope;//.$new();
         controller = _$controller_('roomCTL', { $scope: scope });
+        enumManagerSrv = _enumManagerSrv_;
         
         $ = function() {return {
                 fadeOut : function() {},
@@ -25,7 +26,8 @@ describe('Testing the controller of room object =>', function() {
                     role:"",
                     parentSite:{
                         id:"",
-                        name:""
+                        name:"",
+                        role:""
                     },
                     lstEquips:[]};
         
@@ -124,7 +126,8 @@ describe('Testing the controller of room object =>', function() {
                     role:"TC",
                     parentSite:{
                         id:"2",
-                        name:"siteTest"
+                        name:"siteTest",
+                        role:""
                     }};
                     
         controller.loadRoom(fakeRoom);
@@ -145,7 +148,8 @@ describe('Testing the controller of room object =>', function() {
                     role:"TC",
                     parentSite:{
                         id:"2",
-                        name:"siteTest"
+                        name:"siteTest",
+                        role:"TT",
                     },
                     lstEquips:[]});
         
@@ -160,7 +164,8 @@ describe('Testing the controller of room object =>', function() {
                                     role:"",
                                     parentSite:{
                                         id:"",
-                                        name:""
+                                        name:"",
+                                        role:""
                                     },
                                     lstEquips:[]});
     });
@@ -235,11 +240,12 @@ describe('Testing the controller of room object =>', function() {
     });
     
     describe('Testing Ajax call from Room object => ', function() {
-        var location;
+        var location, streamSrv;
         
-        beforeEach(inject(function(_$httpBackend_, _$location_) {
+        beforeEach(inject(function(_$httpBackend_, _$location_, _streamSrv_) {
             $httpBackend = _$httpBackend_;
             location = _$location_;
+            streamSrv = _streamSrv_;
         }));
  
         it('Testing: Refresh rooms list with success', function() {
@@ -250,7 +256,7 @@ describe('Testing the controller of room object =>', function() {
                                                                                         +'"technicalPointOfContact":"sgt bilbo",'
                                                                                         +'"roomSize":"43",'
                                                                                         +'"role":"TC",'
-                                                                                        +'"parentSite":{"id":"2","name":"siteTest"}'
+                                                                                        +'"parentSite":{"id":"2","name":"siteTest","role":"tt"}'
                                                                                         +'}]');
 
             controller.refreshList(); // <--- TEST
@@ -264,7 +270,7 @@ describe('Testing the controller of room object =>', function() {
                                                 technicalPointOfContact:"sgt bilbo",
                                                 roomSize:"43",
                                                 role:"TC",
-                                                parentSite:{id:"2",name:"siteTest"}
+                                                parentSite:{id:"2",name:"siteTest",role:"tt"}
                                                 }]);
         });
         it('Testing: Generated error for Refresh', function() {
@@ -319,6 +325,8 @@ describe('Testing the controller of room object =>', function() {
             scope.room = {roomID:"fake",parentSite:{},lstEquips:[]};
             
             spyOn(location, 'path');
+            spyOn(streamSrv, 'saveActivity');
+            spyOn(enumManagerSrv, 'getSiteLabelROLE');
             
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('');
@@ -337,7 +345,8 @@ describe('Testing the controller of room object =>', function() {
                                     role:"",
                                     parentSite:{
                                         id:"",
-                                        name:""
+                                        name:"",
+                                        role:""
                                     },
                                     lstEquips:[]});
 
@@ -346,6 +355,8 @@ describe('Testing the controller of room object =>', function() {
             expect(scope.roomList).toEqual('');
             
             expect(location.path).toHaveBeenCalledWith("/admin/rooms");
+            expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(enumManagerSrv.getSiteLabelROLE).toHaveBeenCalled();
         });
         it('Testing: Generated error for Saving', function() {
             scope.roomForm = {$dirty:true, $valid:true};
@@ -428,6 +439,8 @@ describe('Testing the controller of room object =>', function() {
             scope.room = {roomID:"fake",parentSite:{},lstEquips:[]};
             
             spyOn(location, 'path');
+            spyOn(streamSrv, 'saveActivity');
+            spyOn(enumManagerSrv, 'getSiteLabelROLE');
             
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('');
@@ -446,7 +459,8 @@ describe('Testing the controller of room object =>', function() {
                                     role:"",
                                     parentSite:{
                                         id:"",
-                                        name:""
+                                        name:"",
+                                        role:""
                                     },
                                     lstEquips:[]});
             
@@ -455,10 +469,16 @@ describe('Testing the controller of room object =>', function() {
             expect(scope.roomList).toEqual('');
                                                 
             expect(location.path).toHaveBeenCalledWith("/admin/rooms");
+            expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(enumManagerSrv.getSiteLabelROLE).toHaveBeenCalled();
         });
         it('Testing: Generating error for Deleting', function() {
             scope.canDelete = true;
-            scope.room = {roomID:"fake"};
+            scope.room = {roomID:"fake", parentSite:{
+                                        id:"1",
+                                        name:"test",
+                                        role:"tt"
+                                    }};
             
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond('');// APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('fake');
@@ -469,7 +489,11 @@ describe('Testing the controller of room object =>', function() {
             $httpBackend.flush();
             
             expect(scope.canDelete).toBe(true);
-            expect(scope.room).toEqual({roomID:"fake"});
+            expect(scope.room).toEqual({roomID:"fake", parentSite:{
+                                        id:"1",
+                                        name:"test",
+                                        role:"tt"
+                                    }});
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).toEqual('Database error, Contact administrator. Try later'); // Principal test
             expect(scope.roomList).toEqual('fake');

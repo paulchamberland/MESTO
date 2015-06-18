@@ -1,4 +1,4 @@
-app.controller('roomCTL', function($scope, $http, $location, navigateSrv, securitySrv, enumManagerSrv) {
+app.controller('roomCTL', function($scope, $http, $location, navigateSrv, securitySrv, streamSrv, enumManagerSrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
     var ACTIVITY_ADDING_ASSO_EQUIP = "add-ass-rm|eq";
@@ -14,7 +14,8 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv, securi
                     role:"",
                     parentSite:{
                         id:"",
-                        name:""
+                        name:"",
+                        role:""
                     },
                     lstEquips:[]};
     this.emptyRoom = {};
@@ -107,6 +108,10 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv, securi
                 function(data, status) {
                     self.resetMsg();
                     if (data.msg != '') {
+                        streamSrv.saveActivity($scope, ($scope.room.id == '') ? "add" : "mod", self.getLabelROLE($scope.room.role)+" room"
+                                                , enumManagerSrv.getSiteLabelROLE($scope.room.parentSite.role)
+                                                , $scope.room.parentSite.name);
+                                                        
                         //$scope.SQLMsgs = data.msg;
                         //self.loadList();
                         self.resetFrm();
@@ -136,6 +141,9 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv, securi
                 headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
             }).success(
                 function(data, status) {
+                    streamSrv.saveActivity($scope, "del", self.getLabelROLE($scope.room.role)+" room"
+                                                , enumManagerSrv.getSiteLabelROLE($scope.room.parentSite.role)
+                                                , $scope.room.parentSite.name);
                     self.resetMsg();
                     if (data.msg != '') {
                         //$scope.SQLMsgs = data.msg;
@@ -197,6 +205,7 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv, securi
         
         $scope.room.parentSite.id = selectSite.id;
         $scope.room.parentSite.name = selectSite.siteName;
+        $scope.room.parentSite.role = selectSite.role;
         self.closeSiteList();
     };
     

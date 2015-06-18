@@ -20,17 +20,19 @@ class Room { // structure of a room
         $this->updateBy = $objSQL->updateBy;
         $this->updateDate = $objSQL->updateDate;
         
-        $this->parentSite = new ParentSite($objSQL->fk_siteId, $objSQL->siteName);
+        $this->parentSite = new ParentSite($objSQL->fk_siteId, $objSQL->siteName, $objSQL->siteRole);
     }
 }
 
 class ParentSite {
     public $id;
     public $name;
+    public $role;
     
-    public function __construct($pId, $pName) {
+    public function __construct($pId, $pName, $pRole) {
         $this->id = $pId;
         $this->name = $pName;
+        $this->role = $pRole;
     }
 }
 
@@ -41,14 +43,14 @@ try {
 	$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	
     if (empty($data['id'])) {
-        $stmt = $con->prepare("SELECT r.*, s.siteName FROM room r LEFT JOIN site s ON r.fk_siteId = s.id");
+        $stmt = $con->prepare("SELECT r.*, s.siteName, s.role as siteRole FROM room r LEFT JOIN site s ON r.fk_siteId = s.id ORDER BY r.id");
 	}
     else {
         if (isset($data['type']) && $data['type'] == "SITE_INC") {
-            $stmt = $con->prepare("SELECT r.*, s.siteName FROM room r LEFT JOIN site s ON r.fk_siteId = s.id WHERE r.fk_siteId = '".$data['id']."'");
+            $stmt = $con->prepare("SELECT r.*, s.siteName, s.role as siteRole FROM room r LEFT JOIN site s ON r.fk_siteId = s.id WHERE r.fk_siteId = '".$data['id']."' ORDER BY r.id");
         }
         else if (isset($data['type']) && ($data['type'] == "SITE_FREE")) {
-            $stmt = $con->prepare("SELECT r.*, '' as siteName FROM room r WHERE r.fk_siteId = ''");
+            $stmt = $con->prepare("SELECT r.*, '' as siteName, '' as siteRole FROM room r WHERE r.fk_siteId = '' ORDER BY r.id");
         }
     }
     
