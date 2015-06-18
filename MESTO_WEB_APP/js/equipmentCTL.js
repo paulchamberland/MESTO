@@ -114,7 +114,7 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv, s
                 function(data, status) {
                     self.resetMsg();
                     if (data.msg != '') {
-                        streamSrv.saveActivity($scope, ($scope.equipment.id == '') ? "add" : "mod", self.getLabelTYPE($scope.equipment.type)
+                        streamSrv.saveActivity($scope, ($scope.equipment.id == '') ? "add" : "mod", ($scope.equipment.type == "") ? "equipment" : self.getLabelTYPE($scope.equipment.type)
                                                 , ($scope.equipment.parentSite && $scope.equipment.parentSite.id > 0) 
                                                         ? enumManagerSrv.getSiteLabelROLE($scope.equipment.parentSite.role)
                                                         : enumManagerSrv.getRoomLabelROLE($scope.equipment.parentRoom.role)

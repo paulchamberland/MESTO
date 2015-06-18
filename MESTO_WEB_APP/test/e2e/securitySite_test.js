@@ -81,7 +81,7 @@ describe('e2e Site Autority : ', function () {
         browser.sleep(500);
         element(by.id('mnVwSites')).click();
         
-        browser.executeScript('window.scrollTo(0,2000);').then(function () {
+        browser.executeScript('window.scrollTo(0,3000);').then(function () {
             browser.sleep(500);
             element.all(by.repeater('siteList')).last().click();
         });

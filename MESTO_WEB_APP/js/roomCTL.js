@@ -108,7 +108,7 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv, securi
                 function(data, status) {
                     self.resetMsg();
                     if (data.msg != '') {
-                        streamSrv.saveActivity($scope, ($scope.room.id == '') ? "add" : "mod", self.getLabelROLE($scope.room.role)+" room"
+                        streamSrv.saveActivity($scope, ($scope.room.id == '') ? "add" : "mod", ($scope.room.role == "") ? "room" : self.getLabelROLE($scope.room.role)+" room"
                                                 , enumManagerSrv.getSiteLabelROLE($scope.room.parentSite.role)
                                                 , $scope.room.parentSite.name);
                                                         

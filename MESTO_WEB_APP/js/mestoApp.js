@@ -248,8 +248,8 @@ app.factory('streamSrv', function($http, securitySrv) {
                 data: {
                     action : getActionLabel(pAction),
                     concern : pConcern,
-                    parentRole : (pParentRole != "") ? pParentRole : "undefined",
-                    parentInfo : (pParentInfo != "") ? pParentInfo : "undefined",
+                    parentRole : /*(pParentRole != "") ? */pParentRole /*: "undefined"*/,
+                    parentInfo : /*(pParentInfo != "") ? */pParentInfo /*: "undefined"*/,
                     userName : securitySrv.getUser().name,
                     title : securitySrv.getUser().title
                 },
