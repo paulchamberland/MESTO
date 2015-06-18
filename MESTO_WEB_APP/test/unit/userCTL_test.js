@@ -206,11 +206,12 @@ describe('Testing the controller of user object => ', function() {
     });
     
     describe('Testing Ajax call from User object => ', function() {
-        var location;
+        var location, streamSrv;
         
-        beforeEach(inject(function(_$httpBackend_, _$location_) {
+        beforeEach(inject(function(_$httpBackend_, _$location_, _streamSrv_) {
             $httpBackend = _$httpBackend_;
             location = _$location_;
+            streamSrv = _streamSrv_;
         }));
         
         it('Testing: Get the Name from Role value', function() {
@@ -314,7 +315,7 @@ describe('Testing the controller of user object => ', function() {
                             email :"test@test.ca",
                             password :"",
                             supervisor :"p",
-                            role :"",
+                            role :"TT",
                             title :"truc",
                             active : false,
                             approved : false,
@@ -324,6 +325,8 @@ describe('Testing the controller of user object => ', function() {
             
             spyOn(location, 'path').and.returnValue("/admin/user");
             spyOn(controller, 'notifyUser');
+            spyOn(streamSrv, 'saveActivity');
+            spyOn(controller, 'getNameRole');
             
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('');
@@ -342,7 +345,7 @@ describe('Testing the controller of user object => ', function() {
                                         email :"test@test.ca",
                                         password :"",
                                         supervisor :"p",
-                                        role :"",
+                                        role :"TT",
                                         title :"truc",
                                         active : false,
                                         approved : false,
@@ -354,6 +357,8 @@ describe('Testing the controller of user object => ', function() {
                                                 
             expect(location.path).toHaveBeenCalledWith("/admin/users");
             expect(controller.notifyUser).toHaveBeenCalledWith('test@test.ca', "You're new user have been approved");
+            expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(controller.getNameRole).toHaveBeenCalled();
             
             location.path.calls.reset();   
             location.path.and.returnValue("/user");
@@ -365,6 +370,8 @@ describe('Testing the controller of user object => ', function() {
             expect(location.path).toHaveBeenCalledWith();
             expect(scope.SQLMsgs).toEqual("User created successfully!!!");
             expect(scope.SQLErrors).not.toBeDefined();
+            expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(controller.getNameRole).toHaveBeenCalled();
         });
         it('Testing: Generated error for Saving', function() {
             scope.userForm = {$dirty:true, $valid:true};

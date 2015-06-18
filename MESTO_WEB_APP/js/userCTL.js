@@ -1,4 +1,4 @@
-app.controller('userCTL', function($scope, $http, $location, navigateSrv, securitySrv) {
+app.controller('userCTL', function($scope, $http, $location, navigateSrv, securitySrv, streamSrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
 
@@ -121,6 +121,9 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv, securi
                 function(data, status) {
                     self.resetMsg();
                     if (data.msg != '') {
+                        streamSrv.saveActivity($scope, ($scope.user.id == '') ? "add" : "mod"
+                                                , ($scope.user.role == "") ? "user" : "user "+self.getNameRole($scope.user.role)
+                                                , "system", "Mesto");
                         //$scope.SQLMsgs = data.msg;
                         //self.loadList();
                         //self.resetFrm();
@@ -192,6 +195,7 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv, securi
                 function(data, status) {
                     self.resetMsg();
                     if (data.msg != '') {
+                        streamSrv.saveActivity($scope, "del", ($scope.user.role == "") ? "user" : " user "+self.getNameRole($scope.user.role), "system", "Mesto");
                         //$scope.SQLMsgs = data.msg;
                         //self.loadList();
                         self.resetFrm();
