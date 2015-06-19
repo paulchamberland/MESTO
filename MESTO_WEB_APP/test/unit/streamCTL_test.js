@@ -17,6 +17,7 @@ describe('Testing the controller of Stream object', function() {
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOStream.php').respond(500, '{"msg":"", "error":"Database error, Contact administrator. Try later"}'); // CTL INIT
 
+            controller.loadStream(false, 40);
             $httpBackend.flush();
             
             expect(scope.lstError).toEqual('error: 500:undefined');
@@ -26,6 +27,7 @@ describe('Testing the controller of Stream object', function() {
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOStream.php').respond(200, '{"msg":"", "error":"Database error, Contact administrator. Try later"}'); // CTL INIT
 
+            controller.loadStream(false, 40);
             $httpBackend.flush();
             
             expect(scope.lstError).toEqual("Database error, Contact administrator. Try later");
@@ -38,6 +40,7 @@ describe('Testing the controller of Stream object', function() {
                                         +'{"action":"Modified", "concern":"router", "parent":{"role":"storage", "info":"Xfi43"}, "date":"2014-10-11 13:30", "userName":"Jo Lerigolo", "title":"tester" }'
                                         +']'); // CTL INIT
 
+            controller.loadStream(false, 40);
             $httpBackend.flush();
             
             expect(scope.lstError).not.toBeDefined();

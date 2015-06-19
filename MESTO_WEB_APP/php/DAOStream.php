@@ -6,6 +6,7 @@ class Activity {
 	public $title;
     public $action;
     public $concern;
+    public $isRestrain;
     public $parent;
     
     public function __construct($objSQL) {
@@ -15,6 +16,7 @@ class Activity {
         $this->title = $objSQL->userTitle;
         $this->action = $objSQL->action;
         $this->concern = $objSQL->concern;
+        $this->isRestrain = $objSQL->isRestrain;
         
         $this->parent = new ParentConsern($objSQL->parent_role, $objSQL->parent_info);
     }
@@ -36,8 +38,16 @@ try {
 	$con = new PDO("mysql:host=localhost;dbname=mesto", "root", "");
 	$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	
-    if (empty($data['id'])) {
-        $stmt = $con->prepare("SELECT * FROM activitystream order by date desc");
+    if (isset($data['isRestrain']) && isset($data['limit'])) {
+        $sql = "SELECT * FROM activitystream";
+        if ($data['isRestrain'] == 'false')
+            $sql .= " WHERE isRestrain=".$data['isRestrain'];
+        
+        $sql .= " ORDER BY date DESC LIMIT ".$data['limit'];
+        $stmt = $con->prepare($sql);
+	}
+    else if (empty($data['id'])) {
+        $stmt = $con->prepare("SELECT * FROM activitystream ORDER BY date DESC");
 	}
     else {
         
@@ -84,7 +94,7 @@ try {
     
 }
 catch (PDOException $e) {
-    $arr = array("msg" => "", "error" => "Database error, Contact administrator. Try later", "errorMsg" => $e->getMessage());
+    $arr = array("msg" => "", "error" => "Database error, Contact administrator. Try later", "sql"=> $sql, "errorMsg" => $e->getMessage());
     header('Content-Type: application/json');
 	echo $json = json_encode($arr);
 }

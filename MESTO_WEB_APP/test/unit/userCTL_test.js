@@ -358,6 +358,7 @@ describe('Testing the controller of user object => ', function() {
             expect(location.path).toHaveBeenCalledWith("/admin/users");
             expect(controller.notifyUser).toHaveBeenCalledWith('test@test.ca', "You're new user have been approved");
             expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(streamSrv.saveActivity.calls.mostRecent().args[1]).toBeTruthy();
             expect(controller.getNameRole).toHaveBeenCalled();
             
             location.path.calls.reset();   
@@ -371,6 +372,7 @@ describe('Testing the controller of user object => ', function() {
             expect(scope.SQLMsgs).toEqual("User created successfully!!!");
             expect(scope.SQLErrors).not.toBeDefined();
             expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(streamSrv.saveActivity.calls.mostRecent().args[1]).toBeTruthy();
             expect(controller.getNameRole).toHaveBeenCalled();
         });
         it('Testing: Generated error for Saving', function() {

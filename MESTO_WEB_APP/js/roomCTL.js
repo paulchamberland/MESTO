@@ -108,7 +108,7 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv, securi
                 function(data, status) {
                     self.resetMsg();
                     if (data.msg != '') {
-                        streamSrv.saveActivity($scope, ($scope.room.id == '') ? "add" : "mod", ($scope.room.role == "") ? "room" : self.getLabelROLE($scope.room.role)+" room"
+                        streamSrv.saveActivity($scope, false, ($scope.room.id == '') ? "add" : "mod", ($scope.room.role == "") ? "room" : self.getLabelROLE($scope.room.role)+" room"
                                                 , enumManagerSrv.getSiteLabelROLE($scope.room.parentSite.role)
                                                 , $scope.room.parentSite.name);
                                                         
@@ -141,7 +141,7 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv, securi
                 headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
             }).success(
                 function(data, status) {
-                    streamSrv.saveActivity($scope, "del", self.getLabelROLE($scope.room.role)+" room"
+                    streamSrv.saveActivity($scope, false, "del", self.getLabelROLE($scope.room.role)+" room"
                                                 , enumManagerSrv.getSiteLabelROLE($scope.room.parentSite.role)
                                                 , $scope.room.parentSite.name);
                     self.resetMsg();

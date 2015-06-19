@@ -1,13 +1,11 @@
-<div id="menu" data-ng-controller="loginCTL as loginCTL" data-ng-include="'menu.html'" style="position: relative; z-index: 1" ></div>
-<div class="main" data-ng-init="streamCTL.loadStream(false, 10)">
+<div id="menu" class="v" data-ng-include="'mt-admin/mt-menu.html'"></div> 
+<div class="main" data-ng-controller="streamCTL as streamCTL" data-ng-init="streamCTL.loadStream(true, 20)">
     <span class="error" data-ng-show="lstError">{{lstError}}</span>
     <div data-ng-repeat="a in activities">
         <div class="streambox">
             <span style="text-decoration:underline; margin:5px; display:inline-block"><span style="font-size:1.2em;font-weight:bold">{{a.userName}}</span>, <span style="font-size:0.9em;">{{a.date}}</span></span>
             <span style="color:darkgrey; display:block; margin-left:10px; font-size:0.9em;">as {{a.title}}</span>
-            <span style="display:block;margin:15px 5px 5px 5px;">Did a {{a.action}} of a {{a.concern}} in the {{a.parent.role}} - {{a.parent.info}}</span>
+            <span style="display:block;margin:5px;">Did a {{a.action}} of a {{a.concern}} in the {{a.parent.role}} - {{a.parent.info}}</span>
         </div>
     </div>
-    
-    <div class="wrap"></div>
 </div>

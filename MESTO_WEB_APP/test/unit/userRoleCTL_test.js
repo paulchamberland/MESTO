@@ -338,6 +338,7 @@ describe('Testing the controller of userRole object', function() {
             expect(scope.userRoleList).toEqual('');
             expect(location.path).toHaveBeenCalledWith("/admin/roles");
             expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(streamSrv.saveActivity.calls.mostRecent().args[1]).toBeTruthy();
         });
         it('Testing: Generated error for Saving', function() {
             scope.userRoleForm = {$dirty:true, $valid:true};
@@ -419,6 +420,7 @@ describe('Testing the controller of userRole object', function() {
             expect(scope.userRoleList).toEqual('');   
             expect(location.path).toHaveBeenCalledWith("/admin/roles");
             expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(streamSrv.saveActivity.calls.mostRecent().args[1]).toBeTruthy();
         });
         it('Testing: Generating error for Deleting', function() {
             scope.canDelete = true;

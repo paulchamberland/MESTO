@@ -542,6 +542,7 @@ describe('Testing the controller of site object =>', function() {
             expect(location.path).toHaveBeenCalledWith();
             expect(location.path).toHaveBeenCalledWith("/admin/sites");
             expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(streamSrv.saveActivity.calls.mostRecent().args[1]).toBeFalsy();
             expect(controller.getLabelROLE).toHaveBeenCalled();
             
             location.path.calls.reset();   
@@ -554,6 +555,7 @@ describe('Testing the controller of site object =>', function() {
             expect(location.path).toHaveBeenCalledWith();
             expect(location.path).toHaveBeenCalledWith("/sites");
             expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(streamSrv.saveActivity.calls.mostRecent().args[1]).toBeFalsy();
             expect(controller.getLabelROLE).toHaveBeenCalled();
         });
         it('Testing: Generated error for Saving', function() {
@@ -646,6 +648,7 @@ describe('Testing the controller of site object =>', function() {
             
             expect(location.path).toHaveBeenCalledWith("/admin/sites");
             expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(streamSrv.saveActivity.calls.mostRecent().args[1]).toBeFalsy();
             expect(controller.getLabelROLE).toHaveBeenCalled();
         });
         it('Testing: Generating error for Deleting', function() {

@@ -433,6 +433,7 @@ describe('Testing the controller of equipment object', function() {
                      
             expect(location.path).toHaveBeenCalledWith("/admin/equipments");
             expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(streamSrv.saveActivity.calls.mostRecent().args[1]).toBeFalsy();
             expect(enumManagerSrv.getRoomLabelROLE).toHaveBeenCalled();
         });
         it('Testing: Succeeding the Saving and change de path of Logger', function() {
@@ -626,6 +627,7 @@ describe('Testing the controller of equipment object', function() {
                                                 
             expect(location.path).toHaveBeenCalledWith("/admin/equipments");
             expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(streamSrv.saveActivity.calls.mostRecent().args[1]).toBeFalsy();
             expect(enumManagerSrv.getRoomLabelROLE).toHaveBeenCalled();
         });
         it('Testing: Succeeding the Deleting and change de path of Logger', function() {

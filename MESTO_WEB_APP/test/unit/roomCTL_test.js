@@ -356,6 +356,7 @@ describe('Testing the controller of room object =>', function() {
             
             expect(location.path).toHaveBeenCalledWith("/admin/rooms");
             expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(streamSrv.saveActivity.calls.mostRecent().args[1]).toBeFalsy();
             expect(enumManagerSrv.getSiteLabelROLE).toHaveBeenCalled();
         });
         it('Testing: Generated error for Saving', function() {
@@ -470,6 +471,7 @@ describe('Testing the controller of room object =>', function() {
                                                 
             expect(location.path).toHaveBeenCalledWith("/admin/rooms");
             expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(streamSrv.saveActivity.calls.mostRecent().args[1]).toBeFalsy();
             expect(enumManagerSrv.getSiteLabelROLE).toHaveBeenCalled();
         });
         it('Testing: Generating error for Deleting', function() {

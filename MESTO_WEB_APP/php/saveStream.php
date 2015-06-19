@@ -8,8 +8,8 @@ try {
     $arr = array("msg" => "", "error" => "");
     
     
-    $sql = 'INSERT INTO activitystream (`userName`, `date`, `userTitle`, `action`, `concern`, `parent_role`, `parent_info`)'
-        .' values ("'.$activity['userName'].'", now(), "'.$activity['title'].'","'.$activity['action'].'","'.$activity['concern'].'","'.$activity['parentRole'].'","'.$activity['parentInfo'].'")';
+    $sql = 'INSERT INTO activitystream (`userName`, `date`, `userTitle`, `action`, `concern`, `parent_role`, `parent_info`, `isRestrain`)'
+        .' values ("'.$activity['userName'].'", now(), "'.$activity['title'].'","'.$activity['action'].'","'.$activity['concern'].'","'.$activity['parentRole'].'","'.$activity['parentInfo'].'","'.$activity['isRestrain'].'")';
     $con->exec($sql);
     $arr["msg"] = "Activity created successfully!!!";
 

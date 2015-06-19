@@ -492,3 +492,26 @@ div.main {
     height: 100px;
     margin-bottom: 6px;
 }
+
+#mini-stream {
+    border:2px solid black;
+    position: relative;
+    left:10px;
+    width:525px;
+    height:300px;
+    overflow-y:scroll; 
+}
+
+.streambox {
+    border: 1px solid darkblue; 
+    margin:5px 2px 2px 5px;
+    background: #dddddd;
+    
+    box-shadow: 10px 10px 5px #999999;
+    -webkit-box-shadow: 10px 10px 5px #999999;
+    -moz-box-shadow: 10px 10px 5px #999999;
+    
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+}

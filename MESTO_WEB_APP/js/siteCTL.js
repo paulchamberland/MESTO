@@ -162,7 +162,7 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securi
                 function(data, status) {
                     self.resetMsg();
                     if (data.msg != '') {
-                        streamSrv.saveActivity($scope, ($scope.site.id == '') ? "add" : "mod", ($scope.site.role == "") ? "site" : self.getLabelROLE($scope.site.role), "system", "Mesto");
+                        streamSrv.saveActivity($scope, false, ($scope.site.id == '') ? "add" : "mod", ($scope.site.role == "") ? "site" : self.getLabelROLE($scope.site.role), "system", "Mesto");
                         //$scope.SQLMsgs = data.msg;
                         //self.loadList();
                         self.resetFrm();
@@ -200,7 +200,7 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securi
                 function(data, status) {
                     self.resetMsg();
                     if (data.msg != '') {
-                        streamSrv.saveActivity($scope, "del", ($scope.site.role == "") ? "site" : self.getLabelROLE($scope.site.role), "system", "Mesto");
+                        streamSrv.saveActivity($scope, false, "del", ($scope.site.role == "") ? "site" : self.getLabelROLE($scope.site.role), "system", "Mesto");
                         
                         //$scope.SQLMsgs = data.msg;
                         //self.loadList();

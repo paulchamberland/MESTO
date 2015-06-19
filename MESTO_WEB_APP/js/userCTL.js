@@ -121,7 +121,7 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv, securi
                 function(data, status) {
                     self.resetMsg();
                     if (data.msg != '') {
-                        streamSrv.saveActivity($scope, ($scope.user.id == '') ? "add" : "mod"
+                        streamSrv.saveActivity($scope, true, ($scope.user.id == '') ? "add" : "mod"
                                                 , ($scope.user.role == "") ? "user" : "user "+self.getNameRole($scope.user.role)
                                                 , "system", "Mesto");
                         //$scope.SQLMsgs = data.msg;
@@ -195,7 +195,7 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv, securi
                 function(data, status) {
                     self.resetMsg();
                     if (data.msg != '') {
-                        streamSrv.saveActivity($scope, "del", ($scope.user.role == "") ? "user" : " user "+self.getNameRole($scope.user.role), "system", "Mesto");
+                        streamSrv.saveActivity($scope, true, "del", ($scope.user.role == "") ? "user" : " user "+self.getNameRole($scope.user.role), "system", "Mesto");
                         //$scope.SQLMsgs = data.msg;
                         //self.loadList();
                         self.resetFrm();
