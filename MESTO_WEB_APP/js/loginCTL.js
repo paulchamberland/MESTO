@@ -1,8 +1,8 @@
 app.controller('loginCTL', function($scope, $rootScope, $http, $location, securitySrv, navigateSrv) {
     var self = this;
     $scope.logInfo = {
-        username : 'tester',
-        pwd : 'test'
+        username : '',
+        pwd : ''
     };
     
     this.login = function(pLogInfo) {
