@@ -19,6 +19,7 @@ app.config(function($routeProvider, IdleProvider) {
     $routeProvider.when('/admin/roles', {templateUrl:'mt-admin/mt-lstUserRoles.html', controller:'userRoleCTL', controllerAs:'userRoleCTL'});
     $routeProvider.when('/admin/user', {templateUrl:'mt-admin/mt-users.html', controller:'userCTL', controllerAs:'userCTL'});
     $routeProvider.when('/admin/users', {templateUrl:'mt-admin/mt-lstUsers.html', controller:'userCTL', controllerAs:'userCTL'});
+    $routeProvider.when('/admin/stream', {templateUrl:'mt-admin/mt-stream.html', controller:'streamCTL', controllerAs:'streamCTL'});
     $routeProvider.when('/createUser', {templateUrl:'user.html', controller:'userCTL', controllerAs:'userCTL'});
     $routeProvider.when('/profile', {templateUrl:'profile.html', controller:'userCTL', controllerAs:'userCTL'});
     $routeProvider.when('/stream', {templateUrl:'stream.html', controller:'streamCTL', controllerAs:'streamCTL'});
@@ -30,7 +31,7 @@ app.config(function($routeProvider, IdleProvider) {
 });
 
 app.run(function($rootScope, $location, securitySrv) {
-    var routeRestricted = ['/admin/home', '/admin/site', '/admin/sites', '/admin/room', '/admin/rooms', '/admin/equip', '/admin/equipments', '/admin/permissions', '/admin/role', '/admin/roles', '/admin/user', '/admin/users'];
+    var routeRestricted = ['/admin/home', '/admin/site', '/admin/sites', '/admin/room', '/admin/rooms', '/admin/equip', '/admin/equipments', '/admin/permissions', '/admin/role', '/admin/roles', '/admin/user', '/admin/users', '/admin/stream'];
     var forbiddenCall = ['.html', '.php'];
 
     securitySrv.checkLoggedUser().then(function () {
@@ -240,12 +241,13 @@ app.factory('streamSrv', function($http, securitySrv) {
         }
     }
     
-    function saveActivity(_scope, pAction, pConcern, pParentRole, pParentInfo) {
+    function saveActivity(_scope, pIsRestrain, pAction, pConcern, pParentRole, pParentInfo) {
         if (securitySrv.isLogged()) {
             $http({
                 method: 'POST',
                 url: "/MESTO/MESTO_WEB_APP/php/saveStream.php", // TODO: Make a config with path
                 data: {
+                    isRestrain : pIsRestrain ? '1' : '0',
                     action : getActionLabel(pAction),
                     concern : pConcern,
                     parentRole : /*(pParentRole != "") ? */pParentRole /*: "undefined"*/,
