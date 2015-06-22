@@ -2,6 +2,30 @@ describe('Testing the controller of site object =>', function() {
     beforeEach(module('MESTO'));
     var controller, scope;
 
+    var emptySite = {id: "",
+                    reference :"",
+                    latitude:"",
+                    longitude:"",
+                    siteName:"",
+                    description:"",
+                    isTemporary:false,
+                    startDate:"",
+                    endDate:"",
+                    address:"",
+                    city:"",
+                    province:"",
+                    country:"",
+                    postalCode:"",
+                    role:"",
+                    pointOfContact:"",
+                    phoneNumberPoC:"",
+                    organization:"",
+                    techPoC:"",
+                    phoneTechPoC:"",
+                    employesNumber:"",
+                    lstRooms:[],
+                    lstEquips:[]};
+                    
     beforeEach(inject(function(_$controller_, $rootScope) {
         scope = $rootScope;
         controller = _$controller_('siteCTL', { $scope: scope });
@@ -313,29 +337,7 @@ describe('Testing the controller of site object =>', function() {
         controller.resetFrm();
         
         expect(scope.canDelete).toBe(false);
-        expect(scope.site).toEqual({id: "",
-                                    reference :"",
-                                    latitude:"",
-                                    longitude:"",
-                                    siteName:"",
-                                    description:"",
-                                    isTemporary:false,
-                                    startDate:"",
-                                    endDate:"",
-                                    address:"",
-                                    city:"",
-                                    province:"",
-                                    country:"",
-                                    postalCode:"",
-                                    role:"",
-                                    pointOfContact:"",
-                                    phoneNumberPoC:"",
-                                    organization:"",
-                                    techPoC:"",
-                                    phoneTechPoC:"",
-                                    employesNumber:"",
-                                    lstRooms:[],
-                                    lstEquips:[]});
+        expect(scope.site).toEqual(emptySite);
     });
     
     it('Testing: Reset Messages ', function() {
@@ -511,29 +513,7 @@ describe('Testing the controller of site object =>', function() {
             $httpBackend.flush();
             
             expect(scope.canDelete).toBe(false);
-            expect(scope.site).toEqual({id: "",
-                                    reference :"",
-                                    latitude:"",
-                                    longitude:"",
-                                    siteName:"",
-                                    description:"",
-                                    isTemporary:false,
-                                    startDate:"",
-                                    endDate:"",
-                                    address:"",
-                                    city:"",
-                                    province:"",
-                                    country:"",
-                                    postalCode:"",
-                                    role:"",
-                                    pointOfContact:"",
-                                    phoneNumberPoC:"",
-                                    organization:"",
-                                    techPoC:"",
-                                    phoneTechPoC:"",
-                                    employesNumber:"",
-                                    lstRooms:[],
-                                    lstEquips:[]});
+            expect(scope.site).toEqual(emptySite);
                                     
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
@@ -618,29 +598,7 @@ describe('Testing the controller of site object =>', function() {
             $httpBackend.flush();
             
             expect(scope.canDelete).toBe(false);
-            expect(scope.site).toEqual({id: "",
-                                    reference :"",
-                                    latitude:"",
-                                    longitude:"",
-                                    siteName:"",
-                                    description:"",
-                                    isTemporary:false,
-                                    startDate:"",
-                                    endDate:"",
-                                    address:"",
-                                    city:"",
-                                    province:"",
-                                    country:"",
-                                    postalCode:"",
-                                    role:"",
-                                    pointOfContact:"",
-                                    phoneNumberPoC:"",
-                                    organization:"",
-                                    techPoC:"",
-                                    phoneTechPoC:"",
-                                    employesNumber:"",
-                                    lstRooms:[],
-                                    lstEquips:[]});
+            expect(scope.site).toEqual(emptySite);
             
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
@@ -971,6 +929,40 @@ describe('Testing the controller of site object =>', function() {
             expect(controller.loadRoomsList).toHaveBeenCalled();
             
             expect(scope.lstFreeRoomErr).not.toBeDefined();
+        });
+        
+        it('Testing: Failed to load one Site', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(200, '{"msg":"", "error":"Database error"}');
+            
+            controller.loadDBSite();
+            $httpBackend.flush();
+            
+            expect(scope.SQLErrors).toEqual("Database error");
+            expect(scope.site).toEqual(emptySite);
+        });
+        it('Testing: Error to load one Site', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(500, '{"msg":"", "error":"error"}');
+            
+            controller.loadDBSite();
+            $httpBackend.flush();
+            
+            expect(scope.SQLErrors).toEqual("error: 500:undefined");
+            expect(scope.site).toEqual(emptySite);
+        });
+        it('Testing: Success to load one Site', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(200, '[{"test":"test"}]');
+            
+            controller.loadDBSite();
+            $httpBackend.flush();
+            
+            expect(scope.SQLErrors).not.toBeDefined();
+            expect(scope.site).toEqual({test:"test"});
         });
     });
 });

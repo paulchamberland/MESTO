@@ -42,8 +42,11 @@ try {
 	$con = new PDO("mysql:host=localhost;dbname=mesto", "root", "");
 	$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	
-    if (empty($data['id'])) {
+    if (empty($data['id']) && !isset($data['roomID'])) {
         $stmt = $con->prepare("SELECT r.*, s.siteName, s.role as siteRole FROM room r LEFT JOIN site s ON r.fk_siteId = s.id ORDER BY r.id");
+	}
+    else if (isset($data['roomID']) && empty($data['id'])) {
+        $stmt = $con->prepare("SELECT r.*, s.siteName, s.role as siteRole FROM room r LEFT JOIN site s ON r.fk_siteId = s.id WHERE r.roomID='".$data['roomID']."'");
 	}
     else {
         if (isset($data['type']) && $data['type'] == "SITE_INC") {

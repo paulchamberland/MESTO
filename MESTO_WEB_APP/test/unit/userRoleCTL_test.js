@@ -2,6 +2,10 @@ describe('Testing the controller of userRole object', function() {
     beforeEach(module('MESTO'));
     var controller, scope;
 
+    var emptyUserRole = {id: "",
+                    name :"",
+                    description :"",
+                    lstPermissions :[]}
     beforeEach(inject(function(_$controller_, $rootScope) {
         scope = $rootScope;
         controller = _$controller_('userRoleCTL', { $scope: scope });
@@ -86,10 +90,7 @@ describe('Testing the controller of userRole object', function() {
         controller.resetFrm();
         
         expect(scope.canDelete).toBe(false);
-        expect(scope.userRole).toEqual({id: "",
-                                name :"",
-                                description: "",
-                                lstPermissions :[]});
+        expect(scope.userRole).toEqual(emptyUserRole);
         expect(scope.lstSelectedPermissionsObj).toEqual([]);
         expect(scope.lstAvailablePermissions).toEqual([{codeName:"adminAccess",name:"Access to Admin Section", description:"Block Logging, show/hide navigation button"}
                                     ,{codeName:"deleteRole",name:"Delete existing role", description:"Show/Hide the delete button"}
@@ -329,10 +330,7 @@ describe('Testing the controller of userRole object', function() {
             $httpBackend.flush();
             
             expect(scope.canDelete).toBe(false);
-            expect(scope.userRole).toEqual({id: "",
-                                        name :"",
-                                        description :"",
-                                        lstPermissions :[]});
+            expect(scope.userRole).toEqual(emptyUserRole);
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
             expect(scope.userRoleList).toEqual('');
@@ -410,11 +408,7 @@ describe('Testing the controller of userRole object', function() {
             $httpBackend.flush();
             
             expect(scope.canDelete).toBe(false);
-            expect(scope.userRole).toEqual({id: "",
-                                            name :"",
-                                            description :"",
-                                            lstPermissions :[]
-                                           });
+            expect(scope.userRole).toEqual(emptyUserRole);
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
             expect(scope.userRoleList).toEqual('');   
@@ -457,6 +451,45 @@ describe('Testing the controller of userRole object', function() {
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).toEqual('error: 500:undefined'); // Principal test
             expect(scope.userRoleList).toEqual({});
+        });
+        
+        it('Testing: Failed to load one UserRole', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);// CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond(200, '{"msg":"", "error":"Database error"}');
+            
+            controller.loadDBUserRole();
+            $httpBackend.flush();
+            
+            expect(scope.SQLErrors).toEqual("Database error");
+            expect(scope.userRole).toEqual(emptyUserRole);
+        });
+        it('Testing: Error to load one UserRole', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);// CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond(500, '{"msg":"", "error":"error"}');
+            
+            controller.loadDBUserRole();
+            $httpBackend.flush();
+            
+            expect(scope.SQLErrors).toEqual("error: 500:undefined");
+            expect(scope.userRole).toEqual(emptyUserRole);
+        });
+        it('Testing: Success to load one UserRole', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);// CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond(200, '[{"id": "1",'
+                                                                                            +'"name":"SpecialTester",'
+                                                                                            +'"lstPermissions":"test,test2"}]');
+            
+            controller.loadDBUserRole();
+            $httpBackend.flush();
+            
+            expect(scope.SQLErrors).not.toBeDefined();
+            expect(scope.userRole).toEqual({id:"1",
+                                            name:"SpecialTester",
+                                            lstPermissions:["test","test2"]
+                                            });
         });
     });
 });

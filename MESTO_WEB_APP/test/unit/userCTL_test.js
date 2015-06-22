@@ -1,6 +1,19 @@
 describe('Testing the controller of user object => ', function() {
     beforeEach(module('MESTO'));
     var controller, scope;
+    
+    var emptyUser = {id: "",
+                    username :"",
+                    name :"",
+                    email :"",
+                    password :"",
+                    supervisor :"",
+                    role :"",
+                    title :"",
+                    active : false,
+                    approved : false,
+                    address :"",
+                    phone:""};
 
     beforeEach(inject(function(_$controller_, $rootScope) {
         scope = $rootScope;
@@ -127,18 +140,7 @@ describe('Testing the controller of user object => ', function() {
         controller.resetFrm();
         
         expect(scope.canDelete).toBe(false);
-        expect(scope.user).toEqual({id: "",
-                                    username :"",
-                                    name :"",
-                                    email :"",
-                                    password :"",
-                                    supervisor :"",
-                                    role :"",
-                                    title :"",
-                                    active : false,
-                                    approved : false,
-                                    address :"",
-                                    phone:""});
+        expect(scope.user).toEqual(emptyUser);
     });
     it('Testing: Reset changePassword form', function() {
         scope.userPwdForm = {$setPristine : function(){}};
@@ -436,18 +438,7 @@ describe('Testing the controller of user object => ', function() {
             $httpBackend.flush();
             
             expect(scope.canDelete).toBe(false);
-            expect(scope.user).toEqual({id: "",
-                                        username :"",
-                                        name :"",
-                                        email :"",
-                                        password :"",
-                                        supervisor :"",
-                                        role :"",
-                                        title :"",
-                                        active : false,
-                                        approved : false,
-                                        address :"",
-                                        phone:""});
+            expect(scope.user).toEqual(emptyUser);
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
             expect(scope.userList).toEqual('');
@@ -608,6 +599,43 @@ describe('Testing the controller of user object => ', function() {
                 expect(scope.SQLPwdMsgs).not.toBeDefined();
                 expect(scope.SQLPwdErrors).toEqual('error: 500:undefined'); // Principal test
                 expect(scope.userList).toEqual({});
+            });
+            
+            it('Testing: Failed to load one User', function() {
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond(''); // CTR init
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond(200, '{"msg":"", "error":"Database error"}');
+                
+                controller.loadDBUser();
+                $httpBackend.flush();
+                
+                expect(scope.SQLErrors).toEqual("Database error");
+                expect(scope.user).toEqual(emptyUser);
+            });
+            it('Testing: Error to load one User', function() {
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond(''); // CTR init
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond(500, '{"msg":"", "error":"error"}');
+                
+                controller.loadDBUser();
+                $httpBackend.flush();
+                
+                expect(scope.SQLErrors).toEqual("error: 500:undefined");
+                expect(scope.user).toEqual(emptyUser);
+            });
+            it('Testing: Success to load one User', function() {
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond(''); // CTR init
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond(200, '[{"test":"test"}]');
+                
+                controller.loadDBUser();
+                $httpBackend.flush();
+                
+                expect(scope.SQLErrors).not.toBeDefined();
+                expect(scope.user).toEqual({test:"test"});
             });
         });
     });

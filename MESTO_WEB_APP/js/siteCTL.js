@@ -1,4 +1,4 @@
-app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securitySrv, streamSrv, enumManagerSrv) {
+app.controller('siteCTL', function($scope, $http, $location, $routeParams, navigateSrv, securitySrv, streamSrv, enumManagerSrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
     var ACTIVITY_ADDING_ASSO_EQUIP = "add-ass-st|eq";
@@ -58,7 +58,11 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securi
     function init() {
         self.emptySite = angular.copy($scope.site);
         
-        if (navigateSrv.getSite() != null) {
+        if ($routeParams.reference) {
+            self.loadDBSite($routeParams.reference);
+            $scope.canDelete = true;
+        }
+        else if (navigateSrv.getSite() != null) {
             self.loadSite(navigateSrv.getSite());
             navigateSrv.cleanMemory();
         }
@@ -162,7 +166,8 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securi
                 function(data, status) {
                     self.resetMsg();
                     if (data.msg != '') {
-                        streamSrv.saveActivity($scope, false, ($scope.site.id == '') ? "add" : "mod", ($scope.site.role == "") ? "site" : self.getLabelROLE($scope.site.role), "system", "Mesto");
+                        streamSrv.saveActivity($scope, false, ($scope.site.id == '') ? "add" : "mod", ($scope.site.role == "") ? "site" : self.getLabelROLE($scope.site.role)
+                                                , "site", $scope.site.reference, "system", "Mesto");
                         //$scope.SQLMsgs = data.msg;
                         //self.loadList();
                         self.resetFrm();
@@ -200,7 +205,8 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securi
                 function(data, status) {
                     self.resetMsg();
                     if (data.msg != '') {
-                        streamSrv.saveActivity($scope, false, "del", ($scope.site.role == "") ? "site" : self.getLabelROLE($scope.site.role), "system", "Mesto");
+                        streamSrv.saveActivity($scope, false, "del", ($scope.site.role == "") ? "site" : self.getLabelROLE($scope.site.role)
+                                                , "site", $scope.site.reference, "system", "Mesto");
                         
                         //$scope.SQLMsgs = data.msg;
                         //self.loadList();
@@ -250,6 +256,32 @@ app.controller('siteCTL', function($scope, $http, $location, navigateSrv, securi
             function(data, status, headers, config, statusText) {
                 // TODO: error server handling
                 $scope.lstError = "error: "+status+":"+statusText;
+                //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
+            }
+        );
+    };
+    
+    this.loadDBSite = function(pReference) {
+        $http({
+                method: 'POST',
+                url: "/MESTO/MESTO_WEB_APP/php/DAOSite.php", // TODO: Make a config with path
+                data: {
+                    reference : pReference
+                },
+                headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+            }).success( // TODO: Make a config with path
+            function(data) {
+                if (data.error == null) {
+                    $scope.site = data[0];
+                }
+                else {
+                    $scope.SQLErrors = data.error;
+                }
+            }
+        ).error(
+            function(data, status, headers, config, statusText) {
+                // TODO: error server handling
+                $scope.SQLErrors = "error: "+status+":"+statusText;
                 //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
             }
         );

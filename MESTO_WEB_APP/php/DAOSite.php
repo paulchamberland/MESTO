@@ -26,11 +26,20 @@ class site { // structure of a site
 }
 $arr = null;
 try {
+    $data = json_decode(file_get_contents("php://input"), true);
+    
     //throw new PDOException('juste un test');
 	$con = new PDO("mysql:host=localhost;dbname=mesto", "root", "");
 	$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$stmt = $con->prepare("SELECT * from site;");
-	$stmt->execute();
+    
+    if (isset($data['reference'])) {
+        $stmt = $con->prepare("SELECT * from site WHERE reference='".$data['reference']."'");
+	}
+    else {
+        $stmt = $con->prepare("SELECT * from site;");
+    }
+    
+    $stmt->execute();
 	
 	$json = json_encode($stmt->fetchAll(PDO::FETCH_CLASS, "site"));
     

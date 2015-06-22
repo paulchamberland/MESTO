@@ -1,4 +1,4 @@
-app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv, securitySrv, streamSrv, enumManagerSrv) {
+app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, navigateSrv, securitySrv, streamSrv, enumManagerSrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
     $scope.TYPE = enumManagerSrv.getEquip_TYPE();
@@ -38,7 +38,11 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv, s
     function init() {
         self.emptyEquipment = angular.copy($scope.equipment);
         
-        if (navigateSrv.getEquip() != null) {
+        if ($routeParams.serialNumber) {
+            self.loadDBEquipment($routeParams.serialNumber);
+            $scope.canDelete = true;
+        }
+        else if (navigateSrv.getEquip() != null) {
             self.loadEquipment(navigateSrv.getEquip());
             navigateSrv.cleanMemory();
         }
@@ -115,6 +119,7 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv, s
                     self.resetMsg();
                     if (data.msg != '') {
                         streamSrv.saveActivity($scope, false, ($scope.equipment.id == '') ? "add" : "mod", ($scope.equipment.type == "") ? "equipment" : self.getLabelTYPE($scope.equipment.type)
+                                                , "equip", $scope.equipment.serialNumber
                                                 , ($scope.equipment.parentSite && $scope.equipment.parentSite.id > 0) 
                                                         ? enumManagerSrv.getSiteLabelROLE($scope.equipment.parentSite.role)
                                                         : enumManagerSrv.getRoomLabelROLE($scope.equipment.parentRoom.role)
@@ -154,6 +159,7 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv, s
                     self.resetMsg();
                     if (data.msg != '') {
                         streamSrv.saveActivity($scope, false, "del", self.getLabelTYPE($scope.equipment.type)
+                                                , "equip", $scope.equipment.serialNumber
                                                 , ($scope.equipment.parentSite && $scope.equipment.parentSite.id > 0) 
                                                         ? enumManagerSrv.getSiteLabelROLE($scope.equipment.parentSite.role)
                                                         : enumManagerSrv.getRoomLabelROLE($scope.equipment.parentRoom.role)
@@ -209,6 +215,32 @@ app.controller('equipmentCTL', function($scope, $http, $location, navigateSrv, s
             function(data, status, headers, config, statusText) {
                 // TODO: error server handling
                 $scope.lstError = "error: "+status+":"+statusText;
+                //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
+            }
+        );
+    };
+    
+    this.loadDBEquipment = function(pSerialNumber) {
+        $http({
+                method: 'POST',
+                url: "/MESTO/MESTO_WEB_APP/php/DAOEquipment.php", // TODO: Make a config with path
+                data: {
+                    serialNumber : pSerialNumber
+                },
+                headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+            }).success( // TODO: Make a config with path
+            function(data) {
+                if (data.error == null) {
+                    $scope.equipment = data[0];
+                }
+                else {
+                    $scope.SQLErrors = data.error;
+                }
+            }
+        ).error(
+            function(data, status, headers, config, statusText) {
+                // TODO: error server handling
+                $scope.SQLErrors = "error: "+status+":"+statusText;
                 //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
             }
         );

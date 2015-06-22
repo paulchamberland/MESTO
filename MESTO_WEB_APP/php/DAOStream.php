@@ -6,6 +6,8 @@ class Activity {
 	public $title;
     public $action;
     public $concern;
+    public $concernObject;
+    public $concernUnique;
     public $isRestrain;
     public $parent;
     
@@ -16,13 +18,15 @@ class Activity {
         $this->title = $objSQL->userTitle;
         $this->action = $objSQL->action;
         $this->concern = $objSQL->concern;
+        $this->concernObject = $objSQL->concernObject;
+        $this->concernUnique = $objSQL->concernUnique;
         $this->isRestrain = $objSQL->isRestrain;
         
-        $this->parent = new ParentConsern($objSQL->parent_role, $objSQL->parent_info);
+        $this->parent = new ParentConcern($objSQL->parent_role, $objSQL->parent_info);
     }
 }
 
-class ParentConsern {
+class ParentConcern {
     public $role;
     public $info;
     

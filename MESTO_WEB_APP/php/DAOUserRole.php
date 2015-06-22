@@ -23,11 +23,14 @@ try {
 	$con = new PDO("mysql:host=localhost;dbname=mesto", "root", "");
 	$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
-    if (empty($data['id'])) {
-        $stmt = $con->prepare("SELECT id, name, description, list_permissions, updateBy, updateDate FROM userrole ORDER BY id");
+    if (isset($data['id']) && !isset($data['name'])) {
+        $stmt = $con->prepare("SELECT id, name, description, list_permissions, updateBy, updateDate FROM userrole WHERE id = '".$data['id']."' ORDER BY id");
+	}
+    if (isset($data['name']) && !isset($data['id'])) {
+        $stmt = $con->prepare("SELECT id, name, description, list_permissions, updateBy, updateDate FROM userrole WHERE name='".$data['name']."'");
 	}
     else {
-        $stmt = $con->prepare("SELECT id, name, description, list_permissions, updateBy, updateDate FROM userrole WHERE id = '".$data['id']."' ORDER BY id");
+        $stmt = $con->prepare("SELECT id, name, description, list_permissions, updateBy, updateDate FROM userrole ORDER BY id");
     }
     
 	$stmt->execute();

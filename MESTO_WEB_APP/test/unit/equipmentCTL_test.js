@@ -2,6 +2,25 @@ describe('Testing the controller of equipment object', function() {
     beforeEach(module('MESTO'));
     var controller, scope, securitySrv, enumManagerSrv;
 
+    var emptyEquipment = {id: "",
+                            serialNumber :"",
+                            barCode :"",
+                            manufacturer :"",
+                            model :"",
+                            configHW :"",
+                            configSW :"",
+                            type:"",
+                            parentRoom:{
+                                id:"",
+                                roomID:"",
+                                role:"",
+                                siteName:""
+                            },
+                            parentSite:{
+                                id:"",
+                                name:"",
+                                role:""
+                            }};
     beforeEach(inject(function(_$controller_, $rootScope, _securitySrv_, _enumManagerSrv_){
         // The injector unwraps the underscores (_) from around the parameter names when matching
         scope = $rootScope;//.$new();
@@ -162,25 +181,7 @@ describe('Testing the controller of equipment object', function() {
         controller.resetFrm();
         
         expect(scope.canDelete).toBe(false);
-        expect(scope.equipment).toEqual({id: "",
-                                        serialNumber :"",
-                                        barCode :"",
-                                        manufacturer :"",
-                                        model :"",
-                                        configHW :"",
-                                        configSW :"",
-                                        type:"",
-                                        parentRoom:{
-                                            id:"",
-                                            roomID:"",
-                                            role:"",
-                                            siteName:""
-                                        },
-                                        parentSite:{
-                                            id:"",
-                                            name:"",
-                                            role:""
-                                        }});
+        expect(scope.equipment).toEqual(emptyEquipment);
     });
     
     it('Testing: Reset Messages ', function() {
@@ -407,25 +408,7 @@ describe('Testing the controller of equipment object', function() {
             $httpBackend.flush();
             
             expect(scope.canDelete).toBe(false);
-            expect(scope.equipment).toEqual({id: "",
-                                        serialNumber :"",
-                                        barCode :"",
-                                        manufacturer :"",
-                                        model :"",
-                                        configHW :"",
-                                        configSW :"",
-                                        type:"",
-                                        parentRoom:{
-                                            id:"",
-                                            roomID:"",
-                                            role:"",
-                                            siteName:""
-                                        },
-                                        parentSite:{
-                                            id:"",
-                                            name:"",
-                                            role:""
-                                        }});
+            expect(scope.equipment).toEqual(emptyEquipment);
                                         
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
@@ -468,25 +451,7 @@ describe('Testing the controller of equipment object', function() {
             $httpBackend.flush();
             
             expect(scope.canDelete).toBe(false);
-            expect(scope.equipment).toEqual({id: "",
-                                        serialNumber :"",
-                                        barCode :"",
-                                        manufacturer :"",
-                                        model :"",
-                                        configHW :"",
-                                        configSW :"",
-                                        type:"",
-                                        parentRoom:{
-                                            id:"",
-                                            roomID:"",
-                                            role:"",
-                                            siteName:""
-                                        },
-                                        parentSite:{
-                                            id:"",
-                                            name:"",
-                                            role:""
-                                        }});
+            expect(scope.equipment).toEqual(emptyEquipment);
                                         
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
@@ -601,25 +566,7 @@ describe('Testing the controller of equipment object', function() {
             $httpBackend.flush();
             
             expect(scope.canDelete).toBe(false);
-            expect(scope.equipment).toEqual({id: "",
-                                        serialNumber :"",
-                                        barCode :"",
-                                        manufacturer :"",
-                                        model :"",
-                                        configHW :"",
-                                        configSW :"",
-                                        type:"",
-                                        parentRoom:{
-                                            id:"",
-                                            roomID:"",
-                                            role:"",
-                                            siteName:""
-                                        },
-                                        parentSite:{
-                                            id:"",
-                                            name:"",
-                                            role:""
-                                        }});
+            expect(scope.equipment).toEqual(emptyEquipment);
             
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
@@ -661,25 +608,7 @@ describe('Testing the controller of equipment object', function() {
             $httpBackend.flush();
             
             expect(scope.canDelete).toBe(false);
-            expect(scope.equipment).toEqual({id: "",
-                                        serialNumber :"",
-                                        barCode :"",
-                                        manufacturer :"",
-                                        model :"",
-                                        configHW :"",
-                                        configSW :"",
-                                        type:"",
-                                        parentRoom:{
-                                            id:"",
-                                            roomID:"",
-                                            role:"",
-                                            siteName:""
-                                        },
-                                        parentSite:{
-                                            id:"",
-                                            name:"",
-                                            role:""
-                                        }});
+            expect(scope.equipment).toEqual(emptyEquipment);
             
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
@@ -792,6 +721,40 @@ describe('Testing the controller of equipment object', function() {
             
             expect(scope.lstStErr).not.toBeDefined();
             expect(scope.siteList).toEqual([{test:"test"}]);
+        });
+        
+        it('Testing: Failed to load one Equipment', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(200, '{"msg":"", "error":"Database error"}');
+            
+            controller.loadDBEquipment();
+            $httpBackend.flush();
+            
+            expect(scope.SQLErrors).toEqual("Database error");
+            expect(scope.equipment).toEqual(emptyEquipment);
+        });
+        it('Testing: Error to load one Equipment', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(500, '{"msg":"", "error":"error"}');
+            
+            controller.loadDBEquipment();
+            $httpBackend.flush();
+            
+            expect(scope.SQLErrors).toEqual("error: 500:undefined");
+            expect(scope.equipment).toEqual(emptyEquipment);
+        });
+        it('Testing: Success to load one Equipment', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(200, '[{"test":"test"}]');
+            
+            controller.loadDBEquipment();
+            $httpBackend.flush();
+            
+            expect(scope.SQLErrors).not.toBeDefined();
+            expect(scope.equipment).toEqual({test:"test"});
         });
     });
 });

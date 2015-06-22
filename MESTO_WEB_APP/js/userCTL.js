@@ -1,4 +1,4 @@
-app.controller('userCTL', function($scope, $http, $location, navigateSrv, securitySrv, streamSrv) {
+app.controller('userCTL', function($scope, $http, $location, $routeParams, navigateSrv, securitySrv, streamSrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
 
@@ -40,7 +40,11 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv, securi
     function init() {
         self.emptyUser = angular.copy($scope.user);
         
-        if (navigateSrv.getUser() != null) {
+        if ($routeParams.username) {
+            self.loadDBUser($routeParams.username);
+            $scope.canDelete = true;
+        }
+        else if (navigateSrv.getUser() != null) {
             self.loadUser(navigateSrv.getUser());
             navigateSrv.cleanMemory();
         }
@@ -123,7 +127,7 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv, securi
                     if (data.msg != '') {
                         streamSrv.saveActivity($scope, true, ($scope.user.id == '') ? "add" : "mod"
                                                 , ($scope.user.role == "") ? "user" : "user "+self.getNameRole($scope.user.role)
-                                                , "system", "Mesto");
+                                                , "user", $scope.user.username, "system", "Mesto");
                         //$scope.SQLMsgs = data.msg;
                         //self.loadList();
                         //self.resetFrm();
@@ -195,7 +199,8 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv, securi
                 function(data, status) {
                     self.resetMsg();
                     if (data.msg != '') {
-                        streamSrv.saveActivity($scope, true, "del", ($scope.user.role == "") ? "user" : " user "+self.getNameRole($scope.user.role), "system", "Mesto");
+                        streamSrv.saveActivity($scope, true, "del", ($scope.user.role == "") ? "user" : " user "+self.getNameRole($scope.user.role)
+                                                , "user", $scope.user.username, "system", "Mesto");
                         //$scope.SQLMsgs = data.msg;
                         //self.loadList();
                         self.resetFrm();
@@ -234,6 +239,31 @@ app.controller('userCTL', function($scope, $http, $location, navigateSrv, securi
             function(data, status, headers, config, statusText) {
                 // TODO: error server handling
                 $scope.lstError = "error: "+status+":"+statusText;
+                //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
+            }
+        );
+    };
+    this.loadDBUser = function(pUsername) {
+        $http({
+                method: 'POST',
+                url: "/MESTO/MESTO_WEB_APP/php/DAOUser.php", // TODO: Make a config with path
+                data: {
+                    username : pUsername
+                },
+                headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+            }).success( // TODO: Make a config with path
+            function(data) {
+                if (data.error == null) {
+                    $scope.user = data[0];
+                }
+                else {
+                    $scope.SQLErrors = data.error;
+                }
+            }
+        ).error(
+            function(data, status, headers, config, statusText) {
+                // TODO: error server handling
+                $scope.SQLErrors = "error: "+status+":"+statusText;
                 //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
             }
         );

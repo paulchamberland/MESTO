@@ -1,4 +1,4 @@
-app.controller('userRoleCTL', function($scope, $http, $location, navigateSrv, permissionSrv, securitySrv, streamSrv) {
+app.controller('userRoleCTL', function($scope, $http, $location, $routeParams, navigateSrv, permissionSrv, securitySrv, streamSrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
 
@@ -22,7 +22,11 @@ app.controller('userRoleCTL', function($scope, $http, $location, navigateSrv, pe
     function init() {
         self.emptyUserRole = angular.copy($scope.userRole);
         
-        if (navigateSrv.getUserRole() != null) {
+        if ($routeParams.name) {
+            self.loadDBUserRole($routeParams.name);
+            $scope.canDelete = true;
+        }
+        else if (navigateSrv.getUserRole() != null) {
             self.loadUserRole(navigateSrv.getUserRole());
             navigateSrv.cleanMemory();
         }
@@ -84,7 +88,8 @@ app.controller('userRoleCTL', function($scope, $http, $location, navigateSrv, pe
                 function(data, status) {
                     self.resetMsg();
                     if (data.msg != '') {
-                        streamSrv.saveActivity($scope, true, ($scope.userRole.id == '') ? "add" : "mod", "user's role", "system", "Mesto");
+                        streamSrv.saveActivity($scope, true, ($scope.userRole.id == '') ? "add" : "mod", "user's role"
+                                                , "role", $scope.userRole.name, "system", "Mesto");
                         //$scope.SQLMsgs = data.msg;
                         //self.loadList();
                         self.resetFrm();
@@ -116,7 +121,8 @@ app.controller('userRoleCTL', function($scope, $http, $location, navigateSrv, pe
                 function(data, status) {
                     self.resetMsg();
                     if (data.msg != '') {
-                        streamSrv.saveActivity($scope, true, ($scope.userRole.id == '') ? "add" : "mod", "user's role", "system", "Mesto");
+                        streamSrv.saveActivity($scope, true, ($scope.userRole.id == '') ? "add" : "mod", "user's role"
+                                                , "role", $scope.userRole.name, "system", "Mesto");
                         //$scope.SQLMsgs = data.msg;
                         //self.loadList();
                         self.resetFrm();
@@ -155,6 +161,32 @@ app.controller('userRoleCTL', function($scope, $http, $location, navigateSrv, pe
             function(data, status, headers, config, statusText) {
                 // TODO: error server handling
                 $scope.lstError = "error: "+status+":"+statusText;
+                //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
+            }
+        );
+    };
+    this.loadDBUserRole = function(pName) {
+        $http({
+                method: 'POST',
+                url: "/MESTO/MESTO_WEB_APP/php/DAOUserRole.php", // TODO: Make a config with path
+                data: {
+                    name : pName
+                },
+                headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+            }).success( // TODO: Make a config with path
+            function(data) {
+                if (data.error == null) {
+                    $scope.userRole = data[0];
+                    $scope.userRole.lstPermissions = $scope.userRole.lstPermissions.split(',');
+                }
+                else {
+                    $scope.SQLErrors = data.error;
+                }
+            }
+        ).error(
+            function(data, status, headers, config, statusText) {
+                // TODO: error server handling
+                $scope.SQLErrors = "error: "+status+":"+statusText;
                 //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
             }
         );

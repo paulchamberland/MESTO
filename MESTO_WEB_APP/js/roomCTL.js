@@ -1,4 +1,4 @@
-app.controller('roomCTL', function($scope, $http, $location, navigateSrv, securitySrv, streamSrv, enumManagerSrv) {
+app.controller('roomCTL', function($scope, $http, $location, $routeParams, navigateSrv, securitySrv, streamSrv, enumManagerSrv) {
     var self = this;
     var ACTIVITY_DELETE = "del";
     var ACTIVITY_ADDING_ASSO_EQUIP = "add-ass-rm|eq";
@@ -32,7 +32,11 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv, securi
     function init() {
         self.emptyRoom = angular.copy($scope.room);
         
-        if (navigateSrv.getRoom() != null) {
+        if ($routeParams.roomID) {
+            self.loadDBRoom($routeParams.roomID);
+            $scope.canDelete = true;
+        }
+        else if (navigateSrv.getRoom() != null) {
             self.loadRoom(navigateSrv.getRoom());
             navigateSrv.cleanMemory();
         }
@@ -109,6 +113,7 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv, securi
                     self.resetMsg();
                     if (data.msg != '') {
                         streamSrv.saveActivity($scope, false, ($scope.room.id == '') ? "add" : "mod", ($scope.room.role == "") ? "room" : self.getLabelROLE($scope.room.role)+" room"
+                                                , "room", $scope.room.roomID
                                                 , enumManagerSrv.getSiteLabelROLE($scope.room.parentSite.role)
                                                 , $scope.room.parentSite.name);
                                                         
@@ -142,6 +147,7 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv, securi
             }).success(
                 function(data, status) {
                     streamSrv.saveActivity($scope, false, "del", self.getLabelROLE($scope.room.role)+" room"
+                                                , "room", $scope.room.roomID
                                                 , enumManagerSrv.getSiteLabelROLE($scope.room.parentSite.role)
                                                 , $scope.room.parentSite.name);
                     self.resetMsg();
@@ -184,6 +190,32 @@ app.controller('roomCTL', function($scope, $http, $location, navigateSrv, securi
             function(data, status, headers, config, statusText) {
                 // TODO: error server handling
                 $scope.lstError = "error: "+status+":"+statusText;
+                //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
+            }
+        );
+    };
+    
+    this.loadDBRoom = function(pRoomID) {
+        $http({
+                method: 'POST',
+                url: "/MESTO/MESTO_WEB_APP/php/DAORoom.php", // TODO: Make a config with path
+                data: {
+                    roomID : pRoomID
+                },
+                headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+            }).success( // TODO: Make a config with path
+            function(data) {
+                if (data.error == null) {
+                    $scope.room = data[0];
+                }
+                else {
+                    $scope.SQLErrors = data.error;
+                }
+            }
+        ).error(
+            function(data, status, headers, config, statusText) {
+                // TODO: error server handling
+                $scope.SQLErrors = "error: "+status+":"+statusText;
                 //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
             }
         );

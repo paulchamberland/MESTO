@@ -2,6 +2,19 @@ describe('Testing the controller of room object =>', function() {
     beforeEach(module('MESTO'));
     var controller, scope, enumManagerSrv;
 
+    var emptyRoom = {id: "",
+                    roomID :"",
+                    pointOfContact :"",
+                    technicalPointOfContact :"",
+                    roomSize :"",
+                    role:"",
+                    parentSite:{
+                        id:"",
+                        name:"",
+                        role:""
+                    },
+                    lstEquips:[]};
+                    
     beforeEach(inject(function(_$controller_, $rootScope, _enumManagerSrv_){
         // The injector unwraps the underscores (_) from around the parameter names when matching
         scope = $rootScope;//.$new();
@@ -156,18 +169,7 @@ describe('Testing the controller of room object =>', function() {
         controller.resetFrm();
         
         expect(scope.canDelete).toBe(false);
-        expect(scope.room).toEqual({id: "",
-                                    roomID :"",
-                                    pointOfContact :"",
-                                    technicalPointOfContact :"",
-                                    roomSize :"",
-                                    role:"",
-                                    parentSite:{
-                                        id:"",
-                                        name:"",
-                                        role:""
-                                    },
-                                    lstEquips:[]});
+        expect(scope.room).toEqual(emptyRoom);
     });
     
     it('Testing: Reset Messages ', function() {
@@ -337,18 +339,7 @@ describe('Testing the controller of room object =>', function() {
             $httpBackend.flush();
             
             expect(scope.canDelete).toBe(false);
-            expect(scope.room).toEqual({id: "",
-                                    roomID :"",
-                                    pointOfContact :"",
-                                    technicalPointOfContact :"",
-                                    roomSize :"",
-                                    role:"",
-                                    parentSite:{
-                                        id:"",
-                                        name:"",
-                                        role:""
-                                    },
-                                    lstEquips:[]});
+            expect(scope.room).toEqual(emptyRoom);
 
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
@@ -452,18 +443,7 @@ describe('Testing the controller of room object =>', function() {
             $httpBackend.flush();
             
             expect(scope.canDelete).toBe(false);
-            expect(scope.room).toEqual({id: "",
-                                    roomID :"",
-                                    pointOfContact :"",
-                                    technicalPointOfContact :"",
-                                    roomSize :"",
-                                    role:"",
-                                    parentSite:{
-                                        id:"",
-                                        name:"",
-                                        role:""
-                                    },
-                                    lstEquips:[]});
+            expect(scope.room).toEqual(emptyRoom);
             
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
@@ -660,6 +640,40 @@ describe('Testing the controller of room object =>', function() {
             expect(controller.loadEquipsList).toHaveBeenCalled();
             
             expect(scope.lstFreeEquipErr).not.toBeDefined();
+        });
+        
+        it('Testing: Failed to load one Room', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(200, '{"msg":"", "error":"Database error"}');
+            
+            controller.loadDBRoom();
+            $httpBackend.flush();
+            
+            expect(scope.SQLErrors).toEqual("Database error");
+            expect(scope.room).toEqual(emptyRoom);
+        });
+        it('Testing: Error to load one Room', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(500, '{"msg":"", "error":"error"}');
+            
+            controller.loadDBRoom();
+            $httpBackend.flush();
+            
+            expect(scope.SQLErrors).toEqual("error: 500:undefined");
+            expect(scope.room).toEqual(emptyRoom);
+        });
+        it('Testing: Success to load one Room', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(200, '[{"test":"test"}]');
+            
+            controller.loadDBRoom();
+            $httpBackend.flush();
+            
+            expect(scope.SQLErrors).not.toBeDefined();
+            expect(scope.room).toEqual({test:"test"});
         });
     });
 });

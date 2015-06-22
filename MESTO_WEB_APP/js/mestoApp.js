@@ -9,15 +9,20 @@ app.config(function($routeProvider, IdleProvider) {
     $routeProvider.when('/admin', {templateUrl:'mt-admin/mt-login.html'});
     $routeProvider.when('/admin/home', {templateUrl:'mt-admin/mt-home.html'});
     $routeProvider.when('/admin/site', {templateUrl:'mt-admin/mt-sites.html', controller:'siteCTL', controllerAs:'siteCTL'});
+    $routeProvider.when('/admin/site/:reference', {templateUrl:'mt-admin/mt-sites.html', controller:'siteCTL', controllerAs:'siteCTL'});
     $routeProvider.when('/admin/sites', {templateUrl:'mt-admin/mt-lstSites.html', controller:'siteCTL', controllerAs:'siteCTL'});
     $routeProvider.when('/admin/room', {templateUrl:'mt-admin/mt-rooms.html', controller:'roomCTL', controllerAs:'roomCTL'});
+    $routeProvider.when('/admin/room/:roomID', {templateUrl:'mt-admin/mt-rooms.html', controller:'roomCTL', controllerAs:'roomCTL'});
     $routeProvider.when('/admin/rooms', {templateUrl:'mt-admin/mt-lstRooms.html', controller:'roomCTL', controllerAs:'roomCTL'});
     $routeProvider.when('/admin/equip', {templateUrl:'mt-admin/mt-equipments.html', controller:'equipmentCTL', controllerAs:'equipCTL'});
+    $routeProvider.when('/admin/equip/:serialNumber', {templateUrl:'mt-admin/mt-equipments.html', controller:'equipmentCTL', controllerAs:'equipCTL'});
     $routeProvider.when('/admin/equipments', {templateUrl:'mt-admin/mt-lstEquipments.html', controller:'equipmentCTL', controllerAs:'equipCTL'});
     $routeProvider.when('/admin/permissions', {templateUrl:'mt-admin/mt-lstPermissions.html', controller:'permissionCTL', controllerAs:'permissionCTL'});
     $routeProvider.when('/admin/role', {templateUrl:'mt-admin/mt-userRole.html', controller:'userRoleCTL', controllerAs:'userRoleCTL'});
+    $routeProvider.when('/admin/role/:name', {templateUrl:'mt-admin/mt-userRole.html', controller:'userRoleCTL', controllerAs:'userRoleCTL'});
     $routeProvider.when('/admin/roles', {templateUrl:'mt-admin/mt-lstUserRoles.html', controller:'userRoleCTL', controllerAs:'userRoleCTL'});
     $routeProvider.when('/admin/user', {templateUrl:'mt-admin/mt-users.html', controller:'userCTL', controllerAs:'userCTL'});
+    $routeProvider.when('/admin/user/:username', {templateUrl:'mt-admin/mt-users.html', controller:'userCTL', controllerAs:'userCTL'});
     $routeProvider.when('/admin/users', {templateUrl:'mt-admin/mt-lstUsers.html', controller:'userCTL', controllerAs:'userCTL'});
     $routeProvider.when('/admin/stream', {templateUrl:'mt-admin/mt-stream.html', controller:'streamCTL', controllerAs:'streamCTL'});
     $routeProvider.when('/createUser', {templateUrl:'user.html', controller:'userCTL', controllerAs:'userCTL'});
@@ -241,7 +246,7 @@ app.factory('streamSrv', function($http, securitySrv) {
         }
     }
     
-    function saveActivity(_scope, pIsRestrain, pAction, pConcern, pParentRole, pParentInfo) {
+    function saveActivity(_scope, pIsRestrain, pAction, pConcern, pConcernObject, pConcernUnique, pParentRole, pParentInfo) {
         if (securitySrv.isLogged()) {
             $http({
                 method: 'POST',
@@ -250,6 +255,8 @@ app.factory('streamSrv', function($http, securitySrv) {
                     isRestrain : pIsRestrain ? '1' : '0',
                     action : getActionLabel(pAction),
                     concern : pConcern,
+                    concernObject : pConcernObject,
+                    concernUnique : pConcernUnique,
                     parentRole : /*(pParentRole != "") ? */pParentRole /*: "undefined"*/,
                     parentInfo : /*(pParentInfo != "") ? */pParentInfo /*: "undefined"*/,
                     userName : securitySrv.getUser().name,

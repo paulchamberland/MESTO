@@ -44,10 +44,13 @@ try {
 	$con = new PDO("mysql:host=localhost;dbname=mesto", "root", "");
 	$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
-    if (empty($data['id']) && !isset($data['activity'])) {
+    if (!isset($data['id']) && !isset($data['activity']) && !isset($data['username'])) {
         $stmt = $con->prepare("SELECT id, username, name, email, title, supervisor, fk_userRoleId, active, approved, address, phone, updateBy, updateDate FROM mtuser ORDER BY id");
 	}
-    else if (!empty($data['activity']) && $data['activity'] == "login" && !empty($data['id'])) {
+    else if (isset($data['username']) && !isset($data['id']) && !isset($data['activity'])) {
+        $stmt = $con->prepare("SELECT id, username, name, email, title, supervisor, fk_userRoleId, active, approved, address, phone, updateBy, updateDate FROM mtuser WHERE username = '".$data['username']."'");
+	}
+    else if (isset($data['activity']) && $data['activity'] == "login" && isset($data['id'])) {
         $stmt = $con->prepare("SELECT u.*, ur.list_permissions FROM mtuser u LEFT JOIN userrole ur ON u.fk_userRoleId = ur.id WHERE u.id = '".$data['id']."'");
     }
     else {
