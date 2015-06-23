@@ -2,7 +2,16 @@ app.controller('mapCTL', function($scope, $compile, $location, navigateSrv, secu
     var self = this;
     $scope.isAutorizeSeeDetailsSite = securitySrv.isAuthorized('detailSite');
     
-    var map = googleMap.getMap(); // create or get the current instance of Map.
+    var map = null;// create or get the current instance of Map.
+    
+    this.initMap = function(pMap, pLat, pLon) {
+        if (pMap == "mini") {
+            map = googleMap.getMiniMap(parseFloat(pLat), parseFloat(pLon));
+        }
+        else {
+            map = googleMap.getMap();
+        }
+    }
     
     var markers = [];
     var lstSites = [];
@@ -54,6 +63,9 @@ app.controller('mapCTL', function($scope, $compile, $location, navigateSrv, secu
                 });
             });
         });
+    };
+    this.createMarker = function(pSite) {
+        googleMap.factoryMarker(pSite.latitude, pSite.longitude, map, pSite.reference, "");
     };
     
     $scope.seeSiteDetails = function(siteIndex) {

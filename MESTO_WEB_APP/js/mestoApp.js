@@ -413,12 +413,9 @@ app.factory('securitySrv', function($http, $location, Idle) {
 });
 
 app.factory('googleMap', function() {
-    var mapOptions = {
-        center: { lat: 45.899566, lng: -72.894373},
-        zoom: 8
-    };
-    
     var mainMap = null;
+    var miniMap = null;
+    
     var zones = null;
     var info = null;
     var markersCluster = null;
@@ -426,7 +423,8 @@ app.factory('googleMap', function() {
     function getMap() {
         try {
             //if (mainMap == null) {
-                mainMap = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+                mainMap = new google.maps.Map(document.getElementById('map-canvas'), {center: { lat: 45.899566, lng: -72.894373},
+                                                                                      zoom: 8});
             //}
             
             //if (zones == null) {
@@ -445,6 +443,15 @@ app.factory('googleMap', function() {
         return mainMap;
     }
     
+    function getMiniMap(pLat, pLon) {
+        try {
+            miniMap = new google.maps.Map(document.getElementById('map-canvas'), {center: { lat: pLat, lng: pLon}, streetViewControl: false, zoom: 16});
+        }
+        catch (e) {console.error('Something wrong with google'+e);}
+        
+        return miniMap;
+    }
+    
     function showZone() {
         zones.showDocument();
     }
@@ -456,15 +463,17 @@ app.factory('googleMap', function() {
     function factoryMarker(latitude, longitude, map, title, strInfoContent, linkClicker) {
         var mk = null;
         try {
-            var mk = new google.maps.Marker({position: new google.maps.LatLng(latitude, longitude), map: map, title: title, animation: google.maps.Animation.DROP});
+            mk = new google.maps.Marker({position: new google.maps.LatLng(latitude, longitude), map: map, title: title, animation: google.maps.Animation.DROP});
             
-            google.maps.event.addListener(mk, 'click', function() {
-                info.setContent(strInfoContent);
-                $('.link').click(linkClicker);
-                info.open(map, mk);  
-            });
+            if (info != null) {
+                google.maps.event.addListener(mk, 'click', function() {
+                    info.setContent(strInfoContent);
+                    $('.link').click(linkClicker);
+                    info.open(map, mk);  
+                });
+            }
         }
-        catch(e) {console.error('Something wrong with google'+e.message);}
+        catch(e) {console.error('Something wrong with google'+e);}
         
         return mk;
     }
@@ -480,12 +489,15 @@ app.factory('googleMap', function() {
     }
     
     function setLoadFunctionOnInfoWindow(onload) {
-        google.maps.event.addListener(info, 'domready', function() {
-           onload();
-        });
+        if (info != null) {
+            google.maps.event.addListener(info, 'domready', function() {
+               onload();
+            });
+        }
     }
     
     return { getMap : getMap,
+            getMiniMap : getMiniMap,
             hideZone : hideZone,
             showZone : showZone,
             factoryMarker : factoryMarker,

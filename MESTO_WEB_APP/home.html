@@ -7,7 +7,7 @@
         </style>
         <div id="menu" data-ng-controller="loginCTL as loginCTL" data-ng-include="'menu.html'" style="position: relative; z-index: 1" ></div>
         <div id="map-canvas">Google Earth Not available</div>
-        <div data-ng-controller="mapCTL as mapCTL" data-ng-init="mapCTL.createMarkers(siteCTL.getListSites());mapCTL.initFilter(ROLE, ORGANIZATION);">
+        <div data-ng-controller="mapCTL as mapCTL" data-ng-init="mapCTL.initMap();mapCTL.createMarkers(siteCTL.getListSites());mapCTL.initFilter(ROLE, ORGANIZATION);">
             <div id="slideFilter" class="slider">
                 <span>Filters</span>
                 <div class="slider_inner">
