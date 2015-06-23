@@ -136,6 +136,28 @@ describe('Testing the controller of equipment object', function() {
             expect(navigateSrv.getEquip()).toEqual(equip);
         });
         
+        it('Testing: seeEquipmentDetails function', function() {
+            var equip = {id: "1",
+                            serialNumber :"432-43453454-4ref4",
+                            barCode :"code",
+                            manufacturer :"avenger",
+                            model :"XW-5",
+                            type:"HUB"};
+            
+            spyOn(location, 'path');
+            
+            controller.seeEquipmentDetails(equip); // Security ON
+            
+            expect(location.path).not.toHaveBeenCalled();
+            expect(navigateSrv.getEquip()).toBeNull();
+            
+            scope.isAutorizeSeeDetailsEquip = true;
+            controller.seeEquipmentDetails(equip); // Security OFF
+            
+            expect(location.path).toHaveBeenCalledWith('/equip');
+            expect(navigateSrv.getEquip()).toEqual(equip);
+        });
+        
         it('Testing: Add a new object Equipement', function() {
             spyOn(location, 'path');
             

@@ -109,6 +109,27 @@ describe('Testing the controller of room object =>', function() {
             expect(navigateSrv.getRoom()).toEqual(room);
         });
         
+        it('Testing: seeRoomDetails function', function() {
+            var room = {id: "1",
+                        roomID :"erv324r23",
+                        pointOfContact :"sgt bilbo",
+                        roomSize :"43",
+                        role:"TC"};
+            
+            spyOn(location, 'path');
+            
+            controller.seeRoomDetails(room); // Security ON
+            
+            expect(location.path).not.toHaveBeenCalled();
+            expect(navigateSrv.getRoom()).toBeNull();
+            
+            scope.isAutorizeSeeDetailsRoom = true;
+            controller.seeRoomDetails(room); // Security OFF
+            
+            expect(location.path).toHaveBeenCalledWith('/room');
+            expect(navigateSrv.getRoom()).toEqual(room);
+        });
+        
         it('Testing: Add a new sub-object Equipment', function() {
             spyOn(location, 'path');
             

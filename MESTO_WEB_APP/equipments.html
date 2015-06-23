@@ -1,21 +1,3 @@
-<script type="text/javascript">
-    /*
-    var mouseX;
-    var mouseY;
-    $(document).mousemove( function(e) {
-         mouseX = e.pageX; 
-         mouseY = e.pageY;
-    });
-    
-    //data-ng-mouseover="equipment = e;console.log('over');"
-    $(".t.ng-scope").mouseover(function(){
-        console.log("test");
-        $('#details').css({'top':mouseY,'left':mouseX}).fadeIn('slow');
-    });
-    $(".t.ng-scope").mouseout(function(){
-        $('#details').fadeOut('slow');
-    });*/
-</script>
 <div id="menu" data-ng-controller="loginCTL as loginCTL" data-ng-include="'menu.html'" style="position: relative; z-index: 1" ></div>
 <div class="main">
 	<div>
@@ -23,27 +5,11 @@
         <span class="error" data-ng-show="lstError">{{lstError}}</span>
 		<table border="1">
             <tr><th>Serial Number</th><th>Model</th></tr>
-			<tr data-ng-repeat="e in equipmentList" data-ng-click="equipCTL.openEquipment(e)">
+			<tr data-ng-repeat="e in equipmentList" data-ng-click="equipCTL.seeEquipmentDetails(e)">
 				<td>{{e.serialNumber}}</td><td>{{e.model}}</td>
 			</tr>
 		</table>
 	</div>
-    
-    <div id="details" class="details">
-        <div class="top">{{equipment.serialNumber}}</div>
-        <div class="core" >
-            <div class="inner first">Bar Code : {{equipment.barCode}}</div>
-            <div class="inner">Manufacturer : {{equipment.manufacturer}}</div>
-            <div class="inner">Model : {{equipment.model}}</div>
-            <div class="inner">HW Config : {{equipment.configHW}}</div>
-            <div class="inner">SW Config : {{equipment.configSW}}</div>
-            <div class="inner">Type : {{equipCTL.getLabelTYPE(equipment.type)}}</div>
-            <div class="inner">Assigned Room : {{equipment.parentRoom.roomID}}</div>
-            <div class="inner last" data-ng-if="equipment.parentRoom.id <= 0">Assigned Site : {{equipment.parentSite.name}}</div>
-            <div class="inner last" data-ng-if="equipment.parentRoom.id > 0">Associate Site : {{equipment.parentRoom.siteName}}</div>
-        </div>
-        <div class="bot"><a class="btn" onclick="$('#details').fadeOut('slow');">Close</a></div>
-    </div>  
     
     <div class="wrap"></div>
 </div>

@@ -82,6 +82,14 @@ app.controller('roomCTL', function($scope, $http, $location, $routeParams, navig
         }
     };
     
+    /** Secure function **/
+    this.seeRoomDetails = function(p_room) {
+        if ($scope.isAutorizeSeeDetailsRoom) {
+            navigateSrv.setRoom(p_room);
+            $location.path("/room");
+        }
+    };
+    
     this.resetFrm = function() {
         self.setRoom(self.emptyRoom);
         $scope.roomForm.$setPristine();

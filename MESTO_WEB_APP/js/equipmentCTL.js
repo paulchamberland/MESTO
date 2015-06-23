@@ -85,6 +85,14 @@ app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, 
         }
     };
     
+    /** Secure function **/
+    this.seeEquipmentDetails = function(p_equip) {
+        if ($scope.isAutorizeSeeDetailsEquip) {
+            navigateSrv.setEquip(p_equip);
+            $location.path("/equip");
+        }
+    };
+    
     this.resetFrm = function() {
         self.setEquipment(self.emptyEquipment);
         $scope.equipmentForm.$setPristine();

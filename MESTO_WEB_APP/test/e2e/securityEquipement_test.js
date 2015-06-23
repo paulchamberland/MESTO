@@ -82,8 +82,7 @@ describe('e2e Equipment Autority : ', function () {
         
         element.all(by.repeater('equipmentList')).last().click();
         browser.sleep(2000);
-        expect(element(by.id("details")).getAttribute("class")).toEqual('details');
-        expect(element(by.id("details")).getAttribute("style")).toEqual('');
+        expect(browser.getCurrentUrl()).toMatch("#/equip");
     });
     
     it('Testing : creating (with button)', function() {

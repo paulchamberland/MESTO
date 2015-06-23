@@ -83,8 +83,7 @@ describe('e2e Room Autority : ', function () {
         
         element.all(by.repeater('roomList')).last().click();
         browser.sleep(2000);
-        expect(element(by.id("details")).getAttribute("class")).toEqual('details');
-        expect(element(by.id("details")).getAttribute("style")).toEqual('');
+        expect(browser.getCurrentUrl()).toMatch("#/room");
     });
     
     it('Testing : creating (with button)', function() {
