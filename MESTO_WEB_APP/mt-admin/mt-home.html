@@ -1,7 +1,26 @@
 <div id="menu" class="v" data-ng-include="'mt-admin/mt-menu.html'"></div> 
-<div class="main" >
-    <span class="titre" style="text-decoration:underline; display:block;">DashBoard</span>
-        
-    <span class="titre" style="text-decoration:underline;font-size:1.2em;">Stream Activity</span><span><a href="#/admin/stream/">See all</a></span>
-    <div id="mini-stream" data-ng-include="'mt-admin/mt-mini-stream.html'"><div>
+<div class="main" style="background-color:#EAEAEA;">
+    <div style="margin: 10px 0px 0px 0px;padding: 5px 0px 0px 5px;border:1px solid black;width:100%;background-color:#FFFFFF;">
+        <span style="text-decoration:underline;font-size:1.2em;font-weight:bold;">Welcome to Mesto</span>
+        <ul style="list-style-type: none;">
+            <li><a style="text-decoration:none; color:black;" href="#/admin/site">Add a site</a></li>
+            <li><a style="text-decoration:none; color:black;" href="#/admin/user">Add a User</a></li>
+            <li><a style="text-decoration:none; color:black;" href="#/admin/equip">Add a Equipment</a></li>
+        </ul>
+    </div>
+    
+    <div data-ng-controller="statisticCTL as statCTL" style="margin: 10px 0px 0px 0px;padding: 5px 0px 0px 5px;border:1px solid black;width:49%;height:323px;float:left;background-color:#FFFFFF;">
+        <span style="text-decoration:underline;font-size:1.2em;font-weight:bold;">At a glance</span>
+        <ul style="list-style-type: none;">
+            <li>{{nbSite}} sites - {{nbSiteModified}} modified last month</li>
+            <li>{{nbUser}} equipments - {{nbUserModified}} modified last month</li>
+            <li>{{nbEquipment}} users - {{nbEquipmentModified}} modified last month</li>
+            <li>{{nbPendingUser}} pending users</li>
+        </ul>
+    </div>
+    
+    <div style="margin: 10px 0px 0px 0px; padding: 5px 0px 0px 0px; border:1px solid black; float:right;width:49%;height:323px;background-color:#FFFFFF;">
+        <span class="titre" style="text-decoration:underline;font-size:1.2em;">Stream Activity</span><span><a href="#/admin/stream/">See all</a></span>
+        <div  id="mini-stream" data-ng-include="'mt-admin/mt-mini-stream.html'"></div>
+    </div>
 </div>
