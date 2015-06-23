@@ -5,8 +5,10 @@ app.config(function($routeProvider, IdleProvider) {
     $routeProvider.when('/site', {templateUrl:'site.html', controller:'siteCTL', controllerAs:'siteCTL'});
     $routeProvider.when('/sites', {templateUrl:'sites.html', controller:'siteCTL', controllerAs:'siteCTL'});
     $routeProvider.when('/room', {templateUrl:'room.html', controller:'roomCTL', controllerAs:'roomCTL'});
+    $routeProvider.when('/room/:roomID', {templateUrl:'room.html', controller:'roomCTL', controllerAs:'roomCTL'});
     $routeProvider.when('/rooms', {templateUrl:'rooms.html', controller:'roomCTL', controllerAs:'roomCTL'});
     $routeProvider.when('/equip', {templateUrl:'equipment.html', controller:'equipmentCTL', controllerAs:'equipCTL'});
+    $routeProvider.when('/equip/:serialNumber', {templateUrl:'equipment.html', controller:'equipmentCTL', controllerAs:'equipCTL'});
     $routeProvider.when('/equips', {templateUrl:'equipments.html', controller:'equipmentCTL', controllerAs:'equipCTL'});
     $routeProvider.when('/admin', {templateUrl:'mt-admin/mt-login.html'});
     $routeProvider.when('/admin/home', {templateUrl:'mt-admin/mt-home.html'});

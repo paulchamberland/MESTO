@@ -5,7 +5,9 @@
         <div class="streambox">
             <span style="text-decoration:underline; margin:5px; display:inline-block"><span style="font-size:1.2em;font-weight:bold">{{a.userName}}</span>, <span style="font-size:0.9em;">{{a.date}}</span></span>
             <span style="color:darkgrey; display:block; margin-left:10px; font-size:0.9em;">as {{a.title}}</span>
-            <span style="display:block;margin:15px 5px 5px 5px;">Did a {{a.action}} of a {{a.concern}} in the {{a.parent.role}} - {{a.parent.info}}</span>
+            <span style="display:block;margin:15px 5px 5px 5px;" data-ng-if="a.action != 'deletion'">Did a {{a.action}} of a <a href="#/{{a.concernObject}}/{{a.concernUnique}}">{{a.concern}}</a> in the {{a.parent.role}} - {{a.parent.info}}</span>
+            <span style="display:block;margin:15px 5px 5px 5px;" data-ng-if="a.action == 'deletion'">Did a {{a.action}} of a {{a.concern}} in the {{a.parent.role}} - {{a.parent.info}}</span>
+        </div>
         </div>
     </div>
     
