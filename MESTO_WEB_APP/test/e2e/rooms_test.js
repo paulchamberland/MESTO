@@ -250,6 +250,7 @@ describe('E2E: Room => ', function() {
             expect(element(by.model('room.roomSize')).getAttribute("value")).toEqual('24');
             expect(element(by.model('room.role')).$('option:checked').getText()).toEqual('Telecom');
             expect(element(by.model('room.parentSite.name')).getAttribute("value")).not.toEqual('');
+            expect(element(by.binding('room.updateBy')).getText()).toMatch('Protractor');
             
             element(by.id('btnDelete')).click();
         });

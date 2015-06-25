@@ -197,6 +197,7 @@ describe('E2E: UserRole => ', function() {
             expect(element(by.model('userRole.name')).getAttribute("value")).toEqual('testE2E');
             expect(element(by.model('userRole.description')).getAttribute("value")).toEqual('description');
             expect(element.all(by.options('perm.codeName as perm.name for perm in lstSelectedPermissionsObj')).count()).toEqual(1);
+            expect(element(by.binding('userRole.updateBy')).getText()).toMatch('Protractor');
             
             element(by.id('btnDelete')).click();
         });

@@ -323,6 +323,7 @@ describe('E2E: User => ', function() {
             expect(element(by.model('user.title')).getAttribute("value")).toEqual('test title');
             expect(element(by.model('user.active')).isSelected()).toBeTruthy();
             expect(element(by.model('user.address')).getAttribute("value")).toEqual('test adr');
+            expect(element(by.binding('user.updateBy')).getText()).toMatch('Protractor');
                     
             element(by.id('btnDelete')).click();
         });

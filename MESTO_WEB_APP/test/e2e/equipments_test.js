@@ -227,6 +227,7 @@ describe('E2E: Equipment => ', function() {
             expect(element(by.model('equipment.configSW')).getAttribute("value")).toEqual('config 2');
             expect(element(by.model('equipment.type')).$('option:checked').getText()).toEqual('Server');
             expect(element(by.model('equipment.parentRoom.roomID')).getAttribute("value")).not.toEqual('');
+            expect(element(by.binding('equipment.updateBy')).getText()).toMatch('Protractor');
                     
             element(by.id('btnDelete')).click();
         });

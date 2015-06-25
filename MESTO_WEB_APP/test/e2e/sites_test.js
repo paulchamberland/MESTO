@@ -558,6 +558,7 @@ describe('E2E: Site => ', function() {
             expect(element(by.model('site.techPoC')).getAttribute("value")).toEqual('Sgt. Soprano');
             expect(element(by.model('site.phoneTechPoC')).getAttribute("value")).toEqual('514-555-4321');
             expect(element(by.model('site.employesNumber')).getAttribute("value")).toEqual('200');
+            expect(element(by.binding('site.updateBy')).getText()).toMatch('Protractor');
             
             element(by.id('btnDelete')).click();
         });
