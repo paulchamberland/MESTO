@@ -36,7 +36,7 @@ try {
         if (empty($room['id'])) {
             if ($rs[0]['nbRoom'] == 0) {
                 $sql = 'INSERT INTO room (roomID, pointOfContact, technicalPointOfContact, role, roomSize, fk_siteId, updateBy, updateDate)'
-                    .' values ("'.$room['roomID'].'","'.$room['pointOfContact'].'","'.$room['technicalPointOfContact'].'","'.$room['role'].'","'.$room['roomSize'].'","'.$room['parentSiteKey'].'","apps", NOW())';
+                    .' values ("'.$room['roomID'].'","'.$room['pointOfContact'].'","'.$room['technicalPointOfContact'].'","'.$room['role'].'","'.$room['roomSize'].'","'.$room['parentSiteKey'].'","'.$room['updateBy'].'", NOW())';
                 $con->exec($sql);
                 $arr["msg"] = "Room created successfully!!!";
             } else {
@@ -45,7 +45,7 @@ try {
         }
         else {
             if ($rs[0]['nbRoom'] == 0) {
-                $sql = 'UPDATE room SET roomID="'.$room['roomID'].'", pointOfContact="'.$room['pointOfContact'].'", technicalPointOfContact="'.$room['technicalPointOfContact'].'", role="'.$room['role'].'", roomSize="'.$room['roomSize'].'", fk_siteId="'.$room['parentSiteKey'].'", updateBy="apps", updateDate=NOW() WHERE id="'.$room['id'].'"';
+                $sql = 'UPDATE room SET roomID="'.$room['roomID'].'", pointOfContact="'.$room['pointOfContact'].'", technicalPointOfContact="'.$room['technicalPointOfContact'].'", role="'.$room['role'].'", roomSize="'.$room['roomSize'].'", fk_siteId="'.$room['parentSiteKey'].'", updateBy="'.$room['updateBy'].'", updateDate=NOW() WHERE id="'.$room['id'].'"';
                 $con->exec($sql);
                 $arr["msg"] = "Room updated successfully!!!";
             } else {

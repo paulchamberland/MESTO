@@ -13,7 +13,9 @@ describe('Testing the controller of room object =>', function() {
                         name:"",
                         role:""
                     },
-                    lstEquips:[]};
+                    lstEquips:[],
+                    updateBy: "",
+                    updateDate: ""};
                     
     beforeEach(inject(function(_$controller_, $rootScope, _enumManagerSrv_){
         // The injector unwraps the underscores (_) from around the parameter names when matching
@@ -42,7 +44,9 @@ describe('Testing the controller of room object =>', function() {
                         name:"",
                         role:""
                     },
-                    lstEquips:[]};
+                    lstEquips:[],
+                    updateBy: "",
+                    updateDate: ""};
         
         expect(scope.room).toEqual(room);
         

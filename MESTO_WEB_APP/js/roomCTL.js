@@ -17,7 +17,9 @@ app.controller('roomCTL', function($scope, $http, $location, $routeParams, navig
                         name:"",
                         role:""
                     },
-                    lstEquips:[]};
+                    lstEquips:[],
+                    updateBy: "",
+                    updateDate: ""};
     this.emptyRoom = {};
     $scope.canDelete = false; // Flag disable button delete
     $scope.canSave = true;
@@ -113,7 +115,8 @@ app.controller('roomCTL', function($scope, $http, $location, $routeParams, navig
                     technicalPointOfContact : $scope.room.technicalPointOfContact,
                     roomSize : $scope.room.roomSize,
                     role : $scope.room.role,
-                    parentSiteKey : $scope.room.parentSite.id
+                    parentSiteKey : $scope.room.parentSite.id,
+                    updateBy : securitySrv.getUserName()
                 },
                 headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
             }).success(

@@ -9,7 +9,7 @@
             <div class="inner">Role : {{roomCTL.getLabelROLE(room.role)}}</div>
             <div class="inner">Assigned Site : {{room.parentSite.name}}</div>
                     
-            <div class="inner last">
+            <div class="inner">
                 <span style="font-weight: bold; font-size: 12px;">Equipments of this building</span>
                 <span class="error" data-ng-show="lstEquipErr">{{lstEquipErr}}</span>
                 <table border="1">
@@ -19,6 +19,8 @@
                     </tr>
                 </table>
             </div>
+            <hr>
+            <div class="inner last">Last update : {{room.updateBy}}, {{room.updateDate}}</div>
         </div>
         <div class="bot"></div>
     </div>

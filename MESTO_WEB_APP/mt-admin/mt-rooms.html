@@ -11,6 +11,7 @@
         <span class="t">{{SQLMsgs}}</span>
 		<form class="basic" name="roomForm" novalidate >
 			<input type="hidden" id="id" name="id" data-ng-model="room.id" />
+            <div style="position:absolute;right:5px;top:0px;" data-ng-if="room.id > 0">Last update : {{room.updateBy}}, {{room.updateDate}}</div>
 			<div class="section">
 				<div class="field"><label for="roomID">Room ID * :</label><input type="text" id="roomID" name="roomID" data-ng-model="room.roomID" required /></div>
 				<div class="field"><label for="PoC">Point of Contact :</label><input type="text" id="PoC" name="pointOfContact" data-ng-model="room.pointOfContact" /></div>
