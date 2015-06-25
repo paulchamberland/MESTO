@@ -447,7 +447,7 @@ app.factory('googleMap', function() {
         try {
             miniMap = new google.maps.Map(document.getElementById('map-canvas'), {center: { lat: pLat, lng: pLon}, streetViewControl: false, zoom: 16});
         }
-        catch (e) {console.error('Something wrong with google'+e);}
+        catch (e) {console.error('Something wrong with google::'+e);}
         
         return miniMap;
     }
@@ -473,7 +473,7 @@ app.factory('googleMap', function() {
                 });
             }
         }
-        catch(e) {console.error('Something wrong with google'+e);}
+        catch(e) {console.error('Something wrong with google::'+e);}
         
         return mk;
     }
