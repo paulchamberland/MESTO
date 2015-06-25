@@ -10,6 +10,7 @@
         <span class="t">{{SQLMsgs}}</span>
 		<form class="basic" name="equipmentForm" novalidate >
 			<input type="hidden" id="id" name="id" data-ng-model="equipment.id" />
+            <div style="position:absolute;right:5px;top:0px;" data-ng-if="equipment.id > 0">Last update : {{equipment.updateBy}}, {{equipment.updateDate}}</div>
 			<div class="section">
 				<div class="field"><label for="serialNumber">Serial number * :</label><input type="text" id="serialNumber" name="serialNumber" data-ng-model="equipment.serialNumber" required /></div>
 				<div class="field"><label for="barCode">Bar Code :</label><input type="text" id="barCode" name="barCode" data-ng-model="equipment.barCode" /></div>

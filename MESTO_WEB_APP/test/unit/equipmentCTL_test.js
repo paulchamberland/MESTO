@@ -20,7 +20,9 @@ describe('Testing the controller of equipment object', function() {
                                 id:"",
                                 name:"",
                                 role:""
-                            }};
+                            },
+                            updateBy: "",
+                            updateDate: ""};
     beforeEach(inject(function(_$controller_, $rootScope, _securitySrv_, _enumManagerSrv_){
         // The injector unwraps the underscores (_) from around the parameter names when matching
         scope = $rootScope;//.$new();
@@ -67,7 +69,9 @@ describe('Testing the controller of equipment object', function() {
                             id:"",
                             name:"",
                             role:""
-                        }};
+                        },
+                        updateBy: "",
+                        updateDate: ""};
         
         expect(scope.equipment).toEqual(equipment);
         

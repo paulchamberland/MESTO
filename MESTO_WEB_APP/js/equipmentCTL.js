@@ -21,7 +21,9 @@ app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, 
                         id:"",
                         name:"",
                         role:""
-                    }};
+                    },
+                    updateBy: "",
+                    updateDate: ""};
     this.emptyEquipment = {};
     $scope.canDelete = false;
     $scope.canSave = true;
@@ -119,7 +121,8 @@ app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, 
                     configSW : $scope.equipment.configSW,
                     type : $scope.equipment.type,
                     parentRoomKey : ($scope.equipment.parentRoom) ? $scope.equipment.parentRoom.id : "",
-                    parentSiteKey : ($scope.equipment.parentSite) ? $scope.equipment.parentSite.id : ""
+                    parentSiteKey : ($scope.equipment.parentSite) ? $scope.equipment.parentSite.id : "",
+                    updateBy : securitySrv.getUserName()
                 },
                 headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
             }).success(

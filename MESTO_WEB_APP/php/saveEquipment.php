@@ -46,7 +46,8 @@ try {
         if (empty($equip['id'])) {
             if ($rs[0]['nbEquip'] == 0) {
                 $sql = 'INSERT INTO equipment (serialNumber, barCode, manufacturer, model, configHW, configSW, type, fk_roomId, fk_siteId, updateBy, updateDate)'
-                    .' values ("'.$equip['serialNumber'].'","'.$equip['barCode'].'","'.$equip['manufacturer'].'","'.$equip['model'].'","'.$equip['configHW'].'","'.$equip['configSW'].'","'.$equip['type'].'","'.$equip['parentRoomKey'].'","'.$equip['parentSiteKey'].'","apps", NOW())';
+                    .' values ("'.$equip['serialNumber'].'","'.$equip['barCode'].'","'.$equip['manufacturer'].'","'.$equip['model'].'","'.$equip['configHW'].'","'.$equip['configSW']
+                    .'","'.$equip['type'].'","'.$equip['parentRoomKey'].'","'.$equip['parentSiteKey'].'","'.$equip['updateBy'].'", NOW())';
                 $con->exec($sql);
                 $arr["msg"] = "Equipment created successfully!!!";
             } else {
@@ -55,7 +56,7 @@ try {
         }
         else {
             if ($rs[0]['nbEquip'] == 0) {
-                $sql = 'UPDATE equipment SET serialNumber="'.$equip['serialNumber'].'", barCode="'.$equip['barCode'].'", manufacturer="'.$equip['manufacturer'].'", model="'.$equip['model'].'", configHW="'.$equip['configHW'].'", configSW="'.$equip['configSW'].'", type="'.$equip['type'].'", fk_roomId="'.$equip['parentRoomKey'].'", fk_siteId="'.$equip['parentSiteKey'].'", updateBy="apps", updateDate=NOW() WHERE id="'.$equip['id'].'"';
+                $sql = 'UPDATE equipment SET serialNumber="'.$equip['serialNumber'].'", barCode="'.$equip['barCode'].'", manufacturer="'.$equip['manufacturer'].'", model="'.$equip['model'].'", configHW="'.$equip['configHW'].'", configSW="'.$equip['configSW'].'", type="'.$equip['type'].'", fk_roomId="'.$equip['parentRoomKey'].'", fk_siteId="'.$equip['parentSiteKey'].'", updateBy="'.$equip['updateBy'].'", updateDate=NOW() WHERE id="'.$equip['id'].'"';
                 $con->exec($sql);
                 $arr["msg"] = "Equipment updated successfully!!!";
             } else {
