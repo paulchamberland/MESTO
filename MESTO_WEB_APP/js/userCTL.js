@@ -13,7 +13,9 @@ app.controller('userCTL', function($scope, $http, $location, $routeParams, navig
                     active : false,
                     approved : false,
                     address :"",
-                    phone:""};
+                    phone:"",
+                    updateBy: "",
+                    updateDate: ""};
     this.emptyUser = {};
     $scope.canDelete = false;
     $scope.canSave = true;
@@ -118,7 +120,8 @@ app.controller('userCTL', function($scope, $http, $location, $routeParams, navig
                     active : $scope.user.active,
                     approved : $scope.user.approved,
                     address : $scope.user.address,
-                    phone : $scope.user.phone
+                    phone : $scope.user.phone,
+                    updateBy : securitySrv.isLogged() ? securitySrv.getUserName() : "visitor"
                 },
                 headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
             }).success(

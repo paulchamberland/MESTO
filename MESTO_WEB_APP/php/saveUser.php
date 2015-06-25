@@ -33,7 +33,7 @@ try {
             if ($rs[0]['nbUser'] == 0) {
                 $sql = 'INSERT INTO mtuser (username, password, name, email, title, supervisor, fk_userRoleId, active, approved, address, phone, updateBy, updateDate)'
                     .' values ("'.$user['username'].'","'.password_hash($user['password'], PASSWORD_BCRYPT).'","'.$user['name'].'","'.$user['email'].'","'
-                        .$user['title'].'","'.$user['supervisor'].'","'.$user['role'].'","'.$user['active'].'","'.$user['approved'].'","'.$user['address'].'","'.$user['phone'].'","apps", NOW())';
+                        .$user['title'].'","'.$user['supervisor'].'","'.$user['role'].'","'.$user['active'].'","'.$user['approved'].'","'.$user['address'].'","'.$user['phone'].'","'.$user['updateBy'].'", NOW())';
                 $con->exec($sql);
                 $arr["msg"] = "User created successfully!!!";
             } else {
@@ -45,7 +45,7 @@ try {
                 $sql = 'UPDATE mtuser SET username="'.$user['username'];
                 if (!empty($user['password'])) $sql .= '", password="'.password_hash($user['password'], PASSWORD_BCRYPT);
                 $sql .= '", name="'.$user['name'].'", email="'.$user['email'].'", title="'.$user['title'].'", supervisor="'.$user['supervisor']
-                .'", fk_userRoleId="'.$user['role'].'", active="'.$user['active'].'", approved="'.$user['approved'].'", address="'.$user['address'].'", phone="'.$user['phone'].'", updateBy="apps", updateDate=NOW() WHERE id="'.$user['id'].'"';
+                .'", fk_userRoleId="'.$user['role'].'", active="'.$user['active'].'", approved="'.$user['approved'].'", address="'.$user['address'].'", phone="'.$user['phone'].'", updateBy="'.$user['updateBy'].'", updateDate=NOW() WHERE id="'.$user['id'].'"';
                 
                 $con->exec($sql);
                 $arr["msg"] = "User updated successfully!!!";

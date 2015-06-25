@@ -15,6 +15,7 @@
         <span class="t">{{SQLMsgs}}</span>
 		<form class="basic" name="userForm" novalidate >
 			<input type="hidden" id="id" name="id" data-ng-model="user.id" />
+            <div style="position:absolute;right:5px;top:0px;" data-ng-if="user.id > 0">Last update : {{user.updateBy}}, {{user.updateDate}}</div>
 			<div class="section">
 				<div class="field"><label for="email">Email *(lowercase only) :</label><input type="text" id="email" name="email" data-ng-model="user.email" required data-ng-pattern="/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/" /></div>
                 <div class="field"><label for="username">UserName * :</label><input type="text" id="username" name="username" data-ng-model="user.username" required /></div>

@@ -13,7 +13,9 @@ describe('Testing the controller of user object => ', function() {
                     active : false,
                     approved : false,
                     address :"",
-                    phone:""};
+                    phone:"",
+                    updateBy: "",
+                    updateDate: ""};
 
     beforeEach(inject(function(_$controller_, $rootScope) {
         scope = $rootScope;
@@ -34,7 +36,9 @@ describe('Testing the controller of user object => ', function() {
                     active : false,
                     approved : false,
                     address :"",
-                    phone:""};
+                    phone:"",
+                    updateBy: "",
+                    updateDate: ""};
         
         expect(scope.user).toEqual(user);
         
