@@ -78,7 +78,7 @@
                     <div class="field"><label for="siteName">Name * :</label><input type="text" id="siteName" name="siteName" data-ng-model="site.siteName" required /></div>
                     <div class="field"><label for="description">description:</label><textarea cols="38" rows="5" id="description" name="description" data-ng-model="site.description"></textarea></div>
                     <div class="field"><label for="isTemporary">Is temporary?</label>
-                        <input type="checkbox" id="isTemporary" name="isTemporary" data-ng-checked="site.isTemporary == true" data-ng-model="site.isTemporary"/>
+                        <input type="checkbox" id="isTemporary" name="isTemporary" data-ng-true-value="'1'" data-ng-false-value="'0'" data-ng-model="site.isTemporary"/>
                     </div>
                     <div class="field"><label for="startDate">start date (dd-MM-yyyy):</label>
                         <input type="text" id="startDate" name="startDate" data-ng-model="site.startDate" data-ng-keyup="siteCTL.validEndDate()"
