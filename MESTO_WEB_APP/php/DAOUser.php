@@ -44,7 +44,10 @@ try {
 	$con = new PDO("mysql:host=localhost;dbname=mesto", "root", "");
 	$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
-    if (!isset($data['id']) && !isset($data['activity']) && !isset($data['username'])) {
+    if (isset($data['activity']) && $data['activity'] == 'loadPending') {
+        $stmt = $con->prepare("SELECT * FROM mtuser WHERE approved = '0'");
+    }
+    else if (!isset($data['id']) && !isset($data['activity']) && !isset($data['username'])) {
         $stmt = $con->prepare("SELECT id, username, name, email, title, supervisor, fk_userRoleId, active, approved, address, phone, updateBy, updateDate FROM mtuser ORDER BY id");
 	}
     else if (isset($data['username']) && !isset($data['id']) && !isset($data['activity'])) {

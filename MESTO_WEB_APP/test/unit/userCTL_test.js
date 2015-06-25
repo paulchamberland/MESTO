@@ -637,6 +637,43 @@ describe('Testing the controller of user object => ', function() {
                 expect(scope.SQLErrors).not.toBeDefined();
                 expect(scope.user).toEqual({test:"test"});
             });
+            
+            it('Testing: Failed to load list of pending User', function() {
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('[{"test":"test"}]'); // CTR init
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond(200, '{"msg":"", "error":"Database error"}');
+                
+                controller.loadOnlyPending();
+                $httpBackend.flush();
+                
+                expect(scope.lstError).toEqual("Database error");
+                expect(scope.userList).toEqual([{"test":"test"}]);
+            });
+            it('Testing: Error to load list of pending User', function() {
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond('[{"test":"test"}]'); // CTR init
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond(500, '{"msg":"", "error":"error"}');
+                
+                controller.loadOnlyPending();
+                $httpBackend.flush();
+                
+                expect(scope.lstError).toEqual("error: 500:undefined");
+                expect(scope.userList).toEqual([{"test":"test"}]);
+            });
+            it('Testing: Success to load list of pending User', function() {
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond(''); // CTR init
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUserRole.php').respond([{}]);
+                $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOUser.php').respond(200, '[{"user":"harold"}]');
+                
+                controller.loadOnlyPending();
+                $httpBackend.flush();
+                
+                expect(scope.lstError).not.toBeDefined();
+                expect(scope.userList).toEqual([{"user":"harold"}]);
+            });
         });
     });
 });

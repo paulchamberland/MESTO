@@ -269,6 +269,32 @@ app.controller('userCTL', function($scope, $http, $location, $routeParams, navig
         );
     };
     
+    this.loadOnlyPending = function() {
+        $http({
+                method: 'POST',
+                url: "/MESTO/MESTO_WEB_APP/php/DAOUser.php", // TODO: Make a config with path
+                data: {
+                    activity : 'loadPending'
+                },
+                headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+        }).success( // TODO: Make a config with path
+            function(data) {
+                if (data.error == null) {
+                    $scope.userList = data;
+                }
+                else {
+                    $scope.lstError = data.error;
+                }
+            }
+        ).error(
+            function(data, status, headers, config, statusText) {
+                // TODO: error server handling
+                $scope.lstError = "error: "+status+":"+statusText;
+                //$scope.error = "error: "+data+" -- "+status+" -- "+headers+" -- "+config;
+            }
+        );
+    };
+    
     this.loadRolesList = function() {
         $http.post("/MESTO/MESTO_WEB_APP/php/DAOUserRole.php").success( // TODO: Make a config with path
             function(data) {
