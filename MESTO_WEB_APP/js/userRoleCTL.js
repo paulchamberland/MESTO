@@ -181,6 +181,8 @@ app.controller('userRoleCTL', function($scope, $http, $location, $routeParams, n
                 if (data.error == null) {
                     $scope.userRole = data[0];
                     $scope.userRole.lstPermissions = $scope.userRole.lstPermissions.split(',');
+                    self.affectPermissions(null, null);
+                    self.setLstAvailablePermissions(self.getLstSelectedPermissionsObj())
                 }
                 else {
                     $scope.SQLErrors = data.error;

@@ -16,13 +16,13 @@
 			</div>
             <div>
                 <span>Available Permissions:</span>
-                <span style="float:right;">Affected Permissions:</span>
+                <span style="position:relative; left:110px;">Affected Permissions:</span>
             </div>
             <div style="display:inline-block;" data-ng-init="userRoleCTL.affectPermissions(null, null); userRoleCTL.setLstAvailablePermissions(userRoleCTL.getLstSelectedPermissionsObj()); ">
                 <select id="" class="lstPerm" ng-model="TEMP2" name="" ng-options="avaiPerm.codeName as avaiPerm.name for avaiPerm in lstAvailablePermissions" size="15" multiple>
                 </select>
-                <a id="btnUnaffectPerm" class="btn" data-ng-click="userRoleCTL.unaffectPermissions(TEMP);userRoleCTL.setLstAvailablePermissions(userRoleCTL.getLstSelectedPermissionsObj())"><-</a>
-                <a id="btnAffectPerm" class="btn" data-ng-click="userRoleCTL.affectPermissions(TEMP2, lstAvailablePermissions);userRoleCTL.setLstAvailablePermissions(userRoleCTL.getLstSelectedPermissionsObj())">-></a>
+                <a id="btnUnaffectPerm" class="btn" style="position:relative;top:-120px;" data-ng-click="userRoleCTL.unaffectPermissions(TEMP);userRoleCTL.setLstAvailablePermissions(userRoleCTL.getLstSelectedPermissionsObj())"><-</a>
+                <a id="btnAffectPerm" class="btn" style="position:relative;top:-120px;" data-ng-click="userRoleCTL.affectPermissions(TEMP2, lstAvailablePermissions);userRoleCTL.setLstAvailablePermissions(userRoleCTL.getLstSelectedPermissionsObj())">-></a>
             </div>
             
             <div style="display:inline-block;">
