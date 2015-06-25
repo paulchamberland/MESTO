@@ -28,7 +28,7 @@ try {
                 $sql = 'INSERT INTO site (reference, latitude, longitude, siteName, description, address, city, province, country, postalCode, isTemporary, startDate, endDate, role, pointOfContact, phoneNumberPoC, techPoC, phoneTechPoC, employesNumber, organization, updateBy, updateDate)'
                     .' values ("'.$site['reference'].'","'.$site['latitude'].'","'.$site['longitude'].'","'.$site['siteName'].'","'.$site['description'].'","'.$site['address']
                     .'","'.$site['city'].'","'.$site['province'].'","'.$site['country'].'","'.$site['postalCode'].'","'.$site['isTemporary'].'","'.$site['startDate']
-                    .'","'.$site['endDate'].'","'.$site['role'].'","'.$site['pointOfContact'].'","'.$site['phoneNumberPoC'].'","'.$site['techPoC'].'","'.$site['phoneTechPoC'].'","'.$site['employesNumber'].'","'.$site['organization'].'","apps", NOW())';
+                    .'","'.$site['endDate'].'","'.$site['role'].'","'.$site['pointOfContact'].'","'.$site['phoneNumberPoC'].'","'.$site['techPoC'].'","'.$site['phoneTechPoC'].'","'.$site['employesNumber'].'","'.$site['organization'].'","'.$site['updateBy'].'", NOW())';
                 $con->exec($sql);
                 $arr["msg"] = "Site created successfully!!!";
             } else {
@@ -42,7 +42,7 @@ try {
                             .'", country="'.$site['country'].'", postalCode="'.$site['postalCode'].'", isTemporary="'.$site['isTemporary'].'", startDate="'.$site['startDate']
                             .'", endDate="'.$site['endDate'].'", role="'.$site['role'].'", pointOfContact="'.$site['pointOfContact'].'", phoneNumberPoC="'.$site['phoneNumberPoC']
                             .'", techPoC="'.$site['techPoC'].'", phoneTechPoC="'.$site['phoneTechPoC'].'", employesNumber="'.$site['employesNumber'].'", organization="'.$site['organization']
-                            .'", updateBy="apps", updateDate=NOW() WHERE id="'.$site['id'].'"';
+                            .'", updateBy="'.$site['updateBy'].'", updateDate=NOW() WHERE id="'.$site['id'].'"';
                 $con->exec($sql);
                 $arr["msg"] = "Site updated successfully!!!";
             }

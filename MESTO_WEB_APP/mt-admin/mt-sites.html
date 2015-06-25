@@ -22,6 +22,7 @@
         <span class="t">{{SQLMsgs}}</span>
 		<form class="basic" name="siteForm" novalidate >
 			<input type="hidden" id="id" name="id" data-ng-model="site.id" />
+            <div style="position:absolute;right:5px;top:0px;" data-ng-if="site.id > 0">Last update : {{site.updateBy}}, {{site.updateDate}}</div>
 			<div class="section">
 				<div class="field"><label for="reference"># reference * :</label><input type="text" id="reference" name="reference" data-ng-model="site.reference" required /></div>
 				<div class="field"><label for="latitude">latitude * (xxx.xxxxxx):</label><input type="text" id="latitude" name="latitude" data-ng-model="site.latitude" required data-ng-pattern="/^-?[0-9]?[0-9]?[0-9]\.[0-9]{6}$/" /></div>

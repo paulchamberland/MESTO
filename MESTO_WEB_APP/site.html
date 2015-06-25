@@ -6,7 +6,7 @@
             <div class="inner first"># Reference : {{site.reference}}</div>
             <div class="inner">Latitude : {{site.latitude}}</div>
             <div class="inner">Longitude : {{site.longitude}}</div>
-            <div class="inner">Description : {{site.description}}</div>
+            <div class="inner max">Description : {{site.description}}</div>
             <div class="inner">Is temporary? <input type="checkbox" data-ng-checked="site.isTemporary == true" data-ng-model="site.isTemporary" disabled /></div>
             <div class="inner">Start date : {{site.startDate}}</div>
             <div class="inner">End date : {{site.endDate}}</div>
@@ -32,7 +32,7 @@
                     </tr>
                 </table>
             </div>
-            <div class="inner last">
+            <div class="inner">
                 <span style="font-weight: bold; font-size: 12px;">Equipments of this building</span>
                 <span class="error" data-ng-show="lstEquipErr">{{lstEquipErr}}</span>
                 <table border="1">
@@ -45,6 +45,8 @@
             <div data-ng-controller="mapCTL as mapCTL" data-ng-init="mapCTL.initMap('mini', site.latitude, site.longitude);mapCTL.createMarker(site);">
                 <div id="map-canvas" style="position:absolute;top:210px;left:40%;border:1px solid black;width:55%;height:355px;">Google Earth Not available</div>
             </div>
+            <hr>
+            <div class="inner last">Last update : {{site.updateBy}}, {{site.updateDate}}</div>
         </div>
         <div class="bot"><a class="btn" data-ng-if="isAutorizeUpdatingSite" data-ng-click="siteCTL.modifySite();">Modified</a></div>
     </div>

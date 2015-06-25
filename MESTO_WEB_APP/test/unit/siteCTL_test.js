@@ -24,7 +24,9 @@ describe('Testing the controller of site object =>', function() {
                     phoneTechPoC:"",
                     employesNumber:"",
                     lstRooms:[],
-                    lstEquips:[]};
+                    lstEquips:[],
+                    updateBy: "",
+                    updateDate: ""};
                     
     beforeEach(inject(function(_$controller_, $rootScope) {
         scope = $rootScope;
@@ -62,7 +64,9 @@ describe('Testing the controller of site object =>', function() {
                     phoneTechPoC:"",
                     employesNumber:"",
                     lstRooms:[],
-                    lstEquips:[]};
+                    lstEquips:[],
+                    updateBy: "",
+                    updateDate: ""};
         
         expect(scope.site).toEqual(site);
         

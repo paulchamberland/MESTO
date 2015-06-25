@@ -387,6 +387,9 @@ div.main {
 .pageDetails > .core >.inner.last {
     padding-bottom: 10px;
 }
+.pageDetails > .core >.inner.max {
+    max-width: 500px;
+}
 .pageDetails > .top {
     padding: 5px 5px 5px 15px;
     font-size:1.5em;

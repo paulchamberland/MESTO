@@ -41,7 +41,9 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
                     phoneTechPoC:"",
                     employesNumber:"",
                     lstRooms:[],
-                    lstEquips:[]};
+                    lstEquips:[],
+                    updateBy: "",
+                    updateDate: ""};
     this.emptySite = {};
     $scope.canDelete = false;
     $scope.canSave = true;
@@ -160,6 +162,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
                     techPoC : $scope.site.techPoC,
                     phoneTechPoC : $scope.site.phoneTechPoC,
                     employesNumber : $scope.site.employesNumber,
+                    updateBy : securitySrv.getUserName()
                 },
                 headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
             }).success(
