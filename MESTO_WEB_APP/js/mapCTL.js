@@ -65,6 +65,8 @@ app.controller('mapCTL', function($scope, $compile, $location, navigateSrv, secu
         });
     };
     this.createMarker = function(pSite) {
+        if (pSite == null) return;
+        
         googleMap.factoryMarker(pSite.latitude, pSite.longitude, map, pSite.reference, "");
     };
     

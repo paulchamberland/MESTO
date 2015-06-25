@@ -42,6 +42,18 @@ describe('Testing the controller of map =>', function() {
         expect(googleMap.setLoadFunctionOnInfoWindow).toHaveBeenCalled();
     });
     
+    it('Testing: Create unique Marker function', function() {
+        spyOn(googleMap, "factoryMarker");
+                    
+        controller.createMarker();
+        
+        expect(googleMap.factoryMarker).not.toHaveBeenCalled();
+        
+        controller.createMarker({latitude:"21",longitude:"22",reference:"test"});
+        
+        expect(googleMap.factoryMarker).toHaveBeenCalled();
+    });
+    
     it('Testing: seeSiteDetails function', function() {
         spyOn(location, 'path');
         
