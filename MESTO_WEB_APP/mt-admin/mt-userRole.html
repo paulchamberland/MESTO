@@ -9,6 +9,7 @@
         <span class="t">{{SQLMsgs}}</span>
 		<form class="basic" name="userRoleForm" novalidate >
 			<input type="hidden" id="id" name="id" data-ng-model="userRole.id" />
+            <div style="position:absolute;right:5px;top:0px;" data-ng-if="userRole.id > 0">Last update : {{userRole.updateBy}}, {{userRole.updateDate}}</div>
 			<div class="section">
 				<div class="field"><label for="name">Name :</label><input type="text" id="name" name="name" data-ng-model="userRole.name" required /></div>
 				<div class="field"><label for="description">Description:</label><textarea cols="38" rows="5" id="description" name="description" data-ng-model="userRole.description"></textarea></div>

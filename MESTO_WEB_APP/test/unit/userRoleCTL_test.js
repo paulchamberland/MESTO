@@ -5,7 +5,9 @@ describe('Testing the controller of userRole object', function() {
     var emptyUserRole = {id: "",
                     name :"",
                     description :"",
-                    lstPermissions :[]}
+                    lstPermissions :[],
+                    updateBy: "",
+                    updateDate: ""}
     beforeEach(inject(function(_$controller_, $rootScope) {
         scope = $rootScope;
         controller = _$controller_('userRoleCTL', { $scope: scope });
@@ -17,7 +19,9 @@ describe('Testing the controller of userRole object', function() {
         var userRole = {id: "",
                     name :"",
                     description :"",
-                    lstPermissions :[]};
+                    lstPermissions :[],
+                    updateBy: "",
+                    updateDate: ""};
         
         expect(scope.userRole).toEqual(userRole);
         

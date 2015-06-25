@@ -25,7 +25,7 @@ try {
         if (empty($userRole['id'])) {
             if ($rs[0]['nbUserRole'] == 0) {
                 $sql = 'INSERT INTO userrole (name, description, list_permissions, updateBy, updateDate)'
-                    .' values ("'.$userRole['name'].'","'.$userRole['description'].'","'.$userRole['lstPermissions'].'","apps", NOW())';
+                    .' values ("'.$userRole['name'].'","'.$userRole['description'].'","'.$userRole['lstPermissions'].'","'.$userRole['updateBy'].'", NOW())';
                 $con->exec($sql);
                 $arr["msg"] = "Role created successfully!!!";
             } else {
@@ -34,7 +34,7 @@ try {
         }
         else {
             if ($rs[0]['nbUserRole'] == 0) {
-                $sql = 'UPDATE userrole SET name="'.$userRole['name'].'", description="'.$userRole['description'].'", list_permissions="'.$userRole['lstPermissions'].'", updateBy="apps", updateDate=NOW() WHERE id="'.$userRole['id'].'"';
+                $sql = 'UPDATE userrole SET name="'.$userRole['name'].'", description="'.$userRole['description'].'", list_permissions="'.$userRole['lstPermissions'].'", updateBy="'.$userRole['updateBy'].'", updateDate=NOW() WHERE id="'.$userRole['id'].'"';
                 
                 $con->exec($sql);
                 $arr["msg"] = "Role updated successfully!!!";

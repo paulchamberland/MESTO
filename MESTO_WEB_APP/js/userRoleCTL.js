@@ -5,7 +5,9 @@ app.controller('userRoleCTL', function($scope, $http, $location, $routeParams, n
     $scope.userRole = {id: "",
                     name :"",
                     description :"",
-                    lstPermissions :[]}
+                    lstPermissions :[],
+                    updateBy: "",
+                    updateDate: ""}
                     
     $scope.lstSelectedPermissionsObj = [];
     $scope.lstAvailablePermissions = [];
@@ -81,7 +83,8 @@ app.controller('userRoleCTL', function($scope, $http, $location, $routeParams, n
                     id : $scope.userRole.id,
                     name : $scope.userRole.name,
                     description : $scope.userRole.description,
-                    lstPermissions : $scope.userRole.lstPermissions.toString()
+                    lstPermissions : $scope.userRole.lstPermissions.toString(),
+                    updateBy : securitySrv.getUserName()
                 },
                 headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
             }).success(
