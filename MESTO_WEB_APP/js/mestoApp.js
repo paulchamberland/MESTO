@@ -1,4 +1,4 @@
-var app = angular.module('MESTO', ['ngRoute', 'ngIdle']);
+var app = angular.module('MESTO', ['ngRoute', 'ngIdle', 'ui.bootstrap']);
 
 app.config(function($routeProvider, IdleProvider) {
     $routeProvider.when('/home', {templateUrl:'home.html', controller:'siteCTL', controllerAs:'siteCTL'});
