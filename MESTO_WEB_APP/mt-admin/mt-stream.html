@@ -1,5 +1,5 @@
 <div id="menu" class="v" data-ng-include="'mt-admin/mt-menu.html'"></div> 
-<div class="main" data-ng-controller="streamCTL as streamCTL" data-ng-init="streamCTL.loadStream(true, 20)">
+<div class="main admin" data-ng-controller="streamCTL as streamCTL" data-ng-init="streamCTL.loadStream(true, 20)">
     <span class="error" data-ng-show="lstError">{{lstError}}</span>
     <div data-ng-repeat="a in activities">
         <div class="streambox">
