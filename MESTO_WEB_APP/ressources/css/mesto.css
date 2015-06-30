@@ -1,3 +1,7 @@
+html, body {
+ background-color: #F5F5F5;
+}
+
 input[type=text], input[type=password], textarea, select{
     border:1px solid #899caa;
     border-radius:3px;
@@ -293,31 +297,30 @@ div.section2 {
 #map-canvas {
     width: 100%;
     height: 80%;
-    /* padding:10px; */
     position: absolute;
 }
 
 #menu.v {
-    background: #E7E7E7; 
+    position: absolute;
+    background: #3E75A6;
     min-width: 100px;
-    max-width: 189px;
-    width: 15%;
-    height: 100%;
-    /* display:table-cell; */
+    max-width: 160px;
+    width: 14%;
+    height: auto;
+    min-height: 85%;
     float: left;
-    /* vertical-align:top; */
-    /*display: block;
-    float: left;*/
 }
 
 div.main {
-    padding-left:10px;
-    padding-right:10px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 div.admin{
     float: right;
-    width: 85%;
+    width: 87%;
+    height: auto;
+    padding-left: 2px;
 }
 
 .titre {
@@ -327,7 +330,6 @@ div.admin{
 }
 .wrap {
     height:30px;
-    /*margin-bottom:30px;*/
 }
 
 .details {
