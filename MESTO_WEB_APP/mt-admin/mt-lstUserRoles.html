@@ -2,7 +2,7 @@
 <div class="main admin" >
 	<div>
         <h1>UserRole List</h1><a id="btnNewUserRole" class="btn" style="float:right;" data-ng-click="userRoleCTL.newUserRole()" data-ng-if="isAutorizeCreatingRole">Add</a>
-        <span class="error" data-ng-show="lstError">{{lstError}}</span>
+        <alert type="danger" data-ng-show="lstError">{{lstError}}</alert>
 		<table border="1">
             <tr><th>Name</th><th>Description</th><th>List of Permission</th></tr>
 			<tr data-ng-repeat="ur in userRoleList" data-ng-click="userRoleCTL.navigateToUserRole(ur)">

@@ -3,23 +3,23 @@
 	<span class="titre">Add a Site</span>
 	<div>
 		<div data-ng-show="siteForm.$dirty && siteForm.$invalid">
-			<span class="error" data-ng-show="siteForm.reference.$error.required">Reference is required.</span>
-			<span class="error" data-ng-show="siteForm.latitude.$error.required">Latitude is required.</span>
-			<span class="error" data-ng-show="siteForm.latitude.$error.pattern">Invalid latitude format.</span>
-			<span class="error" data-ng-show="siteForm.longitude.$error.required">Longitude is required.</span>
-			<span class="error" data-ng-show="siteForm.longitude.$error.pattern">Invalid longitude format.</span>
-			<span class="error" data-ng-show="siteForm.siteName.$error.required">Name is required.</span>
-			<span class="error" data-ng-show="siteForm.postalCode.$error.pattern">Invalid postal code format.</span>
-			<span class="error" data-ng-show="siteForm.startDate.$error.pattern">Invalid start date format.</span>
-            <span class="error" data-ng-show="siteForm.endDate.$error.required">End date is required for temporary site.</span>
-			<span class="error" data-ng-show="siteForm.endDate.$error.pattern">Invalid end date format.</span>
-            <span class="error" data-ng-show="siteForm.endDate.$error.greaterThan">End date need to be greater than start date.</span>
-			<span class="error" data-ng-show="siteForm.phoneNumberPoC.$error.pattern">Invalid Phone number of PoC format.</span>
-			<span class="error" data-ng-show="siteForm.phoneTechPoC.$error.pattern">Invalid Phone number of Tech PoC format.</span>
-            <span class="error" data-ng-show="siteForm.employesNumber.$error.pattern">Employes number need to be digit only.</span>
+			<alert type="danger" data-ng-show="siteForm.reference.$error.required">Reference is required.</alert>
+			<alert type="danger" data-ng-show="siteForm.latitude.$error.required">Latitude is required.</alert>
+			<alert type="danger" data-ng-show="siteForm.latitude.$error.pattern">Invalid latitude format.</alert>
+			<alert type="danger" data-ng-show="siteForm.longitude.$error.required">Longitude is required.</alert>
+			<alert type="danger" data-ng-show="siteForm.longitude.$error.pattern">Invalid longitude format.</alert>
+			<alert type="danger" data-ng-show="siteForm.siteName.$error.required">Name is required.</alert>
+			<alert type="danger" data-ng-show="siteForm.postalCode.$error.pattern">Invalid postal code format.</alert>
+			<alert type="danger" data-ng-show="siteForm.startDate.$error.pattern">Invalid start date format.</alert>
+            <alert type="danger" data-ng-show="siteForm.endDate.$error.required">End date is required for temporary site.</alert>
+			<alert type="danger" data-ng-show="siteForm.endDate.$error.pattern">Invalid end date format.</alert>
+            <alert type="danger" data-ng-show="siteForm.endDate.$error.greaterThan">End date need to be greater than start date.</alert>
+			<alert type="danger" data-ng-show="siteForm.phoneNumberPoC.$error.pattern">Invalid Phone number of PoC format.</alert>
+			<alert type="danger" data-ng-show="siteForm.phoneTechPoC.$error.pattern">Invalid Phone number of Tech PoC format.</alert>
+            <alert type="danger" data-ng-show="siteForm.employesNumber.$error.pattern">Employes number need to be digit only.</alert>
 		</div>
-        <span class="error">{{SQLErrors}}</span>
-        <span class="t">{{SQLMsgs}}</span>
+        <alert type="danger" data-ng-show="SQLErrors">{{SQLErrors}}</alert>
+        <alert type="success" data-ng-show="SQLMsgs">{{SQLMsgs}}</alert>
 		<form class="basic" name="siteForm" novalidate >
 			<input type="hidden" id="id" name="id" data-ng-model="site.id" />
             <div style="position:absolute;right:5px;top:0px;" data-ng-if="site.id > 0">Last update : {{site.updateBy}}, {{site.updateDate}}</div>
@@ -62,7 +62,7 @@
 	</div>
     <div style="padding-top:15px;">
         <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Rooms of this site</span><a id="btnOpenFreeLstRoom" class="btn" data-ng-if="site.id" data-ng-click="siteCTL.openFreeRoomsList();">Get</a>
-        <span class="error" data-ng-show="lstRoomErr">{{lstRoomErr}}</span>
+        <alert type="danger" data-ng-show="lstRoomErr">{{lstRoomErr}}</alert>
 		<table border="1">
             <tr><th>Room ID</th><th>Point of Contact</th><th></th></tr>
 			<tr data-ng-repeat="r in site.lstRooms" data-ng-click="">
@@ -72,7 +72,7 @@
 	</div>
     <div style="padding-top:15px">
         <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Equipments of this site</span><a id="btnOpenFreeLstEquip" class="btn" data-ng-if="site.id" data-ng-click="siteCTL.openFreeEquipsList();">Get</a>
-        <span class="error" data-ng-show="lstEquipErr">{{lstEquipErr}}</span>
+        <alert type="danger" data-ng-show="lstEquipErr">{{lstEquipErr}}</alert>
 		<table border="1">
             <tr><th>Serial Number</th><th>Model</th><th></th></tr>
 			<tr data-ng-repeat="e in site.lstEquips" data-ng-click="">
@@ -84,7 +84,7 @@
     <div id="lstFreeRooms" class="details" style="top:200px;left:400px;">
         <div class="top">Assigning Rooms</div>
         <div class="core">
-            <div class="inner first"><span class="error" data-ng-show="lstFreeRoomErr">{{lstFreeRoomErr}}</span></div>
+            <div class="inner first"><alert type="danger" data-ng-show="lstFreeRoomErr">{{lstFreeRoomErr}}</alert></div>
             <div class="inner">Choose rooms to associate to this site.</div>
             <div class="inner ">
                 <table border="1">
@@ -105,7 +105,7 @@
     <div id="lstFreeEquips" class="details" style="top:200px;left:400px;">
         <div class="top">Assigning Equipments</div>
         <div class="core">
-            <div class="inner first"><span class="error" data-ng-show="lstFreeEquipErr">{{lstFreeEquipErr}}</span></div>
+            <div class="inner first"><alert type="danger" data-ng-show="lstFreeEquipErr">{{lstFreeEquipErr}}</alert></div>
             <div class="inner">Choose equipments to associate to this site.</div>
             <div class="inner ">
                 <table border="1">

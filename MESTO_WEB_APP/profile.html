@@ -2,14 +2,14 @@
 	<span class="titre">See your user</span>
 	<div>
 		<div data-ng-show="userForm.$dirty && userForm.$invalid">
-			<span class="error" data-ng-show="userForm.email.$error.required">An email is required.</span>
-			<span class="error" data-ng-show="userForm.email.$error.pattern">Invalid email.</span>
-			<span class="error" data-ng-show="userForm.username.$error.required">An username is required.</span>
-            <span class="error" data-ng-show="userForm.role.$error.required">A role is required.</span>
-			<span class="error" data-ng-show="userForm.phone.$error.pattern">Invalid Phone number.</span>
+			<alert type="danger" data-ng-show="userForm.email.$error.required">An email is required.</alert>
+			<alert type="danger" data-ng-show="userForm.email.$error.pattern">Invalid email.</alert>
+			<alert type="danger" data-ng-show="userForm.username.$error.required">An username is required.</alert>
+            <alert type="danger" data-ng-show="userForm.role.$error.required">A role is required.</alert>
+			<alert type="danger" data-ng-show="userForm.phone.$error.pattern">Invalid Phone number.</alert>
 		</div>
-        <span class="error">{{SQLErrors}}</span>
-        <span class="t">{{SQLMsgs}}</span>
+        <alert type="danger" data-ng-show="SQLErrors">{{SQLErrors}}</alert>
+        <alert type="success" data-ng-show="SQLMsgs">{{SQLMsgs}}</alert>
 		<form class="basic" name="userForm" novalidate >
 			<input type="hidden" id="id" name="id" data-ng-model="user.id" />
 			<div class="section">
@@ -31,11 +31,11 @@
     <span class="titre">Change your password</span>
 	<div>
 		<div data-ng-show="userPwdForm.$dirty && userPwdForm.$invalid">
-			<span class="error" data-ng-show="userPwdForm.password.$error.required">A password is required.</span>
-			<span class="error" data-ng-show="userPwdForm.password.$error.pattern">Invalid password, must contain one number, one uppercase, one special symbol [$%?&*!#] and at least 8 characters long.</span>
+			<alert type="danger" data-ng-show="userPwdForm.password.$error.required">A password is required.</alert>
+			<alert type="danger" data-ng-show="userPwdForm.password.$error.pattern">Invalid password, must contain one number, one uppercase, one special symbol [$%?&*!#] and at least 8 characters long.</alert>
 		</div>
-        <span class="error">{{SQLPwdErrors}}</span>
-        <span class="t">{{SQLPwdMsgs}}</span>
+        <alert type="danger" data-ng-show="SQLPwdErrors">{{SQLPwdErrors}}</alert>
+        <alert type="success" data-ng-show="SQLPwdMsgs">{{SQLPwdMsgs}}</alert>
 		<form class="basic" name="userPwdForm" novalidate >
 			<input type="hidden" id="id" name="id" data-ng-model="user.id" />
 			<div class="section">

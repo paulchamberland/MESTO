@@ -2,7 +2,7 @@
 <div class="main admin">
 	<div>
         <h1>Room List</h1><a id="btnNewRoom" class="btn" style="float:right;" data-ng-click="roomCTL.newRoom()" data-ng-if="isAutorizeCreatingRoom">Add</a>
-        <span class="error" data-ng-show="lstError">{{lstError}}</span>
+        <alert type="danger" data-ng-show="lstError">{{lstError}}</alert>
 		<table border="1">
             <tr><th>Room ID</th><th>Point of Contact</th></tr>
 			<tr data-ng-repeat="r in roomList" data-ng-click="roomCTL.navigateToRoom(r)">

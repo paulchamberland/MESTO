@@ -2,7 +2,7 @@
 <div class="main admin" >
 	<div>
         <h1>User List</h1><a id="btnNewUser" class="btn" style="float:right;" data-ng-click="userCTL.newUser()" data-ng-if="isAutorizeCreatingUser">Add</a>
-        <span class="error" data-ng-show="lstError">{{lstError}}</span>
+        <alert type="danger" data-ng-show="lstError">{{lstError}}</alert>
 		<table border="1">
             <tr><th>Username</th><th>Name</th><th>Email</th><th>Role</th><th>Status</th></tr>
 			<tr data-ng-repeat="u in userList" data-ng-click="userCTL.navigateToUser(u)">

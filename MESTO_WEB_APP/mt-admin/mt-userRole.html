@@ -3,10 +3,10 @@
 	<span class="titre">Add an user role</span>
 	<div>
 		<div data-ng-show="userRoleForm.$dirty && userRoleForm.$invalid">
-			<span class="error" data-ng-show="userRoleForm.name.$error.required">A name is required.</span>
+			<alert type="danger" data-ng-show="userRoleForm.name.$error.required">A name is required.</alert>
 		</div>
-        <span class="error">{{SQLErrors}}</span>
-        <span class="t">{{SQLMsgs}}</span>
+        <alert type="danger" data-ng-show="SQLErrors">{{SQLErrors}}</alert>
+        <alert type="success" data-ng-show="SQLMsgs">{{SQLMsgs}}</alert>
 		<form class="basic" name="userRoleForm" novalidate >
 			<input type="hidden" id="id" name="id" data-ng-model="userRole.id" />
             <div style="position:absolute;right:5px;top:0px;" data-ng-if="userRole.id > 0">Last update : {{userRole.updateBy}}, {{userRole.updateDate}}</div>

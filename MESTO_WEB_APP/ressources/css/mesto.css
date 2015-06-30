@@ -290,10 +290,6 @@ div.section2 {
 	float: right;
 }
 
-.error {
-    color:red;
-}
-
 #map-canvas {
     width: 100%;
     height: 80%;

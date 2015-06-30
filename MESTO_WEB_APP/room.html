@@ -11,7 +11,7 @@
                     
             <div class="inner">
                 <span style="font-weight: bold; font-size: 12px;">Equipments of this building</span>
-                <span class="error" data-ng-show="lstEquipErr">{{lstEquipErr}}</span>
+                <alert type="danger" data-ng-show="lstEquipErr">{{lstEquipErr}}</alert>
                 <table border="1">
                     <tr><th>Serial Number</th><th>Model</th></tr>
                     <tr data-ng-repeat="e in room.lstEquips" data-ng-click="">

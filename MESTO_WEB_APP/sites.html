@@ -2,7 +2,7 @@
 <div class="main">
 	<div>
         <h1 class="test">Sites List</h1>
-        <span class="error" data-ng-show="lstError">{{lstError}}</span>
+        <alert type="danger" data-ng-show="lstError">{{lstError}}</alert>
 		<table border="1">
             <tr><th>Name</th><th>Address</th><th>City</th><th>Province</th><th>Postal code</th><th>Role</th><th>Point of Contact</th><th>Phone number of PoC</th></tr>
 			<tr data-ng-repeat="s in siteList" data-ng-click="siteCTL.seeSiteDetails(s);">

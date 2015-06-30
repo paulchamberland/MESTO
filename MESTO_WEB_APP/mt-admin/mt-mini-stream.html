@@ -1,5 +1,5 @@
 <div class="main" data-ng-controller="streamCTL as streamCTL" data-ng-init="streamCTL.loadStream(true, 5)">
-    <span class="error" data-ng-show="lstError">{{lstError}}</span>
+    <alert type="danger" data-ng-show="lstError">{{lstError}}</alert>
     <div data-ng-repeat="a in activities">
         <div class="streambox">
             <span style="text-decoration:underline; margin:5px; display:inline-block"><span style="font-size:1.2em;font-weight:bold">{{a.userName}}</span>, <span style="font-size:0.9em;">{{a.date}}</span></span>

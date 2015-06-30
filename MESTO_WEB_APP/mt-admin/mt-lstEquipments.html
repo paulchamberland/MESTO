@@ -2,7 +2,7 @@
 <div class="main admin" >
 	<div>
         <h1>Equipment List</h1><a id="btnNewEquip" class="btn" style="float:right;" data-ng-click="equipCTL.newEquip()" data-ng-if="isAutorizeCreatingEquip">Add</a>
-        <span class="error" data-ng-show="lstError">{{lstError}}</span>
+        <alert type="danger" data-ng-show="lstError">{{lstError}}</alert>
 		<table border="1">
             <tr><th>Serial Number</th><th>Model</th></tr>
 			<tr data-ng-repeat="e in equipmentList" data-ng-click="equipCTL.navigateToEquipment(e)">

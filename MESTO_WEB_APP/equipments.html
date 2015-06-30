@@ -2,7 +2,7 @@
 <div class="main">
 	<div>
         <h1 class="test">Equipment List</h1>
-        <span class="error" data-ng-show="lstError">{{lstError}}</span>
+        <alert type="danger" data-ng-show="lstError">{{lstError}}</alert>
 		<table border="1">
             <tr><th>Serial Number</th><th>Model</th></tr>
 			<tr data-ng-repeat="e in equipmentList" data-ng-click="equipCTL.seeEquipmentDetails(e)">

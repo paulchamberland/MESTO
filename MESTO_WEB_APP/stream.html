@@ -1,6 +1,6 @@
 <div id="menu" data-ng-controller="loginCTL as loginCTL" data-ng-include="'menu.html'" style="position: relative; z-index: 1" ></div>
 <div class="main" data-ng-init="streamCTL.loadStream(false, 10)">
-    <span class="error" data-ng-show="lstError">{{lstError}}</span>
+    <alert type="danger" data-ng-show="lstError">{{lstError}}</alert>
     <div data-ng-repeat="a in activities">
         <div class="streambox">
             <span style="text-decoration:underline; margin:5px; display:inline-block"><span style="font-size:1.2em;font-weight:bold">{{a.userName}}</span>, <span style="font-size:0.9em;">{{a.date}}</span></span>
