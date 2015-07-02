@@ -1,15 +1,13 @@
 <div <div id="menu" class="v" data-ng-include="'mt-admin/mt-menu.html'"></div> 
 <div class="main admin">
-	<div>
-        <h1>Room List</h1><a id="btnNewRoom" class="btn" style="float:right;" data-ng-click="roomCTL.newRoom()" data-ng-if="isAutorizeCreatingRoom">Add</a>
-        <alert type="danger" data-ng-show="lstError">{{lstError}}</alert>
-		<table border="1">
-            <tr><th>Room ID</th><th>Point of Contact</th></tr>
-			<tr data-ng-repeat="r in roomList" data-ng-click="roomCTL.navigateToRoom(r)">
-				<td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td>
-			</tr>
-		</table>
-	</div>
+    <span class="titre">Room List</span><a id="btnNewRoom" class="btn btn-primary" data-ng-click="roomCTL.newRoom()" data-ng-if="isAutorizeCreatingRoom">Add</a>
+    <alert type="danger" data-ng-show="lstError">{{lstError}}</alert>
+    <table>
+        <tr><th>Room ID</th><th>Point of Contact</th></tr>
+        <tr data-ng-repeat="r in roomList" data-ng-click="roomCTL.navigateToRoom(r)">
+            <td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td>
+        </tr>
+    </table>
     
     <div class="wrap"></div>
 </div>

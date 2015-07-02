@@ -1,15 +1,13 @@
 <div <div id="menu" class="v" data-ng-include="'mt-admin/mt-menu.html'"></div> 
 <div class="main admin" >
-	<div>
-        <h1>Equipment List</h1><a id="btnNewEquip" class="btn" style="float:right;" data-ng-click="equipCTL.newEquip()" data-ng-if="isAutorizeCreatingEquip">Add</a>
-        <alert type="danger" data-ng-show="lstError">{{lstError}}</alert>
-		<table border="1">
-            <tr><th>Serial Number</th><th>Model</th></tr>
-			<tr data-ng-repeat="e in equipmentList" data-ng-click="equipCTL.navigateToEquipment(e)">
-				<td>{{e.serialNumber}}</td><td>{{e.model}}</td>
-			</tr>
-		</table>
-	</div>
+    <span class="titre">Equipment List</span><a id="btnNewEquip" class="btn btn-primary" data-ng-click="equipCTL.newEquip()" data-ng-if="isAutorizeCreatingEquip">Add</a>
+    <alert type="danger" data-ng-show="lstError">{{lstError}}</alert>
+    <table border="1">
+        <tr><th>Serial Number</th><th>Model</th></tr>
+        <tr data-ng-repeat="e in equipmentList" data-ng-click="equipCTL.navigateToEquipment(e)">
+            <td>{{e.serialNumber}}</td><td>{{e.model}}</td>
+        </tr>
+    </table>
     
     <div class="wrap"></div>
 </div>

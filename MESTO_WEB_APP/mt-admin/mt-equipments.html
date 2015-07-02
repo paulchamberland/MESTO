@@ -21,20 +21,20 @@
 				<div class="field"><label for="type">Type :</label><select id="type" data-ng-model="equipment.type" name="type" data-ng-options="type.value as type.label for type in TYPE"></select></div>
 				<div class="field">
                     <label for="prRoom">Assigned Room :</label><input type="text" id="prRoom" name="parentRoomName" data-ng-model="equipment.parentRoom.roomID" disabled />
-                    <a id="btnLinkRoom" class="btn" data-ng-click="equipCTL.openRoomList()" >...</a>
-                    <a id="btnCleanRoom" class="btn" data-ng-click="equipCTL.cleanAssociateRoom()" >X</a>
+                    <a id="btnLinkRoom" class="btn btn-primary btn-xs" data-ng-click="equipCTL.openRoomList()" ><span class="glyphicon glyphicon-link"></span></a>
+                    <a id="btnCleanRoom" class="btn btn-primary btn-xs" data-ng-click="equipCTL.cleanAssociateRoom()" ><span class="glyphicon glyphicon-remove"></span></a>
                 </div>
                 <div class="field" data-ng-if="equipment.parentRoom.id > 0"><span>Associate Site Name : {{equipment.parentRoom.siteName}}</span></div>
                 <div class="field">
                     <label for="prSite">Assigned Site :</label><input type="text" id="prSite" name="parentSiteName" data-ng-model="equipment.parentSite.name" disabled />
-                    <a id="btnLinkSite" class="btn" data-ng-click="equipCTL.openSiteList()" >...</a>
-                    <a id="btnCleanSite" class="btn" data-ng-click="equipCTL.cleanAssociateSite()" >X</a>
+                    <a id="btnLinkSite" class="btn btn-primary btn-xs" data-ng-click="equipCTL.openSiteList()" ><span class="glyphicon glyphicon-link"></span></a>
+                    <a id="btnCleanSite" class="btn btn-primary btn-xs" data-ng-click="equipCTL.cleanAssociateSite()" ><span class="glyphicon glyphicon-remove"></span></a>
                 </div>
 			</div>
 		</form>
-		<a id="btnSave" class="btn" data-ng-click="equipCTL.save();" ng-disabled="equipmentForm.$pristine || equipmentForm.$invalid" data-ng-if="canSave">Save</a>
-		<a id="btnDelete" class="btn" data-ng-click="equipCTL.delete();" ng-disabled="!canDelete" data-ng-if="isAutorizeDeletingEquip">Delete</a>
-        <a id="btnReset" class="btn" data-ng-click="equipCTL.resetFrm();equipCTL.resetMsg();" ng-disabled="equipmentForm.$pristine">Reset</a>
+		<a id="btnSave" class="btn btn-primary" data-ng-click="equipCTL.save();" ng-disabled="equipmentForm.$pristine || equipmentForm.$invalid" data-ng-if="canSave">Save</a>
+		<a id="btnDelete" class="btn btn-primary" data-ng-click="equipCTL.delete();" ng-disabled="!canDelete" data-ng-if="isAutorizeDeletingEquip">Delete</a>
+        <a id="btnReset" class="btn btn-primary" data-ng-click="equipCTL.resetFrm();equipCTL.resetMsg();" ng-disabled="equipmentForm.$pristine">Reset</a>
 	</div>
     
     <script type="text/ng-template" id="roomListModalContent.html">
@@ -54,7 +54,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <a id="btnCloseLstRoom" class="btn" data-ng-click="equipCTL.closeRoomList()">Close</a>
+            <a id="btnCloseLstRoom" class="btn btn-primary" data-ng-click="equipCTL.closeRoomList()">Close</a>
             <!--button class="btn btn-primary" ng-click="ok()">OK</button>
             <button class="btn btn-warning" ng-click="cancel()">Cancel</button-->
         </div>
@@ -77,7 +77,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <a id="btnCloseLstRoom" class="btn" data-ng-click="equipCTL.closeSiteList()">Close</a>
+            <a id="btnCloseLstRoom" class="btn btn-primary" data-ng-click="equipCTL.closeSiteList()">Close</a>
         </div>
     </script>
     

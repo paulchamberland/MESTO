@@ -25,8 +25,8 @@
                 <div class="field"><label for="phone">Phone :</label><input type="text" id="phone" name="phone" data-ng-model="user.phone" tooltip="format: XXX-XXX-XXXX" tooltip-trigger="focus" data-ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" /></div>
 			</div>
 		</form>
-		<a id="btnSave" class="btn" data-ng-click="userCTL.save();" ng-disabled="userForm.$pristine || userForm.$invalid" >Sign Up</a>
-        <a id="btnReset" class="btn" data-ng-click="userCTL.resetFrm();userCTL.resetMsg();" ng-disabled="userForm.$pristine">Reset</a>
+		<a id="btnSave" class="btn btn-primary" data-ng-click="userCTL.save();" ng-disabled="userForm.$pristine || userForm.$invalid" >Sign Up</a>
+        <a id="btnReset" class="btn btn-primary" data-ng-click="userCTL.resetFrm();userCTL.resetMsg();" ng-disabled="userForm.$pristine">Reset</a>
 	</div>
     
     <div id="result" data-ng-show="SQLMsgs != null">

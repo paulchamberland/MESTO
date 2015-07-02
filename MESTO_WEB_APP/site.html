@@ -48,7 +48,7 @@
             <hr>
             <div class="inner last">Last update : {{site.updateBy}}, {{site.updateDate}}</div>
         </div>
-        <div class="bot"><a class="btn" data-ng-if="isAutorizeUpdatingSite" data-ng-click="siteCTL.modifySite();">Modified</a></div>
+        <div class="bot"><a class="btn btn-primary" data-ng-if="isAutorizeUpdatingSite" data-ng-click="siteCTL.modifySite();">Modified</a></div>
     </div>
     
     <div data-ng-show="modifySite == true">
@@ -90,7 +90,7 @@
                                 is-open="strOpened" show-button-bar="false"
                                 datepicker-options="{formatMonth:'MM', showWeeks:'false'}" />
                             <span class="input-group-btn">
-                                <button type="button" class="btn btn-sm btn-default" ng-click="siteCTL.openStartCalendar($event);"><i class="glyphicon glyphicon-calendar"></i></button>
+                                <button type="button" class="btn btn-sm btn-default" style="text-shadow:none;" ng-click="siteCTL.openStartCalendar($event);"><i class="glyphicon glyphicon-calendar"></i></button>
                             </span>
                         </p>
                     </div>
@@ -101,7 +101,7 @@
                                 is-open="endOpened" data-ng-required="site.isTemporary == true" show-button-bar="false"
                                 datepicker-options="{formatMonth:'MM', showWeeks:false}" />
                             <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" ng-click="siteCTL.openEndCalendar($event);"><i class="glyphicon glyphicon-calendar"></i></button>
+                                <button type="button" class="btn btn-default" style="text-shadow:none;" ng-click="siteCTL.openEndCalendar($event);"><i class="glyphicon glyphicon-calendar"></i></button>
                             </span>
                         </p>
                     </div>
@@ -121,27 +121,27 @@
                     <div class="field"><label for="techNumTel">Phone of tech PoC :</label><input type="text" id="techNumTel" name="phoneTechPoC" data-ng-model="site.phoneTechPoC" tooltip="format: XXX-XXX-XXXX" tooltip-trigger="focus" data-ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" /></div>
                 </div>
             </form>
-            <a id="btnSave" class="btn" data-ng-click="siteCTL.save();" ng-disabled="siteForm.$pristine || siteForm.$invalid" data-ng-if="canSave">Save</a>
-            <a id="btnDelete" class="btn" data-ng-click="siteCTL.delete();" ng-disabled="!canDelete" data-ng-if="isAutorizeDeletingSite">Delete</a>
-            <a id="btnReset" class="btn" data-ng-click="siteCTL.resetFrm();siteCTL.resetMsg();" ng-disabled="siteForm.$pristine">Reset</a>
+            <a id="btnSave" class="btn btn-primary" data-ng-click="siteCTL.save();" ng-disabled="siteForm.$pristine || siteForm.$invalid" data-ng-if="canSave">Save</a>
+            <a id="btnDelete" class="btn btn-primary" data-ng-click="siteCTL.delete();" ng-disabled="!canDelete" data-ng-if="isAutorizeDeletingSite">Delete</a>
+            <a id="btnReset" class="btn btn-primary" data-ng-click="siteCTL.resetFrm();siteCTL.resetMsg();" ng-disabled="siteForm.$pristine">Reset</a>
         </div>
         <div style="padding-top:15px;">
-            <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Rooms of this site</span><a id="btnOpenFreeLstRoom" class="btn" data-ng-if="site.id" data-ng-click="siteCTL.openFreeRoomsList();">Get</a>
+            <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Rooms of this site</span><a id="btnOpenFreeLstRoom" class="btn btn-primary" data-ng-if="site.id" data-ng-click="siteCTL.openFreeRoomsList();"><span class="glyphicon glyphicon-link"></a>
             <alert type="danger" data-ng-show="lstRoomErr">{{lstRoomErr}}</alert>
             <table border="1">
                 <tr><th>Room ID</th><th>Point of contact</th><th></th></tr>
                 <tr data-ng-repeat="r in site.lstRooms" data-ng-click="">
-                    <td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td><td><a id="btnRemoveRoom" class="btn" data-ng-click="siteCTL.removeAssRoom(r.id)">Remove</a></td>
+                    <td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td><td><a id="btnRemoveRoom" class="btn btn-primary" data-ng-click="siteCTL.removeAssRoom(r.id)"><span class="glyphicon glyphicon-remove"></span></a></td>
                 </tr>
             </table>
         </div>
         <div style="padding-top:15px">
-            <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Equipments of this site</span><a id="btnOpenFreeLstEquip" class="btn" data-ng-if="site.id" data-ng-click="siteCTL.openFreeEquipsList();">Get</a>
+            <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Equipments of this site</span><a id="btnOpenFreeLstEquip" class="btn btn-primary" data-ng-if="site.id" data-ng-click="siteCTL.openFreeEquipsList();"><span class="glyphicon glyphicon-link"></a>
             <alert type="danger" data-ng-show="lstEquipErr">{{lstEquipErr}}</alert>
             <table border="1">
                 <tr><th>Serial number</th><th>Model</th><th></th></tr>
                 <tr data-ng-repeat="e in site.lstEquips" data-ng-click="">
-                    <td>{{e.serialNumber}}</td><td>{{e.model}}</td><td><a id="btnRemoveEquip" class="btn" data-ng-click="siteCTL.removeAssEquip(e.id)">Remove</a></td>
+                    <td>{{e.serialNumber}}</td><td>{{e.model}}</td><td><a id="btnRemoveEquip" class="btn btn-primary" data-ng-click="siteCTL.removeAssEquip(e.id)"><span class="glyphicon glyphicon-remove"></span></a></td>
                 </tr>
             </table>
         </div>
@@ -162,12 +162,12 @@
                     </table>
                 </div>
                 <div class="inner">
-                    <a id="btnAddLstRooms" class="btn" data-ng-click="siteCTL.addFreeRoomsList()" >Add</a>
-                    <a id="btnNewRoom" class="btn" style="float:right;" data-ng-click="siteCTL.newRoom()" >New</a>
+                    <a id="btnAddLstRooms" class="btn btn-primary" data-ng-click="siteCTL.addFreeRoomsList()" >Add</a>
+                    <a id="btnNewRoom" class="btn btn-primary" style="float:right;" data-ng-click="siteCTL.newRoom()" >New</a>
                 </div>
             </div>
             <div class="modal-footer">
-                <a id="btnCloseFreeLstRooms" class="btn" data-ng-click="siteCTL.closeFreeRoomsList()" >Close</a>
+                <a id="btnCloseFreeLstRooms" class="btn btn-primary" data-ng-click="siteCTL.closeFreeRoomsList()" >Close</a>
             </div>
         </script>
         
@@ -187,12 +187,12 @@
                     </table>
                 </div>
                 <div class="inner">
-                    <a id="btnAddLstEquips" class="btn" data-ng-click="siteCTL.addFreeEquipsList()" >Add</a>
-                    <a id="btnNewEquip" class="btn" style="float:right;" data-ng-click="siteCTL.newEquip()" >New</a>
+                    <a id="btnAddLstEquips" class="btn btn-primary" data-ng-click="siteCTL.addFreeEquipsList()" >Add</a>
+                    <a id="btnNewEquip" class="btn btn-primary" style="float:right;" data-ng-click="siteCTL.newEquip()" >New</a>
                 </div>
             </div>
             <div class="modal-footer">
-                <a id="btnCloseFreeLstEquip" class="btn" data-ng-click="siteCTL.closeFreeEquipsList()" >Close</a>
+                <a id="btnCloseFreeLstEquip" class="btn btn-primary" data-ng-click="siteCTL.closeFreeEquipsList()" >Close</a>
             </div>
         </script>
     </div>

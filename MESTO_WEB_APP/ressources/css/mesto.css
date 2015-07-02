@@ -35,7 +35,7 @@ form.ng-dirty select.ng-invalid  {
     border: 1px solid red;
 }
 
-a.btn {
+a.bt {
     background: #3db1ff;
     background: -webkit-linear-gradient(top, #3db1ff, #114566);
     background: -moz-linear-gradient(top, #3db1ff, #114566);
@@ -62,7 +62,7 @@ a.btn {
     cursor: default;
 }
 
-a.btn:hover {
+a.bt:hover {
     background: #3db1ff;
     background-image: -webkit-linear-gradient(top, #3db1ff, #185b85);
     background-image: -moz-linear-gradient(top, #3db1ff, #185b85);
@@ -71,7 +71,7 @@ a.btn:hover {
     background-image: linear-gradient(to bottom, #3db1ff, #185b85);
 }
 
-a.btn:active {
+a.bt:active {
     background: #185b85;
     background-image: -webkit-linear-gradient(top, #185b85, #3db1ff);
     background-image: -moz-linear-gradient(top, #185b85, #3db1ff);
@@ -80,7 +80,7 @@ a.btn:active {
     background-image: linear-gradient(to bottom, #185b85, #3db1ff);
 }
 
-a.btn[disabled] {
+a.bt[disabled] {
     color:#e8e8e8;
     background: #cfcfcf;
     background-image: -webkit-linear-gradient(top, #cfcfcf, #575757);
@@ -97,7 +97,8 @@ table {
     border-spacing: 0;
 	width:100%;
 	height:100%;
-	margin:0px;padding:0px;
+	
+    margin: 5px 0px 5px 0px;padding:0px;
     
 	box-shadow: 10px 10px 5px #888888;
     -webkit-box-shadow: 10px 10px 5px #888888;
@@ -249,8 +250,8 @@ tr td:last-child{
     	top: 30%;
 	}
     #search_bar input {
-        width: 87%;
-        margin-right: 5px;
+        width: 100%;
+        /* margin-right: 5px; */
 }
 
 

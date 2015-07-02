@@ -23,7 +23,7 @@
                 <div class="field"><label for="phone">Phone :</label><input type="text" id="phone" name="phone" data-ng-model="user.phone" tooltip="format: XXX-XXX-XXXX" tooltip-trigger="focus"data-ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" /></div>
 			</div>
 		</form>
-		<a id="btnSave" class="btn" data-ng-click="userCTL.save();" ng-disabled="userForm.$pristine || userForm.$invalid" >Save</a>
+		<a id="btnSave" class="btn btn-primary" data-ng-click="userCTL.save();" ng-disabled="userForm.$pristine || userForm.$invalid" >Save</a>
 	</div>
     
     <hr>
@@ -42,7 +42,7 @@
 				<div class="field"><label for="pwd">New Password * :</label><input type="password" id="pwd" name="password" data-ng-model="user.password" required tooltip="At least: 1 upper letter, 1 number, 1 symbol:$%?&*!#, 8 min char long" tooltip-trigger="focus" data-ng-pattern="/^(?=.*[A-Z])(?=.*[$%?&*!#])(?=.*[0-9]).{8,}$/" /></div>
             </div>
 		</form>
-		<a id="btnSavePwd" class="btn" data-ng-click="userCTL.savePwd();" ng-disabled="userPwdForm.$pristine || userPwdForm.$invalid" >Change</a>
+		<a id="btnSavePwd" class="btn btn-primary" data-ng-click="userCTL.savePwd();" ng-disabled="userPwdForm.$pristine || userPwdForm.$invalid" >Change</a>
 	</div>
     
     </br>

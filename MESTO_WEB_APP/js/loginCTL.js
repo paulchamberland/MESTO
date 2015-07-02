@@ -15,8 +15,7 @@ app.controller('loginCTL', function($scope, $rootScope, $http, $location, securi
                     $scope.loginForm.username.$setValidity('wrong', true);
                     $scope.loginForm.pwd.$setValidity('wrong', true);
                     
-                    $('#loginBox').toggle();
-                    $('#loginButton').toggleClass('active');
+                    $('#loginBox').toggle(false);
                 }
                 else {
                     $scope.loginForm.username.$setValidity('wrong', false);

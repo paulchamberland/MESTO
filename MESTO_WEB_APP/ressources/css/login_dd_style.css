@@ -22,40 +22,6 @@ a { text-decoration:none }
     font-size:12px;
 }
 
-/* Login Button */
-#loginButton, #logoutButton, #signUpButton{ 
-    display:inline-block;
-    float:right;
-    background:#d2e0ea url(../images/buttonbg.png) repeat-x; 
-    border:1px solid #899caa; 
-    border-radius:3px;
-    -moz-border-radius:3px;
-    position:relative;
-    z-index:30;
-    cursor:pointer;
-    margin-left: 5px;
-}
-
-/* Login Button Text */
-#loginButton span, #logoutButton span, #signUpButton span {
-    color:#445058; 
-    font-size:14px; 
-    font-weight:bold; 
-    text-shadow:1px 1px #fff;
-    display:block
-}
-#loginButton span {
-    padding:7px 29px 9px 10px;
-    background:url(../images/loginArrow.png) no-repeat 53px 7px;
-}
-#logoutButton span, #signUpButton span {
-    padding:7px 10px 9px 10px;
-}
-
-#loginButton:hover, #logoutButton:hover, #signUpButton:hover{
-    background:url(../images/buttonbgHover.png) repeat-x;
-}
-
 /* Login Box */
 #loginBox {
     position:absolute;
@@ -68,23 +34,7 @@ a { text-decoration:none }
     display:block;
 }
 
-/* If the Login Button has been clicked */    
-#loginButton.active {
-    border-radius:3px 3px 0 0;
-}
 
-#loginButton.active span {
-    background-position:53px -76px;
-}
-
-/* A Line added to overlap the border */
-#loginButton.active em {
-    position:absolute;
-    width:100%;
-    height:1px;
-    background:#d2e0ea;
-    bottom:-1px;
-}
 
 /* Login Form */
 #loginForm {
@@ -124,8 +74,8 @@ fieldset#body {
 #body label {
     color:#3a454d;
     margin:9px 0 0 0;
-    display:block;
-    float:left;
+    /* display:block; */
+    float: right;
 }
 
 #loginForm #body fieldset label {
@@ -152,23 +102,6 @@ fieldset#body {
 #loginForm.ng-invalid-wrong input {
     border:1px solid #899caa;
     color:red;
-}
-
-/* Sign In Button */
-#loginForm #login {
-    width:auto;
-    float:left;
-    background:#339cdf url(../images/loginbuttonbg.png) repeat-x;
-    color:#fff;
-    padding:7px 10px 8px 10px;
-    text-shadow:0px -1px #278db8;
-    border:1px solid #339cdf;
-    box-shadow:none;
-    -moz-box-shadow:none;
-    -webkit-box-shadow:none;
-    margin:0 12px 0 0;
-    cursor:pointer;
-    *padding:7px 2px 8px 2px; /* IE7 Fix */
 }
 
 /* Forgot your password */

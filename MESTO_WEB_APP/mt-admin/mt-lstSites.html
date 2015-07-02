@@ -1,14 +1,12 @@
 <div <div id="menu" class="v" data-ng-include="'mt-admin/mt-menu.html'"></div> 
 <div class="main admin">
-	<div>
-        <h1>Sites List</h1><a id="btnNewSite" class="btn" style="float:right;" data-ng-click="siteCTL.newSite()" data-ng-if="isAutorizeCreatingSite">Add</a>
-        <alert type="danger" data-ng-show="lstError">{{lstError}}</alert>
-		<table border="1">
-            <tr><th>Name</th><th>Address</th><th>City</th><th>Province</th><th>Postal code</th><th>Role</th><th>Point of Contact</th><th>Phone number of PoC</th></tr>
-			<tr data-ng-repeat="s in siteList" data-ng-click="siteCTL.navigateToSite(s);">
-				<td>{{s.siteName}}</td><td>{{s.address}}</td><td>{{s.city}}</td><td>{{s.province}}</td><td>{{s.postalCode}}</td><td>{{siteCTL.getLabelROLE(s.role)}}</td><td>{{s.pointOfContact}}</td><td>{{s.phoneNumberPoC}}</td>
-			</tr>
-		</table>
-	</div>
+    <span class="titre">Sites List</span><a id="btnNewSite" class="btn btn-primary" data-ng-click="siteCTL.newSite()" data-ng-if="isAutorizeCreatingSite">Add</a>
+    <alert type="danger" data-ng-show="lstError">{{lstError}}</alert>
+    <table border="1">
+        <tr><th>Name</th><th>Address</th><th>City</th><th>Province</th><th>Postal code</th><th>Role</th><th>Point of Contact</th><th>Phone number of PoC</th></tr>
+        <tr data-ng-repeat="s in siteList" data-ng-click="siteCTL.navigateToSite(s);">
+            <td>{{s.siteName}}</td><td>{{s.address}}</td><td>{{s.city}}</td><td>{{s.province}}</td><td>{{s.postalCode}}</td><td>{{siteCTL.getLabelROLE(s.role)}}</td><td>{{s.pointOfContact}}</td><td>{{s.phoneNumberPoC}}</td>
+        </tr>
+    </table>
     <div class="wrap"></div>
 </div>

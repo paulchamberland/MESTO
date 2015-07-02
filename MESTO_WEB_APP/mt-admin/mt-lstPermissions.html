@@ -1,14 +1,12 @@
 <div <div id="menu" class="v" data-ng-include="'mt-admin/mt-menu.html'"></div> 
 <div class="main admin">
-	<div>
-        <h1 class="">Permission List</h1>
-        <table border="1">
-            <tr><th>Code name</th><th>Name</th><th>Description</th></tr>
-			<tr data-ng-repeat="p in lstPermissions" data-ng-click="permissionCTL.openPermission(p)">
-				<td>{{p.codeName}}</td><td>{{p.name}}</td><td>{{p.description}}</td>
-			</tr>
-		</table>
-	</div>
+    <span class="titre">Permission List</span>
+    <table border="1">
+        <tr><th>Code name</th><th>Name</th><th>Description</th></tr>
+        <tr data-ng-repeat="p in lstPermissions" data-ng-click="permissionCTL.openPermission(p)">
+            <td>{{p.codeName}}</td><td>{{p.name}}</td><td>{{p.description}}</td>
+        </tr>
+    </table>
     
     <div id="details" class="details mt">
         <div class="top">{{permission.codeName}}</div>
@@ -16,7 +14,7 @@
             <div class="inner first">Name : {{permission.name}}</div>
             <div class="inner last">Description : {{permission.description}}</div>
         </div>
-        <div class="bot"><a class="btn" onclick="$('#details').fadeOut('slow');">Close</a></div>
+        <div class="bot"><a class="btn btn-primary" onclick="$('#details').fadeOut('slow');">Close</a></div>
     </div>  
     
     <div class="wrap"></div>

@@ -1,15 +1,13 @@
 <div <div id="menu" class="v" data-ng-include="'mt-admin/mt-menu.html'"></div> 
 <div class="main admin" >
-	<div>
-        <h1>UserRole List</h1><a id="btnNewUserRole" class="btn" style="float:right;" data-ng-click="userRoleCTL.newUserRole()" data-ng-if="isAutorizeCreatingRole">Add</a>
-        <alert type="danger" data-ng-show="lstError">{{lstError}}</alert>
-		<table border="1">
-            <tr><th>Name</th><th>Description</th><th>List of Permission</th></tr>
-			<tr data-ng-repeat="ur in userRoleList" data-ng-click="userRoleCTL.navigateToUserRole(ur)">
-				<td>{{ur.name}}</td><td>{{ur.description}}</td><td>{{userCTL.getLstPermission()}}</td>
-			</tr>
-		</table>
-	</div>
+    <span class="titre">UserRole List</span><a id="btnNewUserRole" class="btn btn-primary" data-ng-click="userRoleCTL.newUserRole()" data-ng-if="isAutorizeCreatingRole">Add</a>
+    <alert type="danger" data-ng-show="lstError">{{lstError}}</alert>
+    <table border="1">
+        <tr><th>Name</th><th>Description</th><th>List of Permission</th></tr>
+        <tr data-ng-repeat="ur in userRoleList" data-ng-click="userRoleCTL.navigateToUserRole(ur)">
+            <td>{{ur.name}}</td><td>{{ur.description}}</td><td>{{userCTL.getLstPermission()}}</td>
+        </tr>
+    </table>
     
     <div class="wrap"></div>
 </div>
