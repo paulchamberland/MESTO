@@ -9,7 +9,7 @@
         </ul>
     </div>
     
-    <div data-ng-controller="statisticCTL as statCTL" style="margin: 10px 0px 10px 0px;padding: 5px 0px 0px 5px;border:1px solid black;width:50%;height:325px;float:left;background-color:#FFFFFF;">
+    <div data-ng-controller="statisticCTL as statCTL" style="margin: 10px 0px 10px 0px;padding: 5px 0px 20px 5px;border:1px solid black;width:50%;height:auto;float:left;background-color:#FFFFFF;">
         <span style="text-decoration:underline;font-size:1.2em;font-weight:bold;">At a glance</span>
         <ul style="list-style-type: none;">
             <li>{{nbSite}} sites - {{nbSiteModified}} modified last month</li>
@@ -26,7 +26,7 @@
 		</table>
     </div>
     
-    <div style="margin: 10px 0px 10px 0px; padding: 5px 0px 0px 0px; border:1px solid black; float:right;width:49%;height:325px;background-color:#FFFFFF;">
+    <div style="margin: 10px 0px 10px 0px; padding: 5px 0px 0px 0px; border:1px solid black; float:right;width:49%;height:auto;background-color:#FFFFFF;">
         <span class="titre" style="text-decoration:underline;font-size:1.2em;">Stream Activity</span><span><a href="#/admin/stream/">See all</a></span>
         <div  id="mini-stream" data-ng-include="'mt-admin/mt-mini-stream.html'"></div>
     </div>
