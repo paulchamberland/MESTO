@@ -13,14 +13,14 @@
 		<form class="basic" name="userForm" novalidate >
 			<input type="hidden" id="id" name="id" data-ng-model="user.id" />
 			<div class="section">
-				<div class="field"><label for="email">Email *(lowercase only) :</label><input type="text" id="email" name="email" data-ng-model="user.email" required data-ng-pattern="/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/" /></div>
+				<div class="field"><label for="email">Email *(lowercase only) :</label><input type="text" id="email" name="email" data-ng-model="user.email" required tooltip="lowercase only" tooltip-trigger="focus" data-ng-pattern="/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/" /></div>
                 <div class="field"><label for="username">UserName * :</label><input type="text" id="username" name="username" data-ng-model="user.username" required disabled /></div>
 				<div class="field"><label for="role">Role * :</label><select id="role" data-ng-model="user.role" name="role" data-ng-options="role.id as role.name for role in roleList" required disabled ></select></div>
                 <div class="field"><label for="name">Name :</label><input type="text" id="name" name="name" data-ng-model="user.name" /></div>
 				<div class="field"><label for="title">Title :</label><input type="text" id="title" name="title" data-ng-model="user.title" /></div>
 				<div class="field"><label for="supervisor">Supervisor :</label><input type="text" id="supervisor" name="supervisor" data-ng-model="user.supervisor" /></div>
                 <div class="field"><label for="address">Address:</label><input type="text" id="address" name="address" data-ng-model="user.address" /></div>
-                <div class="field"><label for="phone">Phone :</label><input type="text" id="phone" name="phone" data-ng-model="user.phone" data-ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" /></div>
+                <div class="field"><label for="phone">Phone :</label><input type="text" id="phone" name="phone" data-ng-model="user.phone" tooltip="format: XXX-XXX-XXXX" tooltip-trigger="focus"data-ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" /></div>
 			</div>
 		</form>
 		<a id="btnSave" class="btn" data-ng-click="userCTL.save();" ng-disabled="userForm.$pristine || userForm.$invalid" >Save</a>
@@ -39,7 +39,7 @@
 		<form class="basic" name="userPwdForm" novalidate >
 			<input type="hidden" id="id" name="id" data-ng-model="user.id" />
 			<div class="section">
-				<div class="field"><label for="pwd">New Password * :</label><input type="password" id="pwd" name="password" data-ng-model="user.password" required data-ng-pattern="/^(?=.*[A-Z])(?=.*[$%?&*!#])(?=.*[0-9]).{8,}$/" /></div>
+				<div class="field"><label for="pwd">New Password * :</label><input type="password" id="pwd" name="password" data-ng-model="user.password" required tooltip="At least: 1 upper letter, 1 number, 1 symbol:$%?&*!#, 8 min char long" tooltip-trigger="focus" data-ng-pattern="/^(?=.*[A-Z])(?=.*[$%?&*!#])(?=.*[0-9]).{8,}$/" /></div>
             </div>
 		</form>
 		<a id="btnSavePwd" class="btn" data-ng-click="userCTL.savePwd();" ng-disabled="userPwdForm.$pristine || userPwdForm.$invalid" >Change</a>

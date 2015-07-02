@@ -25,8 +25,8 @@
             <div style="position:absolute;right:5px;top:0px;" data-ng-if="site.id > 0">Last update : {{site.updateBy}}, {{site.updateDate}}</div>
 			<div class="section">
 				<div class="field"><label for="reference"># Reference * :</label><input type="text" id="reference" name="reference" data-ng-model="site.reference" required /></div>
-				<div class="field"><label for="latitude">Latitude * (xxx.xxxxxx):</label><input type="text" id="latitude" name="latitude" data-ng-model="site.latitude" required data-ng-pattern="/^-?[0-9]?[0-9]?[0-9]\.[0-9]{6}$/" /></div>
-				<div class="field"><label for="longitude">Longitude * (xxx.xxxxxx):</label><input type="text" id="longitude" name="longitude" data-ng-model="site.longitude" required data-ng-pattern="/^-?[0-9]?[0-9]?[0-9]\.[0-9]{6}$/" /></div>
+				<div class="field"><label for="latitude">Latitude * :</label><input type="text" id="latitude" name="latitude" data-ng-model="site.latitude" required tooltip="format: xxx.xxxxxx" tooltip-trigger="focus" data-ng-pattern="/^-?[0-9]?[0-9]?[0-9]\.[0-9]{6}$/" /></div>
+				<div class="field"><label for="longitude">Longitude * :</label><input type="text" id="longitude" name="longitude" data-ng-model="site.longitude" required tooltip="format: xxx.xxxxxx" tooltip-trigger="focus" data-ng-pattern="/^-?[0-9]?[0-9]?[0-9]\.[0-9]{6}$/" /></div>
 				<div class="field"><label for="siteName">Name * :</label><input type="text" id="siteName" name="siteName" data-ng-model="site.siteName" required /></div>
 				<div class="field"><label for="description">Description:</label><textarea cols="38" rows="5" id="description" name="description" data-ng-model="site.description"></textarea></div>
 				<div class="field"><label for="isTemporary">Is temporary?</label>
@@ -62,14 +62,14 @@
 				<div class="field"><label for="city">City:</label><input type="text" id="city" name="city" data-ng-model="site.city" /></div>
 				<div class="field"><label for="province">Province:</label><input type="text" id="province" name="province" data-ng-model="site.province" /></div>
 				<div class="field"><label for="country">Country:</label><input type="text" id="country" name="country" data-ng-model="site.country" /></div>
-				<div class="field"><label for="postalCode">Postal code (X5X 5X5):</label><input type="text" id="postalCode" name="postalCode" data-ng-model="site.postalCode" data-ng-pattern="/^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] [0-9][A-Z][0-9]$/" /></div>
+				<div class="field"><label for="postalCode">Postal code:</label><input type="text" id="postalCode" name="postalCode" data-ng-model="site.postalCode" tooltip="format: X5X 5X5" tooltip-trigger="focus" data-ng-pattern="/^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] [0-9][A-Z][0-9]$/" /></div>
                 <div class="field"><label for="role">Role:</label><select id="role" ng-model="site.role" name="role" ng-options="role.value as role.label for role in ROLE"></select></div>
                 <div class="field"><label for="organise">Organization:</label><select id="organise" ng-model="site.organization" name="organization" ng-options="organization.value as organization.label for organization in ORGANIZATION"></select></div>
-                <div class="field"><label for="employesNumber">Employes number :</label><input type="text" id="employesNumber" name="employesNumber" data-ng-model="site.employesNumber" data-ng-pattern="/^[0-9]*$/" /></div>
+                <div class="field"><label for="employesNumber">Employes number :</label><input type="text" id="employesNumber" name="employesNumber" data-ng-model="site.employesNumber" tooltip="numeric only" tooltip-trigger="focus" data-ng-pattern="/^[0-9]*$/" /></div>
                 <div class="field"><label for="PoC">Point of contact :</label><input type="text" id="PoC" name="pointOfContact" data-ng-model="site.pointOfContact" /></div>
-				<div class="field"><label for="numTel">Phone number of PoC :</label><input type="text" id="numTel" name="phoneNumberPoC" data-ng-model="site.phoneNumberPoC" data-ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" /></div>
+				<div class="field"><label for="numTel">Phone number of PoC :</label><input type="text" id="numTel" name="phoneNumberPoC" data-ng-model="site.phoneNumberPoC" tooltip="format: XXX-XXX-XXXX" tooltip-trigger="focus" data-ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" /></div>
 				<div class="field"><label for="techPoC">Tech PoC :</label><input type="text" id="techPoC" name="techPoC" data-ng-model="site.techPoC" /></div>
-                <div class="field"><label for="techNumTel">Phone of tech PoC :</label><input type="text" id="techNumTel" name="phoneTechPoC" data-ng-model="site.phoneTechPoC" data-ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" /></div>
+                <div class="field"><label for="techNumTel">Phone of tech PoC :</label><input type="text" id="techNumTel" name="phoneTechPoC" data-ng-model="site.phoneTechPoC" tooltip="format: XXX-XXX-XXXX" tooltip-trigger="focus" data-ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" /></div>
 			</div>
 		</form>
 		<a id="btnSave" class="btn" data-ng-click="siteCTL.save();" ng-disabled="siteForm.$pristine || siteForm.$invalid" data-ng-if="canSave">Save</a>
