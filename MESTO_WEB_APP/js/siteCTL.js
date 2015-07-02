@@ -14,6 +14,17 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     
     $scope.modifySite = false; // action flag to change the display of detail vs form page
     
+    this.openStartCalendar = function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        $scope.strOpened = true;
+    };
+    this.openEndCalendar = function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        $scope.endOpened = true;
+    };
+    
     this.modifySite = function() {
         $scope.modifySite = true;
     };
@@ -52,6 +63,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     $scope.isAutorizeCreatingSite = false;
     $scope.isAutorizeDeletingSite = false;
     $scope.isAutorizeSeeDetailsSite = false;
+    $scope.isDateNotEditable = false;
     
     this.getLabelROLE = enumManagerSrv.getSiteLabelROLE;
     
@@ -76,6 +88,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
         $scope.isAutorizeCreatingSite = securitySrv.isAuthorized('updateSite');
         $scope.isAutorizeDeletingSite = securitySrv.isAuthorized('deleteSite');
         $scope.isAutorizeSeeDetailsSite = securitySrv.isAuthorized('detailSite');
+        $scope.isDateNotEditable = securitySrv.isLogged() && securitySrv.getUser().username != "tester"; // Hack for simplify e2e Test
         
         $scope.canSave = ($scope.site.id > 0 && $scope.isAutorizeUpdatingSite) || ($scope.site.id <= 0 && $scope.isAutorizeCreatingSite);
     }

@@ -20,6 +20,9 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus, select:focus
     
     border: 1px solid #097BE5;
 }
+input[type=text][disabled], select[disabled]{
+  cursor: not-allowed;
+}
 
 form.ng-dirty input[type=text].ng-invalid,
 form.ng-dirty input[type=password].ng-invalid,

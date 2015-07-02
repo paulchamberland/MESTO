@@ -74,36 +74,51 @@
             <form class="basic" name="siteForm" novalidate >
                 <input type="hidden" id="id" name="id" data-ng-model="site.id" />
                 <div class="section">
-                    <div class="field"><label for="reference"># reference * :</label><input type="text" id="reference" name="reference" data-ng-model="site.reference" required /></div>
-                    <div class="field"><label for="latitude">latitude * (xxx.xxxxxx):</label><input type="text" id="latitude" name="latitude" data-ng-model="site.latitude" required data-ng-pattern="/^-?[0-9]?[0-9]?[0-9]\.[0-9]{6}$/" /></div>
-                    <div class="field"><label for="longitude">longitude * (xxx.xxxxxx):</label><input type="text" id="longitude" name="longitude" data-ng-model="site.longitude" required data-ng-pattern="/^-?[0-9]?[0-9]?[0-9]\.[0-9]{6}$/" /></div>
+                    <div class="field"><label for="reference"># Reference * :</label><input type="text" id="reference" name="reference" data-ng-model="site.reference" required /></div>
+                    <div class="field"><label for="latitude">Latitude * (xxx.xxxxxx):</label><input type="text" id="latitude" name="latitude" data-ng-model="site.latitude" required data-ng-pattern="/^-?[0-9]?[0-9]?[0-9]\.[0-9]{6}$/" /></div>
+                    <div class="field"><label for="longitude">Longitude * (xxx.xxxxxx):</label><input type="text" id="longitude" name="longitude" data-ng-model="site.longitude" required data-ng-pattern="/^-?[0-9]?[0-9]?[0-9]\.[0-9]{6}$/" /></div>
                     <div class="field"><label for="siteName">Name * :</label><input type="text" id="siteName" name="siteName" data-ng-model="site.siteName" required /></div>
-                    <div class="field"><label for="description">description:</label><textarea cols="38" rows="5" id="description" name="description" data-ng-model="site.description"></textarea></div>
+                    <div class="field"><label for="description">Description:</label><textarea cols="38" rows="5" id="description" name="description" data-ng-model="site.description"></textarea></div>
                     <div class="field"><label for="isTemporary">Is temporary?</label>
                         <input type="checkbox" id="isTemporary" name="isTemporary" data-ng-true-value="'1'" data-ng-false-value="'0'" data-ng-model="site.isTemporary"/>
                     </div>
-                    <div class="field"><label for="startDate">start date (dd-MM-yyyy):</label>
-                        <input type="text" id="startDate" name="startDate" data-ng-model="site.startDate" data-ng-keyup="siteCTL.validEndDate()"
-                            data-ng-pattern="/^(?:(?:31(-)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(-)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(-)(?:0?2|(?:Feb))\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(-)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/" />
+                    <div class="field">
+                        <p class="input-group">
+                            <label for="startDate">Start date:</label>
+                            <input type="text" id="startDate" name="startDate" class="input-sm" data-ng-disabled="{{isDateNotEditable}}" datepicker-popup 
+                                data-ng-model="site.startDate" data-ng-change="siteCTL.validEndDate()"
+                                is-open="strOpened" show-button-bar="false"
+                                datepicker-options="{formatMonth:'MM', showWeeks:'false'}" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-sm btn-default" ng-click="siteCTL.openStartCalendar($event);"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
                     </div>
-                    <div class="field"><label for="endDate">end date (dd-MM-yyyy):</label>
-                        <input type="text" id="endDate" name="endDate" data-ng-model="site.endDate" data-ng-required="site.isTemporary == true" data-ng-keyup="siteCTL.validEndDate()"
-                            data-ng-pattern="/^(?:(?:31(-)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(-)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(-)(?:0?2|(?:Feb))\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(-)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/" />
+                    <div class="field"><label for="endDate">End date:</label>
+                        <p class="input-group">
+                            <input type="text" id="endDate" name="endDate" data-ng-disabled="{{isDateNotEditable}}" datepicker-popup 
+                                data-ng-model="site.endDate" data-ng-change="siteCTL.validEndDate()"
+                                is-open="endOpened" data-ng-required="site.isTemporary == true" show-button-bar="false"
+                                datepicker-options="{formatMonth:'MM', showWeeks:false}" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="siteCTL.openEndCalendar($event);"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
                     </div>
                 </div>
                 <div class="section2">
                     <div class="field"><label for="address">Address:</label><input type="text" id="address" name="address" data-ng-model="site.address" /></div>
                     <div class="field"><label for="city">City:</label><input type="text" id="city" name="city" data-ng-model="site.city" /></div>
-                    <div class="field"><label for="province">province:</label><input type="text" id="province" name="province" data-ng-model="site.province" /></div>
-                    <div class="field"><label for="country">country:</label><input type="text" id="country" name="country" data-ng-model="site.country" /></div>
-                    <div class="field"><label for="postalCode">postal code (X5X 5X5):</label><input type="text" id="postalCode" name="postalCode" data-ng-model="site.postalCode" data-ng-pattern="/^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] [0-9][A-Z][0-9]$/" /></div>
+                    <div class="field"><label for="province">Province:</label><input type="text" id="province" name="province" data-ng-model="site.province" /></div>
+                    <div class="field"><label for="country">Country:</label><input type="text" id="country" name="country" data-ng-model="site.country" /></div>
+                    <div class="field"><label for="postalCode">Postal code (X5X 5X5):</label><input type="text" id="postalCode" name="postalCode" data-ng-model="site.postalCode" data-ng-pattern="/^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] [0-9][A-Z][0-9]$/" /></div>
                     <div class="field"><label for="role">Role:</label><select id="role" ng-model="site.role" name="role" ng-options="role.value as role.label for role in ROLE"></select></div>
                     <div class="field"><label for="organise">Organization:</label><select id="organise" ng-model="site.organization" name="organization" ng-options="organization.value as organization.label for organization in ORGANIZATION"></select></div>
                     <div class="field"><label for="employesNumber">Employes number :</label><input type="text" id="employesNumber" name="employesNumber" data-ng-model="site.employesNumber" data-ng-pattern="/^[0-9]*$/" /></div>
-                    <div class="field"><label for="PoC">Point of Contact :</label><input type="text" id="PoC" name="pointOfContact" data-ng-model="site.pointOfContact" /></div>
+                    <div class="field"><label for="PoC">Point of contact :</label><input type="text" id="PoC" name="pointOfContact" data-ng-model="site.pointOfContact" /></div>
                     <div class="field"><label for="numTel">Phone number of PoC :</label><input type="text" id="numTel" name="phoneNumberPoC" data-ng-model="site.phoneNumberPoC" data-ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" /></div>
                     <div class="field"><label for="techPoC">Tech PoC :</label><input type="text" id="techPoC" name="techPoC" data-ng-model="site.techPoC" /></div>
-                    <div class="field"><label for="techNumTel">Phone of Tech PoC :</label><input type="text" id="techNumTel" name="phoneTechPoC" data-ng-model="site.phoneTechPoC" data-ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" /></div>
+                    <div class="field"><label for="techNumTel">Phone of tech PoC :</label><input type="text" id="techNumTel" name="phoneTechPoC" data-ng-model="site.phoneTechPoC" data-ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" /></div>
                 </div>
             </form>
             <a id="btnSave" class="btn" data-ng-click="siteCTL.save();" ng-disabled="siteForm.$pristine || siteForm.$invalid" data-ng-if="canSave">Save</a>
@@ -114,7 +129,7 @@
             <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Rooms of this site</span><a id="btnOpenFreeLstRoom" class="btn" data-ng-if="site.id" data-ng-click="siteCTL.openFreeRoomsList();">Get</a>
             <alert type="danger" data-ng-show="lstRoomErr">{{lstRoomErr}}</alert>
             <table border="1">
-                <tr><th>Room ID</th><th>Point of Contact</th><th></th></tr>
+                <tr><th>Room ID</th><th>Point of contact</th><th></th></tr>
                 <tr data-ng-repeat="r in site.lstRooms" data-ng-click="">
                     <td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td><td><a id="btnRemoveRoom" class="btn" data-ng-click="siteCTL.removeAssRoom(r.id)">Remove</a></td>
                 </tr>
@@ -124,7 +139,7 @@
             <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Equipments of this site</span><a id="btnOpenFreeLstEquip" class="btn" data-ng-if="site.id" data-ng-click="siteCTL.openFreeEquipsList();">Get</a>
             <alert type="danger" data-ng-show="lstEquipErr">{{lstEquipErr}}</alert>
             <table border="1">
-                <tr><th>Serial Number</th><th>Model</th><th></th></tr>
+                <tr><th>Serial number</th><th>Model</th><th></th></tr>
                 <tr data-ng-repeat="e in site.lstEquips" data-ng-click="">
                     <td>{{e.serialNumber}}</td><td>{{e.model}}</td><td><a id="btnRemoveEquip" class="btn" data-ng-click="siteCTL.removeAssEquip(e.id)">Remove</a></td>
                 </tr>
@@ -138,7 +153,7 @@
                 <div class="inner">Choose rooms to associate to this site.</div>
                 <div class="inner ">
                     <table border="1">
-                        <tr><th></th><th>Room ID</th><th>Point of Contact</th><th>Size</th></tr>
+                        <tr><th></th><th>Room ID</th><th>Point of contact</th><th>Size</th></tr>
                         <tr data-ng-repeat="r in lstFreeRooms">
                             <td><input type="checkbox" data-ng-model="r.adding"/></td><td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td><td>{{r.roomSize}}</td>
                         </tr>
@@ -159,7 +174,7 @@
                 <div class="inner">Choose equipments to associate to this site.</div>
                 <div class="inner ">
                     <table border="1">
-                        <tr><th></th><th>Serial Number</th><th>Manufacturer</th><th>Model</th><th>Type</th></tr>
+                        <tr><th></th><th>Serial number</th><th>Manufacturer</th><th>Model</th><th>Type</th></tr>
                         <tr data-ng-repeat="e in lstFreeEquips">
                             <td><input type="checkbox" data-ng-model="e.adding"/></td><td>{{e.serialNumber}}</td><td>{{e.manufacturer}}</td><td>{{e.model}}</td><td>{{e.type}}</td>
                         </tr>
