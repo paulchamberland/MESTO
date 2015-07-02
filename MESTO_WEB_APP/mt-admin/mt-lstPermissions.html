@@ -8,14 +8,18 @@
         </tr>
     </table>
     
-    <div id="details" class="details mt">
-        <div class="top">{{permission.codeName}}</div>
-        <div class="core" >
+    <script type="text/ng-template" id="detailModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title">{{permission.codeName}}</h3>
+        </div>
+        <div class="modal-body">
             <div class="inner first">Name : {{permission.name}}</div>
             <div class="inner last">Description : {{permission.description}}</div>
         </div>
-        <div class="bot"><a class="btn btn-primary" onclick="$('#details').fadeOut('slow');">Close</a></div>
-    </div>  
+        <div class="modal-footer">
+            <a class="btn btn-primary" data-ng-click="permissionCTL.closeDetail();">Close</a>
+        </div>
+    </script> 
     
     <div class="wrap"></div>
 </div>
