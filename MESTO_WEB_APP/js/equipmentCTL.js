@@ -1,6 +1,7 @@
-app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, navigateSrv, securitySrv, streamSrv, enumManagerSrv) {
+app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, navigateSrv, securitySrv, streamSrv, enumManagerSrv, $modal) {
     var self = this;
     var ACTIVITY_DELETE = "del";
+    var modalInstance = null;
     $scope.TYPE = enumManagerSrv.getEquip_TYPE();
 
     $scope.equipment = {id: "",
@@ -27,8 +28,6 @@ app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, 
     this.emptyEquipment = {};
     $scope.canDelete = false;
     $scope.canSave = true;
-    $scope.isRoomListOpened = false; // Flag to manage GUI display of the list
-    $scope.isSiteListOpened = false; // Flag to manage GUI display of the list
     
     $scope.isAutorizeUpdatingEquip = false;
     $scope.isAutorizeCreatingEquip = false;
@@ -258,30 +257,27 @@ app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, 
     };
     
     this.closeRoomList = function() {
-        $scope.isRoomListOpened = false;
-        $('#lstRoom').fadeOut('slow');
+        modalInstance.dismiss('done');
     };
     this.closeSiteList = function() {
-        $scope.isSiteListOpened = false;
-        $('#lstSite').fadeOut('slow');
+        modalInstance.dismiss('done');
     };
     
     this.openRoomList = function() {
-        if (! $scope.isSiteListOpened) {
-            $scope.isRoomListOpened = true;
-            $scope.isSiteListOpened = false;
-            
-            self.loadRoomList();
-            $('#lstRoom').fadeIn('slow');
-        }
+        self.loadRoomList();
+        modalInstance = $modal.open({
+            animation: true,
+            scope: $scope,
+            templateUrl: 'roomListModalContent.html'
+        });
     };
     this.openSiteList = function() {
-        if (! $scope.isRoomListOpened) {
-            $scope.isRoomListOpened = false;
-            $scope.isSiteListOpened = true;
-            self.loadSiteList();
-            $('#lstSite').fadeIn('slow');
-        }
+        self.loadSiteList();
+        modalInstance = $modal.open({
+            animation: true,
+            scope: $scope,
+            templateUrl: 'siteListModalContent.html'
+        });
     };
     
     this.associateRoom = function(selectRoom) {

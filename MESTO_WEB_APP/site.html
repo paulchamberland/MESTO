@@ -146,10 +146,12 @@
             </table>
         </div>
         
-        <div id="lstFreeRooms" class="details" style="top:200px;left:400px;">
-            <div class="top">Assigning Rooms</div>
-            <div class="core">
-                <div class="inner first"><alert type="danger" data-ng-show="lstFreeRoomErr">{{lstFreeRoomErr}}</alert></div>
+        <script type="text/ng-template" id="freeRoomListModalContent.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Assigning Rooms</h3>
+            </div>
+            <div class="modal-body">
+                <div class="inner "><alert type="danger" data-ng-show="lstFreeRoomErr">{{lstFreeRoomErr}}</alert></div>
                 <div class="inner">Choose rooms to associate to this site.</div>
                 <div class="inner ">
                     <table border="1">
@@ -159,18 +161,22 @@
                         </tr>
                     </table>
                 </div>
-                <div class="inner last">
+                <div class="inner">
                     <a id="btnAddLstRooms" class="btn" data-ng-click="siteCTL.addFreeRoomsList()" >Add</a>
                     <a id="btnNewRoom" class="btn" style="float:right;" data-ng-click="siteCTL.newRoom()" >New</a>
                 </div>
             </div>
-            <div class="bot"><a id="btnCloseFreeLstRooms" class="btn" data-ng-click="siteCTL.closeFreeRoomsList()" >Close</a></div>
-        </div>
+            <div class="modal-footer">
+                <a id="btnCloseFreeLstRooms" class="btn" data-ng-click="siteCTL.closeFreeRoomsList()" >Close</a>
+            </div>
+        </script>
         
-        <div id="lstFreeEquips" class="details" style="top:200px;left:400px;">
-            <div class="top">Assigning Equipments</div>
-            <div class="core">
-                <div class="inner first"><alert type="danger" data-ng-show="lstFreeEquipErr">{{lstFreeEquipErr}}</alert></div>
+        <script type="text/ng-template" id="freeEquipListModalContent.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Assigning Equipments</h3>
+            </div>
+            <div class="modal-body">
+                <div class="inner"><alert type="danger" data-ng-show="lstFreeEquipErr">{{lstFreeEquipErr}}</alert></div>
                 <div class="inner">Choose equipments to associate to this site.</div>
                 <div class="inner ">
                     <table border="1">
@@ -180,13 +186,15 @@
                         </tr>
                     </table>
                 </div>
-                <div class="inner last">
+                <div class="inner">
                     <a id="btnAddLstEquips" class="btn" data-ng-click="siteCTL.addFreeEquipsList()" >Add</a>
                     <a id="btnNewEquip" class="btn" style="float:right;" data-ng-click="siteCTL.newEquip()" >New</a>
                 </div>
             </div>
-            <div class="bot"><a id="btnCloseFreeLstEquip" class="btn" data-ng-click="siteCTL.closeFreeEquipsList()" >Close</a></div>
-        </div>
+            <div class="modal-footer">
+                <a id="btnCloseFreeLstEquip" class="btn" data-ng-click="siteCTL.closeFreeEquipsList()" >Close</a>
+            </div>
+        </script>
     </div>
     
     <div class="wrap"></div>

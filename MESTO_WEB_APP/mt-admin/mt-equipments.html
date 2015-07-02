@@ -37,13 +37,15 @@
         <a id="btnReset" class="btn" data-ng-click="equipCTL.resetFrm();equipCTL.resetMsg();" ng-disabled="equipmentForm.$pristine">Reset</a>
 	</div>
     
-    <div id="lstRoom" class="details" style="top:200px;left:400px;">
-        <div class="top">Rooms List</div>
-        <div class="core">
-            <div class="inner first"><alert type="danger" data-ng-show="lstRmErr">{{lstRmErr}}</alert></div>
+    <script type="text/ng-template" id="roomListModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Rooms List</h3>
+        </div>
+        <div class="modal-body">
+            <div class="inner"><alert type="danger" data-ng-show="lstRmErr">{{lstRmErr}}</alert></div>
             <div class="inner">Assigned the equipment to a room by clicking on the row.</div>
-            <div class="inner last">
-                <table border="1">
+            <div class="inner">
+                <table>
                     <tr><th>Room ID</th><th>Point of Contact</th></tr>
                     <tr data-ng-repeat="r in roomList" data-ng-click="equipCTL.associateRoom(r);equipCTL.validDoubleAssociation();">
                         <td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td>
@@ -51,15 +53,21 @@
                 </table>
             </div>
         </div>
-        <div class="bot"><a id="btnCloseLstRoom" class="btn" data-ng-click="equipCTL.closeRoomList()">Close</a></div>
-    </div>
+        <div class="modal-footer">
+            <a id="btnCloseLstRoom" class="btn" data-ng-click="equipCTL.closeRoomList()">Close</a>
+            <!--button class="btn btn-primary" ng-click="ok()">OK</button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancel</button-->
+        </div>
+    </script>
     
-    <div id="lstSite" class="details" style="top:200px;left:400px;">
-        <div class="top">Sites List</div>
-        <div class="core">
-            <div class="inner first"><alert type="danger" data-ng-show="lstStErr">{{lstStErr}}</alert></div>
+    <script type="text/ng-template" id="siteListModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Sites List</h3>
+        </div>
+        <div class="modal-body">
+            <div class="inner"><alert type="danger" data-ng-show="lstStErr">{{lstStErr}}</alert></div>
             <div class="inner">Assigned the equipment to a site by clicking on the row.</div>
-            <div class="inner last">
+            <div class="inner">
                 <table border="1">
                     <tr><th>id</th><th>Reference</th><th>Name</th><th>Latitude</th><th>Longitude</th></tr>
                     <tr data-ng-repeat="s in siteList" data-ng-click="equipCTL.associateSite(s);equipCTL.validDoubleAssociation();">
@@ -68,8 +76,10 @@
                 </table>
             </div>
         </div>
-        <div class="bot"><a id="btnCloseLstSite" class="btn" data-ng-click="equipCTL.closeSiteList()" >Close</a></div>
-    </div>
+        <div class="modal-footer">
+            <a id="btnCloseLstRoom" class="btn" data-ng-click="equipCTL.closeSiteList()">Close</a>
+        </div>
+    </script>
     
     <div class="wrap"></div>
 </div>

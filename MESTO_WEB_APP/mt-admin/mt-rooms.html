@@ -41,27 +41,33 @@
 		</table>
 	</div>
     
-    <div id="lstSite" class="details" style="top:200px;left:400px;">
-        <div class="top">Sites List</div>
-        <div class="core">
-            <div class="inner first"><alert type="danger" data-ng-show="lstStErr">{{lstStErr}}</alert></div>
-            <div class="inner">Assigned the room to a site, by clicking on the row.</div>
-            <div class="inner last">
+    <script type="text/ng-template" id="siteListModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Sites List</h3>
+        </div>
+        <div class="modal-body">
+            <div class="inner"><alert type="danger" data-ng-show="lstStErr">{{lstStErr}}</alert></div>
+            <div class="inner">Assigned the equipment to a site by clicking on the row.</div>
+            <div class="inner">
                 <table border="1">
                     <tr><th>id</th><th>Reference</th><th>Name</th><th>Latitude</th><th>Longitude</th></tr>
-                    <tr data-ng-repeat="s in siteList" data-ng-click="roomCTL.associateSite(s)">
+                    <tr data-ng-repeat="s in siteList" data-ng-click="roomCTL.associateSite(s);">
                         <td>{{s.id}}</td><td>{{s.reference}}</td><td>{{s.siteName}}</td><td>{{s.latitude}}</td><td>{{s.longitude}}</td>
                     </tr>
                 </table>
             </div>
         </div>
-        <div class="bot"><a id="btnCloseLstSite" class="btn" data-ng-click="roomCTL.closeSiteList()" >Close</a></div>
-    </div>
+        <div class="modal-footer">
+            <a id="btnCloseLstRoom" class="btn" data-ng-click="roomCTL.closeSiteList()">Close</a>
+        </div>
+    </script>
     
-    <div id="lstFreeEquips" class="details" style="top:200px;left:400px;">
-        <div class="top">Assigning Equipments</div>
-        <div class="core">
-            <div class="inner first"><alert type="danger" data-ng-show="lstFreeEquipErr">{{lstFreeEquipErr}}</alert></div>
+    <script type="text/ng-template" id="freeEquipListModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Assigning Equipments</h3>
+        </div>
+        <div class="modal-body">
+            <div class="inner"><alert type="danger" data-ng-show="lstFreeEquipErr">{{lstFreeEquipErr}}</alert></div>
             <div class="inner">Choose equipments to associate to this site.</div>
             <div class="inner ">
                 <table border="1">
@@ -71,12 +77,14 @@
                     </tr>
                 </table>
             </div>
-            <div class="inner last">
+            <div class="inner">
                 <a id="btnAddLstEquips" class="btn" data-ng-click="roomCTL.addFreeEquipsList()" >Add</a>
                 <a id="btnNewEquip" class="btn" style="float:right;" data-ng-click="roomCTL.newEquip()" >New</a>
             </div>
         </div>
-        <div class="bot"><a id="btnCloseFreeLstEquip" data-ng-click="roomCTL.closeFreeEquipsList()" >Close</button></div>
-    </div>
+        <div class="modal-footer">
+            <a id="btnCloseFreeLstEquip" class="btn" data-ng-click="roomCTL.closeFreeEquipsList()" >Close</a>
+        </div>
+    </script>
     <div class="wrap"></div>
 </div>

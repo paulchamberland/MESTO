@@ -1,5 +1,7 @@
-app.controller('siteCTL', function($scope, $http, $location, $routeParams, navigateSrv, securitySrv, streamSrv, enumManagerSrv) {
+app.controller('siteCTL', function($scope, $http, $location, $routeParams, navigateSrv, securitySrv, streamSrv, enumManagerSrv, $modal) {
     var self = this;
+    var modalInstance = null;
+    
     var ACTIVITY_DELETE = "del";
     var ACTIVITY_ADDING_ASSO_EQUIP = "add-ass-st|eq";
     var ACTIVITY_REMOVE_ASSO_EQUIP = "rem-ass-st|eq";
@@ -385,11 +387,15 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     this.openFreeRoomsList = function() {
         self.loadFreeRoomsList();
         
-        $('#lstFreeRooms').fadeIn('slow');
+        modalInstance = $modal.open({
+            animation: true,
+            scope: $scope,
+            templateUrl: 'freeRoomListModalContent.html'
+        });
     };
     
     this.closeFreeRoomsList = function() {
-        $('#lstFreeRooms').fadeOut('slow');
+        modalInstance.dismiss('done');
         
         delete $scope.lstFreeRooms;
     };
@@ -428,6 +434,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     };
     
     this.newRoom = function() {
+        modalInstance.dismiss('redirect');
         $location.path("/admin/room"); // TODO: complete by sending the ID and do the comportement on the Room page
     };
     
@@ -514,11 +521,15 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     this.openFreeEquipsList = function() {
         self.loadFreeEquipsList();
         
-        $('#lstFreeEquips').fadeIn('slow');
+        modalInstance = $modal.open({
+            animation: true,
+            scope: $scope,
+            templateUrl: 'freeEquipListModalContent.html'
+        });
     }
     
     this.closeFreeEquipsList = function() {
-        $('#lstFreeEquips').fadeOut('slow');
+        modalInstance.dismiss('done');
         
         delete $scope.lstFreeEquips;
     }
@@ -557,6 +568,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     }
     
     this.newEquip = function() {
+        modalInstance.dismiss('redirect');
         $location.path("/admin/equip"); // TODO: complete by sending the ID and do the comportement on the Room page
     };
     

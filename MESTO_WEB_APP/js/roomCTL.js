@@ -1,5 +1,7 @@
-app.controller('roomCTL', function($scope, $http, $location, $routeParams, navigateSrv, securitySrv, streamSrv, enumManagerSrv) {
+app.controller('roomCTL', function($scope, $http, $location, $routeParams, navigateSrv, securitySrv, streamSrv, enumManagerSrv, $modal) {
     var self = this;
+    var modalInstance = null;
+    
     var ACTIVITY_DELETE = "del";
     var ACTIVITY_ADDING_ASSO_EQUIP = "add-ass-rm|eq";
     var ACTIVITY_REMOVE_ASSO_EQUIP = "rem-ass-rm|eq";
@@ -233,12 +235,17 @@ app.controller('roomCTL', function($scope, $http, $location, $routeParams, navig
     };
     
     this.closeSiteList = function() {
-        $('#lstSite').fadeOut('slow');
+        modalInstance.dismiss('done');
+        delete $scope.siteList;
     };
 
     this.openSiteList = function() {
         self.loadSiteList();
-        $('#lstSite').fadeIn('slow');
+        modalInstance = $modal.open({
+            animation: true,
+            scope: $scope,
+            templateUrl: 'siteListModalContent.html'
+        });
     };
     
     this.associateSite = function(selectSite) {
@@ -358,11 +365,15 @@ app.controller('roomCTL', function($scope, $http, $location, $routeParams, navig
     this.openFreeEquipsList = function() {
         self.loadFreeEquipsList();
         
-        $('#lstFreeEquips').fadeIn('slow');
+        modalInstance = $modal.open({
+            animation: true,
+            scope: $scope,
+            templateUrl: 'freeEquipListModalContent.html'
+        });
     };
     
     this.closeFreeEquipsList = function() {
-        $('#lstFreeEquips').fadeOut('slow');
+        modalInstance.dismiss('done');
         
         delete $scope.lstFreeEquips;
     };
@@ -401,11 +412,8 @@ app.controller('roomCTL', function($scope, $http, $location, $routeParams, navig
     }
     
     this.newEquip = function() {
+        modalInstance.dismiss('redirect');
         $location.path("/admin/equip"); // TODO: complete by sending the ID and do the comportement on the Room page
-    };
-    
-    this.newRoom = function() {
-        $location.path("/admin/room");
     };
     
     init();
