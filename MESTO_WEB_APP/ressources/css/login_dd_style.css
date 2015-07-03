@@ -3,7 +3,7 @@ a { text-decoration:none }
 .container { width:262px; margin:0 auto; padding-top:200px; }
 
 #bar { width:100%; height:35px; padding:15px 0; background:url(../images/bar.png) repeat-x; }
-#container { width: 20%; height: 65px; margin-right: 5px; float: right;}
+#container { /* width: 20%; */ height: 65px; margin-right: 5px; float: right;}
 
 /*-------LOGIN STARTS HERE -------*/
 
@@ -11,7 +11,7 @@ a { text-decoration:none }
 #loginContainer {
     position:relative;
     top: 20%;
-    float:right;
+    /* float:right; */
     font-size:12px;
 }
 
