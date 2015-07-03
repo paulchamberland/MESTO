@@ -273,6 +273,7 @@ app.controller('userCTL', function($scope, $http, $location, $routeParams, navig
     };
     
     this.loadOnlyPending = function() {
+        $scope.userList = [];
         $http({
                 method: 'POST',
                 url: "/MESTO/MESTO_WEB_APP/php/DAOUser.php", // TODO: Make a config with path

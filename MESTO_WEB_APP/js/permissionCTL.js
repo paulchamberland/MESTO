@@ -1,4 +1,4 @@
-app.controller('permissionCTL', function($scope, permissionSrv, $modal) {
+app.controller('permissionCTL', function($scope, permissionSrv, $modal, paginator) {
     var self = this;
     var modalInstance = null;
     
@@ -11,6 +11,7 @@ app.controller('permissionCTL', function($scope, permissionSrv, $modal) {
     
     function init() {
         $scope.lstPermissions = permissionSrv.lstPermissions;
+        paginator.init($scope, $scope.lstPermissions);
     }
     
     this.openPermission = function(pPerm) {

@@ -287,6 +287,39 @@ app.factory('streamSrv', function($http, securitySrv) {
     }
 });
 
+app.factory('paginator', function() {
+    var scope = null;
+    
+    function init(pScope, pLst) {
+        scope = pScope;
+        scope.list = pLst
+        scope.totalItems = scope.list.length;
+        
+        scope.currentPage = 1;
+        scope.itemsPerPage = 5;
+        
+        scope.pageChanged = pageChanged;
+        pageChanged();
+    }
+
+    function setPage(pageNo) {
+        scope.currentPage = pageNo;
+    }
+
+    function pageChanged() {
+        scope.$watch('currentPage + itemsPerPage', function() {
+            var begin = ((scope.currentPage - 1) * scope.itemsPerPage),
+            end = begin + scope.itemsPerPage;
+
+            scope.listPaged = scope.list.slice(begin, end);
+        });
+    }
+    
+    return {
+        init : init
+    };
+});
+
 app.factory('securitySrv', function($http, $location, Idle) {
     var currentUser = null;
     var uId = null;
