@@ -1,6 +1,6 @@
 app.controller('roomCTL', function($scope, $http, $location, $routeParams, navigateSrv, securitySrv, streamSrv, enumManagerSrv, $modal) {
     var self = this;
-    var modalInstance = null;
+    self.modalInstance = null; // shoudl be private, but test need it public.
     
     var ACTIVITY_DELETE = "del";
     var ACTIVITY_ADDING_ASSO_EQUIP = "add-ass-rm|eq";
@@ -235,13 +235,13 @@ app.controller('roomCTL', function($scope, $http, $location, $routeParams, navig
     };
     
     this.closeSiteList = function() {
-        modalInstance.dismiss('done');
+        self.modalInstance.dismiss('done');
         delete $scope.siteList;
     };
 
     this.openSiteList = function() {
         self.loadSiteList();
-        modalInstance = $modal.open({
+        self.modalInstance = $modal.open({
             animation: true,
             scope: $scope,
             templateUrl: 'siteListModalContent.html'
@@ -365,7 +365,7 @@ app.controller('roomCTL', function($scope, $http, $location, $routeParams, navig
     this.openFreeEquipsList = function() {
         self.loadFreeEquipsList();
         
-        modalInstance = $modal.open({
+        self.modalInstance = $modal.open({
             animation: true,
             scope: $scope,
             templateUrl: 'freeEquipListModalContent.html'
@@ -373,7 +373,7 @@ app.controller('roomCTL', function($scope, $http, $location, $routeParams, navig
     };
     
     this.closeFreeEquipsList = function() {
-        modalInstance.dismiss('done');
+        self.modalInstance.dismiss('done');
         
         delete $scope.lstFreeEquips;
     };
@@ -412,7 +412,7 @@ app.controller('roomCTL', function($scope, $http, $location, $routeParams, navig
     }
     
     this.newEquip = function() {
-        modalInstance.dismiss('redirect');
+        self.modalInstance.dismiss('redirect');
         $location.path("/admin/equip"); // TODO: complete by sending the ID and do the comportement on the Room page
     };
     

@@ -182,19 +182,25 @@ describe('Testing the controller of site object =>', function() {
         });
         
         it('Testing: Add a new sub-object Room', function() {
+            modInst = controller.modalInstance = {dismiss:function(){}};
+            spyOn(modInst, 'dismiss');
             spyOn(location, 'path');
             
             controller.newRoom();
             
             expect(location.path).toHaveBeenCalledWith('/admin/room');
+            expect(modInst.dismiss).toHaveBeenCalledWith('redirect');
         });
         
         it('Testing: Add a new sub-object Equipment', function() {
+            modInst = controller.modalInstance = {dismiss:function(){}};
+            spyOn(modInst, 'dismiss');
             spyOn(location, 'path');
             
             controller.newEquip();
             
             expect(location.path).toHaveBeenCalledWith('/admin/equip');
+            expect(modInst.dismiss).toHaveBeenCalledWith('redirect');
         });
         
         it('Testing: Add a new object Site', function() {
@@ -367,28 +373,42 @@ describe('Testing the controller of site object =>', function() {
     });
     
     it('Testing: closeFreeRoomsList', function() {
+        modInst = controller.modalInstance = {dismiss:function(){}};
+        spyOn(modInst, 'dismiss');
         scope.lstFreeRooms = "test";
+        
         controller.closeFreeRoomsList();
         
         expect(scope.lstFreeRooms).not.toBeDefined();
-        // TODO : add test and spy for JQuery
+        expect(modInst.dismiss).toHaveBeenCalledWith('done');
     });
-    
-    it('Testing: openFreeEquipsList', function() {
-        spyOn(controller, "loadFreeEquipsList");
-        
-        controller.openFreeEquipsList();
-        expect(controller.loadFreeEquipsList).toHaveBeenCalled();
-        // TODO : add test and spy for JQuery
-    });
-    
     it('Testing: closeFreeEquipsList', function() {
+        modInst = controller.modalInstance = {dismiss:function(){}};
+        spyOn(modInst, 'dismiss');
         scope.lstFreeEquips = "test";
         controller.closeFreeEquipsList();
         
         expect(scope.lstFreeEquips).not.toBeDefined();
-        // TODO : add test and spy for JQuery
+        expect(modInst.dismiss).toHaveBeenCalledWith('done');
     });
+    
+    describe('Dependancy to modal Instance', function() {
+        var modal;
+        
+        beforeEach(inject(function(_$modal_) {
+            modal = _$modal_;
+        }));
+        it('Testing: openFreeEquipsList', function() {
+            spyOn(modal, "open");
+            spyOn(controller, "loadFreeEquipsList");
+            
+            controller.openFreeEquipsList();
+            
+            expect(controller.loadFreeEquipsList).toHaveBeenCalled();
+            expect(modal.open).toHaveBeenCalled();
+        });
+    });
+    
     describe('Testing Ajax call from site object =>', function() {
         var location, streamSrv;
         

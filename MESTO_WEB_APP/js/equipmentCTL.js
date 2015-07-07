@@ -1,7 +1,7 @@
 app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, navigateSrv, securitySrv, streamSrv, enumManagerSrv, $modal) {
     var self = this;
     var ACTIVITY_DELETE = "del";
-    var modalInstance = null;
+    this.modalInstance = null; // shoudl be private, but test need it public.
     $scope.TYPE = enumManagerSrv.getEquip_TYPE();
 
     $scope.equipment = {id: "",
@@ -257,15 +257,15 @@ app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, 
     };
     
     this.closeRoomList = function() {
-        modalInstance.dismiss('done');
+        self.modalInstance.dismiss('done');
     };
     this.closeSiteList = function() {
-        modalInstance.dismiss('done');
+        self.modalInstance.dismiss('done');
     };
     
     this.openRoomList = function() {
         self.loadRoomList();
-        modalInstance = $modal.open({
+        self.modalInstance = $modal.open({
             animation: true,
             scope: $scope,
             templateUrl: 'roomListModalContent.html'
@@ -273,7 +273,7 @@ app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, 
     };
     this.openSiteList = function() {
         self.loadSiteList();
-        modalInstance = $modal.open({
+        self.modalInstance = $modal.open({
             animation: true,
             scope: $scope,
             templateUrl: 'siteListModalContent.html'

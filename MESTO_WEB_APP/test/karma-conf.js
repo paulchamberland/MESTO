@@ -10,6 +10,7 @@ module.exports = function(config){
       'libs/angular-mocks.js',
       'libs/angular-route.min.js',
       'libs/angular-idle.js',
+      'libs/ui-bootstrap-0.13.0.js',
  
       // include js files
       'js/mestoApp.js',

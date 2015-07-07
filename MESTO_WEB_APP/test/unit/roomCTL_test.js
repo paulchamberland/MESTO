@@ -135,11 +135,14 @@ describe('Testing the controller of room object =>', function() {
         });
         
         it('Testing: Add a new sub-object Equipment', function() {
+            modInst = controller.modalInstance = {dismiss:function(){}};
+            spyOn(modInst, 'dismiss');
             spyOn(location, 'path');
             
             controller.newEquip();
             
             expect(location.path).toHaveBeenCalledWith('/admin/equip');
+            expect(modInst.dismiss).toHaveBeenCalledWith('redirect');
         });
         
         it('Testing: Add a new object Room', function() {
@@ -260,10 +263,13 @@ describe('Testing the controller of room object =>', function() {
     
     it('Testing: closeFreeEquipsList', function() {
         scope.lstFreeEquips = "test";
+        modInst = controller.modalInstance = {dismiss:function(){}};
+        spyOn(modInst, 'dismiss');
+            
         controller.closeFreeEquipsList();
         
         expect(scope.lstFreeEquips).not.toBeDefined();
-        // TODO : add test and spy for JQuery
+        expect(modInst.dismiss).toHaveBeenCalledWith('done');
     });
     
     describe('Testing Ajax call from Room object => ', function() {

@@ -1,6 +1,6 @@
 app.controller('siteCTL', function($scope, $http, $location, $routeParams, navigateSrv, securitySrv, streamSrv, enumManagerSrv, $modal) {
     var self = this;
-    var modalInstance = null;
+    this.modalInstance = null;// shoudl be private, but test need it public.
     
     var ACTIVITY_DELETE = "del";
     var ACTIVITY_ADDING_ASSO_EQUIP = "add-ass-st|eq";
@@ -387,7 +387,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     this.openFreeRoomsList = function() {
         self.loadFreeRoomsList();
         
-        modalInstance = $modal.open({
+        self.modalInstance = $modal.open({
             animation: true,
             scope: $scope,
             templateUrl: 'freeRoomListModalContent.html'
@@ -395,7 +395,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     };
     
     this.closeFreeRoomsList = function() {
-        modalInstance.dismiss('done');
+        self.modalInstance.dismiss('done');
         
         delete $scope.lstFreeRooms;
     };
@@ -434,7 +434,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     };
     
     this.newRoom = function() {
-        modalInstance.dismiss('redirect');
+        self.modalInstance.dismiss('redirect');
         $location.path("/admin/room"); // TODO: complete by sending the ID and do the comportement on the Room page
     };
     
@@ -521,7 +521,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     this.openFreeEquipsList = function() {
         self.loadFreeEquipsList();
         
-        modalInstance = $modal.open({
+        self.modalInstance = $modal.open({
             animation: true,
             scope: $scope,
             templateUrl: 'freeEquipListModalContent.html'
@@ -529,7 +529,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     }
     
     this.closeFreeEquipsList = function() {
-        modalInstance.dismiss('done');
+        self.modalInstance.dismiss('done');
         
         delete $scope.lstFreeEquips;
     }
@@ -568,7 +568,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     }
     
     this.newEquip = function() {
-        modalInstance.dismiss('redirect');
+        self.modalInstance.dismiss('redirect');
         $location.path("/admin/equip"); // TODO: complete by sending the ID and do the comportement on the Room page
     };
     

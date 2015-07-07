@@ -23,6 +23,7 @@ describe('Testing the controller of equipment object', function() {
                             },
                             updateBy: "",
                             updateDate: ""};
+                            
     beforeEach(inject(function(_$controller_, $rootScope, _securitySrv_, _enumManagerSrv_){
         // The injector unwraps the underscores (_) from around the parameter names when matching
         scope = $rootScope;//.$new();
@@ -224,54 +225,84 @@ describe('Testing the controller of equipment object', function() {
         expect(scope.SQLErrors).not.toBeDefined();
     });
     
-    it('Testing: associateRoom function', function() {
-        var testDirty = false;
-        scope.equipmentForm = {parentRoomName:{$setDirty : function(){testDirty=true;}}};
-        scope.isRoomListOpened = true;
-        controller.associateRoom({id:'3',roomID:"test"});
+    describe('Dependancy to modal Instance', function() {
+        var modal;
+        beforeEach(inject(function(_$modal_) {
+            modal = _$modal_;
+        }));
         
-        expect(scope.equipment.parentRoom.id).toBe('3');
-        expect(scope.equipment.parentRoom.roomID).toEqual("test");
-        expect(scope.isRoomListOpened).toBeFalsy();
-        expect(testDirty).toBeTruthy();
+        it('Testing : openRoomList function', function() {
+            spyOn(modal, "open");
+            spyOn(controller, 'loadRoomList');
+            
+            controller.openRoomList();
+            
+            expect(controller.loadRoomList).toHaveBeenCalled();
+            expect(modal.open).toHaveBeenCalled();
+        });
+        it('Testing : openSiteList function', function() {
+            spyOn(modal, "open");
+            spyOn(controller, 'loadSiteList');
+            
+            controller.openSiteList();
+            
+            expect(controller.loadSiteList).toHaveBeenCalled();
+            expect(modal.open).toHaveBeenCalled();
+        });
         
-        testDirty = false;
-        controller.associateRoom({id:'3',roomID:"test"});
-        expect(testDirty).toBeFalsy();
-    });
-    
-    it('Testing: closeRoomList function', function() {
-        expect(scope.isRoomListOpened).toBeFalsy();
+        it('Testing: associateRoom function', function() {
+            var testDirty = false;
+            scope.equipmentForm = {parentRoomName:{$setDirty : function(){testDirty=true;}}};
+            spyOn(controller, "closeRoomList");
+            
+            controller.associateRoom({id:'3',roomID:"test", role:"TTT", siteName:"site"});
+            
+            expect(scope.equipment.parentRoom.id).toBe('3');
+            expect(scope.equipment.parentRoom.roomID).toEqual("test");
+            expect(scope.equipment.parentRoom.role).toEqual("TTT");
+            expect(scope.equipment.parentRoom.siteName).toEqual("site");
+            expect(testDirty).toBeTruthy();
+            expect(controller.closeRoomList).toHaveBeenCalled();
+            
+            testDirty = false;
+            controller.associateRoom({id:'3',roomID:"test"});
+            expect(testDirty).toBeFalsy();
+        });
         
-        scope.isRoomListOpened = true;
-        controller.closeRoomList();
+        it('Testing: closeRoomList function', function() {
+            modInst = controller.modalInstance = {dismiss:function(){}};
+            spyOn(modInst, 'dismiss');
+            
+            controller.closeRoomList();
+            
+            expect(modInst.dismiss).toHaveBeenCalledWith('done');
+        });
+        it('Testing: closeSiteList function', function() {
+            modInst = controller.modalInstance = {dismiss:function(){}};
+            spyOn(modInst, 'dismiss');
+            
+            scope.isSiteListOpened = true;
+            controller.closeSiteList();
+            
+            expect(modInst.dismiss).toHaveBeenCalledWith('done');
+        });
         
-        expect(scope.isRoomListOpened).toBeFalsy();
-    });
-    it('Testing: closeSiteList function', function() {
-        expect(scope.isSiteListOpened).toBeFalsy();
-        
-        scope.isSiteListOpened = true;
-        controller.closeSiteList();
-        
-        expect(scope.isSiteListOpened).toBeFalsy();
-    });
-    
-    it('Testing: associateSite function', function() {
-        var testDirty = false;
-        scope.equipmentForm = {parentSiteName:{$setDirty : function(){testDirty=true;}}};
-        scope.isSiteListOpened = true;
-        
-        controller.associateSite({id:'3',siteName:"test"}); // test
-        
-        expect(scope.equipment.parentSite.id).toBe('3');
-        expect(scope.equipment.parentSite.name).toEqual("test");
-        expect(scope.isSiteListOpened).toBeFalsy();
-        expect(testDirty).toBeTruthy();
-        
-        testDirty = false;
-        controller.associateSite({id:'3',siteName:"test"});
-        expect(testDirty).toBeFalsy();
+        it('Testing: associateSite function', function() {
+            var testDirty = false;
+            scope.equipmentForm = {parentSiteName:{$setDirty : function(){testDirty=true;}}};
+            spyOn(controller, "closeSiteList");
+            
+            controller.associateSite({id:'3',siteName:"test"}); // test
+            
+            expect(scope.equipment.parentSite.id).toBe('3');
+            expect(scope.equipment.parentSite.name).toEqual("test");
+            expect(controller.closeSiteList).toHaveBeenCalled();
+            expect(testDirty).toBeTruthy();
+            
+            testDirty = false;
+            controller.associateSite({id:'3',siteName:"test"});
+            expect(testDirty).toBeFalsy();
+        });
     });
     
     it('Testing: cleanAssociateRoom function', function() {
@@ -292,33 +323,6 @@ describe('Testing the controller of equipment object', function() {
         controller.cleanAssociateSite();
         expect(scope.equipment.parentSite).toEqual({id:"", name:"", role:""});
         expect(controller.validDoubleAssociation).toHaveBeenCalled();
-    });
-    
-    it('Testing : openRoomList function', function() {
-        expect(scope.isRoomListOpened).toBeFalsy();
-        expect(scope.isSiteListOpened).toBeFalsy();
-        
-        spyOn(controller, 'loadRoomList');
-        
-        controller.openRoomList();
-        
-        expect(scope.isRoomListOpened).toBeTruthy();
-        expect(scope.isSiteListOpened).toBeFalsy();
-        expect(controller.loadRoomList).toHaveBeenCalled();
-        // TODO test call JQuery
-    });
-    it('Testing : openSiteList function', function() {
-        expect(scope.isRoomListOpened).toBeFalsy();
-        expect(scope.isSiteListOpened).toBeFalsy();
-        
-        spyOn(controller, 'loadSiteList');
-        
-        controller.openSiteList();
-        
-        expect(scope.isRoomListOpened).toBeFalsy();
-        expect(scope.isSiteListOpened).toBeTruthy();
-        expect(controller.loadSiteList).toHaveBeenCalled();
-        // TODO test call JQuery
     });
     
     describe('Testing Ajax call from Equipment object', function() {
