@@ -6,8 +6,8 @@
     <title>Mesto - find it!</title>
     
     <link rel="stylesheet" type="text/css" href="./ressources/css/login_dd_style.css" />
-    <link rel="stylesheet" type="text/css" href="ressources/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="ressources/css/mesto.css">
+    <link rel="stylesheet" type="text/css" href="ressources/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="ressources/css/mesto.css" />
     
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCtGKY6V-0PBUobXIG63JvdgGrldlC109Q">
@@ -21,8 +21,8 @@
     <script type="text/javascript" src="./libs/markerclusterer.js"></script>
     
 	<script type="text/javascript" src="./js/login_drop_down.js"></script>
-    <script type="text/javascript" src="./js/mestoHelper.js"></script>
     
+    <script type="text/javascript" src="./js/mestoHelper.js"></script>
     <script type="text/javascript" src="./js/mestoApp.js"></script>
     <script type="text/javascript" src="./js/loginCTL.js"></script>
     <script type="text/javascript" src="./js/mapCTL.js"></script>
@@ -53,7 +53,6 @@
         </form>    
     </div>
 		<div id="container" data-ng-if="headCTL.isLoginDisplay()">
-            <!-- Login Starts Here -->
             <div id="loginContainer" data-ng-controller="loginCTL as loginCTL">
                 <span style="padding-right:5px;" data-ng-if="loginCTL.isLogged()">Welcome <span class="fake-link" data-ng-click="loginCTL.openProfileUser()">{{loginCTL.getUserName()}}</span></span>
                 <a id="logoutButton" class="btn btn-info" data-ng-if="loginCTL.isLogged()" data-ng-click="loginCTL.logout()"><span>Logout</span></a>
@@ -78,7 +77,6 @@
                     </form>
                 </div>
             </div>
-            <!-- Login Ends Here -->
         </div>
   </header>
   <div style="display: block;">
