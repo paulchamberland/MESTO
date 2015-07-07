@@ -36,7 +36,7 @@ try {
         $stmt = $con->prepare("SELECT * from site WHERE reference='".$data['reference']."'");
 	}
     else {
-        $stmt = $con->prepare("SELECT * from site;");
+        $stmt = $con->prepare("SELECT * from site ORDER BY id;");
     }
     
     $stmt->execute();

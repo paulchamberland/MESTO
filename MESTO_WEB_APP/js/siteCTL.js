@@ -252,7 +252,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     
     this.validEndDate = function() {
         if ($scope.siteForm.endDate.$valid && $scope.siteForm.startDate.$valid && $scope.siteForm.endDate.$dirty && $scope.siteForm.startDate.$dirty
-                && Date.parse($scope.site.endDate) <= Date.parse($scope.site.startDate)) {
+                && $scope.site.endDate.toYMD() <= $scope.site.startDate.toYMD()) {
             $scope.siteForm.endDate.$setValidity('greaterThan', false);
         }
         else {
