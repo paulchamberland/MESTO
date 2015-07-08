@@ -49,7 +49,7 @@ app.controller('mapCTL', function($scope, $compile, $location, navigateSrv, secu
                         strInfoContent += '        <div class="inner last"><a class="link" href="" data-ng-click="seeSiteDetails('+i+')">More Detail</a></div>'
                                     
                     strInfoContent +='    </div>'
-                                    +'</div>'
+                                    +'</div>';
                     //markers[lstSites[i].reference] = googleMap.factoryMarker(lstSites[i].latitude, lstSites[i].longitude, map, lstSites[i].reference, strInfoContent);
                     markers.push(googleMap.factoryMarker(lstSites[i].latitude, lstSites[i].longitude, map, lstSites[i].reference, strInfoContent));
                 //}, i + 300);

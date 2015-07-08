@@ -384,8 +384,10 @@ div.admin{
 }
 
 .mapDetails {
-    min-width: 40px;
-    max-width: 180px;
+    min-width: 60px;
+    max-width: 200px;
+    height: auto;
+    overflow: hidden;
 }
 
 .mapDetails > .top {
@@ -413,6 +415,7 @@ div.admin{
 }
 .mapDetails > .core >.inner >.label {
     font-size:0.9em;
+    color: black;
     font-weight:bold;
 }
 .mapDetails > .core >.inner.first {
