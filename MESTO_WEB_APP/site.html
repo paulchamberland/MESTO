@@ -96,12 +96,12 @@
                     </div>
                     <div class="field"><label for="endDate">End date:</label>
                         <p class="input-group">
-                            <input type="text" id="endDate" name="endDate" data-ng-disabled="{{isDateNotEditable}}" datepicker-popup 
+                            <input type="text" id="endDate" name="endDate" class="input-sm" data-ng-disabled="{{isDateNotEditable}}" datepicker-popup 
                                 data-ng-model="site.endDate" data-ng-change="siteCTL.validEndDate()"
                                 is-open="endOpened" data-ng-required="site.isTemporary == true" show-button-bar="false"
                                 datepicker-options="{formatMonth:'MM', showWeeks:false}" />
                             <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" style="text-shadow:none;" ng-click="siteCTL.openEndCalendar($event);"><i class="glyphicon glyphicon-calendar"></i></button>
+                                <button type="button" class="btn btn-sm btn-default" style="text-shadow:none;" ng-click="siteCTL.openEndCalendar($event);"><i class="glyphicon glyphicon-calendar"></i></button>
                             </span>
                         </p>
                     </div>
