@@ -69,7 +69,7 @@ describe('E2E: Room => ', function() {
         
         it('Testing: Associate a site and required', function() {
             element(by.id('btnLinkSite')).click();
-            element.all(by.repeater('siteList')).first().click();
+            element.all(by.repeater('siteList')).get(1).click();
             
             expect(element(by.model('room.parentSite.name')).getAttribute("value")).not.toEqual('');
             expect(element(by.model('room.parentSite.name')).getAttribute("class")).toMatch("ng-valid-required");
@@ -81,11 +81,13 @@ describe('E2E: Room => ', function() {
             expect(btn.getAttribute('disabled')).toBeTruthy();
             
             element(by.model('room.pointOfContact')).sendKeys('t');
+            element(by.model('room.roomSize')).sendKeys(12);
             expect(btn.getAttribute('disabled')).toBeTruthy();
             
             element(by.model('room.roomID')).sendKeys('test');
+            
             element(by.id('btnLinkSite')).click();
-            element.all(by.repeater('siteList')).first().click();
+            element.all(by.repeater('siteList')).get(1).click();
             
             expect(btn.getAttribute('disabled')).toBeFalsy();
         });
@@ -119,7 +121,7 @@ describe('E2E: Room => ', function() {
             element(by.model('room.role')).sendKeys('T');
             element(by.id('btnLinkSite')).click();
             browser.sleep(1000);
-            element.all(by.repeater('siteList')).first().click();
+            element.all(by.repeater('siteList')).get(1).click();
             
             element(by.id('btnSave')).click();
             expect(browser.getCurrentUrl()).toMatch("#/admin/rooms");
@@ -132,7 +134,7 @@ describe('E2E: Room => ', function() {
             element(by.model('room.roomSize')).sendKeys('24');
             element(by.id('btnLinkSite')).click();
             browser.sleep(1000);
-            element.all(by.repeater('siteList')).first().click();
+            element.all(by.repeater('siteList')).get(1).click();
             
             element(by.id('btnSave')).click();
             expect(browser.getCurrentUrl()).toMatch("#/admin/room");
@@ -197,7 +199,7 @@ describe('E2E: Room => ', function() {
             element(by.model('room.roomSize')).sendKeys('24');
             element(by.id('btnLinkSite')).click();
             browser.sleep(1000);
-            element.all(by.repeater('siteList')).first().click();
+            element.all(by.repeater('siteList')).get(1).click();
             
             element(by.id('btnSave')).click();
             expect(browser.getCurrentUrl()).toMatch("#/admin/rooms");
@@ -209,7 +211,7 @@ describe('E2E: Room => ', function() {
             element(by.model('room.roomSize')).sendKeys('24');
             element(by.id('btnLinkSite')).click();
             browser.sleep(1000);
-            element.all(by.repeater('siteList')).first().click();
+            element.all(by.repeater('siteList')).get(1).click();
             
             element(by.id('btnSave')).click();
             expect(browser.getCurrentUrl()).toMatch("#/admin/rooms");
@@ -238,7 +240,7 @@ describe('E2E: Room => ', function() {
             element(by.model('room.role')).sendKeys('T');
             element(by.id('btnLinkSite')).click();
             browser.sleep(1000);
-            element.all(by.repeater('siteList')).first().click();// Just to be sure the info is there
+            element.all(by.repeater('siteList')).get(1).click();// Just to be sure the info is there
             
             
             element(by.id('btnSave')).click();
