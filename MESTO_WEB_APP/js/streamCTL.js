@@ -1,11 +1,11 @@
-app.controller('streamCTL', function($scope, $http) {
+app.controller('streamCTL', function($scope, $http, CONF_PATH) {
     var self = this;
     $scope.activities = [];
     
     this.loadStream = function(pIsRestrain, pLimit) {
         $http({
             method: 'POST',
-            url: "/MESTO/MESTO_WEB_APP/php/DAOStream.php", // TODO: Make a config with path
+            url: CONF_PATH+"/php/DAOStream.php",
             data: {
                 isRestrain : pIsRestrain.toString(),
                 limit : pLimit

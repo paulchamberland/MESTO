@@ -1,4 +1,4 @@
-app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, navigateSrv, securitySrv, streamSrv, enumManagerSrv, $modal) {
+app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, navigateSrv, securitySrv, streamSrv, enumManagerSrv, $modal, CONF_PATH) {
     var self = this;
     var ACTIVITY_DELETE = "del";
     this.modalInstance = null; // shoudl be private, but test need it public.
@@ -109,7 +109,7 @@ app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, 
         if ($scope.equipmentForm.$dirty && $scope.equipmentForm.$valid) {
             $http({
                 method: 'POST',
-                url: "/MESTO/MESTO_WEB_APP/php/saveEquipment.php", // TODO: Make a config with path
+                url: CONF_PATH+"/php/saveEquipment.php",
                 data: {
                     id : $scope.equipment.id,
                     serialNumber : $scope.equipment.serialNumber,
@@ -158,7 +158,7 @@ app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, 
     this.delete = function() {
         $http({
                 method: 'POST',
-                url: "/MESTO/MESTO_WEB_APP/php/saveEquipment.php", // TODO: Make a config with path
+                url: CONF_PATH+"/php/saveEquipment.php",
                 data: {
                     id : $scope.equipment.id,
                     activity : ACTIVITY_DELETE
@@ -212,7 +212,7 @@ app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, 
     };
     
     this.loadList = function() {
-        $http.post("/MESTO/MESTO_WEB_APP/php/DAOEquipment.php").success( // TODO: Make a config with path
+        $http.post(CONF_PATH+"/php/DAOEquipment.php").success(
             function(data) {
                 if (data.error == null) {
                     $scope.equipmentList = data;
@@ -233,7 +233,7 @@ app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, 
     this.loadDBEquipment = function(pSerialNumber) {
         $http({
                 method: 'POST',
-                url: "/MESTO/MESTO_WEB_APP/php/DAOEquipment.php", // TODO: Make a config with path
+                url: CONF_PATH+"/php/DAOEquipment.php",
                 data: {
                     serialNumber : pSerialNumber
                 },
@@ -325,7 +325,7 @@ app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, 
     };
     
     this.loadRoomList = function() {
-        $http.post("/MESTO/MESTO_WEB_APP/php/DAORoom.php").success( // TODO: Make a config with path
+        $http.post(CONF_PATH+"/php/DAORoom.php").success(
             function(data) {
                 if (data.error == null) {
                     $scope.roomList = data;
@@ -342,7 +342,7 @@ app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, 
         );
     };
     this.loadSiteList = function() {
-        $http.post("/MESTO/MESTO_WEB_APP/php/DAOSite.php").success( // TODO: Make a config with path
+        $http.post(CONF_PATH+"/php/DAOSite.php").success(
             function(data) {
                 if (data.error == null) {
                     $scope.siteList = data;

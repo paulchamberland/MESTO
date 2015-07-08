@@ -1,4 +1,4 @@
-app.controller('userRoleCTL', function($scope, $http, $location, $routeParams, navigateSrv, permissionSrv, securitySrv, streamSrv) {
+app.controller('userRoleCTL', function($scope, $http, $location, $routeParams, navigateSrv, permissionSrv, securitySrv, streamSrv, CONF_PATH) {
     var self = this;
     var ACTIVITY_DELETE = "del";
 
@@ -36,8 +36,8 @@ app.controller('userRoleCTL', function($scope, $http, $location, $routeParams, n
             self.loadList();
         }
         
-        $scope.isAutorizeUpdatingRole = securitySrv.isAuthorized('createRole');
-        $scope.isAutorizeCreatingRole = securitySrv.isAuthorized('updateRole');
+        $scope.isAutorizeUpdatingRole = securitySrv.isAuthorized('updateRole');
+        $scope.isAutorizeCreatingRole = securitySrv.isAuthorized('createRole');
         $scope.isAutorizeDeletingRole = securitySrv.isAuthorized('deleteRole');
         
         $scope.canSave = ($scope.userRole.id > 0 && $scope.isAutorizeUpdatingRole) || ($scope.userRole.id <= 0 && $scope.isAutorizeCreatingRole);
@@ -78,7 +78,7 @@ app.controller('userRoleCTL', function($scope, $http, $location, $routeParams, n
         if ($scope.userRoleForm.$dirty && $scope.userRoleForm.$valid) {
             $http({
                 method: 'POST',
-                url: "/MESTO/MESTO_WEB_APP/php/saveUserRole.php", // TODO: Make a config with path
+                url: CONF_PATH+"/php/saveUserRole.php",
                 data: {                    
                     id : $scope.userRole.id,
                     name : $scope.userRole.name,
@@ -114,7 +114,7 @@ app.controller('userRoleCTL', function($scope, $http, $location, $routeParams, n
     this.delete = function() {
         $http({
                 method: 'POST',
-                url: "/MESTO/MESTO_WEB_APP/php/saveUserRole.php", // TODO: Make a config with path
+                url: CONF_PATH+"/php/saveUserRole.php",
                 data: {
                     id : $scope.userRole.id,
                     activity : ACTIVITY_DELETE
@@ -151,7 +151,7 @@ app.controller('userRoleCTL', function($scope, $http, $location, $routeParams, n
     };
     
     this.loadList = function() {
-        $http.post("/MESTO/MESTO_WEB_APP/php/DAOUserRole.php").success( // TODO: Make a config with path
+        $http.post(CONF_PATH+"/php/DAOUserRole.php").success(
             function(data) {
                 if (data.error == null) {
                     $scope.userRoleList = data;
@@ -171,7 +171,7 @@ app.controller('userRoleCTL', function($scope, $http, $location, $routeParams, n
     this.loadDBUserRole = function(pName) {
         $http({
                 method: 'POST',
-                url: "/MESTO/MESTO_WEB_APP/php/DAOUserRole.php", // TODO: Make a config with path
+                url: CONF_PATH+"/php/DAOUserRole.php",
                 data: {
                     name : pName
                 },

@@ -71,6 +71,10 @@ app.run(function($rootScope, $location, securitySrv) {
     });
 });
 
+app.factory('CONF_PATH', function() {
+    return "/MESTO/MESTO_WEB_APP";
+});
+
 app.factory('navigateSrv', function() {
     var equip = null;
     var room = null;
@@ -239,7 +243,7 @@ app.factory('enumManagerSrv', function() {
     }
 });
 
-app.factory('streamSrv', function($http, securitySrv) {
+app.factory('streamSrv', function($http, securitySrv, CONF_PATH) {
 
     function getActionLabel(pCode) {
         switch (pCode) {
@@ -254,7 +258,7 @@ app.factory('streamSrv', function($http, securitySrv) {
         if (securitySrv.isLogged()) {
             $http({
                 method: 'POST',
-                url: "/MESTO/MESTO_WEB_APP/php/saveStream.php", // TODO: Make a config with path
+                url: CONF_PATH+"/php/saveStream.php",
                 data: {
                     isRestrain : pIsRestrain ? '1' : '0',
                     action : getActionLabel(pAction),
@@ -320,7 +324,7 @@ app.factory('paginator', function() {
     };
 });
 
-app.factory('securitySrv', function($http, $location, Idle) {
+app.factory('securitySrv', function($http, $location, Idle, CONF_PATH) {
     var currentUser = null;
     var uId = null;
     
@@ -329,7 +333,7 @@ app.factory('securitySrv', function($http, $location, Idle) {
         
         $http({
             method: 'POST',
-            url: "/MESTO/MESTO_WEB_APP/php/login.php", // TODO: Make a config with path
+            url: CONF_PATH+"/php/login.php",
             data: pData,
             headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
         }).success(
@@ -353,7 +357,7 @@ app.factory('securitySrv', function($http, $location, Idle) {
     function loadUser(pId) {
         return $http({
             method: 'POST',
-            url: "/MESTO/MESTO_WEB_APP/php/DAOUser.php", // TODO: Make a config with path
+            url: CONF_PATH+"/php/DAOUser.php",
             data: {id:pId,
                    activity:'login'},
             headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
@@ -376,7 +380,7 @@ app.factory('securitySrv', function($http, $location, Idle) {
     function checkLoggedUser() {
        return $http({
             method: 'POST',
-            url: "/MESTO/MESTO_WEB_APP/php/loggedUser.php", // TODO: Make a config with path
+            url: CONF_PATH+"/php/loggedUser.php",
             headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
         }).success(
             function(data, status) {
@@ -396,7 +400,7 @@ app.factory('securitySrv', function($http, $location, Idle) {
     function logout() {
         $http({
             method: 'POST',
-            url: "/MESTO/MESTO_WEB_APP/php/logout.php", // TODO: Make a config with path
+            url: CONF_PATH+"/php/logout.php",
             headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
         }).success(
             function(data, status) {

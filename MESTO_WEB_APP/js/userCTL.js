@@ -1,4 +1,4 @@
-app.controller('userCTL', function($scope, $http, $location, $routeParams, navigateSrv, securitySrv, streamSrv) {
+app.controller('userCTL', function($scope, $http, $location, $routeParams, navigateSrv, securitySrv, streamSrv, CONF_PATH) {
     var self = this;
     var ACTIVITY_DELETE = "del";
 
@@ -107,7 +107,7 @@ app.controller('userCTL', function($scope, $http, $location, $routeParams, navig
                 
             $http({
                 method: 'POST',
-                url: "/MESTO/MESTO_WEB_APP/php/saveUser.php", // TODO: Make a config with path
+                url: CONF_PATH+"/php/saveUser.php",
                 data: {                    
                     id : $scope.user.id,
                     username : $scope.user.username,
@@ -162,7 +162,7 @@ app.controller('userCTL', function($scope, $http, $location, $routeParams, navig
         if ($scope.userPwdForm.$dirty && $scope.userPwdForm.$valid) {
             $http({
                 method: 'POST',
-                url: "/MESTO/MESTO_WEB_APP/php/saveUser.php", // TODO: Make a config with path
+                url: CONF_PATH+"/php/saveUser.php",
                 data: {
                     id : $scope.user.id,
                     password : $scope.user.password,
@@ -192,7 +192,7 @@ app.controller('userCTL', function($scope, $http, $location, $routeParams, navig
     this.delete = function() {
         $http({
                 method: 'POST',
-                url: "/MESTO/MESTO_WEB_APP/php/saveUser.php", // TODO: Make a config with path
+                url: CONF_PATH+"/php/saveUser.php",
                 data: {
                     id : $scope.user.id,
                     activity : ACTIVITY_DELETE
@@ -229,7 +229,7 @@ app.controller('userCTL', function($scope, $http, $location, $routeParams, navig
     };
     
     this.loadList = function() {
-        $http.post("/MESTO/MESTO_WEB_APP/php/DAOUser.php").success( // TODO: Make a config with path
+        $http.post(CONF_PATH+"/php/DAOUser.php").success(
             function(data) {
                 if (data.error == null) {
                     $scope.userList = data;
@@ -249,7 +249,7 @@ app.controller('userCTL', function($scope, $http, $location, $routeParams, navig
     this.loadDBUser = function(pUsername) {
         $http({
                 method: 'POST',
-                url: "/MESTO/MESTO_WEB_APP/php/DAOUser.php", // TODO: Make a config with path
+                url: CONF_PATH+"/php/DAOUser.php",
                 data: {
                     username : pUsername
                 },
@@ -276,7 +276,7 @@ app.controller('userCTL', function($scope, $http, $location, $routeParams, navig
         $scope.userList = [];
         $http({
                 method: 'POST',
-                url: "/MESTO/MESTO_WEB_APP/php/DAOUser.php", // TODO: Make a config with path
+                url: CONF_PATH+"/php/DAOUser.php",
                 data: {
                     activity : 'loadPending'
                 },
@@ -300,7 +300,7 @@ app.controller('userCTL', function($scope, $http, $location, $routeParams, navig
     };
     
     this.loadRolesList = function() {
-        $http.post("/MESTO/MESTO_WEB_APP/php/DAOUserRole.php").success( // TODO: Make a config with path
+        $http.post(CONF_PATH+"/php/DAOUserRole.php").success(
             function(data) {
                 if (data.error == null) {
                     $scope.roleList = data;
@@ -329,7 +329,7 @@ app.controller('userCTL', function($scope, $http, $location, $routeParams, navig
     this.notifyUser = function(pEmailTo, pSubject) {
         $http({
             method: 'POST',
-            url: "/MESTO/MESTO_WEB_APP/php/emailNotification.php", // TODO: Make a config with path
+            url: CONF_PATH+"/php/emailNotification.php",
             data: {
                 to : pEmailTo,
                 subject : pSubject,

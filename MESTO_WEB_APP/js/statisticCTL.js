@@ -1,4 +1,4 @@
-app.controller('statisticCTL', function($scope, $http) {
+app.controller('statisticCTL', function($scope, $http, CONF_PATH) {
     $scope.nbSite = 0;
     $scope.nbSiteModified = 0;
     $scope.nbUser = 0;
@@ -10,7 +10,7 @@ app.controller('statisticCTL', function($scope, $http) {
     function init() {
         $http({
             method: 'POST',
-            url: "/MESTO/MESTO_WEB_APP/php/DAOStatistic.php", // TODO: Make a config with path
+            url: CONF_PATH+"/php/DAOStatistic.php",
             headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
         }).success(
             function(data) {

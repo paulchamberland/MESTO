@@ -1,4 +1,4 @@
-app.controller('siteCTL', function($scope, $http, $location, $routeParams, navigateSrv, securitySrv, streamSrv, enumManagerSrv, $modal) {
+app.controller('siteCTL', function($scope, $http, $location, $routeParams, navigateSrv, securitySrv, streamSrv, enumManagerSrv, $modal, CONF_PATH) {
     var self = this;
     this.modalInstance = null;// shoudl be private, but test need it public.
     
@@ -154,7 +154,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
         if ($scope.siteForm.$dirty && $scope.siteForm.$valid) {
             $http({
                 method: 'POST',
-                url: "/MESTO/MESTO_WEB_APP/php/saveSite.php", // TODO: Make a config with path
+                url: CONF_PATH+"/php/saveSite.php",
                 data: {
                     id : $scope.site.id,
                     reference : $scope.site.reference,
@@ -213,7 +213,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     this.delete = function() {
         $http({
                 method: 'POST',
-                url: "/MESTO/MESTO_WEB_APP/php/saveSite.php", // TODO: Make a config with path
+                url: CONF_PATH+"/php/saveSite.php",
                 data: {
                     id : $scope.site.id,
                     activity : ACTIVITY_DELETE
@@ -261,7 +261,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     };
     
     this.loadList = function() {
-        return $http.post("/MESTO/MESTO_WEB_APP/php/DAOSite.php").success( // TODO: Make a config with path
+        return $http.post(CONF_PATH+"/php/DAOSite.php").success(
             function(data) {
                 if (data.error == null) {
                     $scope.siteList = data;
@@ -282,7 +282,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     this.loadDBSite = function(pReference) {
         $http({
                 method: 'POST',
-                url: "/MESTO/MESTO_WEB_APP/php/DAOSite.php", // TODO: Make a config with path
+                url: CONF_PATH+"/php/DAOSite.php",
                 data: {
                     reference : pReference
                 },
@@ -309,7 +309,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     this.loadRoomsList = function() {
         $http({
                 method: 'POST',
-                url: "/MESTO/MESTO_WEB_APP/php/DAORoom.php", // TODO: Make a config with path
+                url: CONF_PATH+"/php/DAORoom.php",
                 data: {
                     id : $scope.site.id,
                     type : LOAD_INCLUDE_ROOM
@@ -336,7 +336,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     this.loadFreeRoomsList = function() {
         $http({
                 method: 'POST',
-                url: "/MESTO/MESTO_WEB_APP/php/DAORoom.php", // TODO: Make a config with path
+                url: CONF_PATH+"/php/DAORoom.php",
                 data: {
                     id : $scope.site.id,
                     type : LOAD_FREE_ROOM
@@ -363,7 +363,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     this.removeAssRoom = function(p_roomID) {
         $http({
                 method: 'POST',
-                url: "/MESTO/MESTO_WEB_APP/php/saveRoom.php",
+                url: CONF_PATH+"/php/saveRoom.php",
                 data: {id: p_roomID,
                         activity: ACTIVITY_REMOVE_ASSO_ROOM},
                 headers: {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
@@ -410,7 +410,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     
         $http({
             method: 'POST',
-            url: "/MESTO/MESTO_WEB_APP/php/saveRoom.php",
+            url: CONF_PATH+"/php/saveRoom.php",
             data: {ids: lstAdding.toString(),
                     siteID: $scope.site.id,
                     activity: ACTIVITY_ADDING_ASSO_ROOM},
@@ -443,7 +443,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     this.loadEquipsList = function() {
         $http({
                 method: 'POST',
-                url: "/MESTO/MESTO_WEB_APP/php/DAOEquipment.php", // TODO: Make a config with path
+                url: CONF_PATH+"/php/DAOEquipment.php",
                 data: {
                     id : $scope.site.id,
                     type : LOAD_INCLUDE_EQUIP
@@ -470,7 +470,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     this.loadFreeEquipsList = function() {
         $http({
                 method: 'POST',
-                url: "/MESTO/MESTO_WEB_APP/php/DAOEquipment.php", // TODO: Make a config with path
+                url: CONF_PATH+"/php/DAOEquipment.php",
                 data: {
                     id : $scope.site.id,
                     type : LOAD_FREE_EQUIP
@@ -497,7 +497,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     this.removeAssEquip = function(p_equipID) {
         $http({
                 method: 'POST',
-                url: "/MESTO/MESTO_WEB_APP/php/saveEquipment.php",
+                url: CONF_PATH+"/php/saveEquipment.php",
                 data: {id: p_equipID,
                         activity: ACTIVITY_REMOVE_ASSO_EQUIP},
                 headers: {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
@@ -544,7 +544,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     
         $http({
             method: 'POST',
-            url: "/MESTO/MESTO_WEB_APP/php/saveEquipment.php",
+            url: CONF_PATH+"/php/saveEquipment.php",
             data: {ids: lstAdding.toString(),
                     siteID: $scope.site.id,
                     activity: ACTIVITY_ADDING_ASSO_EQUIP},
