@@ -1,5 +1,10 @@
+/* ANGULARJS main application : Inegrate all module and specific services design for Mesto
+ * @author : jonathan-lefebvregithub@outlook.com
+ */
+
 var app = angular.module('MESTO', ['ngRoute', 'ngIdle', 'ui.bootstrap']);
 
+/* specific routing */
 app.config(function($routeProvider, IdleProvider) {
     $routeProvider.when('/home', {templateUrl:'home.html', controller:'siteCTL', controllerAs:'siteCTL'});
     $routeProvider.when('/site', {templateUrl:'site.html', controller:'siteCTL', controllerAs:'siteCTL'});
@@ -34,6 +39,7 @@ app.config(function($routeProvider, IdleProvider) {
     $routeProvider.when('/stream', {templateUrl:'stream.html', controller:'streamCTL', controllerAs:'streamCTL'});
     $routeProvider.otherwise({redirectTo:"/home"});
     
+    // initiate the userLogout system
     IdleProvider.idle(600);
     IdleProvider.timeout(5);
     IdleProvider.keepalive(false);
@@ -43,6 +49,7 @@ app.run(function($rootScope, $location, securitySrv) {
     var routeRestricted = ['/admin/home', '/admin/site', '/admin/sites', '/admin/room', '/admin/rooms', '/admin/equip', '/admin/equipments', '/admin/permissions', '/admin/role', '/admin/roles', '/admin/user', '/admin/users', '/admin/stream'];
     var forbiddenCall = ['.html', '.php'];
 
+    // security check for define what page should be use with a user logged
     securitySrv.checkLoggedUser().then(function () {
         $rootScope.$on('$routeChangeStart', function() {
             if ("/admin/".indexOf($location.path()) != -1 && securitySrv.isLogged() && securitySrv.isAuthorized('adminAccess')) {
@@ -57,13 +64,15 @@ app.run(function($rootScope, $location, securitySrv) {
         });
     });
     
+    // Define the way we warn the use that he become idle
     $rootScope.$on('IdleStart', function() {
         console.log('idle start');
     });
-
+    // Define the way we inform user he's not idle anymore (a little dump to do?)
     $rootScope.$on('IdleEnd', function() {
         console.log('Idle end');
     });
+    // Define the way we kick out idle user
     $rootScope.$on('IdleTimeout', function() {
         securitySrv.logout();
         alert('you have been aways? By security we log you out');
@@ -71,10 +80,17 @@ app.run(function($rootScope, $location, securitySrv) {
     });
 });
 
+/*
+ * Configuration service that can be use to set Constante across the apps. At this point only a confPath is used
+ */
 app.factory('CONF_PATH', function() {
     return "/MESTO/MESTO_WEB_APP";
 });
 
+/* navigateSrv : Service who facilitate navigation between same controller load. 
+ *                Give the possibility to stock 1 object of each type in the main map.
+ *                The object "saved" could be load alter by a controller
+ */
 app.factory('navigateSrv', function() {
     var equip = null;
     var room = null;
@@ -82,7 +98,6 @@ app.factory('navigateSrv', function() {
     var user = null;
     var userRole = null;
     
-    // TODO: to each 'set' we could use "cleanMemory" instead of manual nullation
     function setEquip(p_equip) {
         equip = angular.copy(p_equip); 
         room = null;
@@ -131,6 +146,7 @@ app.factory('navigateSrv', function() {
         return userRole;
     };
     
+    // Remove every object the Service had
     function cleanMemory() {
         equip = null; 
         room = null;
@@ -154,6 +170,9 @@ app.factory('navigateSrv', function() {
     };
 });
 
+/* permissionSrv : Permission is a model with no required DAO. All permission are fixed
+ *                  This service instantiate them and make it available in all controller  
+ */
 app.factory('permissionSrv', function() {
     var lstPermissions = [];
     
@@ -184,6 +203,9 @@ app.factory('permissionSrv', function() {
     }
 });
 
+/* enumManagerSrv : Service instantiate all enum in the apps. It's centralize here to be able to give access to all controller
+ *
+ */
 app.factory('enumManagerSrv', function() {
     var equip_TYPE = [{value:'RT',label:'Router'},{value:'HUB',label:'Hub'},{value:'SRV',label:'Server'},{value:'SWT',label:'Switch'}];
     var room_ROLE = [{value:'MTC',label:'Main Telecom'},{value:'TC',label:'Telecom'},{value:'SPR',label:'Spare'},{value:'STR',label:'Storage'}];
@@ -243,6 +265,9 @@ app.factory('enumManagerSrv', function() {
     }
 });
 
+/* streamSrv : Service that manage activity(log) for the entire system.
+ *              This service has a controller to more specific work : streamCTL
+ */
 app.factory('streamSrv', function($http, securitySrv, CONF_PATH) {
 
     function getActionLabel(pCode) {
@@ -291,6 +316,9 @@ app.factory('streamSrv', function($http, securitySrv, CONF_PATH) {
     }
 });
 
+/* paginator : Prototype Service for centralized pagination treatment.
+ *
+ */
 app.factory('paginator', function() {
     var scope = null;
     
@@ -324,6 +352,10 @@ app.factory('paginator', function() {
     };
 });
 
+/* securitySrv : Service responsible for user management as Security purpose like, login, logout, check if logged...
+ *                The service store information about user and security to gave to Controller when required.
+ *                There is a closed relation with this service and PHP session used on the server side...
+ */
 app.factory('securitySrv', function($http, $location, Idle, CONF_PATH) {
     var currentUser = null;
     var uId = null;
@@ -449,14 +481,19 @@ app.factory('securitySrv', function($http, $location, Idle, CONF_PATH) {
     };
 });
 
+/* 
+ * googleMap : Service who controller, store, give main treatment of Google Maps API to controller
+ *              This service possess a controller for more specific treatment : mapCTL
+ */
 app.factory('googleMap', function() {
-    var mainMap = null;
-    var miniMap = null;
+    var mainMap = null; // main map of the home page
+    var miniMap = null; // mini map of detail site page
     
-    var zones = null;
-    var info = null;
+    var zones = null; // array of zone layer
+    var info = null; // stock unique opened infoWindows
     var markersCluster = null;
     
+    // main contructor
     function getMap() {
         try {
             //if (mainMap == null) {
@@ -480,6 +517,7 @@ app.factory('googleMap', function() {
         return mainMap;
     }
     
+    // Second contructor
     function getMiniMap(pLat, pLon) {
         try {
             miniMap = new google.maps.Map(document.getElementById('map-canvas'), {center: { lat: pLat, lng: pLon}, streetViewControl: false, zoom: 16});

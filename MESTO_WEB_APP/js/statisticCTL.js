@@ -1,3 +1,6 @@
+/* statisticCTL : Control behavior for admin dashboard.
+ * @author : jonathan-lefebvregithub@outlook.com
+ */
 app.controller('statisticCTL', function($scope, $http, CONF_PATH) {
     $scope.nbSite = 0;
     $scope.nbSiteModified = 0;
@@ -7,6 +10,7 @@ app.controller('statisticCTL', function($scope, $http, CONF_PATH) {
     $scope.nbEquipmentModified = 0;
     $scope.nbPendingUser = 0;
     
+    // contructor
     function init() {
         $http({
             method: 'POST',

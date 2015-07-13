@@ -1,3 +1,7 @@
+/* streamCTL : Control behavior of Stream Activity list.
+ * @see : StreamSrv to look other function of Stream object
+ * @author : jonathan-lefebvregithub@outlook.com
+ */
 app.controller('streamCTL', function($scope, $http, CONF_PATH) {
     var self = this;
     $scope.activities = [];

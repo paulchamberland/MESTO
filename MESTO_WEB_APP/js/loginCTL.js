@@ -1,3 +1,7 @@
+/* loginCTL : Controller of login behavior, manage credential and interface function call.
+ * @see : securitySrv to Service corresponding to this controller.
+ * @author : jonathan-lefebvregithub@outlook.com
+ */
 app.controller('loginCTL', function($scope, $rootScope, $http, $location, securitySrv, navigateSrv) {
     var self = this;
     $scope.logInfo = {
@@ -6,6 +10,7 @@ app.controller('loginCTL', function($scope, $rootScope, $http, $location, securi
     };
     
     this.login = function(pLogInfo) {
+        // declare function as "promise result" for arguments
         securitySrv.login({
             username : pLogInfo.username,
             pwd : pLogInfo.pwd
@@ -29,6 +34,7 @@ app.controller('loginCTL', function($scope, $rootScope, $http, $location, securi
     };
     
     this.adminLogin = function(pLogInfo) {
+        // declare function as "promise result" for arguments
         securitySrv.login({
                 username : pLogInfo.username,
                 pwd : pLogInfo.pwd

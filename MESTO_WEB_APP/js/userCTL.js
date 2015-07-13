@@ -1,7 +1,11 @@
-app.controller('userCTL', function($scope, $http, $location, $routeParams, navigateSrv, securitySrv, streamSrv, CONF_PATH) {
+/* userCTL : Control behavior of user model.
+ * @author : jonathan-lefebvregithub@outlook.com
+ */
+ app.controller('userCTL', function($scope, $http, $location, $routeParams, navigateSrv, securitySrv, streamSrv, CONF_PATH) {
     var self = this;
-    var ACTIVITY_DELETE = "del";
+    var ACTIVITY_DELETE = "del"; // Constance send by Ajax call to PHP indicating a delete request
 
+    // Modal
     $scope.user = {id: "",
                     username :"",
                     name :"",
@@ -39,6 +43,7 @@ app.controller('userCTL', function($scope, $http, $location, $routeParams, navig
         $scope.changePassword = ! $scope.changePassword;
     };
     
+    // constructor
     function init() {
         self.emptyUser = angular.copy($scope.user);
         
@@ -102,6 +107,7 @@ app.controller('userCTL', function($scope, $http, $location, $routeParams, navig
     
     this.save = function() {
         if ($scope.userForm.$dirty && $scope.userForm.$valid) {
+            // If save pass "pending" to "approve" need to send email.
             if (self.isSendingEmail) 
                 self.notifyUser($scope.user.email, "You're new user have been approved");
                 
@@ -228,6 +234,7 @@ app.controller('userCTL', function($scope, $http, $location, $routeParams, navig
         self.loadList();
     };
     
+    // Load all user
     this.loadList = function() {
         $http.post(CONF_PATH+"/php/DAOUser.php").success(
             function(data) {
@@ -246,6 +253,10 @@ app.controller('userCTL', function($scope, $http, $location, $routeParams, navig
             }
         );
     };
+    /* Load a specific user with a given username
+     * @param : pUsername : Username of user to find
+     * @return : none (but fill the model with user found.
+     */
     this.loadDBUser = function(pUsername) {
         $http({
                 method: 'POST',
@@ -272,6 +283,7 @@ app.controller('userCTL', function($scope, $http, $location, $routeParams, navig
         );
     };
     
+    // Load all user who are pending user's
     this.loadOnlyPending = function() {
         $scope.userList = [];
         $http({
@@ -299,6 +311,7 @@ app.controller('userCTL', function($scope, $http, $location, $routeParams, navig
         );
     };
     
+    // Load all userRole list available
     this.loadRolesList = function() {
         $http.post(CONF_PATH+"/php/DAOUserRole.php").success(
             function(data) {
@@ -326,6 +339,7 @@ app.controller('userCTL', function($scope, $http, $location, $routeParams, navig
         }
     };
     
+    // Send email to inform user about approved user request by a administrator
     this.notifyUser = function(pEmailTo, pSubject) {
         $http({
             method: 'POST',

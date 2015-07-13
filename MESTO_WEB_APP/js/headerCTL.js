@@ -1,3 +1,6 @@
+/* headerCTL : Controller of Mesto header display. Manage section to display and other behavior.
+ * @author : jonathan-lefebvregithub@outlook.com
+ */
 app.controller('headerCTL', function($scope, $location, securitySrv) {
     var self = this;
     this.isSearchDisplay = function() {

@@ -1,9 +1,13 @@
+/* equipmentCTL : Controller all view for the equipment model.
+ * @author : jonathan-lefebvregithub@outlook.com
+ */
 app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, navigateSrv, securitySrv, streamSrv, enumManagerSrv, $modal, CONF_PATH) {
     var self = this;
-    var ACTIVITY_DELETE = "del";
-    this.modalInstance = null; // shoudl be private, but test need it public.
-    $scope.TYPE = enumManagerSrv.getEquip_TYPE();
+    var ACTIVITY_DELETE = "del"; // Constance send with Ajax call to PHP server
+    this.modalInstance = null; // should be private, but test need it public. Modal(pop-up) managed by the controller
+    $scope.TYPE = enumManagerSrv.getEquip_TYPE(); // Enumeration of type of equipment possible
 
+    // Equipment Model
     $scope.equipment = {id: "",
                     serialNumber :"",
                     barCode :"",
@@ -34,8 +38,9 @@ app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, 
     $scope.isAutorizeDeletingEquip = false;
     $scope.isAutorizeSeeDetailsEquip = false;
     
-    this.getLabelTYPE = enumManagerSrv.getEquipLabelTYPE;
+    this.getLabelTYPE = enumManagerSrv.getEquipLabelTYPE; // function declaration
     
+    // auto call contructor of all view
     function init() {
         self.emptyEquipment = angular.copy($scope.equipment);
         
@@ -211,6 +216,7 @@ app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, 
         }
     };
     
+    // Load all equipment from DB
     this.loadList = function() {
         $http.post(CONF_PATH+"/php/DAOEquipment.php").success(
             function(data) {
@@ -230,6 +236,10 @@ app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, 
         );
     };
     
+    /* Load a specific equipment with a give Serial Number
+     * @param : pSerialNumber : Serial number of the equipment to find
+     * @return : none (but fill the model with equipment found.
+     */
     this.loadDBEquipment = function(pSerialNumber) {
         $http({
                 method: 'POST',
@@ -324,6 +334,7 @@ app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, 
         self.validDoubleAssociation();
     };
     
+    // Load all sub object Room list.
     this.loadRoomList = function() {
         $http.post(CONF_PATH+"/php/DAORoom.php").success(
             function(data) {
@@ -341,6 +352,7 @@ app.controller('equipmentCTL', function($scope, $http, $location, $routeParams, 
             }
         );
     };
+    // Load all sub object Sites list
     this.loadSiteList = function() {
         $http.post(CONF_PATH+"/php/DAOSite.php").success(
             function(data) {

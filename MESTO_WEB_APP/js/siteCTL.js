@@ -1,18 +1,21 @@
+/* siteCTL : Control behavior of views for site model.
+ * @author : jonathan-lefebvregithub@outlook.com
+ */
 app.controller('siteCTL', function($scope, $http, $location, $routeParams, navigateSrv, securitySrv, streamSrv, enumManagerSrv, $modal, CONF_PATH) {
     var self = this;
-    this.modalInstance = null;// shoudl be private, but test need it public.
+    this.modalInstance = null;// shoudl be private, but test need it public, popup manage locally
     
-    var ACTIVITY_DELETE = "del";
-    var ACTIVITY_ADDING_ASSO_EQUIP = "add-ass-st|eq";
-    var ACTIVITY_REMOVE_ASSO_EQUIP = "rem-ass-st|eq";
-    var ACTIVITY_ADDING_ASSO_ROOM = "add-ass-st|rm";
-    var ACTIVITY_REMOVE_ASSO_ROOM = "rem-ass-st|rm";
-    var LOAD_INCLUDE_EQUIP = "SITE_INC";
-    var LOAD_INCLUDE_ROOM = "SITE_INC";
-    var LOAD_FREE_EQUIP = "SITE_FREE";
-    var LOAD_FREE_ROOM = "SITE_FREE";
-    $scope.ROLE = enumManagerSrv.getSite_ROLE();
-    $scope.ORGANIZATION = enumManagerSrv.getSite_ORGANIZATION();
+    var ACTIVITY_DELETE = "del"; // Constance send by Ajax call to PHP indicating a delete request
+    var ACTIVITY_ADDING_ASSO_EQUIP = "add-ass-st|eq"; // Constance send by Ajax call to PHP indicating to associate an equipment with a site
+    var ACTIVITY_REMOVE_ASSO_EQUIP = "rem-ass-st|eq"; // Constance send by Ajax call to PHP indicating to remove an association with an equipment and a site
+    var ACTIVITY_ADDING_ASSO_ROOM = "add-ass-st|rm"; // Constance send by Ajax call to PHP indicating to associate a room with a site
+    var ACTIVITY_REMOVE_ASSO_ROOM = "rem-ass-st|rm"; // Constance send by Ajax call to PHP indicating to remove an association with a room and a site
+    var LOAD_INCLUDE_EQUIP = "SITE_INC"; // Constance send by Ajax call to PHP indicating all equipment associate with a site
+    var LOAD_INCLUDE_ROOM = "SITE_INC"; // Constance send by Ajax call to PHP indicating all rooms associate with a site
+    var LOAD_FREE_EQUIP = "SITE_FREE"; // Constance send by Ajax call to PHP indicating to load all equipement free for site
+    var LOAD_FREE_ROOM = "SITE_FREE"; //// Constance send by Ajax call to PHP indicating to load all room free for site
+    $scope.ROLE = enumManagerSrv.getSite_ROLE(); // Enumeration of Role possible for a site.
+    $scope.ORGANIZATION = enumManagerSrv.getSite_ORGANIZATION(); // Enumeration of Organization for possible for a site.
     
     $scope.modifySite = false; // action flag to change the display of detail vs form page
     
@@ -31,7 +34,9 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
         $scope.modifySite = true;
     };
     
-    var promiseLstLoad = null;
+    var promiseLstLoad = null; // promise used for other controller who need all site list
+    
+    // model
     $scope.site = {id: "",
                     reference :"",
                     latitude:"",
@@ -67,10 +72,11 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     $scope.isAutorizeSeeDetailsSite = false;
     $scope.isDateNotEditable = false;
     
-    this.getLabelROLE = enumManagerSrv.getSiteLabelROLE;
+    this.getLabelROLE = enumManagerSrv.getSiteLabelROLE; // function declaration
     
-    this.getLabelORGANIZATION = enumManagerSrv.getSiteLabelORGANIZATION;
+    this.getLabelORGANIZATION = enumManagerSrv.getSiteLabelORGANIZATION; // function declaration
     
+    // constructor
     function init() {
         self.emptySite = angular.copy($scope.site);
         
@@ -260,6 +266,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
         }
     };
     
+    // Load all sites
     this.loadList = function() {
         return $http.post(CONF_PATH+"/php/DAOSite.php").success(
             function(data) {
@@ -279,6 +286,10 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
         );
     };
     
+    /* Load a specific site with a give reference
+     * @param : pReference : Reference of site to find
+     * @return : none (but fill the model with site found.
+     */
     this.loadDBSite = function(pReference) {
         $http({
                 method: 'POST',
@@ -306,6 +317,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     };
     /**********************************************************************************************/
     
+    // Load all associate room
     this.loadRoomsList = function() {
         $http({
                 method: 'POST',
@@ -333,6 +345,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
             );
     };
     
+    // Load all room not associate with site
     this.loadFreeRoomsList = function() {
         $http({
                 method: 'POST',
@@ -440,6 +453,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
     
     /**********************************************************************************************/
     
+    // Load all associate equipement with site
     this.loadEquipsList = function() {
         $http({
                 method: 'POST',
@@ -467,6 +481,7 @@ app.controller('siteCTL', function($scope, $http, $location, $routeParams, navig
             );
     };
     
+    // load all site not associate with site
     this.loadFreeEquipsList = function() {
         $http({
                 method: 'POST',

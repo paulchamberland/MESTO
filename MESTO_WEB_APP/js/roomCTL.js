@@ -1,13 +1,18 @@
+/* roomCTL : Control all behavior of views for room model
+ * @see : securitySrv to Service corresponding to this controller.
+ * @author : jonathan-lefebvregithub@outlook.com
+ */
 app.controller('roomCTL', function($scope, $http, $location, $routeParams, navigateSrv, securitySrv, streamSrv, enumManagerSrv, $modal, CONF_PATH) {
     var self = this;
     self.modalInstance = null; // shoudl be private, but test need it public.
     
-    var ACTIVITY_DELETE = "del";
-    var ACTIVITY_ADDING_ASSO_EQUIP = "add-ass-rm|eq";
-    var ACTIVITY_REMOVE_ASSO_EQUIP = "rem-ass-rm|eq";
-    var LOAD_FREE_EQUIP = "ROOM_FREE";
-    $scope.ROLE = enumManagerSrv.getRoom_ROLE();
+    var ACTIVITY_DELETE = "del"; // Constance send by Ajax call to PHP indicating a delete request
+    var ACTIVITY_ADDING_ASSO_EQUIP = "add-ass-rm|eq"; // Constance send by Ajax call to PHP indicating a associate equipement with room
+    var ACTIVITY_REMOVE_ASSO_EQUIP = "rem-ass-rm|eq"; // Constance send by Ajax call to PHP indicating a remove association with room/equipement
+    var LOAD_FREE_EQUIP = "ROOM_FREE";  // Constance send by Ajax call to PHP indicating a load all free equipement for RoomCTL
+    $scope.ROLE = enumManagerSrv.getRoom_ROLE(); // Enumeration of possible role for a room
     
+    // Model
     $scope.room = {id: "",
                     roomID :"",
                     pointOfContact :"",
@@ -31,8 +36,9 @@ app.controller('roomCTL', function($scope, $http, $location, $routeParams, navig
     $scope.isAutorizeDeletingRoom = false;
     $scope.isAutorizeSeeDetailsRoom = false;
     
-    this.getLabelROLE = enumManagerSrv.getRoomLabelROLE;
+    this.getLabelROLE = enumManagerSrv.getRoomLabelROLE; // function declaration
     
+    // constructor
     function init() {
         self.emptyRoom = angular.copy($scope.room);
         
@@ -189,6 +195,7 @@ app.controller('roomCTL', function($scope, $http, $location, $routeParams, navig
         self.loadList();
     };
     
+    // Load all Room
     this.loadList = function() {
         $http.post(CONF_PATH+"/php/DAORoom.php").success(
             function(data) {
@@ -208,6 +215,10 @@ app.controller('roomCTL', function($scope, $http, $location, $routeParams, navig
         );
     };
     
+    /* Load a specific room with a give room ID
+     * @param : pRoomID : Serial number of the room to find
+     * @return : none (but fill the model with room found.
+     */
     this.loadDBRoom = function(pRoomID) {
         $http({
                 method: 'POST',

@@ -1,7 +1,11 @@
+/* userRoleCTL : Control behavior of views for userRole model.
+ * @author : jonathan-lefebvregithub@outlook.com
+ */
 app.controller('userRoleCTL', function($scope, $http, $location, $routeParams, navigateSrv, permissionSrv, securitySrv, streamSrv, CONF_PATH) {
     var self = this;
-    var ACTIVITY_DELETE = "del";
+    var ACTIVITY_DELETE = "del"; // Constance send by Ajax call to PHP indicating a delete request
 
+    // model
     $scope.userRole = {id: "",
                     name :"",
                     description :"",
@@ -21,6 +25,7 @@ app.controller('userRoleCTL', function($scope, $http, $location, $routeParams, n
     $scope.isAutorizeCreatingRole = false;
     $scope.isAutorizeDeletingRole = false;
     
+    // constructor
     function init() {
         self.emptyUserRole = angular.copy($scope.userRole);
         
@@ -150,6 +155,7 @@ app.controller('userRoleCTL', function($scope, $http, $location, $routeParams, n
         self.loadList();
     };
     
+    // Load all userRole list
     this.loadList = function() {
         $http.post(CONF_PATH+"/php/DAOUserRole.php").success(
             function(data) {
@@ -168,6 +174,11 @@ app.controller('userRoleCTL', function($scope, $http, $location, $routeParams, n
             }
         );
     };
+    
+    /* Load a specific userRole with a given name
+     * @param : pName : Name of the userRole to find
+     * @return : none (but fill the model with userRole found.
+     */
     this.loadDBUserRole = function(pName) {
         $http({
                 method: 'POST',
@@ -201,6 +212,7 @@ app.controller('userRoleCTL', function($scope, $http, $location, $routeParams, n
         $location.path("/admin/role");
     };
     
+    // Set available permission according to the aldready affected
     this.setLstAvailablePermissions = function (pLstAffectedPerms) {
         pLstAffectedPerms = !pLstAffectedPerms ? [] : pLstAffectedPerms;
         
@@ -219,6 +231,7 @@ app.controller('userRoleCTL', function($scope, $http, $location, $routeParams, n
         $scope.TEMP = null;
     };
     
+    // With all unaffected selected permission set Available array and Selected array permission
     this.affectPermissions = function(pSelectPermCodes, pLstAvailablePermissions) {
         if (pSelectPermCodes == null)
             pSelectPermCodes = $scope.userRole.lstPermissions
@@ -235,6 +248,7 @@ app.controller('userRoleCTL', function($scope, $http, $location, $routeParams, n
         }
     };
     
+    // With all affected selected permission set Available array and Selected array permission
     this.unaffectPermissions = function(pSelectPermCodes) {
         pSelectPermCodes = !pSelectPermCodes ? [] : pSelectPermCodes;
         

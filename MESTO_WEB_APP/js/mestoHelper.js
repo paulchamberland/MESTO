@@ -1,3 +1,6 @@
+/* New function to center some treatment.
+ * @author : jonathan-lefebvregithub@outlook.com
+ */
 (function() {
     Date.prototype.toYMD = function() {
         var year, month, day;
