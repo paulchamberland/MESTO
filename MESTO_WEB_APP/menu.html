@@ -3,21 +3,22 @@
 <div id='cssmenu'>
 <ul>
    <li class='active'><a href='#/home'><span>Home</span></a></li>
-   <li class='has-sub'><a><span>Manage</span></a>
+   <li data-ng-if="loginCTL.isLogged()" ><a href='#/stream'><span>Activity stream</span></a></li>
+   <li id="mnView" class='has-sub'><a><span>View</span></a>
       <ul>
-         <li><a href='#/site'><span>Sites</span></a></li>
-         <li><a href='#/room'><span>Rooms</span></a></li>
-         <li class='last'><a href='#/equip'><span>Equipments</span></a></li>
+         <li><a id="mnVwSites" href='#/sites'><span>Sites</span></a></li>
+         <li><a id="mnVwRooms" href='#/rooms'><span>Rooms</span></a></li>
+         <li class='last'><a id="mnVwEquipements" href='#/equips'><span>Equipments</span></a></li>
       </ul>
    </li>
    <li class='has-sub'><a><span>About</span></a>
       <ul>
-         <li><a href='#'><span>Company</span></a></li>
-         <li class='last'><a href='#'><span>Contact</span></a></li>
+         <li><a><span>Company</span></a></li>
+         <li class='last'><a><span>Contact</span></a></li>
       </ul>
    </li>
-   <li class='last'><a href='#'><span>Contact</span></a></li>
-   <li class='last'><a href="#"><span>admin</span></a></li>
+   <li class='last'><a><span>Contact</span></a></li>
+   <li class='last'><a id="mnAdmin" href="#/admin"><span>admin</span></a></li>
 </ul>
 </div>
 

@@ -1,0 +1,29 @@
+<div id="menu" data-ng-controller="loginCTL as loginCTL" data-ng-include="'menu.html'" style="position: relative; z-index: 1" ></div>
+<div class="main">
+    <div class="pageDetails">
+        <div class="top">{{room.roomID}}</div>
+        <div class="core">
+            <div class="inner first">Point of Contact : {{room.pointOfContact}}</div>
+            <div class="inner">Technical PoC : {{room.technicalPointOfContact}}</div>
+            <div class="inner">Room size : {{room.roomSize}}</div>
+            <div class="inner">Role : {{roomCTL.getLabelROLE(room.role)}}</div>
+            <div class="inner">Assigned Site : {{room.parentSite.name}}</div>
+                    
+            <div class="inner">
+                <span style="font-weight: bold; font-size: 12px;">Equipments of this building</span>
+                <alert type="danger" data-ng-show="lstEquipErr">{{lstEquipErr}}</alert>
+                <table border="1">
+                    <tr><th>Serial Number</th><th>Model</th></tr>
+                    <tr data-ng-repeat="e in room.lstEquips" data-ng-click="">
+                        <td>{{e.serialNumber}}</td><td>{{e.model}}</td>
+                    </tr>
+                </table>
+            </div>
+            <hr>
+            <div class="inner last">Last update : {{room.updateBy}}, {{room.updateDate}}</div>
+        </div>
+        <div class="bot"></div>
+    </div>
+    
+    <div class="wrap"></div>
+</div>

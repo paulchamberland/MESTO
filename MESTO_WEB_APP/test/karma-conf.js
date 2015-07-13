@@ -8,13 +8,24 @@ module.exports = function(config){
       // include relevant Angular files and libs
       'libs/angular.min.js',
       'libs/angular-mocks.js',
+      'libs/angular-route.min.js',
+      'libs/angular-idle.js',
+      'libs/ui-bootstrap-0.13.0.js',
  
       // include js files
       'js/mestoApp.js',
       'js/siteCTL.js',
       'js/roomCTL.js',
       'js/equipmentCTL.js',
+      'js/loginCTL.js',
+      'js/headerCTL.js',
       'js/mestoHelper.js',
+      'js/userCTL.js',
+      'js/userRoleCTL.js',
+      'js/permissionCTL.js',
+      'js/mapCTL.js',
+      'js/streamCTL.js',
+      'js/statisticCTL.js',
  
       // include unit test specs
       'test/unit/*.js'

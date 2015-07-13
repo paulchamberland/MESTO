@@ -1,4 +1,4 @@
-( function( $ ) {
+/*( function( $ ) {
 $( document ).ready(function() {
 // Cache the elements we'll need
 var menu = $('#cssmenu');
@@ -14,4 +14,4 @@ menu.on('click', '#responsive-tab', function(){
 	listItems.addClass('collapsed');
 });
 });
-} )( jQuery );
+} )( jQuery );*/
