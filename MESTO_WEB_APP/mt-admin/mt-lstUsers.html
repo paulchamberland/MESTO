@@ -1,0 +1,16 @@
+<div <div id="menu" class="v" data-ng-include="'mt-admin/mt-menu.html'"></div> 
+<div class="main admin" >
+    <span class="titre">User List</span><a id="btnNewUser" class="btn btn-primary" data-ng-click="userCTL.newUser()" data-ng-if="isAutorizeCreatingUser">Add</a>
+    <alert type="danger" data-ng-show="lstError">{{lstError}}</alert>
+    <table border="1">
+        <tr><th>Username</th><th>Name</th><th>Email</th><th>Role</th><th>Status</th></tr>
+        <tr data-ng-repeat="u in userList" data-ng-click="userCTL.navigateToUser(u)">
+            <td>{{u.username}}</td><td>{{u.name}}</td><td>{{u.email}}</td><td>{{userCTL.getNameRole(u.role)}}</td><td><div ng-switch on="u.approved">
+                                                                                                                      <div style="background:limegreen;" ng-switch-when="1">Approved</div>
+                                                                                                                      <div style="background:yellow;" ng-switch-default>Pending</div>
+                                                                                                                  </div></td>
+        </tr>
+    </table>
+    
+    <div class="wrap"></div>
+</div>

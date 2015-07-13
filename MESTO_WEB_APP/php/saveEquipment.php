@@ -5,32 +5,64 @@ $equip = json_decode(file_get_contents("php://input"), true);
 try {
     $con = new PDO("mysql:host=localhost;dbname=mesto", "root", "");
     $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $arr = array("msg" => "", "error" => "");
     
-    if (empty($equip['id'])) {
-        $stmt = $con->prepare("SELECT count(*) as nbEquip FROM equipment WHERE serialNumber = '".$equip['serialNumber']."'");
-        $stmt->execute();
-        $rs = $stmt->fetchAll();
-        
-        $arr = array("msg" => "", "error" => "");
-        if ($rs[0]['nbEquip'] == 0 && !empty($equip['serialNumber'])) {
-            $sql = 'INSERT INTO equipment (serialNumber, barCode, manufacturer, model, configHW, configSW, type, updateBy, updateDate)'
-                .' values ("'.$equip['serialNumber'].'","'.$equip['barCode'].'","'.$equip['manufacturer'].'","'.$equip['model'].'","'.$equip['configHW'].'","'.$equip['configSW'].'","'.$equip['type'].'","apps", NOW())';
-            $con->exec($sql);
-            $arr = array("msg" => "Equipment created successfully!!!", "error" => "");
-        } else {
-            $arr["error"] = "Equipment already exists with same serial number.";
-        }
-    }
-    else if (!empty($equip['id']) && isset($equip['activity']) && $equip['activity'] == "del") {
+    if (!empty($equip['id']) && isset($equip['activity']) && $equip['activity'] == "del") {
         $sql = 'DELETE FROM equipment WHERE id="'.$equip['id'].'"';
         $con->exec($sql);
-        $arr = array("msg" => "Equipment deleted successfully!!!", "error" => "");
+        $arr["msg"] = "Equipment deleted successfully!!!";
     }
-    else {
-        // TODO: Updating a serialNumber? that is unique, need validation, or block that...
-        $sql = 'UPDATE equipment SET serialNumber="'.$equip['serialNumber'].'", barCode="'.$equip['barCode'].'", manufacturer="'.$equip['manufacturer'].'", model="'.$equip['model'].'", configHW="'.$equip['configHW'].'", configSW="'.$equip['configSW'].'", type="'.$equip['type'].'", updateBy="apps", updateDate=NOW() WHERE id="'.$equip['id'].'"';
+    else if (!empty($equip['id']) && isset($equip['activity']) && $equip['activity'] == "rem-ass-st|eq") {
+        $sql = 'UPDATE equipment SET fk_siteId="" WHERE id="'.$equip['id'].'"';
         $con->exec($sql);
-        $arr = array("msg" => "Equipment updated successfully!!!", "error" => "");
+        $arr["msg"] = "Association with equipment ended successfully!!!";
+    }
+    else if (!empty($equip['id']) && isset($equip['activity']) && $equip['activity'] == "rem-ass-rm|eq") {
+        $sql = 'UPDATE equipment SET fk_roomId="" WHERE id="'.$equip['id'].'"';
+        $con->exec($sql);
+        $arr["msg"] = "Association with equipment ended successfully!!!";
+    }
+    else if (!empty($equip['ids']) && isset($equip['activity']) && $equip['activity'] == "add-ass-st|eq") {
+        $sql = 'UPDATE equipment SET fk_siteId="'.$equip['siteID'].'" WHERE id IN ('.$equip['ids'].')';
+        $con->exec($sql);
+        $arr["msg"] = "Associations with multiple equipments done successfully!!!";
+    }
+    else if (!empty($equip['ids']) && isset($equip['activity']) && $equip['activity'] == "add-ass-rm|eq") {
+        $sql = 'UPDATE equipment SET fk_roomId="'.$equip['roomID'].'" WHERE id IN ('.$equip['ids'].')';
+        $con->exec($sql);
+        $arr["msg"] = "Associations with multiple equipments done successfully!!!";
+    }
+    else if (!empty($equip['serialNumber'])) {
+        $sql = "SELECT count(*) as nbEquip FROM equipment WHERE serialNumber = '".$equip['serialNumber']."'";
+        
+        if (!empty($equip['id'])) {
+            $sql .= " AND NOT id = '".$equip['id']."'";
+        }
+        
+        $stmt = $con->prepare($sql);
+        $stmt->execute();
+        $rs = $stmt->fetchAll();
+            
+        if (empty($equip['id'])) {
+            if ($rs[0]['nbEquip'] == 0) {
+                $sql = 'INSERT INTO equipment (serialNumber, barCode, manufacturer, model, configHW, configSW, type, fk_roomId, fk_siteId, updateBy, updateDate)'
+                    .' values ("'.$equip['serialNumber'].'","'.$equip['barCode'].'","'.$equip['manufacturer'].'","'.$equip['model'].'","'.$equip['configHW'].'","'.$equip['configSW']
+                    .'","'.$equip['type'].'","'.$equip['parentRoomKey'].'","'.$equip['parentSiteKey'].'","'.$equip['updateBy'].'", NOW())';
+                $con->exec($sql);
+                $arr["msg"] = "Equipment created successfully!!!";
+            } else {
+                $arr["error"] = "Equipment already exists with same serial number.";
+            }
+        }
+        else {
+            if ($rs[0]['nbEquip'] == 0) {
+                $sql = 'UPDATE equipment SET serialNumber="'.$equip['serialNumber'].'", barCode="'.$equip['barCode'].'", manufacturer="'.$equip['manufacturer'].'", model="'.$equip['model'].'", configHW="'.$equip['configHW'].'", configSW="'.$equip['configSW'].'", type="'.$equip['type'].'", fk_roomId="'.$equip['parentRoomKey'].'", fk_siteId="'.$equip['parentSiteKey'].'", updateBy="'.$equip['updateBy'].'", updateDate=NOW() WHERE id="'.$equip['id'].'"';
+                $con->exec($sql);
+                $arr["msg"] = "Equipment updated successfully!!!";
+            } else {
+                $arr["error"] = "Update failed: Equipment already exists with same serial number.";
+            }
+        }
     }
 
     $json = json_encode($arr);

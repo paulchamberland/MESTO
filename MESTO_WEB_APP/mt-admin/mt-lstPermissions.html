@@ -1,0 +1,27 @@
+<div <div id="menu" class="v" data-ng-include="'mt-admin/mt-menu.html'"></div> 
+<div class="main admin">
+    <span class="titre">Permission List</span>
+    <pagination boundary-links="true" total-items="totalItems" ng-model="currentPage" ng-change="pageChanged()" items-per-page="itemsPerPage" max-size="5" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+    <table>
+        <tr><th>Code name</th><th>Name</th><th>Description</th></tr>
+        <!--tr data-ng-repeat="p in lstPermissions" data-ng-click="permissionCTL.openPermission(p)"-->
+        <tr data-ng-repeat="p in listPaged" data-ng-click="permissionCTL.openPermission(p)">
+            <td>{{p.codeName}}</td><td>{{p.name}}</td><td>{{p.description}}</td>
+        </tr>
+    </table>
+    
+    <script type="text/ng-template" id="detailModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title">{{permission.codeName}}</h3>
+        </div>
+        <div class="modal-body">
+            <div class="inner first">Name : {{permission.name}}</div>
+            <div class="inner last">Description : {{permission.description}}</div>
+        </div>
+        <div class="modal-footer">
+            <a class="btn btn-primary" data-ng-click="permissionCTL.closeDetail();">Close</a>
+        </div>
+    </script> 
+    
+    <div class="wrap"></div>
+</div>

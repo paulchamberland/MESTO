@@ -1,0 +1,90 @@
+<div <div id="menu" class="v" data-ng-include="'mt-admin/mt-menu.html'"></div>
+<div class="main admin">
+	<span class="titre">Add a Room</span>
+	<div>
+		<div data-ng-show="roomForm.$dirty && roomForm.$invalid">
+			<alert type="danger" data-ng-show="roomForm.roomID.$error.required">Room ID is required.</alert>
+			<alert type="danger" data-ng-show="roomForm.roomSize.$error.pattern">Room size need to be digit only.</alert>
+			<alert type="danger" data-ng-show="roomForm.parentSiteName.$error.required">A room must be build for a site.</alert>
+		</div>
+        <alert type="danger" data-ng-show="SQLErrors">{{SQLErrors}}</alert>
+        <alert type="success" data-ng-show="SQLMsgs">{{SQLMsgs}}</alert>
+		<form class="basic" name="roomForm" novalidate >
+			<input type="hidden" id="id" name="id" data-ng-model="room.id" />
+            <div style="position:absolute;right:5px;top:0px;" data-ng-if="room.id > 0">Last update : {{room.updateBy}}, {{room.updateDate}}</div>
+			<div class="section">
+				<div class="field"><label for="roomID">Room ID * :</label><input type="text" id="roomID" name="roomID" data-ng-model="room.roomID" required /></div>
+				<div class="field"><label for="PoC">Point of Contact :</label><input type="text" id="PoC" name="pointOfContact" data-ng-model="room.pointOfContact" /></div>
+				<div class="field"><label for="TPoC">Technical PoC :</label><input type="text" id="TPoC" name="technicalPointOfContact" data-ng-model="room.technicalPointOfContact" /></div>
+				<div class="field"><label for="roomSize">Room size (in square) :</label><input type="text" id="roomSize" name="roomSize" data-ng-model="room.roomSize" tooltip="numeric only" tooltip-trigger="focus" data-ng-pattern="/^[0-9]*$/" /></div>
+				<div class="field"><label for="role">Role:</label><select id="role" data-ng-model="room.role" name="role" data-ng-options="role.value as role.label for role in ROLE"></select></div>
+				<div class="field">
+                    <label for="prSite">Assigned Site:</label><input type="text" id="prSite" name="parentSiteName" data-ng-model="room.parentSite.name" disabled required/>
+                    <a id="btnLinkSite" class="btn btn-primary btn-xs" data-ng-click="roomCTL.openSiteList()" ><span class="glyphicon glyphicon-link"></span></a>
+                    <a id="btnCleanSite" class="btn btn-primary btn-xs" data-ng-click="roomCTL.cleanAssociateSite()" ><span class="glyphicon glyphicon-remove"></span></a>
+                </div>
+            </div>
+		</form>
+		<a id="btnSave" class="btn btn-primary" data-ng-click="roomCTL.save();" ng-disabled="roomForm.$pristine || roomForm.$invalid" data-ng-if="canSave">Save</a>
+		<a id="btnDelete" class="btn btn-primary" data-ng-click="roomCTL.delete();" ng-disabled="!canDelete" data-ng-if="isAutorizeDeletingRoom">Delete</a>
+        <a id="btnReset" class="btn btn-primary" data-ng-click="roomCTL.resetFrm();roomCTL.resetMsg();" ng-disabled="roomForm.$pristine">Reset</a>
+	</div>
+    
+    <div style="padding-top:15px">
+        <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Equipments of this room</span><a id="btnOpenFreeLstEquip" class="btn btn-primary" data-ng-if="room.id" data-ng-click="roomCTL.openFreeEquipsList();"><span class="glyphicon glyphicon-link"></span></a>
+        <alert type="danger" data-ng-show="lstEquipErr">{{lstEquipErr}}</alert>
+		<table border="1">
+            <tr><th>Serial Number</th><th>Model</th><th></th></tr>
+			<tr data-ng-repeat="e in room.lstEquips" data-ng-click="">
+				<td>{{e.serialNumber}}</td><td>{{e.model}}</td><td><a id="btnRemoveEquip" class="btn btn-primary" data-ng-click="roomCTL.removeAssEquip(e.id)"><span class="glyphicon glyphicon-remove"></span></a></td>
+			</tr>
+		</table>
+	</div>
+    
+    <script type="text/ng-template" id="siteListModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Sites List</h3>
+        </div>
+        <div class="modal-body">
+            <div class="inner"><alert type="danger" data-ng-show="lstStErr">{{lstStErr}}</alert></div>
+            <div class="inner">Assigned the equipment to a site by clicking on the row.</div>
+            <div class="inner">
+                <table border="1">
+                    <tr><th>id</th><th>Reference</th><th>Name</th><th>Latitude</th><th>Longitude</th></tr>
+                    <tr data-ng-repeat="s in siteList" data-ng-click="roomCTL.associateSite(s);">
+                        <td>{{s.id}}</td><td>{{s.reference}}</td><td>{{s.siteName}}</td><td>{{s.latitude}}</td><td>{{s.longitude}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a id="btnCloseLstRoom" class="btn btn-primary" data-ng-click="roomCTL.closeSiteList()">Close</a>
+        </div>
+    </script>
+    
+    <script type="text/ng-template" id="freeEquipListModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Assigning Equipments</h3>
+        </div>
+        <div class="modal-body">
+            <div class="inner"><alert type="danger" data-ng-show="lstFreeEquipErr">{{lstFreeEquipErr}}</alert></div>
+            <div class="inner">Choose equipments to associate to this site.</div>
+            <div class="inner ">
+                <table border="1">
+                    <tr><th></th><th>Serial Number</th><th>Manufacturer</th><th>Model</th><th>Type</th></tr>
+                    <tr data-ng-repeat="e in lstFreeEquips">
+                        <td><input type="checkbox" data-ng-model="e.adding"/></td><td>{{e.serialNumber}}</td><td>{{e.manufacturer}}</td><td>{{e.model}}</td><td>{{e.type}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="inner">
+                <a id="btnAddLstEquips" class="btn btn-primary" data-ng-click="roomCTL.addFreeEquipsList()" >Add</a>
+                <a id="btnNewEquip" class="btn btn-primary" style="float:right;" data-ng-click="roomCTL.newEquip()" >New</a>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a id="btnCloseFreeLstEquip" class="btn btn-primary" data-ng-click="roomCTL.closeFreeEquipsList()" >Close</a>
+        </div>
+    </script>
+    <div class="wrap"></div>
+</div>

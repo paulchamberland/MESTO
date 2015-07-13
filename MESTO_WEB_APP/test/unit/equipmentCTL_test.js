@@ -1,15 +1,56 @@
 describe('Testing the controller of equipment object', function() {
     beforeEach(module('MESTO'));
-    var controller, scope;
+    var controller, scope, securitySrv, enumManagerSrv;
 
-    beforeEach(inject(function(_$controller_, $rootScope){
+    var emptyEquipment = {id: "",
+                            serialNumber :"",
+                            barCode :"",
+                            manufacturer :"",
+                            model :"",
+                            configHW :"",
+                            configSW :"",
+                            type:"",
+                            parentRoom:{
+                                id:"",
+                                roomID:"",
+                                role:"",
+                                siteName:""
+                            },
+                            parentSite:{
+                                id:"",
+                                name:"",
+                                role:""
+                            },
+                            updateBy: "",
+                            updateDate: ""};
+                            
+    beforeEach(inject(function(_$controller_, $rootScope, _securitySrv_, _enumManagerSrv_){
         // The injector unwraps the underscores (_) from around the parameter names when matching
         scope = $rootScope;//.$new();
         controller = _$controller_('equipmentCTL', { $scope: scope });
+        securitySrv = _securitySrv_;
+        enumManagerSrv = _enumManagerSrv_;
+        
+        $ = function() {return {
+                    fadeOut : function() {},
+                    fadeIn : function() {}
+                };
+            };
+        /*$ = function() {this.e; return this.e = {
+                    fadeOut : function() {},
+                    fadeIn : function() {}
+                };
+            };*/ // mock JQuery 
+            
+        //jasmine.createSpyObj('$'
+        
+        //securitySrv.isAuthorized = function(p) {return false;};
     }));
     
     it('Testing: creation object', function() {
-        expect(scope.canDelete).toBe(false);
+        expect(scope.canDelete).toBeFalsy();
+        expect(scope.isRoomListOpened).toBeFalsy();
+        expect(scope.isSiteListOpened).toBeFalsy();
         
         var equipment = {id: "",
                         serialNumber :"",
@@ -18,15 +59,121 @@ describe('Testing the controller of equipment object', function() {
                         model :"",
                         configHW :"",
                         configSW :"",
-                        type:""};
+                        type:"",
+                        parentRoom:{
+                            id:"",
+                            roomID:"",
+                            role:"",
+                            siteName:""
+                        },
+                        parentSite:{
+                            id:"",
+                            name:"",
+                            role:""
+                        },
+                        updateBy: "",
+                        updateDate: ""};
         
         expect(scope.equipment).toEqual(equipment);
         
         expect(controller.emptyEquipment).toEqual(equipment);
+        
+        
+        expect(scope.isAutorizeUpdatingEquip).toBeFalsy();
+        expect(scope.isAutorizeCreatingEquip).toBeFalsy();
+        expect(scope.isAutorizeDeletingEquip).toBeFalsy();
+        expect(scope.isAutorizeSeeDetailsEquip).toBeFalsy();
+        expect(scope.canSave).toBeFalsy();
+    });
+    
+    it('Testing: Get the label from TYPE value', function() {
+        expect(controller.getLabelTYPE('RT')).toEqual("Router");
+        expect(controller.getLabelTYPE('HUB')).toEqual("Hub");
+        expect(controller.getLabelTYPE('SRV')).toEqual("Server");
+        expect(controller.getLabelTYPE('SWT')).toEqual("Switch");
+    });
+    
+    it('Testing: Open Equipement', function() {
+        var equip = {id: "1",
+                    serialNumber :"432-43453454-4ref4",
+                    barCode :"code",
+                    manufacturer :"avenger",
+                    model :"XW-5",
+                    type:"HUB"};
+        
+        //spyOn($, '().fadeIn'); // TODO: make a spy of a function without or sub object function
+        controller.openEquipment(equip); // security ON
+        
+        expect(scope.equipment).toEqual(controller.emptyEquipment);
+        //expect($().fadeIn).toHaveBeenCalled();// TODO: make a spy on jquery without or sub object function
+        
+        scope.isAutorizeSeeDetailsEquip = true;
+        controller.openEquipment(equip); // security OFF
+        
+        expect(scope.equipment).toEqual(equip);
+    });
+    
+    describe('Dependancy to navigateSrv', function() {
+        var location, navigateSrv;
+        
+        beforeEach(inject(function(_navigateSrv_, _$location_) {
+            navigateSrv = _navigateSrv_;
+            location = _$location_;
+        }));
+        it('Testing: NavigateToEquipement function', function() {
+            var equip = {id: "1",
+                            serialNumber :"432-43453454-4ref4",
+                            barCode :"code",
+                            manufacturer :"avenger",
+                            model :"XW-5",
+                            type:"HUB"};
+            
+            spyOn(location, 'path');
+            controller.navigateToEquipment(equip); // Security ON
+            
+            expect(location.path).not.toHaveBeenCalled();
+            expect(navigateSrv.getEquip()).toBeNull();
+            
+            scope.isAutorizeUpdatingEquip = true;
+            controller.navigateToEquipment(equip); // Security OFF
+            
+            expect(location.path).toHaveBeenCalledWith('/admin/equip');
+            expect(navigateSrv.getEquip()).toEqual(equip);
+        });
+        
+        it('Testing: seeEquipmentDetails function', function() {
+            var equip = {id: "1",
+                            serialNumber :"432-43453454-4ref4",
+                            barCode :"code",
+                            manufacturer :"avenger",
+                            model :"XW-5",
+                            type:"HUB"};
+            
+            spyOn(location, 'path');
+            
+            controller.seeEquipmentDetails(equip); // Security ON
+            
+            expect(location.path).not.toHaveBeenCalled();
+            expect(navigateSrv.getEquip()).toBeNull();
+            
+            scope.isAutorizeSeeDetailsEquip = true;
+            controller.seeEquipmentDetails(equip); // Security OFF
+            
+            expect(location.path).toHaveBeenCalledWith('/equip');
+            expect(navigateSrv.getEquip()).toEqual(equip);
+        });
+        
+        it('Testing: Add a new object Equipement', function() {
+            spyOn(location, 'path');
+            
+            controller.newEquip();
+            
+            expect(location.path).toHaveBeenCalledWith('/admin/equip');
+        });
     });
 
     it('Testing: Load of an equipment', function() {
-        scope.equipmentForm = {$setPristine : function(){}};
+        //scope.equipmentForm = {$setPristine : function(){}};
         scope.SQLMsgs = "Good message";
         scope.SQLErrors = "bad message";
         
@@ -39,7 +186,7 @@ describe('Testing the controller of equipment object', function() {
                             configSW :"some config",
                             type:"HUB"};
                     
-        scope.loadEquipment(fakeEquipment);
+        controller.loadEquipment(fakeEquipment);
         
         expect(scope.equipment).toEqual(fakeEquipment);
         expect(scope.canDelete).toBe(true);
@@ -49,7 +196,7 @@ describe('Testing the controller of equipment object', function() {
     
     it('Testing: Reset form', function() {
         scope.equipmentForm = {$setPristine : function(){}};
-        scope.loadEquipment({id: "1",
+        controller.loadEquipment({id: "1",
                             serialNumber :"432-43453454-4ref4",
                             barCode :"code",
                             manufacturer :"avenger",
@@ -58,40 +205,139 @@ describe('Testing the controller of equipment object', function() {
                             configSW :"some config",
                             type:"HUB"});
         
-        scope.resetFrm();
+        controller.resetFrm();
         
         expect(scope.canDelete).toBe(false);
-        expect(scope.equipment).toEqual({id: "",
-                                        serialNumber :"",
-                                        barCode :"",
-                                        manufacturer :"",
-                                        model :"",
-                                        configHW :"",
-                                        configSW :"",
-                                        type:""});
+        expect(scope.equipment).toEqual(emptyEquipment);
     });
     
     it('Testing: Reset Messages ', function() {
-        scope.resetMsg(); // Test when already not define
+        controller.resetMsg(); // Test when already not define
         
         expect(scope.SQLMsgs).not.toBeDefined();
         expect(scope.SQLErrors).not.toBeDefined();
         
         scope.SQLMsgs = "Good message";
         scope.SQLErrors = "bad message";
-        scope.resetMsg(); // test when define
+        controller.resetMsg(); // test when define
         
         expect(scope.SQLMsgs).not.toBeDefined();
         expect(scope.SQLErrors).not.toBeDefined();
     });
     
+    describe('Dependancy to modal Instance', function() {
+        var modal;
+        beforeEach(inject(function(_$modal_) {
+            modal = _$modal_;
+        }));
+        
+        it('Testing : openRoomList function', function() {
+            spyOn(modal, "open");
+            spyOn(controller, 'loadRoomList');
+            
+            controller.openRoomList();
+            
+            expect(controller.loadRoomList).toHaveBeenCalled();
+            expect(modal.open).toHaveBeenCalled();
+        });
+        it('Testing : openSiteList function', function() {
+            spyOn(modal, "open");
+            spyOn(controller, 'loadSiteList');
+            
+            controller.openSiteList();
+            
+            expect(controller.loadSiteList).toHaveBeenCalled();
+            expect(modal.open).toHaveBeenCalled();
+        });
+        
+        it('Testing: associateRoom function', function() {
+            var testDirty = false;
+            scope.equipmentForm = {parentRoomName:{$setDirty : function(){testDirty=true;}}};
+            spyOn(controller, "closeRoomList");
+            
+            controller.associateRoom({id:'3',roomID:"test", role:"TTT", siteName:"site"});
+            
+            expect(scope.equipment.parentRoom.id).toBe('3');
+            expect(scope.equipment.parentRoom.roomID).toEqual("test");
+            expect(scope.equipment.parentRoom.role).toEqual("TTT");
+            expect(scope.equipment.parentRoom.siteName).toEqual("site");
+            expect(testDirty).toBeTruthy();
+            expect(controller.closeRoomList).toHaveBeenCalled();
+            
+            testDirty = false;
+            controller.associateRoom({id:'3',roomID:"test"});
+            expect(testDirty).toBeFalsy();
+        });
+        
+        it('Testing: closeRoomList function', function() {
+            modInst = controller.modalInstance = {dismiss:function(){}};
+            spyOn(modInst, 'dismiss');
+            
+            controller.closeRoomList();
+            
+            expect(modInst.dismiss).toHaveBeenCalledWith('done');
+        });
+        it('Testing: closeSiteList function', function() {
+            modInst = controller.modalInstance = {dismiss:function(){}};
+            spyOn(modInst, 'dismiss');
+            
+            scope.isSiteListOpened = true;
+            controller.closeSiteList();
+            
+            expect(modInst.dismiss).toHaveBeenCalledWith('done');
+        });
+        
+        it('Testing: associateSite function', function() {
+            var testDirty = false;
+            scope.equipmentForm = {parentSiteName:{$setDirty : function(){testDirty=true;}}};
+            spyOn(controller, "closeSiteList");
+            
+            controller.associateSite({id:'3',siteName:"test"}); // test
+            
+            expect(scope.equipment.parentSite.id).toBe('3');
+            expect(scope.equipment.parentSite.name).toEqual("test");
+            expect(controller.closeSiteList).toHaveBeenCalled();
+            expect(testDirty).toBeTruthy();
+            
+            testDirty = false;
+            controller.associateSite({id:'3',siteName:"test"});
+            expect(testDirty).toBeFalsy();
+        });
+    });
+    
+    it('Testing: cleanAssociateRoom function', function() {
+        spyOn(controller, "validDoubleAssociation");
+        scope.equipment.parentRoom = {id:"21", roomID:"test", role:"", siteName:""};
+        scope.equipmentForm = {parentRoomName:{$setDirty : function(){testDirty=true;}}};
+        
+        controller.cleanAssociateRoom();
+        expect(scope.equipment.parentRoom).toEqual({id:"", roomID:"",role:"", siteName:""});
+        expect(controller.validDoubleAssociation).toHaveBeenCalled();
+    });
+    
+    it('Testing: cleanAssociateSite function', function() {
+        spyOn(controller, "validDoubleAssociation");
+        scope.equipment.parentSite = {id:"21", name:"test", role:""};
+        scope.equipmentForm = {parentSiteName:{$setDirty : function(){testDirty=true;}}};
+        
+        controller.cleanAssociateSite();
+        expect(scope.equipment.parentSite).toEqual({id:"", name:"", role:""});
+        expect(controller.validDoubleAssociation).toHaveBeenCalled();
+    });
+    
     describe('Testing Ajax call from Equipment object', function() {
-        beforeEach(inject(function(_$httpBackend_) {
+        var location, streamSrv;
+        
+        beforeEach(inject(function(_$httpBackend_, _$location_, _streamSrv_) {
             $httpBackend = _$httpBackend_;
+            location = _$location_;
+            streamSrv = _streamSrv_;
         }));
  
         it('Testing: Refresh equipments list with success', function() {
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(200, '[{"id": "1",'
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(''); // CTL INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(200, '[{"id": "1",'
                                                                                             +'"serialNumber":"432-43453454-4ref4",'
                                                                                             +'"barCode":"code",'
                                                                                             +'"manufacturer":"avenger",'
@@ -100,7 +346,7 @@ describe('Testing the controller of equipment object', function() {
                                                                                             +'"configSW":"some config",'
                                                                                             +'"type":"HUB"}]');
 
-            scope.refreshList(); // <--- TEST
+            controller.refreshList(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -118,23 +364,27 @@ describe('Testing the controller of equipment object', function() {
             scope.canDelete = true;
             scope.equipment = {serialNumber:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('lst'); // CTL INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             
-            scope.refreshList(); // <--- TEST
+            controller.refreshList(); // <--- TEST
 
             $httpBackend.flush();
             
-            expect(scope.equipmentList).not.toBeDefined();
+            expect(scope.equipmentList).toEqual('lst');
             expect(scope.lstError).toEqual('Database error, Contact administrator. Try later'); // Principal test
         });
         it('Testing: Refresh equipements list and failed...', function() {
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(500, 'server error');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('lst'); // CTL INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(500, 'server error');
 
-            scope.refreshList(); // <--- TEST
+            controller.refreshList(); // <--- TEST
 
             $httpBackend.flush();
             
-            expect(scope.equipmentList).not.toBeDefined();
+            expect(scope.equipmentList).toEqual('lst');
             expect(scope.lstError).toEqual('error: 500:undefined'); // Principal test
         });
  
@@ -143,18 +393,10 @@ describe('Testing the controller of equipment object', function() {
             scope.canDelete = true;
             scope.equipment = {serialNumber:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"Equipment created successfully!!!", "error":""}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond([{}]);
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('[{"id": "1",'
-                                                                                        +'"serialNumber":"432-43453454-4ref4",'
-                                                                                        +'"barCode":"code",'
-                                                                                        +'"manufacturer":"avenger",'
-                                                                                        +'"model":"XW-5",'
-                                                                                        +'"configHW":"some config",'
-                                                                                        +'"configSW":"some config",'
-                                                                                        +'"type":"HUB"}]');
 
-            scope.save(); // <--- TEST
+            controller.save(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -164,60 +406,124 @@ describe('Testing the controller of equipment object', function() {
             expect(scope.SQLErrors).not.toBeDefined();
             expect(scope.equipmentList).toEqual([{}]);
         });
-        it('Testing: Succeeding the Saving', function() {
+        it('Testing: Succeeding the Saving (with old msg)', function() {
             scope.equipmentForm = {$setPristine:function(){}, $dirty:true, $valid:true};
+            scope.SQLErrors = " error msg";
+            scope.MsgErrors = "success msg";
             scope.canDelete = true;
-            scope.equipment = {roomID:"fake"};
+            scope.equipment = {id: "",
+                                serialNumber:"fake",
+                                parentRoom:{
+                                    id:"",
+                                    roomID:"",
+                                    role:"",
+                                    siteName:""
+                                },
+                                parentSite:{
+                                    id:"",
+                                    name:"",
+                                    role:""
+                                }};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"Equipment created successfully!!!", "error":""}');
+            spyOn(location, 'path');  
+            spyOn(streamSrv, 'saveActivity');  
+            spyOn(enumManagerSrv, 'getRoomLabelROLE');  
+            
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('');
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('[{"id": "1",'
-                                                                                        +'"serialNumber":"432-43453454-4ref4",'
-                                                                                        +'"barCode":"code",'
-                                                                                        +'"manufacturer":"avenger",'
-                                                                                        +'"model":"XW-5",'
-                                                                                        +'"configHW":"some config",'
-                                                                                        +'"configSW":"some config",'
-                                                                                        +'"type":"HUB"}]');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"Equipment created successfully!!!", "error":""}');
 
-            scope.save(); // <--- TEST
+            controller.save(); // <--- TEST
 
             $httpBackend.flush();
             
             expect(scope.canDelete).toBe(false);
-            expect(scope.equipment).toEqual({id: "",
-                                        serialNumber :"",
-                                        barCode :"",
-                                        manufacturer :"",
-                                        model :"",
-                                        configHW :"",
-                                        configSW :"",
-                                        type:""});
-            expect(scope.SQLMsgs).toEqual('Equipment created successfully!!!');
+            expect(scope.equipment).toEqual(emptyEquipment);
+                                        
+            expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
-            expect(scope.equipmentList).toEqual([{"id":"1",
-                                                "serialNumber":"432-43453454-4ref4",
-                                                "barCode":"code",
-                                                "manufacturer":"avenger",
-                                                "model":"XW-5",
-                                                "configHW":"some config",
-                                                "configSW":"some config",
-                                                "type":"HUB"}]);
+            expect(scope.equipmentList).toEqual('');
+                     
+            expect(location.path).toHaveBeenCalledWith("/admin/equipments");
+            expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(streamSrv.saveActivity.calls.mostRecent().args[1]).toBeFalsy();
+            expect(enumManagerSrv.getRoomLabelROLE).toHaveBeenCalled();
+        });
+        it('Testing: Succeeding the Saving and change de path of Logger', function() {
+            scope.equipmentForm = {$setPristine:function(){}, $dirty:true, $valid:true};
+            scope.SQLErrors = " error msg";
+            scope.MsgErrors = "success msg";
+            scope.canDelete = true;
+            scope.equipment = {id:"1",
+                                serialNumber:"fake",
+                                parentRoom:{
+                                    id:"",
+                                    roomID:"",
+                                    role:"",
+                                    siteName:""
+                                },
+                                parentSite:{
+                                    id:"1",
+                                    name:"test",
+                                    role:"TS"
+                                }};
+            
+            spyOn(location, 'path');  
+            spyOn(streamSrv, 'saveActivity');  
+            spyOn(enumManagerSrv, 'getSiteLabelROLE');  
+            
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"Equipment created successfully!!!", "error":""}');
+
+            controller.save(); // <--- TEST
+
+            $httpBackend.flush();
+            
+            expect(scope.canDelete).toBe(false);
+            expect(scope.equipment).toEqual(emptyEquipment);
+                                        
+            expect(scope.SQLMsgs).not.toBeDefined();
+            expect(scope.SQLErrors).not.toBeDefined();
+            expect(scope.equipmentList).toEqual('');
+                     
+            expect(location.path).toHaveBeenCalledWith("/admin/equipments");
+            expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(enumManagerSrv.getSiteLabelROLE).toHaveBeenCalled();
         });
         it('Testing: Generated error for Saving', function() {
             scope.equipmentForm = {$dirty:true, $valid:true};
             scope.canDelete = true;
-            scope.equipment = {serialNumber:"fake"};
+            scope.equipment = {serialNumber:"fake",
+                                parentRoom:{
+                                    id:"12",
+                                    roomID:"test", 
+                                    siteName:"toto"
+                                },
+                                parentSite:{
+                                    id:"",
+                                    name:""
+                                }};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond({});
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             
-            scope.save(); // <--- TEST
+            controller.save(); // <--- TEST
 
             $httpBackend.flush();
             
             expect(scope.canDelete).toBe(true);
-            expect(scope.equipment).toEqual({serialNumber:"fake"});
+            expect(scope.equipment).toEqual({serialNumber:"fake",
+                                                parentRoom:{
+                                                    id:"12",
+                                                    roomID:"test", 
+                                                    siteName:"toto"
+                                                },
+                                                parentSite:{
+                                                    id:"",
+                                                    name:""
+                                                }});
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).toEqual('Database error, Contact administrator. Try later'); // Principal test
             expect(scope.equipmentList).toEqual({});
@@ -225,71 +531,132 @@ describe('Testing the controller of equipment object', function() {
         it('Testing: Failing the Saving', function() {
             scope.equipmentForm = {$dirty:true, $valid:true};
             scope.canDelete = true;
-            scope.equipment = {serialNumber:"fake"};
+            scope.equipment = {serialNumber:"fake",
+                                parentRoom:{
+                                    id:"12",
+                                    roomID:"test"
+                                },
+                                parentSite:{
+                                    id:"",
+                                    name:""
+                                }};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(500, 'server error');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond({});
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(500, 'server error');
             
-            scope.save(); // <--- TEST
+            controller.save(); // <--- TEST
 
             $httpBackend.flush();
             
             expect(scope.canDelete).toBe(true);
-            expect(scope.equipment).toEqual({serialNumber:"fake"});
+            expect(scope.equipment).toEqual({serialNumber:"fake",
+                                                parentRoom:{
+                                                    id:"12",
+                                                    roomID:"test"
+                                                },
+                                                parentSite:{
+                                                    id:"",
+                                                    name:""
+                                                }});
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).toEqual('error: 500:undefined'); // Principal test
             expect(scope.equipmentList).toEqual({});
         });
 
         
-        it('Testing: Succeeding the Deleting', function() {
+        it('Testing: Succeeding the Deleting (with old Msg)', function() {
             scope.equipmentForm = {$setPristine:function(){}};
+            scope.SQLErrors = " error msg";
+            scope.MsgErrors = "success msg";
             scope.canDelete = true;
-            scope.equipment = {serialNumber:"fake"};
+            scope.equipment = {serialNumber:"fake",
+                                    parentRoom:{
+                                        id:"",
+                                        roomID:"",
+                                        role:"",
+                                        siteName:""
+                                    },
+                                    parentSite:{
+                                        id:"",
+                                        name:"",
+                                        role:""
+                                    }};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"Equipment deleted successfully!!!", "error":""}');
+            spyOn(location, 'path');
+            spyOn(streamSrv, 'saveActivity');
+            spyOn(enumManagerSrv, 'getRoomLabelROLE');
+            
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('');
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('[{"id": "1",'
-                                                                                        +'"serialNumber":"432-43453454-4ref4",'
-                                                                                        +'"barCode":"code",'
-                                                                                        +'"manufacturer":"avenger",'
-                                                                                        +'"model":"XW-5",'
-                                                                                        +'"configHW":"some config",'
-                                                                                        +'"configSW":"some config",'
-                                                                                        +'"type":"HUB"}]');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"Equipment deleted successfully!!!", "error":""}');
 
-            scope.delete(); // <--- TEST
+            controller.delete(); // <--- TEST
 
             $httpBackend.flush();
             
             expect(scope.canDelete).toBe(false);
-            expect(scope.equipment).toEqual({id: "",
-                                        serialNumber :"",
-                                        barCode :"",
-                                        manufacturer :"",
-                                        model :"",
-                                        configHW :"",
-                                        configSW :"",
-                                        type:""});
-            expect(scope.SQLMsgs).toEqual('Equipment deleted successfully!!!');
+            expect(scope.equipment).toEqual(emptyEquipment);
+            
+            expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
-            expect(scope.equipmentList).toEqual([{"id":"1",
-                                                "serialNumber":"432-43453454-4ref4",
-                                                "barCode":"code",
-                                                "manufacturer":"avenger",
-                                                "model":"XW-5",
-                                                "configHW":"some config",
-                                                "configSW":"some config",
-                                                "type":"HUB"}]);
+            expect(scope.equipmentList).toEqual('');
+                                                
+            expect(location.path).toHaveBeenCalledWith("/admin/equipments");
+            expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(streamSrv.saveActivity.calls.mostRecent().args[1]).toBeFalsy();
+            expect(enumManagerSrv.getRoomLabelROLE).toHaveBeenCalled();
+        });
+        it('Testing: Succeeding the Deleting and change de path of Logger', function() {
+            scope.equipmentForm = {$setPristine:function(){}};
+            scope.SQLErrors = " error msg";
+            scope.MsgErrors = "success msg";
+            scope.canDelete = true;
+            scope.equipment = {serialNumber:"fake",
+                                    parentRoom:{
+                                        id:"",
+                                        roomID:"",
+                                        role:"",
+                                        siteName:""
+                                    },
+                                    parentSite:{
+                                        id:"1",
+                                        name:"test",
+                                        role:"TE"
+                                    }};
+            
+            spyOn(location, 'path');
+            spyOn(streamSrv, 'saveActivity');
+            spyOn(enumManagerSrv, 'getSiteLabelROLE');
+            
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"Equipment deleted successfully!!!", "error":""}');
+
+            controller.delete(); // <--- TEST
+
+            $httpBackend.flush();
+            
+            expect(scope.canDelete).toBe(false);
+            expect(scope.equipment).toEqual(emptyEquipment);
+            
+            expect(scope.SQLMsgs).not.toBeDefined();
+            expect(scope.SQLErrors).not.toBeDefined();
+            expect(scope.equipmentList).toEqual('');
+                                                
+            expect(location.path).toHaveBeenCalledWith("/admin/equipments");
+            expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(enumManagerSrv.getSiteLabelROLE).toHaveBeenCalled();
         });
         it('Testing: Generating error for Deleting', function() {
             scope.canDelete = true;
             scope.equipment = {serialNumber:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('fake');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             
-            scope.delete(); // <--- TEST
+            controller.delete(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -303,10 +670,11 @@ describe('Testing the controller of equipment object', function() {
             scope.canDelete = true;
             scope.equipment = {serialNumber:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(500, 'server error');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
             $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond({});
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(500, 'server error');
             
-            scope.delete(); // <--- TEST
+            controller.delete(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -315,6 +683,108 @@ describe('Testing the controller of equipment object', function() {
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).toEqual('error: 500:undefined'); // Principal test
             expect(scope.equipmentList).toEqual({});
+        });
+        
+        it('Testing: Failed to load Rooms List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(200, '{"msg":"", "error":"Database error"}');
+            
+            controller.loadRoomList();
+            $httpBackend.flush();
+            
+            expect(scope.lstRmErr).toEqual("Database error");
+            expect(scope.roomList).not.toBeDefined();
+        });
+        it('Testing: Error to load Rooms List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(500, '{"msg":"", "error":"error"}');
+            
+            controller.loadRoomList();
+            $httpBackend.flush();
+            
+            expect(scope.lstRmErr).toEqual("error: 500:undefined");
+            expect(scope.roomList).not.toBeDefined();
+        });
+        it('Testing: Success to load Rooms List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(200, '[{"test":"test"}]');
+            
+            controller.loadRoomList();
+            $httpBackend.flush();
+            
+            expect(scope.lstRmErr).not.toBeDefined();
+            expect(scope.roomList).toEqual([{test:"test"}]);
+        });
+        
+        it('Testing: Failed to load Sites List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(200, '{"msg":"", "error":"Database error"}');
+            
+            controller.loadSiteList();
+            $httpBackend.flush();
+            
+            expect(scope.lstStErr).toEqual("Database error");
+            expect(scope.siteList).not.toBeDefined();
+        });
+        it('Testing: Error to load Sites List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(500, '{"msg":"", "error":"error"}');
+            
+            controller.loadSiteList();
+            $httpBackend.flush();
+            
+            expect(scope.lstStErr).toEqual("error: 500:undefined");
+            expect(scope.siteList).not.toBeDefined();
+        });
+        it('Testing: Success to load Sites List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(200, '[{"test":"test"}]');
+            
+            controller.loadSiteList();
+            $httpBackend.flush();
+            
+            expect(scope.lstStErr).not.toBeDefined();
+            expect(scope.siteList).toEqual([{test:"test"}]);
+        });
+        
+        it('Testing: Failed to load one Equipment', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(200, '{"msg":"", "error":"Database error"}');
+            
+            controller.loadDBEquipment();
+            $httpBackend.flush();
+            
+            expect(scope.SQLErrors).toEqual("Database error");
+            expect(scope.equipment).toEqual(emptyEquipment);
+        });
+        it('Testing: Error to load one Equipment', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(500, '{"msg":"", "error":"error"}');
+            
+            controller.loadDBEquipment();
+            $httpBackend.flush();
+            
+            expect(scope.SQLErrors).toEqual("error: 500:undefined");
+            expect(scope.equipment).toEqual(emptyEquipment);
+        });
+        it('Testing: Success to load one Equipment', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(200, '[{"test":"test"}]');
+            
+            controller.loadDBEquipment();
+            $httpBackend.flush();
+            
+            expect(scope.SQLErrors).not.toBeDefined();
+            expect(scope.equipment).toEqual({test:"test"});
         });
     });
 });

@@ -1,10 +1,42 @@
-describe('Testing the controller of site object', function() {
+describe('Testing the controller of site object =>', function() {
     beforeEach(module('MESTO'));
     var controller, scope;
 
+    var emptySite = {id: "",
+                    reference :"",
+                    latitude:"",
+                    longitude:"",
+                    siteName:"",
+                    description:"",
+                    isTemporary:false,
+                    startDate:"",
+                    endDate:"",
+                    address:"",
+                    city:"",
+                    province:"",
+                    country:"",
+                    postalCode:"",
+                    role:"",
+                    pointOfContact:"",
+                    phoneNumberPoC:"",
+                    organization:"",
+                    techPoC:"",
+                    phoneTechPoC:"",
+                    employesNumber:"",
+                    lstRooms:[],
+                    lstEquips:[],
+                    updateBy: "",
+                    updateDate: ""};
+                    
     beforeEach(inject(function(_$controller_, $rootScope) {
         scope = $rootScope;
         controller = _$controller_('siteCTL', { $scope: scope });
+        
+        $ = function() {return {
+                fadeOut : function() {},
+                fadeIn : function() {}
+            };
+        };
     }));
     
     it('Testing: creation object', function() {
@@ -24,15 +56,165 @@ describe('Testing the controller of site object', function() {
                     province:"",
                     country:"",
                     postalCode:"",
-                    role:""};
+                    role:"",
+                    pointOfContact:"",
+                    phoneNumberPoC:"",
+                    organization:"",
+                    techPoC:"",
+                    phoneTechPoC:"",
+                    employesNumber:"",
+                    lstRooms:[],
+                    lstEquips:[],
+                    updateBy: "",
+                    updateDate: ""};
         
         expect(scope.site).toEqual(site);
         
         expect(controller.emptySite).toEqual(site);
+        
+        expect(scope.modifySite).toBeFalsy();
+        
+        expect(scope.isAutorizeUpdatingSite).toBeFalsy();
+        expect(scope.isAutorizeCreatingSite).toBeFalsy();
+        expect(scope.isAutorizeDeletingSite).toBeFalsy();
+        expect(scope.isAutorizeSeeDetailsSite).toBeFalsy();
+        expect(scope.canSave).toBeFalsy();
+    });
+    
+    it('Testing: Modify site Flag setting', function() {
+        controller.modifySite();
+        
+        expect(scope.modifySite).toBeTruthy();
+    });
+    
+    it('Testing: Get the label from ROLE value', function() {
+        expect(controller.getLabelROLE('ED')).toEqual("Edifice");
+        expect(controller.getLabelROLE('FLR')).toEqual("Floor");
+        expect(controller.getLabelROLE('FOB')).toEqual("FOB");
+        expect(controller.getLabelROLE('COP')).toEqual("COP");
+        expect(controller.getLabelROLE('CMP')).toEqual("CAMP");
+    });
+    
+    it('Testing: Get the label from ORGANIZATION value', function() {
+        expect(controller.getLabelORGANIZATION('TC')).toEqual("TC");
+        expect(controller.getLabelORGANIZATION('DND')).toEqual("DND");
+        expect(controller.getLabelORGANIZATION('RCMP')).toEqual("RCMP");
+        expect(controller.getLabelORGANIZATION('ASC')).toEqual("ASC");
+        expect(controller.getLabelORGANIZATION('CSC')).toEqual("CSC");
     });
 
+    it('Testing: Open site', function() {
+        var site = {id: "1",
+                    reference :"test",
+                    latitude:"12.123456",
+                    longitude:"43.123456",
+                    siteName:"test4"};
+                    
+        spyOn(controller, 'loadRoomsList');
+        spyOn(controller, 'loadEquipsList');
+        controller.openSite(site); // security ON
+        
+        expect(scope.site).toEqual(controller.emptySite);
+        // TODO: make a spy of jquery without or sub object function
+        
+        scope.isAutorizeSeeDetailsSite = true;
+        controller.openSite(site); // security OFF
+        
+        expect(scope.site).toEqual(site);
+        expect(controller.loadRoomsList).toHaveBeenCalled();
+        expect(controller.loadEquipsList).toHaveBeenCalled();
+    });
+    
+    it('Testing: Promise of getListSite', function() {
+        var promise = controller.getListSites();
+        
+        expect(promise).toBeDefined();
+        expect(promise.then).toBeDefined(); // object type Promise
+    });
+    
+    describe('Dependancy to navigateSrv/location', function() {
+        var location, navigateSrv;
+        
+        beforeEach(inject(function(_navigateSrv_, _$location_) {
+            navigateSrv = _navigateSrv_;
+            location = _$location_;
+        }));
+        it('Testing: NavigateToSite function', function() {
+            var site = {id: "1",
+                    reference :"test",
+                    latitude:"12.123456",
+                    longitude:"43.123456",
+                    siteName:"test4"};
+            
+            spyOn(location, 'path');
+            
+            controller.navigateToSite(site); // Security ON
+            
+            expect(location.path).not.toHaveBeenCalled();
+            expect(navigateSrv.getSite()).toBeNull();
+            
+            scope.isAutorizeUpdatingSite = true;
+            controller.navigateToSite(site); // Security OFF
+            
+            expect(location.path).toHaveBeenCalledWith('/admin/site');
+            expect(navigateSrv.getSite()).toEqual(site);
+        });
+        
+        it('Testing: seeSiteDetails function', function() {
+            var site = {id: "1",
+                    reference :"test",
+                    latitude:"12.123456",
+                    longitude:"43.123456",
+                    siteName:"test4"};
+            
+            spyOn(location, 'path');
+            
+            controller.seeSiteDetails(site); // Security ON
+            
+            expect(location.path).not.toHaveBeenCalled();
+            expect(navigateSrv.getSite()).toBeNull();
+            
+            scope.isAutorizeSeeDetailsSite = true;
+            controller.seeSiteDetails(site); // Security OFF
+            
+            expect(location.path).toHaveBeenCalledWith('/site');
+            expect(navigateSrv.getSite()).toEqual(site);
+        });
+        
+        it('Testing: Add a new sub-object Room', function() {
+            modInst = controller.modalInstance = {dismiss:function(){}};
+            spyOn(modInst, 'dismiss');
+            spyOn(location, 'path');
+            
+            controller.newRoom();
+            
+            expect(location.path).toHaveBeenCalledWith('/admin/room');
+            expect(modInst.dismiss).toHaveBeenCalledWith('redirect');
+        });
+        
+        it('Testing: Add a new sub-object Equipment', function() {
+            modInst = controller.modalInstance = {dismiss:function(){}};
+            spyOn(modInst, 'dismiss');
+            spyOn(location, 'path');
+            
+            controller.newEquip();
+            
+            expect(location.path).toHaveBeenCalledWith('/admin/equip');
+            expect(modInst.dismiss).toHaveBeenCalledWith('redirect');
+        });
+        
+        it('Testing: Add a new object Site', function() {
+            spyOn(location, 'path');
+            
+            controller.newSite();
+            
+            expect(location.path).toHaveBeenCalledWith('/admin/site');
+        });
+    });
+    
     it('Testing: Load of a site', function() {
-        scope.siteForm = {$setPristine : function(){}};
+        spyOn(controller, "loadRoomsList");
+        spyOn(controller, "loadEquipsList");
         scope.SQLMsgs = "Good message";
         scope.SQLErrors = "bad message";
         
@@ -43,104 +225,226 @@ describe('Testing the controller of site object', function() {
                     siteName:"test4",
                     description:"test5",
                     isTemporary:true,
-                    startDate:"12-12-1912",
-                    endDate:"11-11-1900",
+                    startDate:"1912-01-01",
+                    endDate:"1900-11-11",
                     address:"test9",
                     city:"test10",
                     province:"test11",
                     country:"test12",
                     postalCode:"X5X 5X5",
-                    role:"COP"};
+                    role:"COP",
+                    pointOfContact:"Lt. Bariton",
+                    phoneNumberPoC:"514-555-4321",
+                    organization:"TC",
+                    techPoC:"Sgt. Soprano",
+                    phoneTechPoC:"514-555-5432",
+                    employesNumber:"200",
+                    lstRooms:[{id:"2",name:"test"},{id:"3",name:"testV2"}],
+                    lstEquips:[{id:"2",roomID:"test"},{id:"3",roomID:"testV2"}]};
                     
-        scope.loadSite(fakeSite);
+        controller.loadSite(fakeSite);
         
-        fakeSite.startDate = new Date(fakeSite.startDate).toDMY();
-        fakeSite.endDate = new Date(fakeSite.endDate).toDMY();
-        
-        expect(scope.site).toEqual(fakeSite);
+        expect(scope.site).toEqual({id: "1",
+                                    reference :"test",
+                                    latitude:"12.123456",
+                                    longitude:"43.123456",
+                                    siteName:"test4",
+                                    description:"test5",
+                                    isTemporary:true,
+                                    startDate:"01-01-1912",
+                                    endDate:"11-11-1900",
+                                    address:"test9",
+                                    city:"test10",
+                                    province:"test11",
+                                    country:"test12",
+                                    postalCode:"X5X 5X5",
+                                    role:"COP",
+                                    pointOfContact:"Lt. Bariton",
+                                    phoneNumberPoC:"514-555-4321",
+                                    organization:"TC",
+                                    techPoC:"Sgt. Soprano",
+                                    phoneTechPoC:"514-555-5432",
+                                    employesNumber:"200",
+                                    lstRooms:[{id:"2",name:"test"},{id:"3",name:"testV2"}],
+                                    lstEquips:[{id:"2",roomID:"test"},{id:"3",roomID:"testV2"}]});
         expect(scope.canDelete).toBe(true);
         expect(scope.SQLMsgs).not.toBeDefined();
         expect(scope.SQLErrors).not.toBeDefined();
+        
+        expect(controller.loadRoomsList).toHaveBeenCalled();
+        expect(controller.loadEquipsList).toHaveBeenCalled();
+    });
+    it('Testing: Validation of Date at loading', function() {
+        scope.siteForm = {$setPristine : function(){}};
+        
+        var fakeSite = {id: "1",
+                    reference :"test",
+                    latitude:"12.123456",
+                    longitude:"43.123456",
+                    siteName:"test4",
+                    isTemporary:true,
+                    startDate:"01-01-2008",
+                    endDate:"01-01-2010"};
+                    
+        controller.loadSite(fakeSite);
+        
+        expect(scope.site).toEqual({id: "1",
+                    reference :"test",
+                    latitude:"12.123456",
+                    longitude:"43.123456",
+                    siteName:"test4",
+                    isTemporary:true,
+                    startDate:"01-01-2008",
+                    endDate:"01-01-2010"});
+        
+        var fakeSite2 = {id: "2",
+            reference :"tester",
+            latitude:"55.123456",
+            longitude:"44.123456",
+            siteName:"tester2",
+            isTemporary:true,
+            startDate:"2008-01-01",
+            endDate:"2010-01-01"};
+                    
+        controller.loadSite(fakeSite2);
+        
+        expect(scope.site).toEqual({id: "2",
+                    reference :"tester",
+                    latitude:"55.123456",
+                    longitude:"44.123456",
+                    siteName:"tester2",
+                    isTemporary:true,
+                    startDate:"01-01-2008",
+                    endDate:"01-01-2010"});
     });
     
     it('Testing: Reset form', function() {
         scope.siteForm = {$setPristine : function(){}};
-        scope.loadSite({id: "1",
+        controller.loadSite({id: "1",
                     reference :"test",
                     latitude:"12.123456",
                     longitude:"43.123456",
                     siteName:"test4",
                     description:"test5",
                     isTemporary:true,
-                    startDate:"12-12-1912",
-                    endDate:"11-11-1900",
+                    startDate:"1912-12-12",
+                    endDate:"1900-11-11",
                     address:"test9",
                     city:"test10",
                     province:"test11",
                     country:"test12",
                     postalCode:"X5X 5X5",
-                    role:"COP"});
+                    role:"COP",
+                    pointOfContact:"Lt. Bariton",
+                    phoneNumberPoC:"514-555-4321",
+                    organization:"TC",
+                    techPoC:"Sgt. Soprano",
+                    phoneTechPoC:"514-555-5432",
+                    employesNumber:"200",
+                    lstRooms:[{id:"2",name:"test"},{id:"3",name:"testV2"}],
+                    lstEquips:[{id:"2",roomID:"test"},{id:"3",roomID:"testV2"}]});
         
-        scope.resetFrm();
+        controller.resetFrm();
         
         expect(scope.canDelete).toBe(false);
-        //expect(scope.siteForm.$pristine).toBe(true);
-        //expect(scope.siteForm.$dirty).toBe(false);
-        //expect(scope.siteForm.$valid).toBe(true);
-        expect(scope.site).toEqual({id: "",
-                                    reference :"",
-                                    latitude:"",
-                                    longitude:"",
-                                    siteName:"",
-                                    description:"",
-                                    isTemporary:false,
-                                    startDate:"",
-                                    endDate:"",
-                                    address:"",
-                                    city:"",
-                                    province:"",
-                                    country:"",
-                                    postalCode:"",
-                                    role:""});
+        expect(scope.site).toEqual(emptySite);
     });
     
     it('Testing: Reset Messages ', function() {
-        scope.resetMsg(); // Test when already not define
+        controller.resetMsg(); // Test when already not define
         
         expect(scope.SQLMsgs).not.toBeDefined();
         expect(scope.SQLErrors).not.toBeDefined();
         
         scope.SQLMsgs = "Good message";
         scope.SQLErrors = "bad message";
-        scope.resetMsg(); // test when define
+        controller.resetMsg(); // test when define
         
         expect(scope.SQLMsgs).not.toBeDefined();
         expect(scope.SQLErrors).not.toBeDefined();
     });
     
-    describe('Testing Ajax call from site object', function() {
-        beforeEach(inject(function(_$httpBackend_) {
+    it('Testing: openFreeRoomsList', function() {
+        spyOn(controller, "loadFreeRoomsList");
+        
+        controller.openFreeRoomsList();
+        expect(controller.loadFreeRoomsList).toHaveBeenCalled();
+        // TODO : add test and spy for JQuery
+    });
+    
+    it('Testing: closeFreeRoomsList', function() {
+        modInst = controller.modalInstance = {dismiss:function(){}};
+        spyOn(modInst, 'dismiss');
+        scope.lstFreeRooms = "test";
+        
+        controller.closeFreeRoomsList();
+        
+        expect(scope.lstFreeRooms).not.toBeDefined();
+        expect(modInst.dismiss).toHaveBeenCalledWith('done');
+    });
+    it('Testing: closeFreeEquipsList', function() {
+        modInst = controller.modalInstance = {dismiss:function(){}};
+        spyOn(modInst, 'dismiss');
+        scope.lstFreeEquips = "test";
+        controller.closeFreeEquipsList();
+        
+        expect(scope.lstFreeEquips).not.toBeDefined();
+        expect(modInst.dismiss).toHaveBeenCalledWith('done');
+    });
+    
+    describe('Dependancy to modal Instance', function() {
+        var modal;
+        
+        beforeEach(inject(function(_$modal_) {
+            modal = _$modal_;
+        }));
+        it('Testing: openFreeEquipsList', function() {
+            spyOn(modal, "open");
+            spyOn(controller, "loadFreeEquipsList");
+            
+            controller.openFreeEquipsList();
+            
+            expect(controller.loadFreeEquipsList).toHaveBeenCalled();
+            expect(modal.open).toHaveBeenCalled();
+        });
+    });
+    
+    describe('Testing Ajax call from site object =>', function() {
+        var location, streamSrv;
+        
+        beforeEach(inject(function(_$httpBackend_, _$location_, _streamSrv_) {
             $httpBackend = _$httpBackend_;
+            location = _$location_;
+            streamSrv = _streamSrv_;
         }));
  
         it('Testing: Refresh sites list with success', function() {
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(200, '[{"id": "1",'
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTL INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(200, '[{"id": "1",'
                                                                                         +'"reference":"test",'
                                                                                         +'"latitude":"12.123456",'
                                                                                         +'"longitude":"43.123456",'
                                                                                         +'"siteName":"test4",'
                                                                                         +'"description":"test5",'
                                                                                         +'"isTemporary":true,'
-                                                                                        +'"startDate":"12-12-1912",'
-                                                                                        +'"endDate":"11-11-1900",'
+                                                                                        +'"startDate":"1912-12-12",'
+                                                                                        +'"endDate":"1900-11-11",'
                                                                                         +'"address":"test9",'
                                                                                         +'"city":"test10",'
                                                                                         +'"province":"test11",'
                                                                                         +'"country":"test12",'
                                                                                         +'"postalCode":"X5X 5X5",'
-                                                                                        +'"role":"COP"}]');
+                                                                                        +'"role":"COP",'
+                                                                                        +'"pointOfContact":"Lt. Bariton",'
+                                                                                        +'"phoneNumberPoC":"514-555-4321",'
+                                                                                        +'"organization":"TC",'
+                                                                                        +'"techPoC":"Sgt. Soprano",'
+                                                                                        +'"phoneTechPoC":"514-555-5432",'
+                                                                                        +'"employesNumber":"200"'
+                                                                                        +'}]');
 
-            scope.refreshList(); // <--- TEST
+            controller.refreshList(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -152,36 +456,46 @@ describe('Testing the controller of site object', function() {
                                                 "siteName":"test4",
                                                 "description":"test5",
                                                 "isTemporary":true,
-                                                "startDate":"12-12-1912",
-                                                "endDate":"11-11-1900",
+                                                "startDate":"1912-12-12",
+                                                "endDate":"1900-11-11",
                                                 "address":"test9",
                                                 "city":"test10",
                                                 "province":"test11",
                                                 "country":"test12",
                                                 "postalCode":"X5X 5X5",
-                                                "role":"COP"}]);
+                                                "role":"COP",
+                                                "pointOfContact":"Lt. Bariton",
+                                                "phoneNumberPoC":"514-555-4321",
+                                                "organization":"TC",
+                                                "techPoC":"Sgt. Soprano",
+                                                "phoneTechPoC":"514-555-5432",
+                                                "employesNumber":"200"}]);
         });
         it('Testing: Generated error for Refresh', function() {
             scope.canDelete = true;
             scope.site = {reference:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTL INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             
-            scope.refreshList(); // <--- TEST
+            controller.refreshList(); // <--- TEST
 
             $httpBackend.flush();
             
-            expect(scope.siteList).not.toBeDefined();
+            expect(scope.siteList).toEqual('');
             expect(scope.lstError).toEqual('Database error, Contact administrator. Try later'); // Principal test
         });
         it('Testing: Refresh sites list and failed...', function() {
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(500, 'server error');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTL INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(500, 'server error');
 
-            scope.refreshList(); // <--- TEST
+            controller.refreshList(); // <--- TEST
 
             $httpBackend.flush();
             
-            expect(scope.siteList).not.toBeDefined();
+            expect(scope.siteList).toEqual('');
             expect(scope.lstError).toEqual('error: 500:undefined'); // Principal test
         });
  
@@ -190,25 +504,10 @@ describe('Testing the controller of site object', function() {
             scope.canDelete = true;
             scope.site = {reference:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveSite.php').respond('{"msg":"Site created successfully!!!", "error":""}');
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond([{}]);
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond('[{"id": "1",'
-                                                                                        +'"reference":"test",'
-                                                                                        +'"latitude":"12.123456",'
-                                                                                        +'"longitude":"43.123456",'
-                                                                                        +'"siteName":"test4",'
-                                                                                        +'"description":"test5",'
-                                                                                        +'"isTemporary":true,'
-                                                                                        +'"startDate":"12-12-1912",'
-                                                                                        +'"endDate":"11-11-1900",'
-                                                                                        +'"address":"test9",'
-                                                                                        +'"city":"test10",'
-                                                                                        +'"province":"test11",'
-                                                                                        +'"country":"test12",'
-                                                                                        +'"postalCode":"X5X 5X5",'
-                                                                                        +'"role":"COP"}]');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond('lst'); // CTL INIT
 
-            scope.save(); // <--- TEST
+            controller.save(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -216,78 +515,63 @@ describe('Testing the controller of site object', function() {
             expect(scope.site).toEqual({reference :"fake"});
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
-            expect(scope.siteList).toEqual([{}]);
+            expect(scope.siteList).toEqual('lst');
         });
-        it('Testing: Succeeding the Saving', function() {
+        it('Testing: Succeeding the Saving (with old msg)', function() {
             scope.siteForm = {$setPristine:function(){}, $dirty:true, $valid:true};
+            scope.SQLErrors = " error msg";
+            scope.MsgErrors = "success msg";
             scope.canDelete = true;
             scope.site = {reference:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveSite.php').respond('{"msg":"Site created successfully!!!", "error":""}');
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond('');
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond('[{"id": "1",'
-                                                                                        +'"reference":"test",'
-                                                                                        +'"latitude":"12.123456",'
-                                                                                        +'"longitude":"43.123456",'
-                                                                                        +'"siteName":"test4",'
-                                                                                        +'"description":"test5",'
-                                                                                        +'"isTemporary":true,'
-                                                                                        +'"startDate":"12-12-1912",'
-                                                                                        +'"endDate":"11-11-1900",'
-                                                                                        +'"address":"test9",'
-                                                                                        +'"city":"test10",'
-                                                                                        +'"province":"test11",'
-                                                                                        +'"country":"test12",'
-                                                                                        +'"postalCode":"X5X 5X5",'
-                                                                                        +'"role":"COP"}]');
+            spyOn(location, 'path').and.returnValue("/admin/site");
+            spyOn(streamSrv, 'saveActivity');
+            spyOn(controller, 'getLabelROLE');
+            
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTL INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveSite.php').respond('{"msg":"Site created successfully!!!", "error":""}');
 
-            scope.save(); // <--- TEST
+            controller.save(); // <--- TEST
 
             $httpBackend.flush();
             
             expect(scope.canDelete).toBe(false);
-            expect(scope.site).toEqual({id: "",
-                                    reference :"",
-                                    latitude:"",
-                                    longitude:"",
-                                    siteName:"",
-                                    description:"",
-                                    isTemporary:false,
-                                    startDate:"",
-                                    endDate:"",
-                                    address:"",
-                                    city:"",
-                                    province:"",
-                                    country:"",
-                                    postalCode:"",
-                                    role:""});
-            expect(scope.SQLMsgs).toEqual('Site created successfully!!!');
+            expect(scope.site).toEqual(emptySite);
+                                    
+            expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
-            expect(scope.siteList).toEqual([{"id": "1",
-                                                "reference":"test",
-                                                "latitude":"12.123456",
-                                                "longitude":"43.123456",
-                                                "siteName":"test4",
-                                                "description":"test5",
-                                                "isTemporary":true,
-                                                "startDate":"12-12-1912",
-                                                "endDate":"11-11-1900",
-                                                "address":"test9",
-                                                "city":"test10",
-                                                "province":"test11",
-                                                "country":"test12",
-                                                "postalCode":"X5X 5X5",
-                                                "role":"COP"}]);
+            expect(scope.siteList).toEqual('');
+            
+            expect(location.path).toHaveBeenCalledWith();
+            expect(location.path).toHaveBeenCalledWith("/admin/sites");
+            expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(streamSrv.saveActivity.calls.mostRecent().args[1]).toBeFalsy();
+            expect(controller.getLabelROLE).toHaveBeenCalled();
+            
+            location.path.calls.reset();   
+            location.path.and.returnValue("/site");
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveSite.php').respond('{"msg":"Site created successfully!!!", "error":""}');
+
+            controller.save(); // <--- TEST
+            $httpBackend.flush();
+            
+            expect(location.path).toHaveBeenCalledWith();
+            expect(location.path).toHaveBeenCalledWith("/sites");
+            expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(streamSrv.saveActivity.calls.mostRecent().args[1]).toBeFalsy();
+            expect(controller.getLabelROLE).toHaveBeenCalled();
         });
         it('Testing: Generated error for Saving', function() {
             scope.siteForm = {$dirty:true, $valid:true};
             scope.canDelete = true;
             scope.site = {reference:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveSite.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond({});
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond('lst'); // CTL INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveSite.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             
-            scope.save(); // <--- TEST
+            controller.save(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -295,17 +579,18 @@ describe('Testing the controller of site object', function() {
             expect(scope.site).toEqual({reference:"fake"});
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).toEqual('Database error, Contact administrator. Try later'); // Principal test
-            expect(scope.siteList).toEqual({});
+            expect(scope.siteList).toEqual('lst');
         });
         it('Testing: Failing the Saving', function() {
             scope.siteForm = {$dirty:true, $valid:true};
             scope.canDelete = true;
             scope.site = {reference:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveSite.php').respond(500, 'server error');
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond({});
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond('lst'); // CTL INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveSite.php').respond(500, 'server error');
             
-            scope.save(); // <--- TEST
+            controller.save(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -313,79 +598,50 @@ describe('Testing the controller of site object', function() {
             expect(scope.site).toEqual({reference:"fake"});
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).toEqual('error: 500:undefined'); // Principal test
-            expect(scope.siteList).toEqual({});
+            expect(scope.siteList).toEqual('lst');
         });
 
         
-        it('Testing: Succeeding the Deleting', function() {
+        it('Testing: Succeeding the Deleting (with old msg)', function() {
             scope.siteForm = {$setPristine:function(){}};
+            scope.SQLErrors = " error msg";
+            scope.MsgErrors = "success msg";
             scope.canDelete = true;
             scope.site = {reference:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveSite.php').respond('{"msg":"Site deleted successfully!!!", "error":""}');
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond('');
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond('[{"id": "1",'
-                                                                                        +'"reference":"test",'
-                                                                                        +'"latitude":"12.123456",'
-                                                                                        +'"longitude":"43.123456",'
-                                                                                        +'"siteName":"test4",'
-                                                                                        +'"description":"test5",'
-                                                                                        +'"isTemporary":true,'
-                                                                                        +'"startDate":"12-12-1912",'
-                                                                                        +'"endDate":"11-11-1900",'
-                                                                                        +'"address":"test9",'
-                                                                                        +'"city":"test10",'
-                                                                                        +'"province":"test11",'
-                                                                                        +'"country":"test12",'
-                                                                                        +'"postalCode":"X5X 5X5",'
-                                                                                        +'"role":"COP"}]');
+            spyOn(location, 'path');
+            spyOn(streamSrv, 'saveActivity');
+            spyOn(controller, 'getLabelROLE');
+            
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTL INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveSite.php').respond('{"msg":"Site deleted successfully!!!", "error":""}');
 
-            scope.delete(); // <--- TEST
+            controller.delete(); // <--- TEST
 
             $httpBackend.flush();
             
             expect(scope.canDelete).toBe(false);
-            expect(scope.site).toEqual({id: "",
-                                    reference :"",
-                                    latitude:"",
-                                    longitude:"",
-                                    siteName:"",
-                                    description:"",
-                                    isTemporary:false,
-                                    startDate:"",
-                                    endDate:"",
-                                    address:"",
-                                    city:"",
-                                    province:"",
-                                    country:"",
-                                    postalCode:"",
-                                    role:""});
-            expect(scope.SQLMsgs).toEqual('Site deleted successfully!!!');
+            expect(scope.site).toEqual(emptySite);
+            
+            expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).not.toBeDefined();
-            expect(scope.siteList).toEqual([{"id": "1",
-                                                "reference":"test",
-                                                "latitude":"12.123456",
-                                                "longitude":"43.123456",
-                                                "siteName":"test4",
-                                                "description":"test5",
-                                                "isTemporary":true,
-                                                "startDate":"12-12-1912",
-                                                "endDate":"11-11-1900",
-                                                "address":"test9",
-                                                "city":"test10",
-                                                "province":"test11",
-                                                "country":"test12",
-                                                "postalCode":"X5X 5X5",
-                                                "role":"COP"}]);
+            expect(scope.siteList).toEqual('');
+            
+            expect(location.path).toHaveBeenCalledWith("/admin/sites");
+            expect(streamSrv.saveActivity).toHaveBeenCalled();
+            expect(streamSrv.saveActivity.calls.mostRecent().args[1]).toBeFalsy();
+            expect(controller.getLabelROLE).toHaveBeenCalled();
         });
         it('Testing: Generating error for Deleting', function() {
             scope.canDelete = true;
             scope.site = {reference:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveSite.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond('fake');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond('lst'); // CTL INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveSite.php').respond('{"msg":"", "error":"Database error, Contact administrator. Try later"}');
             
-            scope.delete(); // <--- TEST
+            controller.delete(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -393,16 +649,17 @@ describe('Testing the controller of site object', function() {
             expect(scope.site).toEqual({reference:"fake"});
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).toEqual('Database error, Contact administrator. Try later'); // Principal test
-            expect(scope.siteList).toEqual('fake');
+            expect(scope.siteList).toEqual('lst');
         });
         it('Testing: Failling the Deleting', function() {
             scope.canDelete = true;
             scope.site = {reference:"fake"};
             
-            $httpBackend.whenPOST('/MESTO/MESTO_WEB_APP/php/saveSite.php').respond(500, 'server error');
-            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond({});
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond('lst'); // CTL INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveSite.php').respond(500, 'server error');
             
-            scope.delete(); // <--- TEST
+            controller.delete(); // <--- TEST
 
             $httpBackend.flush();
             
@@ -410,7 +667,326 @@ describe('Testing the controller of site object', function() {
             expect(scope.site).toEqual({reference:"fake"});
             expect(scope.SQLMsgs).not.toBeDefined();
             expect(scope.SQLErrors).toEqual('error: 500:undefined'); // Principal test
-            expect(scope.siteList).toEqual({});
+            expect(scope.siteList).toEqual('lst');
+        });
+        
+        it('Testing: Failed to Load sub list of Equipements', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(200, '{"msg":"", "error":"Database error"}');
+            
+            controller.loadEquipsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstEquipErr).toEqual("Database error");
+            expect(scope.site.lstEquips).toEqual([]);
+        });
+        it('Testing: Error to Load sub list of Equipements', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(500, '{"msg":"", "error":"error"}');
+            
+            controller.loadEquipsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstEquipErr).toEqual("error: 500:undefined");
+            expect(scope.site.lstEquips).toEqual([]);
+        });
+        it('Testing: Success to Load sub list of Equipements', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(200, '[{"test":"test"}]');
+            
+            controller.loadEquipsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstEquipErr).not.toBeDefined();
+            expect(scope.site.lstEquips).toEqual([{test:"test"}]);
+        });
+        
+        it('Testing: Failed to remove a associated equipment', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '{"msg":"", "error":"Database error"}');
+            
+            controller.removeAssEquip(12);
+            $httpBackend.flush();
+            
+            expect(scope.lstEquipErr).toEqual("Database error");
+        });
+        it('Testing: Error to remove a associated equipment', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(500, '{"msg":"", "error":"error"}');
+            
+            controller.removeAssEquip(12);
+            $httpBackend.flush();
+            
+            expect(scope.lstEquipErr).toEqual("error: 500:undefined");
+        });
+        it('Testing: Success to remove a associated equipment', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '{"msg":"success", "error":""}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond('[{"test":"test"}]');
+            
+            spyOn(controller, "loadEquipsList").and.callThrough();
+            
+            controller.removeAssEquip(12);
+            $httpBackend.flush();
+            
+            expect(scope.lstEquipErr).not.toBeDefined();
+            expect(scope.site.lstEquips).toEqual([{test:"test"}]);
+            expect(controller.loadEquipsList).toHaveBeenCalled();
+        });
+        
+        it('Testing: Failed to remove a associated room', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond(200, '{"msg":"", "error":"Database error"}');
+            
+            controller.removeAssRoom(12);
+            $httpBackend.flush();
+            
+            expect(scope.lstRoomErr).toEqual("Database error");
+        });
+        it('Testing: Error to remove a associated room', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond(500, '{"msg":"", "error":"error"}');
+            
+            controller.removeAssRoom(12);
+            $httpBackend.flush();
+            
+            expect(scope.lstRoomErr).toEqual("error: 500:undefined");
+        });
+        it('Testing: Success to remove a associated room', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond(200, '{"msg":"success", "error":""}');
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond('[{"test":"test"}]');
+            
+            controller.removeAssRoom(12);
+            $httpBackend.flush();
+            
+            expect(scope.lstRoomErr).not.toBeDefined();
+            expect(scope.site.lstRooms).toEqual([{test:"test"}]);
+        });
+        
+        it('Testing: Failed to load Free Equips List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(200, '{"msg":"", "error":"Database error"}');
+            
+            controller.loadFreeEquipsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstFreeEquipErr).toEqual("Database error");
+            expect(scope.lstFreeEquips).not.toBeDefined();
+        });
+        it('Testing: Error to load Free Equips List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(500, '{"msg":"", "error":"error"}');
+            
+            controller.loadFreeEquipsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstFreeEquipErr).toEqual("error: 500:undefined");
+            expect(scope.lstFreeEquips).not.toBeDefined();
+        });
+        it('Testing: Success to load Free Equips List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOEquipment.php').respond(200, '[{"test":"test"}]');
+            
+            controller.loadFreeEquipsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstFreeEquipErr).not.toBeDefined();
+            expect(scope.lstFreeEquips).toEqual([{test:"test"}]);
+        });
+        
+        it('Testing: Failed to add Free Equips List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '{"msg":"", "error":"Database error"}');
+            scope.lstFreeEquips = [43,41,3];
+            
+            controller.addFreeEquipsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstFreeEquipErr).toEqual("Database error");
+        });
+        it('Testing: Error to add Free Equips List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(500, '{"msg":"", "error":"error"}');
+            scope.lstFreeEquips = [43,41,3];
+            
+            controller.addFreeEquipsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstFreeEquipErr).toEqual("error: 500:undefined");
+        });
+        it('Testing: Success to add Free Equips List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveEquipment.php').respond(200, '[{"test":"test"}]');
+            scope.lstFreeEquips = [43,41,3];
+            
+            controller.closeFreeEquipsList = jasmine.createSpy("closeFreeEquipsList");
+            controller.loadEquipsList = jasmine.createSpy("loadEquipsList");
+            
+            controller.addFreeEquipsList();
+            $httpBackend.flush();
+            
+            expect(controller.closeFreeEquipsList).toHaveBeenCalled();
+            expect(controller.loadEquipsList).toHaveBeenCalled();
+            
+            expect(scope.lstFreeEquipErr).not.toBeDefined();
+        });
+        
+        it('Testing: Failed to load Rooms List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(200, '{"msg":"", "error":"Database error"}');
+            
+            controller.loadRoomsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstRoomErr).toEqual("Database error");
+            expect(scope.site.lstRooms).toEqual([]);
+        });
+        it('Testing: Error to load Rooms List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(500, '{"msg":"", "error":"error"}');
+            
+            controller.loadRoomsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstRoomErr).toEqual("error: 500:undefined");
+            expect(scope.site.lstRooms).toEqual([]);
+        });
+        it('Testing: Success to load Rooms List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(200, '[{"test":"test"}]');
+            
+            controller.loadRoomsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstRoomErr).not.toBeDefined();
+            expect(scope.site.lstRooms).toEqual([{test:"test"}]);
+        });
+        
+        it('Testing: Failed to load Free Rooms List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(200, '{"msg":"", "error":"Database error"}');
+            
+            controller.loadFreeRoomsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstFreeRoomErr).toEqual("Database error");
+            expect(scope.lstFreeRooms).not.toBeDefined();
+        });
+        it('Testing: Error to load Free Rooms List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(500, '{"msg":"", "error":"error"}');
+            
+            controller.loadFreeRoomsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstFreeRoomErr).toEqual("error: 500:undefined");
+            expect(scope.lstFreeRooms).not.toBeDefined();
+        });
+        it('Testing: Success to load Free Rooms List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAORoom.php').respond(200, '[{"test":"test"}]');
+            
+            controller.loadFreeRoomsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstFreeRoomErr).not.toBeDefined();
+            expect(scope.lstFreeRooms).toEqual([{test:"test"}]);
+        });
+        
+        it('Testing: Failed to add Free Rooms List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond(200, '{"msg":"", "error":"Database error"}');
+            scope.lstFreeRooms = [43,41,3];
+            
+            controller.addFreeRoomsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstFreeRoomErr).toEqual("Database error");
+        });
+        it('Testing: Error to add Free Rooms List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond(500, '{"msg":"", "error":"error"}');
+            scope.lstFreeRooms = [43,41,3];
+            
+            controller.addFreeRoomsList();
+            $httpBackend.flush();
+            
+            expect(scope.lstFreeRoomErr).toEqual("error: 500:undefined");
+        });
+        it('Testing: Success to add Free Rooms List', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/saveRoom.php').respond(200, '[{"test":"test"}]');
+            scope.lstFreeRooms = [43,41,3];
+            
+            controller.closeFreeRoomsList = jasmine.createSpy("closeFreeRoomsList");
+            controller.loadRoomsList = jasmine.createSpy("loadRoomsList");
+            
+            controller.addFreeRoomsList();
+            $httpBackend.flush();
+            
+            expect(controller.closeFreeRoomsList).toHaveBeenCalled();
+            expect(controller.loadRoomsList).toHaveBeenCalled();
+            
+            expect(scope.lstFreeRoomErr).not.toBeDefined();
+        });
+        
+        it('Testing: Failed to load one Site', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(200, '{"msg":"", "error":"Database error"}');
+            
+            controller.loadDBSite();
+            $httpBackend.flush();
+            
+            expect(scope.SQLErrors).toEqual("Database error");
+            expect(scope.site).toEqual(emptySite);
+        });
+        it('Testing: Error to load one Site', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(500, '{"msg":"", "error":"error"}');
+            
+            controller.loadDBSite();
+            $httpBackend.flush();
+            
+            expect(scope.SQLErrors).toEqual("error: 500:undefined");
+            expect(scope.site).toEqual(emptySite);
+        });
+        it('Testing: Success to load one Site', function() {
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/loggedUser.php').respond(''); // APP INIT
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(''); // CTR init
+            $httpBackend.expectPOST('/MESTO/MESTO_WEB_APP/php/DAOSite.php').respond(200, '[{"test":"test"}]');
+            
+            controller.loadDBSite();
+            $httpBackend.flush();
+            
+            expect(scope.SQLErrors).not.toBeDefined();
+            expect(scope.site).toEqual({test:"test"});
         });
     });
 });

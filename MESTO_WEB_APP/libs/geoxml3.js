@@ -24,7 +24,57 @@
  * limitations under the License.
  *
  */
+/**
+ * A MultiGeometry object that will allow multiple polylines in a MultiGeometry
+ * containing LineStrings to be treated as a single object
+ *
+ * @param {MutiGeometryOptions} anonymous object.  Available properties:
+ * map: The map on which to attach the MultiGeometry
+ * paths: the individual polylines
+ * polylineOptions: options to use when constructing all the polylines
+ *
+ * @constructor
+ */
+// only if Google Maps API included
+if (!!window.google && !! google.maps) { 
+function MultiGeometry(multiGeometryOptions) {
+   function createPolyline(polylineOptions, mg) {
+     var polyline = new google.maps.Polyline(polylineOptions);
+     google.maps.event.addListener(polyline,'click', function(evt) { google.maps.event.trigger(mg,'click',evt);});
+     google.maps.event.addListener(polyline,'dblclick', function(evt) { google.maps.event.trigger(mg, 'dblclick', evt);});
+     google.maps.event.addListener(polyline,'mousedown', function(evt) { google.maps.event.trigger(mg, 'mousedown', evt);});
+     google.maps.event.addListener(polyline,'mousemove', function(evt) { google.maps.event.trigger(mg, 'mousemove', evt);});
+     google.maps.event.addListener(polyline,'mouseout', function(evt) { google.maps.event.trigger(mg, 'mouseout', evt);});
+     google.maps.event.addListener(polyline,'mouseover', function(evt) { google.maps.event.trigger(mg, 'mouseover', evt);});
+     google.maps.event.addListener(polyline,'mouseup', function(evt) { google.maps.event.trigger(mg, 'mouseup', evt);});
+     google.maps.event.addListener(polyline,'rightclick', function(evt) { google.maps.event.trigger(mg, 'rightclick', evt);});
+     return polyline;
+   }
+   this.setValues(multiGeometryOptions);
+   this.polylines = [];
 
+   for (i=0; i<this.paths.length;i++) {
+     var polylineOptions = multiGeometryOptions;
+     polylineOptions.path = this.paths[i];
+     var polyline = createPolyline(polylineOptions,this);
+     // Bind the polyline properties to the MultiGeometry properties
+     this.polylines.push(polyline);
+   }
+}
+MultiGeometry.prototype = new google.maps.MVCObject();
+MultiGeometry.prototype.changed = function(key) {
+    // alert(key+" changed");
+    if (this.polylines) {
+        for (var i=0; i<this.polylines.length; i++) {
+            this.polylines[i].set(key,this.get(key));
+        }
+    }
+};
+MultiGeometry.prototype.setMap = function(map) { this.set('map',map); };
+MultiGeometry.prototype.getMap = function() { return this.get('map'); };
+}
+
+// Extend the global String object with a method to remove leading and trailing whitespace
 if (!String.prototype.trim) {
 /**
  * Remove leading and trailing whitespace.
@@ -262,6 +312,16 @@ function processStyleUrl(node) {
       // style.icon.color     = (unsupported; not supported in API)
       // style.icon.colorMode = (unsupported; not supported in API)
 
+      styleNodes = getElementsByTagName(styleNodes[0], 'hotSpot');
+      if (!!styleNodes && styleNodes.length > 0) {
+        icon.hotSpot = {
+          x:      styleNodes[0].getAttribute('x'),
+          y:      styleNodes[0].getAttribute('y'),
+          xunits: styleNodes[0].getAttribute('xunits'),
+          yunits: styleNodes[0].getAttribute('yunits')
+        };
+      }
+
       styleNodes = getElementsByTagName(thisNode, 'Icon');
       if (!!styleNodes && styleNodes.length > 0) {
         icon.href = nodeValue(getElementsByTagName(styleNodes[0], 'href')[0]);
@@ -277,34 +337,30 @@ function processStyleUrl(node) {
           h: parseInt(nodeValue(getElementsByTagNameNS(styleNodes[0], gxNS, 'h')[0], icon.dim.h))
         };
 
-        styleNodes = getElementsByTagName(thisNode, 'hotSpot');
-        if (!!styleNodes && styleNodes.length > 0) {
-          icon.hotSpot = {
-            x:      styleNodes[0].getAttribute('x'),
-            y:      styleNodes[0].getAttribute('y'),
-            xunits: styleNodes[0].getAttribute('xunits'),
-            yunits: styleNodes[0].getAttribute('yunits')
-          };
-        }
-
         // certain occasions where we need the pixel size of the image (like the default settings...)
         // (NOTE: Scale is applied to entire image, not just the section of the icon palette.  So,
         //  if we need scaling, we'll need the img dimensions no matter what.)
-        if ( (icon.dim.w < 0 || icon.dim.h < 0) && (icon.xunits != 'pixels' || icon.yunits == 'fraction') || icon.scale != 1.0) {
+        if (true /* (icon.dim.w < 0 || icon.dim.h < 0) && (icon.xunits != 'pixels' || icon.yunits == 'fraction') || icon.scale != 1.0 */) {
           // (hopefully, this will load by the time we need it...)
           icon.img = new Image();
           icon.img.onload = function() {
             if (icon.dim.w < 0 || icon.dim.h < 0) {
               icon.dim.w = this.width;
               icon.dim.h = this.height;
+            } else {
+              icon.dim.th = this.height;
             }
           };
           icon.img.src = icon.url;
 
           // sometimes the file is already cached and it never calls onLoad
           if (icon.img.width > 0) {
-            icon.dim.w = icon.img.width;
-            icon.dim.h = icon.img.height;
+            if (icon.dim.w < 0 || icon.dim.h < 0) {
+             icon.dim.w = icon.img.width;
+             icon.dim.h = icon.img.height;
+            } else {
+             icon.dim.th = icon.img.height;
+            }
           }
         }
       }
@@ -409,7 +465,7 @@ function processStyleUrl(node) {
 
   var render = function (responseXML, doc) {
     // Callback for retrieving a KML document: parse the KML and display it on the map
-    if (!responseXML) {
+    if (!responseXML || responseXML == "failed parse") {
       // Error retrieving the data
       geoXML3.log('Unable to retrieve ' + doc.url);
       if (parserOptions.failedParse) parserOptions.failedParse(doc);
@@ -527,7 +583,8 @@ function processStyleUrl(node) {
           styleBaseUrl: styleUrl[0] ? cleanURL(doc.baseDir, styleUrl[0]) : doc.baseUrl,
           styleID:      styleUrl[1],
           visibility:        getBooleanValue(getElementsByTagName(node, 'visibility')[0], true),
-          balloonVisibility: getBooleanValue(getElementsByTagNameNS(node, gxNS, 'balloonVisibility')[0], !parserOptions.suppressInfoWindows)
+          balloonVisibility: getBooleanValue(getElementsByTagNameNS(node, gxNS, 'balloonVisibility')[0], !parserOptions.suppressInfoWindows),
+          id:           node.getAttribute('id')
         };
         placemark.style = (styles[placemark.styleBaseUrl] && styles[placemark.styleBaseUrl][placemark.styleID]) || clone(defaultStyle);
         // inline style overrides shared style
@@ -651,7 +708,10 @@ function processStyleUrl(node) {
               doc.markers = doc.markers || [];
               if (doc.reload) {
                 for (var j = 0; j < doc.markers.length; j++) {
-                  if (doc.markers[j].getPosition().equals(placemark.latlng)) {
+                    if ((doc.markers[j].id == placemark.id) ||
+                        // if no id, check position
+                        (!doc.markers[j].id && 
+                         (doc.markers[j].getPosition().equals(placemark.latlng)))) {
                     found = doc.markers[j].active = true;
                     break;
                   }
@@ -662,7 +722,10 @@ function processStyleUrl(node) {
           if (!found) {
             // Call the marker creator
             var marker = pointCreateFunc(placemark, doc);
-            if (marker) marker.active = placemark.visibility;
+            if (marker) { 
+              marker.active = placemark.visibility;
+              marker.id = placemark.id;
+            }
           }
         }
         // polygon/line
@@ -925,7 +988,7 @@ function processStyleUrl(node) {
 
   var processStyleID = function (style) {
     var icon = style.icon;
-    if (!icon.href) return;
+    if (!icon || !icon.href) return;
 
     if (icon.img && !icon.img.complete && (icon.dim.w < 0) && (icon.dim.h < 0) ) {
       // we're still waiting on the image loading (probably because we've been blocking since the declaration)
@@ -935,6 +998,8 @@ function processStyleUrl(node) {
         if (icon.dim.w < 0 || icon.dim.h < 0) {
           icon.dim.w = this.width;
           icon.dim.h = this.height;
+        } else {
+          icon.dim.th = this.height;
         }
         processStyleID(style);
 
@@ -949,25 +1014,35 @@ function processStyleUrl(node) {
       };
       return;
     }
-    else if (icon.dim.w < 0 || icon.dim.h < 0) {
+    else { //if (icon.dim.w < 0 || icon.dim.h < 0) {
       if (icon.img && icon.img.complete) {
         // sometimes the file is already cached and it never calls onLoad
+        if (icon.dim.w < 0 || icon.dim.h < 0) {
         icon.dim.w = icon.img.width;
         icon.dim.h = icon.img.height;
+        } else {
+          icon.dim.th = icon.img.height;
+        }
       }
       else {
         // settle for a default of 32x32
         icon.dim.whGuess = true;
         icon.dim.w = 32;
         icon.dim.h = 32;
+        icon.dim.th = 32;
       }
     }
 
     // pre-scaled variables
     var rnd = Math.round;
+    var y = icon.dim.y;
+    if (typeof icon.dim.th !== 'undefined' && icon.dim.th != icon.dim.h) { // palette - reverse kml y for maps
+      y = Math.abs(y - (icon.dim.th - icon.dim.h));
+    }
+
     var scaled = {
       x:  icon.dim.x     * icon.scale,
-      y:  icon.dim.y     * icon.scale,
+      y: y * icon.scale,
       w:  icon.dim.w     * icon.scale,
       h:  icon.dim.h     * icon.scale,
       aX: icon.hotSpot.x * icon.scale,
@@ -1105,18 +1180,20 @@ function processStyleUrl(node) {
 
   // Create Polyline
   var createPolyline = function(placemark, doc) {
-    var path = [];
+    var paths = [];
     var bounds = new google.maps.LatLngBounds();
     for (var j=0; j<placemark.LineString.length; j++) {
+      var path = [];
       var coords = placemark.LineString[j].coordinates;
       for (var i=0;i<coords.length;i++) {
         var pt = new google.maps.LatLng(coords[i].lat, coords[i].lng);
         path.push(pt);
         bounds.extend(pt);
       }
+      paths.push(path);
     }
     // point to open the infowindow if triggered
-    var point = path[Math.floor(path.length/2)];
+    var point = paths[0][Math.floor(path.length/2)];
     // Load basic polyline properties
     var kmlStrokeColor = kmlColor(placemark.style.line.color, placemark.style.line.colorMode);
     var polyOptions = geoXML3.combineOptions(parserOptions.polylineOptions, {
@@ -1128,6 +1205,13 @@ function processStyleUrl(node) {
       title:         placemark.name,
       visible:       placemark.visibility
     });
+    if (paths.length > 1) {
+      polyOptions.paths = paths;
+      var p = new MultiGeometry(polyOptions);
+    } else {
+      polyOptions.path = paths[0];
+      var p = new google.maps.Polyline(polyOptions);
+    }
     var p = new google.maps.Polyline(polyOptions);
     p.bounds = bounds;
 
@@ -1203,8 +1287,9 @@ function processStyleUrl(node) {
 
     if (!placemark.balloonVisibility || bStyle.displayMode === 'hide') return;
 
-    // define geDirections
-    if (placemark.latlng) {
+    // define geDirections 
+    if (placemark.latlng && 
+        (!parserOptions.suppressDirections || !parserOptions.suppressDirections)) {
       vars.directions.push('sll=' + placemark.latlng.toUrlValue());
 
       var url = 'http://maps.google.com/maps?' + vars.directions.join('&');
@@ -1418,7 +1503,7 @@ geoXML3.fetchers = [];
  * @return {Element|Document} DOM.
  */
 geoXML3.xmlParse = function (str) {
-  if (typeof ActiveXObject != 'undefined' && typeof GetObject != 'undefined') {
+  if ((typeof ActiveXObject != 'undefined') || ("ActiveXObject" in window)) {
     var doc = new ActiveXObject('Microsoft.XMLDOM');
     doc.loadXML(str);
     return doc;
@@ -1428,8 +1513,31 @@ geoXML3.xmlParse = function (str) {
     return (new DOMParser()).parseFromString(str, 'text/xml');
   }
 
-  return createElement('div', null);
+  return document.createElement('div', null);
 }
+
+/**
+ * Checks for XML parse error.
+ *
+ * @param {xmlDOM} XML DOM.
+ * @return boolean.
+ */
+// from http://stackoverflow.com/questions/11563554/how-do-i-detect-xml-parsing-errors-when-using-javascripts-domparser-in-a-cross
+geoXML3.isParseError = function(parsedDocument) {
+    if ((typeof ActiveXObject != 'undefined') || ("ActiveXObject" in window))
+        return false;
+    // parser and parsererrorNS could be cached on startup for efficiency
+    var p = new DOMParser(),
+        errorneousParse = p.parseFromString('<', 'text/xml'),
+        parsererrorNS = errorneousParse.getElementsByTagName("parsererror")[0].namespaceURI;
+
+    if (parsererrorNS === 'http://www.w3.org/1999/xhtml') {
+        // In PhantomJS the parseerror element doesn't seem to have a special namespace, so we are just guessing here :(
+        return parsedDocument.getElementsByTagName("parsererror").length > 0;
+    }
+
+    return parsedDocument.getElementsByTagNameNS(parsererrorNS, 'parsererror').length > 0;
+};
 
 /**
  * Fetches a XML document.
@@ -1469,8 +1577,8 @@ geoXML3.fetchXML = function (url, callback) {
     }
   }
 
-  if (!!xhrFetcher.fetcher.overrideMimeType) xhrFetcher.fetcher.overrideMimeType('text/xml');
   xhrFetcher.fetcher.open('GET', url, true);
+  if (!!xhrFetcher.fetcher.overrideMimeType) xhrFetcher.fetcher.overrideMimeType('text/xml');
   xhrFetcher.fetcher.onreadystatechange = function () {
     if (xhrFetcher.fetcher.readyState === 4) {
       // Retrieval complete
@@ -1481,15 +1589,25 @@ geoXML3.fetchXML = function (url, callback) {
       }
       // Returned successfully
       else {
-        if (xhrFetcher.fetcher.responseXML) {
+       if (xhrFetcher.fetcher.responseXML) {
         // Sometimes IE will get the data, but won't bother loading it as an XML doc
-        var xmlDoc = xhrFetcher.fetcher.responseXML;
-        if (xmlDoc && !xmlDoc.documentElement && !xmlDoc.ownerElement) xmlDoc.loadXML(xhrFetcher.fetcher.responseText);
-          callback(xmlDoc);          
-        } else // handle valid xml sent with wrong MIME type 
-          callback(geoXML3.xmlParse(xhrFetcher.fetcher.responseText));
+        var xml = xhrFetcher.fetcher.responseXML;
+        if (xml && !xml.documentElement && !xml.ownerElement) {
+         xml.loadXML(xhrFetcher.fetcher.responseText);
+        }
+       } else {// handle valid xml sent with wrong MIME type 
+        xml=geoXML3.xmlParse(xhrFetcher.fetcher.responseText);
+       }
+       // handle parse errors
+       if (xml.parseError && (xml.parseError.errorCode != 0)) {
+        geoXML3.log("XML parse error "+xml.parseError.errorCode+", "+xml.parseError.reason+"\nLine:"+xml.parseError.line+", Position:"+xml.parseError.linepos+", srcText:"+xml.parseError.srcText);
+        xml = "failed parse"
+       } else if (geoXML3.isParseError(xml)) {
+        geoXML3.log("XML parse error");
+        xml = "failed parse"
+       }
+       callback(xml);          
       }
-
       // We're done with this fetcher object
       geoXML3.fetchers.push(xhrFetcher);
     }

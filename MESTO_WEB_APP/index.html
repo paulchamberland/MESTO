@@ -4,115 +4,83 @@
     <meta charset="utf8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Mesto - find it!</title>
-    <style type="text/css">
-    #map-canvas { height: 100%; margin: 0; padding: 0;}
-   
-   	#header, #footer{
-	width:100%;
-	height:70px;
-    background-color: #3E75A6;
-    color:white;
-    text-align:left;
-    padding:15px 0;
-	}
-	#map-canvas {
-    padding:10px;	 	 
-	}
-	#logo {
-		position:relative;
-		float:left;
-	}
-	#search_bar {
-	float:left;
-	width: 350px;
-	height: 50px;
-	z-index:2;
-	}
-	a {
-    color:white;
-	}
-
-	</style>
-    <link rel="stylesheet" href="./ressources/css/login_dd_style.css" />
-	
+    
+    <link rel="stylesheet" type="text/css" href="./ressources/css/login_dd_style.css" />
+    <link rel="stylesheet" type="text/css" href="ressources/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="ressources/css/mesto.css" />
+    
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCtGKY6V-0PBUobXIG63JvdgGrldlC109Q">
     </script>
 	<script type="text/javascript" src="./libs/geoxml3.js"></script>
 	<script type="text/javascript" src="./libs/jquery-2.1.3.min.js"></script>
-	<script type="text/javascript" src="./js/login_drop_down.js"></script>
-
-	
-    <script type="text/javascript">
-      function initialize() {
-        try {
-            var mapOptions = {
-              center: { lat: 45.899566, lng: -72.894373},
-              zoom: 8
-            };
-            map = new google.maps.Map(document.getElementById('map-canvas'),
-                mapOptions);
-                
-            //Load the board of each zone
-            Load_boarder_zones();
-        }
-        catch (e) {}
-      }
-	  
-	  function Load_boarder_zones() { 
-			var Zones = new geoXML3.parser({
-				map: map, 
-				zoom: false,
-				suppressInfoWindows: true
-			});
-			Zones.parse('limits/Zones.kml');
-		}
-	  
-      google.maps.event.addDomListener(window, 'load', initialize);
-    </script>
-	<!-- Script to load the top menu bar in div id menu -->
-	<script type  = "text/javascript">
-		$(document).ready(function() {
-			$('#menu').load('menu.html');
-			$('#search_bar').load('search_bar.html');
-		});
-	</script>
+    <script type="text/javascript" src="./libs/angular.js"></script>
+    <script type="text/javascript" src="./libs/ui-bootstrap-0.13.0.js"></script>
+    <script type="text/javascript" src="./libs/angular-route.min.js"></script>
+    <script type="text/javascript" src="./libs/angular-idle.js"></script>
+    <script type="text/javascript" src="./libs/markerclusterer.js"></script>
+    
+    <script type="text/javascript" src="./js/mestoHelper.js"></script>
+    <script type="text/javascript" src="./js/mestoApp.js"></script>
+    <script type="text/javascript" src="./js/loginCTL.js"></script>
+    <script type="text/javascript" src="./js/mapCTL.js"></script>
+    <script type="text/javascript" src="./js/siteCTL.js"></script>
+    <script type="text/javascript" src="./js/roomCTL.js"></script>
+    <script type="text/javascript" src="./js/equipmentCTL.js"></script>
+    <script type="text/javascript" src="./js/headerCTL.js"></script>
+    <script type="text/javascript" src="./js/permissionCTL.js"></script>
+    <script type="text/javascript" src="./js/userCTL.js"></script>
+    <script type="text/javascript" src="./js/userRoleCTL.js"></script>
+    <script type="text/javascript" src="./js/streamCTL.js"></script>
+    <script type="text/javascript" src="./js/statisticCTL.js"></script>
+    
   </head>
-  <body>
-  <div id="header">
+  <body data-ng-app="MESTO">
+  <header data-ng-controller="headerCTL as headCTL">
 	<div id="logo">
 		<img src="./ressources/images/mesto.png" alt="Mesto" style="width:250px;height:70px">
 	</div>
-	<div id="search_bar"></div>
-		<div id="container">
-            <!-- Login Starts Here -->
-            <div id="loginContainer">
-                <a href="#" id="loginButton"><span>Login</span><em></em></a>
+	<div id="search_bar" data-ng-if="headCTL.isSearchDisplay()">
+        <form>
+            <p class="input-group" style="width:90%;">
+                <input type="text" placeholder="Is it me you&#39;re looking for?" class="input-sm">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-info btn-sm"><i class="glyphicon glyphicon-search"></i></button>
+                </span>
+            </p>
+        </form>    
+    </div>
+		<div id="container" data-ng-if="headCTL.isLoginDisplay()">
+            <div id="loginContainer" data-ng-controller="loginCTL as loginCTL">
+                <span style="padding-right:5px;" data-ng-if="loginCTL.isLogged()">Welcome <span class="fake-link" data-ng-click="loginCTL.openProfileUser()">{{loginCTL.getUserName()}}</span></span>
+                <a id="logoutButton" class="btn btn-info" data-ng-if="loginCTL.isLogged()" data-ng-click="loginCTL.logout()"><span>Logout</span></a>
+                <a id="signUpButton" class="btn btn-info" data-ng-if="!loginCTL.isLogged()" href="#/createUser"><span>Sign Up</span></a>
+                <a id="loginButton" class="btn btn-info" data-ng-if="!loginCTL.isLogged()" onclick="$('#loginBox').toggle();$('#loginForm').toggleClass('active');"><span>Login</span><em></em></a>
                 <div style="clear:both"></div>
-                <div id="loginBox">                
-                    <form id="loginForm">
+                <div id="loginBox">              
+                    <form id="loginForm" name="loginForm" novalidate>
                         <fieldset id="body">
                             <fieldset>
-                                <label for="email">Email Address</label>
-                                <input type="text" name="email" id="email" />
+                                <label for="username">User Name</label>
+                                <input type="text" name="username" id="username" data-ng-model="logInfo.username"/>
                             </fieldset>
                             <fieldset>
-                                <label for="password">Password</label>
-                                <input type="password" name="password" id="password" />
+                                <label for="pwd">password</label>
+                                <input type="password" name="pwd" id="pwd" data-ng-model="logInfo.pwd"/>
                             </fieldset>
-                            <input type="submit" id="login" value="Sign in" />
+                            <a id="login" class="btn btn-primary" data-ng-click="loginCTL.login(logInfo)">Sign in</a>
                             <label for="checkbox"><input type="checkbox" id="checkbox" />Remember me</label>
                         </fieldset>
                         <span><a href="#">Forgot your password?</a></span>
                     </form>
                 </div>
             </div>
-            <!-- Login Ends Here -->
         </div>
+  </header>
+  <div style="display: block;">
+    <ng-view></ng-view>
+    <!--div class="wrap"></div-->
   </div>
-  <div id="menu" style="position: relative; z-index: 1" ></div> 
-  <div id="map-canvas" >Google Earth Not available</div>
-	<div id="footer">
-	</div>
+  <footer></footer>
   </body>
 </html>

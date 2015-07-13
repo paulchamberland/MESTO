@@ -1,0 +1,201 @@
+<div id="menu" data-ng-controller="loginCTL as loginCTL" data-ng-include="'menu.html'" style="position: relative; z-index: 1" ></div>
+<div class="main">
+    <div class="pageDetails" data-ng-if="modifySite == false">
+        <div class="top">{{site.siteName}}</div>
+        <div class="core">
+            <div class="inner first"># Reference : {{site.reference}}</div>
+            <div class="inner">Latitude : {{site.latitude}}</div>
+            <div class="inner">Longitude : {{site.longitude}}</div>
+            <div class="inner max">Description : {{site.description}}</div>
+            <div class="inner">Is temporary? <input type="checkbox" data-ng-checked="site.isTemporary == true" data-ng-model="site.isTemporary" disabled /></div>
+            <div class="inner">Start date : {{site.startDate}}</div>
+            <div class="inner">End date : {{site.endDate}}</div>
+            <div class="inner">Address : {{site.address}}</div>
+			<div class="inner">City : {{site.city}}</div>
+			<div class="inner">Province : {{site.province}}</div>
+			<div class="inner">Country : {{site.country}}</div>
+			<div class="inner">Postal code : {{site.postalCode}}</div>
+            <div class="inner">Role : {{siteCTL.getLabelROLE(site.role)}}</div>
+            <div class="inner">Organization : {{siteCTL.getLabelORGANIZATION(site.organization)}}</div>
+            <div class="inner">Point of Contact : {{site.pointOfContact}}</div>
+			<div class="inner">Phone number of PoC : {{site.phoneNumberPoC}}</div>
+			<div class="inner">Tech PoC : {{site.techPoC}}</div>
+			<div class="inner">Phone of Tech PoC : {{site.phoneTechPoC}}</div>
+			<div class="inner">Employes Number : {{site.employesNumber}}</div>
+            <div class="inner">
+                <span style="font-weight: bold; font-size: 12px;">Rooms of this building</span>
+                <alert type="danger" data-ng-show="lstRoomErr">{{lstRoomErr}}</alert>
+                <table border="1">
+                    <tr><th>Room ID</th><th>Point of Contact</th></tr>
+                    <tr data-ng-repeat="r in site.lstRooms" data-ng-click="">
+                        <td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="inner">
+                <span style="font-weight: bold; font-size: 12px;">Equipments of this building</span>
+                <alert type="danger" data-ng-show="lstEquipErr">{{lstEquipErr}}</alert>
+                <table border="1">
+                    <tr><th>Serial Number</th><th>Model</th></tr>
+                    <tr data-ng-repeat="e in site.lstEquips" data-ng-click="">
+                        <td>{{e.serialNumber}}</td><td>{{e.model}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div data-ng-controller="mapCTL as mapCTL" data-ng-init="mapCTL.initMap('mini', site.latitude, site.longitude);mapCTL.createMarker(site);">
+                <div id="map-canvas" style="position:absolute;top:210px;left:40%;border:1px solid black;width:55%;height:355px;">Google Earth Not available</div>
+            </div>
+            <hr>
+            <div class="inner last">Last update : {{site.updateBy}}, {{site.updateDate}}</div>
+        </div>
+        <div class="bot"><a class="btn btn-primary" data-ng-if="isAutorizeUpdatingSite" data-ng-click="siteCTL.modifySite();">Modified</a></div>
+    </div>
+    
+    <div data-ng-show="modifySite == true">
+        <div>
+            <div data-ng-show="siteForm.$dirty && siteForm.$invalid">
+                <alert type="danger" data-ng-show="siteForm.reference.$error.required">Reference is required.</alert>
+                <alert type="danger" data-ng-show="siteForm.latitude.$error.required">Latitude is required.</alert>
+                <alert type="danger" data-ng-show="siteForm.latitude.$error.pattern">Invalid latitude format.</alert>
+                <alert type="danger" data-ng-show="siteForm.longitude.$error.required">Longitude is required.</alert>
+                <alert type="danger" data-ng-show="siteForm.longitude.$error.pattern">Invalid longitude format.</alert>
+                <alert type="danger" data-ng-show="siteForm.siteName.$error.required">Name is required.</alert>
+                <alert type="danger" data-ng-show="siteForm.postalCode.$error.pattern">Invalid postal code format.</alert>
+                <alert type="danger" data-ng-show="siteForm.startDate.$error.pattern">Invalid start date format.</alert>
+                <alert type="danger" data-ng-show="siteForm.endDate.$error.required">End date is required for temporary site.</alert>
+                <alert type="danger" data-ng-show="siteForm.endDate.$error.pattern">Invalid end date format.</alert>
+                <alert type="danger" data-ng-show="siteForm.endDate.$error.greaterThan">End date need to be greater than start date.</alert>
+                <alert type="danger" data-ng-show="siteForm.phoneNumberPoC.$error.pattern">Invalid Phone number of PoC format.</alert>
+                <alert type="danger" data-ng-show="siteForm.phoneTechPoC.$error.pattern">Invalid Phone number of Tech PoC format.</alert>
+                <alert type="danger" data-ng-show="siteForm.employesNumber.$error.pattern">Employes number need to be digit only.</alert>
+            </div>
+            <alert type="danger" data-ng-show="SQLErrors">{{SQLErrors}}</alert>
+            <alert type="success" data-ng-show="SQLMsgs">{{SQLMsgs}}</alert>
+            <form class="basic" name="siteForm" novalidate >
+                <input type="hidden" id="id" name="id" data-ng-model="site.id" />
+                <div class="section">
+                    <div class="field"><label for="reference"># Reference * :</label><input type="text" id="reference" name="reference" data-ng-model="site.reference" required /></div>
+                    <div class="field"><label for="latitude">Latitude * (xxx.xxxxxx):</label><input type="text" id="latitude" name="latitude" data-ng-model="site.latitude" required tooltip="format: xxx.xxxxxx" tooltip-trigger="focus" data-ng-pattern="/^-?[0-9]?[0-9]?[0-9]\.[0-9]{6}$/" /></div>
+                    <div class="field"><label for="longitude">Longitude * (xxx.xxxxxx):</label><input type="text" id="longitude" name="longitude" data-ng-model="site.longitude" required tooltip="format: xxx.xxxxxx" tooltip-trigger="focus" data-ng-pattern="/^-?[0-9]?[0-9]?[0-9]\.[0-9]{6}$/" /></div>
+                    <div class="field"><label for="siteName">Name * :</label><input type="text" id="siteName" name="siteName" data-ng-model="site.siteName" required /></div>
+                    <div class="field"><label for="description">Description:</label><textarea cols="38" rows="5" id="description" name="description" data-ng-model="site.description"></textarea></div>
+                    <div class="field"><label for="isTemporary">Is temporary?</label>
+                        <input type="checkbox" id="isTemporary" name="isTemporary" data-ng-true-value="'1'" data-ng-false-value="'0'" data-ng-model="site.isTemporary"/>
+                    </div>
+                    <div class="field">
+                        <p class="input-group">
+                            <label for="startDate">Start date:</label>
+                            <input type="text" id="startDate" name="startDate" class="input-sm" data-ng-disabled="{{isDateNotEditable}}" datepicker-popup 
+                                data-ng-model="site.startDate" data-ng-change="siteCTL.validEndDate()"
+                                is-open="strOpened" show-button-bar="false"
+                                datepicker-options="{formatMonth:'MM', showWeeks:'false'}" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-sm btn-default" style="text-shadow:none;" ng-click="siteCTL.openStartCalendar($event);"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field"><label for="endDate">End date:</label>
+                        <p class="input-group">
+                            <input type="text" id="endDate" name="endDate" class="input-sm" data-ng-disabled="{{isDateNotEditable}}" datepicker-popup 
+                                data-ng-model="site.endDate" data-ng-change="siteCTL.validEndDate()"
+                                is-open="endOpened" data-ng-required="site.isTemporary == true" show-button-bar="false"
+                                datepicker-options="{formatMonth:'MM', showWeeks:false}" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-sm btn-default" style="text-shadow:none;" ng-click="siteCTL.openEndCalendar($event);"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="section2">
+                    <div class="field"><label for="address">Address:</label><input type="text" id="address" name="address" data-ng-model="site.address" /></div>
+                    <div class="field"><label for="city">City:</label><input type="text" id="city" name="city" data-ng-model="site.city" /></div>
+                    <div class="field"><label for="province">Province:</label><input type="text" id="province" name="province" data-ng-model="site.province" /></div>
+                    <div class="field"><label for="country">Country:</label><input type="text" id="country" name="country" data-ng-model="site.country" /></div>
+                    <div class="field"><label for="postalCode">Postal code (X5X 5X5):</label><input type="text" id="postalCode" name="postalCode" data-ng-model="site.postalCode" tooltip="format: X5X 5X5" tooltip-trigger="focus" data-ng-pattern="/^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] [0-9][A-Z][0-9]$/" /></div>
+                    <div class="field"><label for="role">Role:</label><select id="role" ng-model="site.role" name="role" ng-options="role.value as role.label for role in ROLE"></select></div>
+                    <div class="field"><label for="organise">Organization:</label><select id="organise" ng-model="site.organization" name="organization" ng-options="organization.value as organization.label for organization in ORGANIZATION"></select></div>
+                    <div class="field"><label for="employesNumber">Employes number :</label><input type="text" id="employesNumber" name="employesNumber" data-ng-model="site.employesNumber" tooltip="numeric only" tooltip-trigger="focus" data-ng-pattern="/^[0-9]*$/" /></div>
+                    <div class="field"><label for="PoC">Point of contact :</label><input type="text" id="PoC" name="pointOfContact" data-ng-model="site.pointOfContact" /></div>
+                    <div class="field"><label for="numTel">Phone number of PoC :</label><input type="text" id="numTel" name="phoneNumberPoC" data-ng-model="site.phoneNumberPoC" tooltip="format: XXX-XXX-XXXX" tooltip-trigger="focus" data-ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" /></div>
+                    <div class="field"><label for="techPoC">Tech PoC :</label><input type="text" id="techPoC" name="techPoC" data-ng-model="site.techPoC" /></div>
+                    <div class="field"><label for="techNumTel">Phone of tech PoC :</label><input type="text" id="techNumTel" name="phoneTechPoC" data-ng-model="site.phoneTechPoC" tooltip="format: XXX-XXX-XXXX" tooltip-trigger="focus" data-ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" /></div>
+                </div>
+            </form>
+            <a id="btnSave" class="btn btn-primary" data-ng-click="siteCTL.save();" ng-disabled="siteForm.$pristine || siteForm.$invalid" data-ng-if="canSave">Save</a>
+            <a id="btnDelete" class="btn btn-primary" data-ng-click="siteCTL.delete();" ng-disabled="!canDelete" data-ng-if="isAutorizeDeletingSite">Delete</a>
+            <a id="btnReset" class="btn btn-primary" data-ng-click="siteCTL.resetFrm();siteCTL.resetMsg();" ng-disabled="siteForm.$pristine">Reset</a>
+        </div>
+        <div style="padding-top:15px;">
+            <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Rooms of this site</span><a id="btnOpenFreeLstRoom" class="btn btn-primary" data-ng-if="site.id" data-ng-click="siteCTL.openFreeRoomsList();"><span class="glyphicon glyphicon-link"></a>
+            <alert type="danger" data-ng-show="lstRoomErr">{{lstRoomErr}}</alert>
+            <table border="1">
+                <tr><th>Room ID</th><th>Point of contact</th><th></th></tr>
+                <tr data-ng-repeat="r in site.lstRooms" data-ng-click="">
+                    <td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td><td><a id="btnRemoveRoom" class="btn btn-primary" data-ng-click="siteCTL.removeAssRoom(r.id)"><span class="glyphicon glyphicon-remove"></span></a></td>
+                </tr>
+            </table>
+        </div>
+        <div style="padding-top:15px">
+            <span style="font-weight: bold; font-size: 22px; padding-right:20px;">Equipments of this site</span><a id="btnOpenFreeLstEquip" class="btn btn-primary" data-ng-if="site.id" data-ng-click="siteCTL.openFreeEquipsList();"><span class="glyphicon glyphicon-link"></a>
+            <alert type="danger" data-ng-show="lstEquipErr">{{lstEquipErr}}</alert>
+            <table border="1">
+                <tr><th>Serial number</th><th>Model</th><th></th></tr>
+                <tr data-ng-repeat="e in site.lstEquips" data-ng-click="">
+                    <td>{{e.serialNumber}}</td><td>{{e.model}}</td><td><a id="btnRemoveEquip" class="btn btn-primary" data-ng-click="siteCTL.removeAssEquip(e.id)"><span class="glyphicon glyphicon-remove"></span></a></td>
+                </tr>
+            </table>
+        </div>
+        
+        <script type="text/ng-template" id="freeRoomListModalContent.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Assigning Rooms</h3>
+            </div>
+            <div class="modal-body">
+                <div class="inner "><alert type="danger" data-ng-show="lstFreeRoomErr">{{lstFreeRoomErr}}</alert></div>
+                <div class="inner">Choose rooms to associate to this site.</div>
+                <div class="inner ">
+                    <table border="1">
+                        <tr><th></th><th>Room ID</th><th>Point of contact</th><th>Size</th></tr>
+                        <tr data-ng-repeat="r in lstFreeRooms">
+                            <td><input type="checkbox" data-ng-model="r.adding"/></td><td>{{r.roomID}}</td><td>{{r.pointOfContact}}</td><td>{{r.roomSize}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="inner">
+                    <a id="btnAddLstRooms" class="btn btn-primary" data-ng-click="siteCTL.addFreeRoomsList()" >Add</a>
+                    <a id="btnNewRoom" class="btn btn-primary" style="float:right;" data-ng-click="siteCTL.newRoom()" >New</a>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a id="btnCloseFreeLstRooms" class="btn btn-primary" data-ng-click="siteCTL.closeFreeRoomsList()" >Close</a>
+            </div>
+        </script>
+        
+        <script type="text/ng-template" id="freeEquipListModalContent.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Assigning Equipments</h3>
+            </div>
+            <div class="modal-body">
+                <div class="inner"><alert type="danger" data-ng-show="lstFreeEquipErr">{{lstFreeEquipErr}}</alert></div>
+                <div class="inner">Choose equipments to associate to this site.</div>
+                <div class="inner ">
+                    <table border="1">
+                        <tr><th></th><th>Serial number</th><th>Manufacturer</th><th>Model</th><th>Type</th></tr>
+                        <tr data-ng-repeat="e in lstFreeEquips">
+                            <td><input type="checkbox" data-ng-model="e.adding"/></td><td>{{e.serialNumber}}</td><td>{{e.manufacturer}}</td><td>{{e.model}}</td><td>{{e.type}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="inner">
+                    <a id="btnAddLstEquips" class="btn btn-primary" data-ng-click="siteCTL.addFreeEquipsList()" >Add</a>
+                    <a id="btnNewEquip" class="btn btn-primary" style="float:right;" data-ng-click="siteCTL.newEquip()" >New</a>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a id="btnCloseFreeLstEquip" class="btn btn-primary" data-ng-click="siteCTL.closeFreeEquipsList()" >Close</a>
+            </div>
+        </script>
+    </div>
+    
+    <div class="wrap"></div>
+</div>
